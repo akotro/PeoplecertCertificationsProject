@@ -1,4 +1,4 @@
-﻿namespace ModelLibrary.Models.Candidate
+﻿namespace ModelLibrary.Models.Candidates
 {
     public class Address
     {
@@ -9,5 +9,6 @@
         public string State { get; set; }
         public string PostalCode { get; set; }
         public virtual Country Country { get; set; }
+        public virtual Candidate Candidate { get; set; } // NOTE(akotro): Reverse Navigation
     }
 }

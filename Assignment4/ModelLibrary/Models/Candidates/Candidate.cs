@@ -1,4 +1,6 @@
-﻿namespace ModelLibrary.Models.Candidate
+﻿using ModelLibrary.Models.Exams;
+
+namespace ModelLibrary.Models.Candidates
 {
     public class Candidate
     {
@@ -13,9 +15,12 @@
         public string CandidateNumber { get; set; }
         public string PhotoIdNumber { get; set; }
         public DateTime PhotoIdIssueDate { get; set; }
+
         public virtual Gender Gender { get; set; }
         public virtual Language Language { get; set; }
         public virtual PhotoIdType PhotoIdType { get; set; }
-        public Address Address { get; set; }
+        public virtual ICollection<Address> Address { get; set; }
+
+        public virtual ICollection<CandidateExam> CandidateExams { get; set; } // NOTE(akotro): Reverse Navigation
     }
 }
