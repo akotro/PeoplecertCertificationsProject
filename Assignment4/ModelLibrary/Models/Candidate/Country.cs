@@ -6,13 +6,9 @@ using System.Threading.Tasks;
 
 namespace ModelLibrary.Models.Candidate
 {
-    public enum Country
+    public class Country
     {
-        None,
-        Greece,
-        England,
-        Albania,
-        Spain,
-
+        public int Id { get; set; }
+        public string CountryOfResidence { get; set; }
     }
 }
