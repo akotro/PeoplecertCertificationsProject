@@ -6,11 +6,17 @@ using System.Threading.Tasks;
 
 namespace ModelLibrary.Models.Candidate
 {
-    public enum Gender
+    public enum GenderEnum
     {
         None,
         Male,
         Female,
         Other
+    }
+
+    public class Gender
+    {
+        public int Id { get; set; }
+        public GenderEnum GenderType { get; set; }
     }
 }

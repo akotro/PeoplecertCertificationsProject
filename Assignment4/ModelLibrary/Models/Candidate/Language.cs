@@ -6,12 +6,9 @@ using System.Threading.Tasks;
 
 namespace ModelLibrary.Models.Candidate
 {
-    public enum Language
+    public class Language
     {
-        None,
-        Greek,
-        English,
-        French,
-        Spanish
+        public int Id { get; set; }
+        public string NativeLanguage { get; set; }
     }
 }
