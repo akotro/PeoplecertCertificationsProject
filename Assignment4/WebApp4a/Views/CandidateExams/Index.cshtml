@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ModelLibrary.Models.Exams.CandidateExam>
+﻿@model IEnumerable<ModelLibrary.Models.Questions.Question>
 
 @{
     ViewData["Title"] = "Index";
@@ -10,36 +10,35 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Result)
+                @Html.DisplayNameFor(model => model.Text)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.MaxScore)
+                Available Answers
             </th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Text)
+                </td>
+                <td>
+                    @foreach (var option in item.Options)
+                    {
+                        @option.Text
+                        @*@Html.RadioButtonFor(modelItem => option, option.Correct)*@
+                        <input type="hidden" name=@option.Id value=@option.Correct />
+                        @Html.RadioButton(option.Text, option.Correct, false)
+                    }
+                </td>
+            </tr>
+        }
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Result)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MaxScore)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PercentScore)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ExamDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReportDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CandidateScore)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AssessmentCode)
+                <input type="submit" class="btn btn-primary" value="Save" />
             </td>
         </tr>
     </tbody>

@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using ModelLibrary.Models.Candidates;
 using ModelLibrary.Models.Exams;
+using ModelLibrary.Models.Questions;
+using NuGet.Common;
 using WebApp4a.Data;
 
 namespace WebApp4a.Controllers
@@ -22,7 +26,9 @@ namespace WebApp4a.Controllers
         // GET: CandidateExams
         public ActionResult Index()
         {
-              return View(_context.CandidateExams.ToList());
+
+              //return View(await _context.CandidateExams.ToListAsync());
+              return View(GetExam(1));
         }
 
         // GET: CandidateExams/Details/5
@@ -41,6 +47,16 @@ namespace WebApp4a.Controllers
             }
 
             return View(candidateExam);
+        }
+
+        private IEnumerable<Question> GetExam(int examId)
+        {
+            var exam = _context.Exams
+                .Include(p => p.Questions)
+                .ThenInclude(p => p.Options)
+                .Where(p => p.Id == examId).SingleOrDefault();
+
+            return exam.Questions;
         }
 
         private bool CandidateExamExists(int id)
