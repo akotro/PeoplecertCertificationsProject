@@ -7,7 +7,7 @@ using ModelLibrary.Models.Exams;
 
 namespace WebApp4a.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<AppUser>
     {
         public virtual DbSet<Candidate> Candidates { get; set; }
         public virtual DbSet<PhotoIdType> PhotoIdTypes { get; set; }
