@@ -12,6 +12,8 @@ public enum DifficultyEnum
 public class DifficultyLevel
 {
     public int Id { get; set; }
-    public DifficultyEnum Difficulty { get; set; }
-    public virtual ICollection<Question> Questions { get; set; } // NOTE(akotro): Reverse Navigation
+    public DifficultyEnum? Difficulty { get; set; }
+
+    public virtual ICollection<Question>?
+        Questions { get; set; } // NOTE(akotro): Reverse Navigation
 }

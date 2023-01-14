@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using ModelLibrary.Models;
 using ModelLibrary.Models.Candidates;
 using ModelLibrary.Models.Certificates;
 using ModelLibrary.Models.Exams;
-using WebApp4a.Models;
 
 namespace WebApp4a.Data
 {
@@ -25,9 +25,22 @@ namespace WebApp4a.Data
         public virtual DbSet<CandidateExam> CandidateExams { get; set; }
         public virtual DbSet<CandidateExamAnswers> CandidateExamAnswers { get; set; }
 
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-            : base(options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) :
+            base(options)
         {
+        }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+            // NOTE(akotro): Configures AppUserId to be Candidate's PK + FK to AppUser
+            builder
+                .Entity<AppUser>()
+                .HasOne(a => a.Candidate)
+                .WithOne(c => c.AppUser)
+                .HasForeignKey<Candidate>(c => c.AppUserId)
+                .IsRequired(false);
+            builder.Entity<Candidate>().HasKey(c => c.AppUserId);
         }
     }
 }
