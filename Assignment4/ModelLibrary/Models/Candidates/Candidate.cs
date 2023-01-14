@@ -18,10 +18,16 @@ namespace ModelLibrary.Models.Candidates
         public string? CandidateNumber { get; set; }
         public string? PhotoIdNumber { get; set; }
         public DateTime? PhotoIdIssueDate { get; set; }
-
+        public int GenderId { get; set; }
         public virtual Gender? Gender { get; set; }
+        public int LanguageId { get; set; }
+
         public virtual Language? Language { get; set; }
+        public int PhotoIdTypeId { get; set; }
+
         public virtual PhotoIdType? PhotoIdType { get; set; }
+        //public int Address { get; set; }
+
         public virtual ICollection<Address>? Address { get; set; }
 
         public virtual ICollection<CandidateExam>?
