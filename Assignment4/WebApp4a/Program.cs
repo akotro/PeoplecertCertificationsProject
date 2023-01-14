@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using ModelLibrary.Models;
 using WebApp4a.Data;
 
 namespace WebApp4a
@@ -16,9 +17,11 @@ namespace WebApp4a
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddRazorPages();
+            builder.Services.AddMvc();
+            builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
 
@@ -43,6 +46,7 @@ namespace WebApp4a
             app.UseAuthorization();
 
             app.MapRazorPages();
+            app.MapDefaultControllerRoute();
 
             app.Run();
         }
