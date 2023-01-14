@@ -17,5 +17,5 @@ public class CandidateExam
     public virtual Exam? Exam { get; set; }
 
     public virtual ICollection<CandidateExamAnswers>?
-        CandidateExamAnswers { get; set; } // NOTE(akotro): Reverse Navigation
+        CandidateExamAnswers { get; set; } // NOTE:(akotro) Reverse Navigation
 }

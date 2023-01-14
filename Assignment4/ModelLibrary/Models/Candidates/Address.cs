@@ -11,6 +11,6 @@
         public virtual Country? Country { get; set; }
 
         public virtual Candidate?
-            Candidate { get; set; } // NOTE(akotro): Reverse Navigation
+            Candidate { get; set; } // NOTE:(akotro) Reverse Navigation
     }
 }

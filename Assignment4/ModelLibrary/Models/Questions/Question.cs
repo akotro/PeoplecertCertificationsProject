@@ -11,6 +11,5 @@ public class Question
     public virtual DifficultyLevel? DifficultyLevel { get; set; }
     public virtual ICollection<Exam>? Exams { get; set; }
 
-    public virtual ICollection<Option>?
-        Options { get; set; } // NOTE(akotro): Reverse Navigation
+    public virtual ICollection<Option>? Options { get; set; } // NOTE:(akotro) Reverse Navigation
 }

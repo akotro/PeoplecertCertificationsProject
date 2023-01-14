@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using ModelLibrary.Models;
 using ModelLibrary.Models.Candidates;
 using ModelLibrary.Models.Certificates;
 using ModelLibrary.Models.Exams;
+using ModelLibrary.Models.Questions;
 
 namespace WebApp4a.Data
 {
@@ -33,7 +34,7 @@ namespace WebApp4a.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            // NOTE(akotro): Configures AppUserId to be Candidate's PK + FK to AppUser
+            // NOTE:(akotro) Configures AppUserId to be Candidate's PK + FK to AppUser
             builder
                 .Entity<AppUser>()
                 .HasOne(a => a.Candidate)
@@ -42,5 +43,7 @@ namespace WebApp4a.Data
                 .IsRequired(false);
             builder.Entity<Candidate>().HasKey(c => c.AppUserId);
         }
+
+        public DbSet<ModelLibrary.Models.Questions.Question>? Question { get; set; }
     }
 }
