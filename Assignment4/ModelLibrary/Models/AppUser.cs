@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using ModelLibrary.Models.Candidates;
 
-namespace WebApp4a.Models;
+namespace ModelLibrary.Models;
 
 public class AppUser : IdentityUser
 {
-    //public virtual Candidate? Candidate { get; set; }
+    public Candidate Candidate { get; set; }
 }

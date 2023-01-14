@@ -18,7 +18,9 @@ namespace ModelLibrary.Models.Candidates
     public class PhotoIdType
     {
         public int Id { get; set; }
-        public PhotoIdTypeEnum IdType { get; set; }
-        public virtual ICollection<Candidate> Candidates { get; set; } // NOTE(akotro): Reverse navigation
+        public PhotoIdTypeEnum? IdType { get; set; }
+
+        public virtual ICollection<Candidate>?
+            Candidates { get; set; } // NOTE(akotro): Reverse navigation
     }
 }

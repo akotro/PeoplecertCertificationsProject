@@ -19,4 +19,8 @@
     <ProjectReference Include="..\ModelLibrary\ModelLibrary.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models" />
+  </ItemGroup>
+
 </Project>

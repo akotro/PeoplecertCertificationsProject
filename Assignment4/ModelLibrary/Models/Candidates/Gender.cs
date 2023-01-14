@@ -17,7 +17,9 @@ namespace ModelLibrary.Models.Candidates
     public class Gender
     {
         public int Id { get; set; }
-        public GenderEnum GenderType { get; set; }
-        public virtual ICollection<Candidate> Candidates { get; set; } // NOTE(akotro): Reverse navigation
+        public GenderEnum? GenderType { get; set; }
+
+        public virtual ICollection<Candidate>?
+            Candidates { get; set; } // NOTE(akotro): Reverse navigation
     }
 }

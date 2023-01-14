@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApp4a.Data;
 
@@ -11,9 +12,10 @@ using WebApp4a.Data;
 namespace WebApp4a.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230114102443_UserCandidateRelationship")]
+    partial class UserCandidateRelationship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -269,29 +271,34 @@ namespace WebApp4a.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Address1")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Address2")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CandidateAppUserId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("CandidateId")
+                        .HasColumnType("int");
 
                     b.Property<string>("City")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("CountryId")
+                    b.Property<int>("CountryId")
                         .HasColumnType("int");
 
                     b.Property<string>("PostalCode")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("State")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CandidateAppUserId");
+                    b.HasIndex("CandidateId");
 
                     b.HasIndex("CountryId");
 
@@ -300,49 +307,67 @@ namespace WebApp4a.Migrations
 
             modelBuilder.Entity("ModelLibrary.Models.Candidates.Candidate", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
                     b.Property<string>("AppUserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CandidateNumber")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("DateOfBirth")
+                    b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("GenderId")
+                    b.Property<int>("GenderId")
                         .HasColumnType("int");
 
                     b.Property<string>("Landline")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("LanguageId")
+                    b.Property<int>("LanguageId")
                         .HasColumnType("int");
 
                     b.Property<string>("LastName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("MiddleName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Mobile")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("PhotoIdIssueDate")
+                    b.Property<DateTime>("PhotoIdIssueDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("PhotoIdNumber")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PhotoIdTypeId")
+                    b.Property<int>("PhotoIdTypeId")
                         .HasColumnType("int");
 
-                    b.HasKey("AppUserId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId")
+                        .IsUnique()
+                        .HasFilter("[AppUserId] IS NOT NULL");
 
                     b.HasIndex("GenderId");
 
@@ -362,6 +387,7 @@ namespace WebApp4a.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("CountryOfResidence")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -377,7 +403,7 @@ namespace WebApp4a.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("GenderType")
+                    b.Property<int>("GenderType")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -394,6 +420,7 @@ namespace WebApp4a.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("NativeLanguage")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -409,7 +436,7 @@ namespace WebApp4a.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("IdType")
+                    b.Property<int>("IdType")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -425,19 +452,22 @@ namespace WebApp4a.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<bool?>("Active")
+                    b.Property<bool>("Active")
                         .HasColumnType("bit");
 
                     b.Property<string>("Category")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PassingMark")
+                    b.Property<int>("PassingMark")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -453,7 +483,7 @@ namespace WebApp4a.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("Difficulty")
+                    b.Property<int>("Difficulty")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -469,10 +499,11 @@ namespace WebApp4a.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("MaxMarks")
+                    b.Property<int>("MaxMarks")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -489,35 +520,36 @@ namespace WebApp4a.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("AssessmentCode")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CandidateAppUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int?>("CandidateScore")
+                    b.Property<int>("CandidateId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("ExamDate")
+                    b.Property<int>("CandidateScore")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ExamDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("ExamId")
+                    b.Property<int>("ExamId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("MaxScore")
+                    b.Property<int>("MaxScore")
                         .HasColumnType("int");
 
-                    b.Property<decimal?>("PercentScore")
+                    b.Property<decimal>("PercentScore")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<DateTime?>("ReportDate")
+                    b.Property<DateTime>("ReportDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool?>("Result")
+                    b.Property<bool>("Result")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CandidateAppUserId");
+                    b.HasIndex("CandidateId");
 
                     b.HasIndex("ExamId");
 
@@ -532,16 +564,18 @@ namespace WebApp4a.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("CandidateExamId")
+                    b.Property<int>("CandidateExamId")
                         .HasColumnType("int");
 
                     b.Property<string>("ChosenOption")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CorrectOption")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool?>("IsCorrect")
+                    b.Property<bool>("IsCorrect")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
@@ -559,7 +593,7 @@ namespace WebApp4a.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("CertificateId")
+                    b.Property<int>("CertificateId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -577,13 +611,14 @@ namespace WebApp4a.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<bool?>("Correct")
+                    b.Property<bool>("Correct")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("QuestionId")
+                    b.Property<int>("QuestionId")
                         .HasColumnType("int");
 
                     b.Property<string>("Text")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -601,13 +636,14 @@ namespace WebApp4a.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("DifficultyLevelId")
+                    b.Property<int>("DifficultyLevelId")
                         .HasColumnType("int");
 
                     b.Property<string>("Text")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("TopicId")
+                    b.Property<int>("TopicId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -711,11 +747,15 @@ namespace WebApp4a.Migrations
                 {
                     b.HasOne("ModelLibrary.Models.Candidates.Candidate", "Candidate")
                         .WithMany("Address")
-                        .HasForeignKey("CandidateAppUserId");
+                        .HasForeignKey("CandidateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ModelLibrary.Models.Candidates.Country", "Country")
                         .WithMany("Addresses")
-                        .HasForeignKey("CountryId");
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Candidate");
 
@@ -730,15 +770,21 @@ namespace WebApp4a.Migrations
 
                     b.HasOne("ModelLibrary.Models.Candidates.Gender", "Gender")
                         .WithMany("Candidates")
-                        .HasForeignKey("GenderId");
+                        .HasForeignKey("GenderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ModelLibrary.Models.Candidates.Language", "Language")
                         .WithMany("Candidates")
-                        .HasForeignKey("LanguageId");
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ModelLibrary.Models.Candidates.PhotoIdType", "PhotoIdType")
                         .WithMany("Candidates")
-                        .HasForeignKey("PhotoIdTypeId");
+                        .HasForeignKey("PhotoIdTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("AppUser");
 
@@ -753,11 +799,15 @@ namespace WebApp4a.Migrations
                 {
                     b.HasOne("ModelLibrary.Models.Candidates.Candidate", "Candidate")
                         .WithMany("CandidateExams")
-                        .HasForeignKey("CandidateAppUserId");
+                        .HasForeignKey("CandidateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ModelLibrary.Models.Exams.Exam", "Exam")
                         .WithMany("CandidateExams")
-                        .HasForeignKey("ExamId");
+                        .HasForeignKey("ExamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Candidate");
 
@@ -768,7 +818,9 @@ namespace WebApp4a.Migrations
                 {
                     b.HasOne("ModelLibrary.Models.Exams.CandidateExam", "CandidateExam")
                         .WithMany("CandidateExamAnswers")
-                        .HasForeignKey("CandidateExamId");
+                        .HasForeignKey("CandidateExamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("CandidateExam");
                 });
@@ -777,7 +829,9 @@ namespace WebApp4a.Migrations
                 {
                     b.HasOne("ModelLibrary.Models.Certificates.Certificate", "Certificate")
                         .WithMany("Exams")
-                        .HasForeignKey("CertificateId");
+                        .HasForeignKey("CertificateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Certificate");
                 });
@@ -786,7 +840,9 @@ namespace WebApp4a.Migrations
                 {
                     b.HasOne("ModelLibrary.Models.Questions.Question", "Question")
                         .WithMany("Options")
-                        .HasForeignKey("QuestionId");
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Question");
                 });
@@ -795,11 +851,15 @@ namespace WebApp4a.Migrations
                 {
                     b.HasOne("ModelLibrary.Models.Certificates.DifficultyLevel", "DifficultyLevel")
                         .WithMany("Questions")
-                        .HasForeignKey("DifficultyLevelId");
+                        .HasForeignKey("DifficultyLevelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ModelLibrary.Models.Certificates.Topic", "Topic")
                         .WithMany("Questions")
-                        .HasForeignKey("TopicId");
+                        .HasForeignKey("TopicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("DifficultyLevel");
 
