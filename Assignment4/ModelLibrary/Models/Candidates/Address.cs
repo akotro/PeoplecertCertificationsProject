@@ -8,9 +8,9 @@
         public string? City { get; set; }
         public string? State { get; set; }
         public string? PostalCode { get; set; }
+        public int CountryId { get; set; }
         public virtual Country? Country { get; set; }
-
-        public virtual Candidate?
-            Candidate { get; set; } // NOTE:(akotro) Reverse Navigation
+        public string? CandidateId { get; set; }
+        public virtual Candidate? Candidate { get; set; } // NOTE(akotro): Reverse Navigation
     }
 }
