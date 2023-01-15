@@ -60,7 +60,24 @@ namespace WebApp4a.Data
                 .WithMany(c => c.Exams)
                 .HasForeignKey(t => t.QuestionId);
 
+            builder.Entity<CandidateExam>()
+                .HasOne(c => c.Candidate)
+                .WithMany(c => c.CandidateExams)
+                .HasForeignKey(t => t.CandidateId);
+            builder.Entity<CandidateExam>()
+                .HasOne(c => c.Exam)
+                .WithMany(c => c.CandidateExams)
+                .HasForeignKey(t => t.ExamId);
 
+            //builder.Entity<Candidate>()
+            //       .HasMany(c => c.CandidateExams)
+            //       .WithOne(e => e.Candidate)
+            //       .HasForeignKey(ce => ce.CandidateId);
+
+            //builder.Entity<Exam>()
+            //    .HasMany(e => e.CandidateExams)
+            //    .WithOne(c => c.Exam)
+            //    .HasForeignKey(ce => ce.ExamId);
 
             //builder.Entity<Certificate>()
             //    .HasMany(c => c.Topics)
@@ -86,6 +103,6 @@ namespace WebApp4a.Data
             #endregion
 
         }
-      
+
     }
 }

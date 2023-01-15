@@ -15,22 +15,22 @@ namespace WebApp4a.Data.ModelBuilderExtensions
 {
     public static class SeedExtention
     {
-        public static void Seed(this ModelBuilder modelBuilder )
-        { 
+        public static void Seed(this ModelBuilder modelBuilder)
+        {
 
             //public static ModelBuilder sasd = new ModelBuilder();
-        //private static ApplicationDbContext _context { get; set; }
-        //static SeedExtention (ApplicationDbContext context)
-        //{
-        //_context = context;
-        //}
-        //var db = new ApplicationDbContext();
+            //private static ApplicationDbContext _context { get; set; }
+            //static SeedExtention (ApplicationDbContext context)
+            //{
+            //_context = context;
+            //}
+            //var db = new ApplicationDbContext();
 
 
-        //SampleData.Initialize(app.ApplicationServices);
+            //SampleData.Initialize(app.ApplicationServices);
 
-        // Bogus RAndomizer set to generate repeatable data sets.
-        Randomizer.Seed = new Random(8675309);
+            // Bogus RAndomizer set to generate repeatable data sets.
+            Randomizer.Seed = new Random(8675309);
             var faker = new Faker();
             var fakeNum10 = faker.Random.Number(1, 10);
 
@@ -76,7 +76,7 @@ namespace WebApp4a.Data.ModelBuilderExtensions
             #endregion
 
             #region // Adding Enum options and Seeding PhotoIdType Table in DB
-         
+
             var photoIdTypeEntries = new List<PhotoIdType>();
             for (int i = 0; i < Enum.GetNames(typeof(PhotoIdTypeEnum)).Length; i++)
             {
@@ -156,7 +156,7 @@ namespace WebApp4a.Data.ModelBuilderExtensions
             {
                 fakeAddresses[i].Id = i + 1;
                 fakeAddresses[i].CountryId = fakeCountries[i].Id;
-                fakeAddresses[i].CandidateId = fakeCandidates[faker.Random.Number(fakeCandidates.Count-1)].AppUserId;
+                fakeAddresses[i].CandidateId = fakeCandidates[faker.Random.Number(fakeCandidates.Count - 1)].AppUserId;
             }
 
             modelBuilder.Entity<ModelLibrary.Models.Candidates.Address>().HasData(fakeAddresses);
@@ -225,7 +225,7 @@ namespace WebApp4a.Data.ModelBuilderExtensions
                 .RuleFor(c => c.Description, f => f.Random.Words(10))
                 .RuleFor(c => c.Category, f => f.Random.Words(1))
                 .RuleFor(c => c.Active, f => f.Random.Bool());
-               
+
 
 
             var fakeCerts = certFaker.Generate(10);
@@ -276,15 +276,16 @@ namespace WebApp4a.Data.ModelBuilderExtensions
 
             #region // Seeding Exams table
 
-            modelBuilder.Entity<Exam>().HasData(
-                new Exam {Id = 1, CertificateId = 1 },
-                new Exam {Id = 2, CertificateId = 1 },
-                new Exam {Id = 3, CertificateId = 2 },
-                new Exam {Id = 4, CertificateId = 3 },
-                new Exam {Id = 5, CertificateId = 3 },
-                new Exam {Id = 6, CertificateId = 3 },
-                new Exam {Id = 7, CertificateId = 4 }
-                );
+            var fakeExamEntries = new List<Exam>(){
+                new Exam { Id = 1, CertificateId = 1 },
+                new Exam { Id = 2, CertificateId = 1 },
+                new Exam { Id = 3, CertificateId = 2 },
+                new Exam { Id = 4, CertificateId = 3 },
+                new Exam { Id = 5, CertificateId = 3 },
+                new Exam { Id = 6, CertificateId = 3 },
+                new Exam { Id = 7, CertificateId = 4 }
+            };
+            modelBuilder.Entity<Exam>().HasData(fakeExamEntries);
 
             #endregion
 
@@ -307,7 +308,40 @@ namespace WebApp4a.Data.ModelBuilderExtensions
             #region // Seeding CAndiadateExam table
 
 
+            var candiExamFaker = new Faker<CandidateExam>()
+                .RuleFor(c => c.ExamDate, f => f.Date.Past(2, DateTime.Now))
+                .RuleFor(c => c.ReportDate, f => f.Date.Between(new DateTime(2022, 6, 10, 0, 0, 0), DateTime.Now));
+            var fakecandiExams = candiExamFaker.Generate(10);
+
+            for (int i = 0; i < fakecandiExams.Count; i++)
+            {
+                fakecandiExams[i].Id = i + 1;
+                fakecandiExams[i].ExamId = fakeExamEntries[faker.Random.Number(fakeExamEntries.Count - 1)].Id;
+                fakecandiExams[i].CandidateId = fakeCandidates[faker.Random.Number(fakeCandidates.Count - 1)].AppUserId;
+
+            }
+            modelBuilder.Entity<CandidateExam>().HasData(fakecandiExams);
+
+            #endregion
+
+            #region // Seeding CAndiadateExamAnswers table
+
+
+            var candiExamAnsFaker = new Faker<CandidateExamAnswers>()
+                .RuleFor(c => c.CorrectOption, f => f.PickRandom(fakeOptions).Text)
+                .RuleFor(c => c.ChosenOption, f => f.PickRandom(fakeOptions).Text);
+
+            var fakecandiExamAns = candiExamAnsFaker.Generate(10);
+
+            for (int i = 0; i < fakecandiExams.Count; i++)
+            {
+                fakecandiExamAns[i].Id = i + 1;
+                fakecandiExamAns[i].CandidateExamId = fakecandiExams[faker.Random.Number(fakecandiExams.Count - 1)].Id;
+                fakecandiExamAns[i].IsCorrect = false;
+            }
+            modelBuilder.Entity<CandidateExamAnswers>().HasData(fakecandiExamAns);
+
             #endregion
         }
     }
-    }
+}
