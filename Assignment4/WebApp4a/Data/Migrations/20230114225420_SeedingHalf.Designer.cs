@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApp4a.Data;
 
@@ -11,9 +12,10 @@ using WebApp4a.Data;
 namespace WebApp4a.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230114225420_SeedingHalf")]
+    partial class SeedingHalf
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +23,36 @@ namespace WebApp4a.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("CertificateTopic", b =>
+                {
+                    b.Property<int>("CertificatesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TopicsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CertificatesId", "TopicsId");
+
+                    b.HasIndex("TopicsId");
+
+                    b.ToTable("CertificateTopic");
+                });
+
+            modelBuilder.Entity("ExamQuestion", b =>
+                {
+                    b.Property<int>("ExamsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("QuestionsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ExamsId", "QuestionsId");
+
+                    b.HasIndex("QuestionsId");
+
+                    b.ToTable("ExamQuestion");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -228,13 +260,13 @@ namespace WebApp4a.Migrations
                         {
                             Id = "9407b6e2-f46e-4a79-a725-dfb1e15e2915",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "a35a1a91-0abf-4ee0-817c-7a8a36b2a538",
+                            ConcurrencyStamp = "2a266ef0-f116-49b7-95ee-ac2de2fdbd00",
                             Email = "admin0@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumber = "1234567890",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "bdf417e3-0b67-42d4-b5dd-a6024fcd1ad8",
+                            SecurityStamp = "be1ace94-f799-44fd-b946-014d6fdf71a1",
                             TwoFactorEnabled = false,
                             UserName = "Admin0"
                         },
@@ -242,13 +274,13 @@ namespace WebApp4a.Migrations
                         {
                             Id = "be69a4bd-fb90-41dd-b65b-4ff8b619b767",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "e0fbd2f6-a43c-4a49-bdd5-73b03943a49a",
+                            ConcurrencyStamp = "4eeb9621-c141-4da1-99d8-9e6dbd8a57ba",
                             Email = "admin1@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumber = "1234567890",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "fbd16aeb-b265-4820-8ec4-a2a6bc51841e",
+                            SecurityStamp = "8249df9a-76ff-4f45-97c8-f08bee44e264",
                             TwoFactorEnabled = false,
                             UserName = "Admin1"
                         },
@@ -256,13 +288,13 @@ namespace WebApp4a.Migrations
                         {
                             Id = "8ca319b2-762d-45e3-8b26-edd6b1f4ba75",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "19506327-79f1-403c-8700-f931f4c21b4a",
+                            ConcurrencyStamp = "99094eb9-712d-44d3-a46a-3f63b539bbc2",
                             Email = "admin2@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumber = "1234567890",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "6e4fc92a-f3d1-4f4c-8ef7-bb5dfd0b70ef",
+                            SecurityStamp = "b36f9ea6-2448-446e-a09b-37ac1a263472",
                             TwoFactorEnabled = false,
                             UserName = "Admin2"
                         },
@@ -270,13 +302,13 @@ namespace WebApp4a.Migrations
                         {
                             Id = "f60a904a-aba6-4635-892d-f38919b09896",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "44919ce7-b036-43ae-8d38-d1a0eb1c64ad",
+                            ConcurrencyStamp = "afea8d14-c41b-4160-b6b8-b7be04950d29",
                             Email = "admin3@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumber = "1234567890",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "790fb538-1444-4cd3-a9da-d3adfab6e4e0",
+                            SecurityStamp = "6ccb4740-df0d-4a94-8f31-33b82265cad3",
                             TwoFactorEnabled = false,
                             UserName = "Admin3"
                         });
@@ -296,7 +328,7 @@ namespace WebApp4a.Migrations
                     b.Property<string>("Address2")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CandidateId")
+                    b.Property<string>("CandidateAppUserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("City")
@@ -313,7 +345,7 @@ namespace WebApp4a.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CandidateId");
+                    b.HasIndex("CandidateAppUserId");
 
                     b.HasIndex("CountryId");
 
@@ -323,112 +355,102 @@ namespace WebApp4a.Migrations
                         new
                         {
                             Id = 1,
-                            Address1 = "831 Heller Place",
-                            Address2 = "9688 Stark Place",
-                            CandidateId = "9407b6e2-f46e-4a79-a725-dfb1e15e2915",
-                            City = "New Demond",
+                            Address1 = "66095 Lynch Pine",
+                            Address2 = "68310 Schneider Inlet",
+                            City = "Port Rowena",
                             CountryId = 1,
-                            PostalCode = "95510-8057",
-                            State = "Vermont"
+                            PostalCode = "68826-2859",
+                            State = "New Mexico"
                         },
                         new
                         {
                             Id = 2,
-                            Address1 = "5075 Karl Curve",
-                            Address2 = "19598 Madge Mission",
-                            CandidateId = "9407b6e2-f46e-4a79-a725-dfb1e15e2915",
-                            City = "Ritchieborough",
+                            Address1 = "0572 Annabelle Stream",
+                            Address2 = "0751 Cormier Pass",
+                            City = "South Madgeport",
                             CountryId = 2,
-                            PostalCode = "48284",
-                            State = "Louisiana"
+                            PostalCode = "59877-3334",
+                            State = "Georgia"
                         },
                         new
                         {
                             Id = 3,
-                            Address1 = "6314 Jenifer Plains",
-                            Address2 = "18120 Leannon Club",
-                            CandidateId = "be69a4bd-fb90-41dd-b65b-4ff8b619b767",
-                            City = "East Jeff",
+                            Address1 = "51466 Klein Station",
+                            Address2 = "85018 Jordi Flats",
+                            City = "East Angelborough",
                             CountryId = 3,
-                            PostalCode = "70911",
-                            State = "Vermont"
+                            PostalCode = "82709",
+                            State = "Florida"
                         },
                         new
                         {
                             Id = 4,
-                            Address1 = "7589 Dejon Heights",
-                            Address2 = "459 Skiles Crossroad",
-                            CandidateId = "8ca319b2-762d-45e3-8b26-edd6b1f4ba75",
-                            City = "East Cristalview",
+                            Address1 = "23758 Estella Inlet",
+                            Address2 = "14592 Stehr Street",
+                            City = "East Janiceborough",
                             CountryId = 4,
-                            PostalCode = "14236-9757",
-                            State = "Louisiana"
+                            PostalCode = "42369",
+                            State = "New Hampshire"
                         },
                         new
                         {
                             Id = 5,
-                            Address1 = "51359 Chet Trail",
-                            Address2 = "34678 Jess Hill",
-                            CandidateId = "be69a4bd-fb90-41dd-b65b-4ff8b619b767",
-                            City = "Valentinafurt",
+                            Address1 = "3185 Daugherty Avenue",
+                            Address2 = "2243 White Drive",
+                            City = "South Lonnie",
                             CountryId = 5,
-                            PostalCode = "17049-9241",
-                            State = "Oregon"
+                            PostalCode = "69677-1704",
+                            State = "South Carolina"
                         },
                         new
                         {
                             Id = 6,
-                            Address1 = "308 Ferry Ridges",
-                            Address2 = "9991 Fay Walk",
-                            CandidateId = "8ca319b2-762d-45e3-8b26-edd6b1f4ba75",
-                            City = "Port Nelson",
+                            Address1 = "687 Jada Crest",
+                            Address2 = "651 Albina Tunnel",
+                            City = "Port Velva",
                             CountryId = 6,
-                            PostalCode = "36477",
-                            State = "Alaska"
+                            PostalCode = "13970-2364",
+                            State = "West Virginia"
                         },
                         new
                         {
                             Id = 7,
-                            Address1 = "708 Zieme Village",
-                            Address2 = "8821 Toby Land",
-                            CandidateId = "9407b6e2-f46e-4a79-a725-dfb1e15e2915",
-                            City = "Heathville",
+                            Address1 = "997 Tiana Pike",
+                            Address2 = "948 MacGyver Fords",
+                            City = "Goyetteland",
                             CountryId = 7,
-                            PostalCode = "47627",
-                            State = "Tennessee"
+                            PostalCode = "28047",
+                            State = "Nevada"
                         },
                         new
                         {
                             Id = 8,
-                            Address1 = "9589 Bryana Stream",
-                            Address2 = "1449 Laney Underpass",
-                            CandidateId = "be69a4bd-fb90-41dd-b65b-4ff8b619b767",
-                            City = "South Ursula",
+                            Address1 = "41895 Carroll Lock",
+                            Address2 = "591 Julia Flat",
+                            City = "West Thea",
                             CountryId = 8,
-                            PostalCode = "10949-0483",
-                            State = "Hawaii"
+                            PostalCode = "92910-9490",
+                            State = "Maine"
                         },
                         new
                         {
                             Id = 9,
-                            Address1 = "44989 Hodkiewicz Brook",
-                            Address2 = "37608 Harber Stream",
-                            CandidateId = "8ca319b2-762d-45e3-8b26-edd6b1f4ba75",
-                            City = "Lake Nina",
+                            Address1 = "930 Madalyn Cape",
+                            Address2 = "8263 Spencer Via",
+                            City = "Gutkowskichester",
                             CountryId = 9,
-                            PostalCode = "30846",
-                            State = "Virginia"
+                            PostalCode = "82779",
+                            State = "North Carolina"
                         },
                         new
                         {
                             Id = 10,
-                            Address1 = "5974 Chandler Parkway",
-                            Address2 = "3757 Margie Brook",
-                            CandidateId = "9407b6e2-f46e-4a79-a725-dfb1e15e2915",
-                            City = "East Delaneybury",
+                            Address1 = "68421 Rico Mews",
+                            Address2 = "9546 Romaguera Lakes",
+                            City = "West Nathanielmouth",
                             CountryId = 10,
-                            PostalCode = "08208-7354",
-                            State = "Mississippi"
+                            PostalCode = "12449",
+                            State = "Pennsylvania"
                         });
                 });
 
@@ -490,52 +512,52 @@ namespace WebApp4a.Migrations
                         new
                         {
                             AppUserId = "9407b6e2-f46e-4a79-a725-dfb1e15e2915",
-                            CandidateNumber = "420088571",
-                            DateOfBirth = new DateTime(1991, 11, 4, 11, 17, 35, 686, DateTimeKind.Local).AddTicks(9274),
-                            Email = "Otho_Pfannerstill31@gmail.com",
-                            FirstName = "Josianne",
+                            CandidateNumber = "419272734",
+                            DateOfBirth = new DateTime(1996, 11, 9, 12, 42, 52, 985, DateTimeKind.Local).AddTicks(2253),
+                            Email = "Cordie_Sawayn64@hotmail.com",
+                            FirstName = "Donna",
                             GenderId = 2,
-                            Landline = "645.786.1631 x0930",
-                            LanguageId = 2,
-                            LastName = "Pfeffer",
-                            MiddleName = "Yolanda",
-                            Mobile = "351-303-5993 x592",
-                            PhotoIdIssueDate = new DateTime(2022, 2, 24, 13, 2, 58, 204, DateTimeKind.Local).AddTicks(4950),
-                            PhotoIdNumber = "bfqee8",
-                            PhotoIdTypeId = 4
+                            Landline = "1-864-658-6163",
+                            LanguageId = 3,
+                            LastName = "Zboncak",
+                            MiddleName = "Josianne",
+                            Mobile = "230.942.2510",
+                            PhotoIdIssueDate = new DateTime(2019, 6, 26, 4, 32, 47, 546, DateTimeKind.Local).AddTicks(4790),
+                            PhotoIdNumber = "藞專誢",
+                            PhotoIdTypeId = 3
                         },
                         new
                         {
                             AppUserId = "be69a4bd-fb90-41dd-b65b-4ff8b619b767",
-                            CandidateNumber = "136721276",
-                            DateOfBirth = new DateTime(1988, 7, 19, 10, 32, 33, 561, DateTimeKind.Local).AddTicks(8756),
-                            Email = "Dedrick_Lynch@hotmail.com",
-                            FirstName = "Adeline",
+                            CandidateNumber = "353153592",
+                            DateOfBirth = new DateTime(2009, 5, 16, 8, 34, 53, 479, DateTimeKind.Local).AddTicks(9739),
+                            Email = "Ashtyn.Howe@gmail.com",
+                            FirstName = "Gregory",
                             GenderId = 4,
-                            Landline = "615.524.9751 x3792",
-                            LanguageId = 2,
-                            LastName = "Dietrich",
-                            MiddleName = "Aiyana",
-                            Mobile = "(750) 481-1897",
-                            PhotoIdIssueDate = new DateTime(2018, 1, 8, 23, 24, 39, 986, DateTimeKind.Local).AddTicks(5422),
-                            PhotoIdNumber = "cb4osy",
+                            Landline = "282-355-5754",
+                            LanguageId = 3,
+                            LastName = "Friesen",
+                            MiddleName = "Gladyce",
+                            Mobile = "649.475.1379",
+                            PhotoIdIssueDate = new DateTime(2021, 9, 18, 21, 49, 0, 678, DateTimeKind.Local).AddTicks(6484),
+                            PhotoIdNumber = "቉뼫䞅辢j�",
                             PhotoIdTypeId = 5
                         },
                         new
                         {
                             AppUserId = "8ca319b2-762d-45e3-8b26-edd6b1f4ba75",
-                            CandidateNumber = "153060623",
-                            DateOfBirth = new DateTime(1956, 1, 5, 12, 54, 13, 289, DateTimeKind.Local).AddTicks(4015),
-                            Email = "Kory27@gmail.com",
-                            FirstName = "Dakota",
-                            GenderId = 4,
-                            Landline = "(210) 799-5764 x6282",
+                            CandidateNumber = "193265026",
+                            DateOfBirth = new DateTime(1979, 9, 20, 19, 23, 31, 404, DateTimeKind.Local).AddTicks(3920),
+                            Email = "Marlen.Schmitt50@gmail.com",
+                            FirstName = "Alize",
+                            GenderId = 1,
+                            Landline = "821.492.5512 x6071",
                             LanguageId = 1,
-                            LastName = "Wilkinson",
-                            MiddleName = "Bridie",
-                            Mobile = "1-783-633-4424",
-                            PhotoIdIssueDate = new DateTime(2022, 9, 14, 0, 41, 4, 571, DateTimeKind.Local).AddTicks(6726),
-                            PhotoIdNumber = "f1lklm",
+                            LastName = "Hansen",
+                            MiddleName = "Esther",
+                            Mobile = "(957) 964-6282",
+                            PhotoIdIssueDate = new DateTime(2018, 3, 3, 15, 57, 45, 814, DateTimeKind.Local).AddTicks(2999),
+                            PhotoIdNumber = "ꡰ騹�持昚憮",
                             PhotoIdTypeId = 3
                         });
                 });
@@ -559,52 +581,52 @@ namespace WebApp4a.Migrations
                         new
                         {
                             Id = 1,
-                            CountryOfResidence = "Yemen"
+                            CountryOfResidence = "Saint Lucia"
                         },
                         new
                         {
                             Id = 2,
-                            CountryOfResidence = "Mexico"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CountryOfResidence = "United Arab Emirates"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CountryOfResidence = "Liechtenstein"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CountryOfResidence = "Bahrain"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            CountryOfResidence = "Costa Rica"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            CountryOfResidence = "Norfolk Island"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            CountryOfResidence = "Monaco"
-                        },
-                        new
-                        {
-                            Id = 9,
                             CountryOfResidence = "Yemen"
                         },
                         new
                         {
+                            Id = 3,
+                            CountryOfResidence = "Mexico"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CountryOfResidence = "United Arab Emirates"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CountryOfResidence = "Liechtenstein"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CountryOfResidence = "Bahrain"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            CountryOfResidence = "Costa Rica"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            CountryOfResidence = "Norfolk Island"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            CountryOfResidence = "Monaco"
+                        },
+                        new
+                        {
                             Id = 10,
-                            CountryOfResidence = "Ethiopia"
+                            CountryOfResidence = "Yemen"
                         });
                 });
 
@@ -753,160 +775,6 @@ namespace WebApp4a.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Certificates");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Active = false,
-                            Category = "reinvent",
-                            Description = "CSS Legacy AI Secured Guinea-Bissau SAS non-volatile Brunei Darussalam Rustic Berkshire",
-                            PassingMark = 0,
-                            Title = "mobile interfaces revolutionize"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Active = false,
-                            Category = "asymmetric",
-                            Description = "index Designer bypass JBOD world-class Landing invoice open-source Human invoice",
-                            PassingMark = 0,
-                            Title = "SAS conglomeration Incredible Plastic Tuna"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Active = false,
-                            Category = "Berkshire",
-                            Description = "Small Cotton Keyboard bandwidth empower Handmade Steel Bike Wooden neural parse TCP Incredible open architecture",
-                            PassingMark = 0,
-                            Title = "Ranch Antigua and Barbuda Infrastructure"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Active = false,
-                            Category = "synthesizing",
-                            Description = "Coves web-enabled ADP Mobility Metal Checking Account Security Personal Loan Account Cayman Islands Central",
-                            PassingMark = 0,
-                            Title = "Malaysia AGP Unbranded Cotton Keyboard"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Active = false,
-                            Category = "Paradigm",
-                            Description = "Cambridgeshire orchestration Manager Latvian Lats Tasty Rubber Keyboard Drive Refined Concrete Cheese functionalities Assurance Lead",
-                            PassingMark = 0,
-                            Title = "withdrawal metrics copy"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Active = true,
-                            Category = "back up",
-                            Description = "Points Forint methodologies Chief convergence Incredible Plastic Ball Route primary withdrawal copying",
-                            PassingMark = 0,
-                            Title = "extensible Investment Account Drives"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Active = true,
-                            Category = "hack",
-                            Description = "Wyoming Liaison Guam Suriname haptic Infrastructure ivory payment Kids multi-byte",
-                            PassingMark = 0,
-                            Title = "synthesize frictionless AI"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Active = false,
-                            Category = "Barbados Dollar",
-                            Description = "New Mexico California Money Market Account orchestrate Fantastic Plastic Bike JSON Forward Iowa Crescent deposit",
-                            PassingMark = 0,
-                            Title = "Fresh deposit withdrawal"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Active = false,
-                            Category = "bleeding-edge",
-                            Description = "Drives Virgin Islands, U.S. clicks-and-mortar Wooden database CSS hybrid customized full-range B2B",
-                            PassingMark = 0,
-                            Title = "transmit deposit payment"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Active = false,
-                            Category = "Orchestrator",
-                            Description = "Pitcairn Islands Fantastic Metal Pizza Fantastic Frozen Towels index Gorgeous Fresh Cheese Central Montana COM Progressive harness",
-                            PassingMark = 0,
-                            Title = "withdrawal Central Synchronised"
-                        });
-                });
-
-            modelBuilder.Entity("ModelLibrary.Models.Certificates.CertificateTopic", b =>
-                {
-                    b.Property<int>("CertificateId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TopicId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CertificateId", "TopicId");
-
-                    b.HasIndex("TopicId");
-
-                    b.ToTable("CertificateTopic");
-
-                    b.HasData(
-                        new
-                        {
-                            CertificateId = 1,
-                            TopicId = 1
-                        },
-                        new
-                        {
-                            CertificateId = 1,
-                            TopicId = 2
-                        },
-                        new
-                        {
-                            CertificateId = 1,
-                            TopicId = 3
-                        },
-                        new
-                        {
-                            CertificateId = 2,
-                            TopicId = 4
-                        },
-                        new
-                        {
-                            CertificateId = 2,
-                            TopicId = 5
-                        },
-                        new
-                        {
-                            CertificateId = 2,
-                            TopicId = 6
-                        },
-                        new
-                        {
-                            CertificateId = 3,
-                            TopicId = 4
-                        },
-                        new
-                        {
-                            CertificateId = 3,
-                            TopicId = 2
-                        },
-                        new
-                        {
-                            CertificateId = 3,
-                            TopicId = 1
-                        });
                 });
 
             modelBuilder.Entity("ModelLibrary.Models.Certificates.DifficultyLevel", b =>
@@ -965,61 +833,61 @@ namespace WebApp4a.Migrations
                         {
                             Id = 1,
                             MaxMarks = 26,
-                            Name = "Sports & Music firewall input"
+                            Name = "System.String[]"
                         },
                         new
                         {
                             Id = 2,
-                            MaxMarks = 25,
-                            Name = "withdrawal synergize Movies & Clothing"
+                            MaxMarks = 35,
+                            Name = "System.String[]"
                         },
                         new
                         {
                             Id = 3,
                             MaxMarks = 29,
-                            Name = "Human Philippine Peso Lead"
+                            Name = "System.String[]"
                         },
                         new
                         {
                             Id = 4,
-                            MaxMarks = 37,
-                            Name = "Lead back-end Agent"
+                            MaxMarks = 27,
+                            Name = "System.String[]"
                         },
                         new
                         {
                             Id = 5,
-                            MaxMarks = 31,
-                            Name = "capacity Parkways real-time"
+                            MaxMarks = 35,
+                            Name = "System.String[]"
                         },
                         new
                         {
                             Id = 6,
-                            MaxMarks = 37,
-                            Name = "Brunei Darussalam Associate Corporate"
+                            MaxMarks = 40,
+                            Name = "System.String[]"
                         },
                         new
                         {
                             Id = 7,
-                            MaxMarks = 31,
-                            Name = "Rupiah Island Small Cotton Car"
+                            MaxMarks = 27,
+                            Name = "System.String[]"
                         },
                         new
                         {
                             Id = 8,
-                            MaxMarks = 39,
-                            Name = "deploy bluetooth connecting"
+                            MaxMarks = 35,
+                            Name = "System.String[]"
                         },
                         new
                         {
                             Id = 9,
-                            MaxMarks = 31,
-                            Name = "Money Market Account connect Gorgeous"
+                            MaxMarks = 35,
+                            Name = "System.String[]"
                         },
                         new
                         {
                             Id = 10,
-                            MaxMarks = 35,
-                            Name = "transmit International scale"
+                            MaxMarks = 26,
+                            Name = "System.String[]"
                         });
                 });
 
@@ -1034,8 +902,7 @@ namespace WebApp4a.Migrations
                     b.Property<string>("AssessmentCode")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CandidateId")
-                        .IsRequired()
+                    b.Property<string>("CandidateAppUserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int?>("CandidateScore")
@@ -1044,7 +911,7 @@ namespace WebApp4a.Migrations
                     b.Property<DateTime?>("ExamDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ExamId")
+                    b.Property<int?>("ExamId")
                         .HasColumnType("int");
 
                     b.Property<int?>("MaxScore")
@@ -1061,93 +928,11 @@ namespace WebApp4a.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CandidateId");
+                    b.HasIndex("CandidateAppUserId");
 
                     b.HasIndex("ExamId");
 
                     b.ToTable("CandidateExams");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CandidateId = "be69a4bd-fb90-41dd-b65b-4ff8b619b767",
-                            ExamDate = new DateTime(2021, 12, 16, 15, 39, 31, 800, DateTimeKind.Local).AddTicks(3856),
-                            ExamId = 7,
-                            ReportDate = new DateTime(2022, 9, 17, 2, 20, 46, 984, DateTimeKind.Unspecified).AddTicks(6674)
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CandidateId = "8ca319b2-762d-45e3-8b26-edd6b1f4ba75",
-                            ExamDate = new DateTime(2021, 12, 25, 1, 19, 33, 730, DateTimeKind.Local).AddTicks(5259),
-                            ExamId = 4,
-                            ReportDate = new DateTime(2022, 12, 24, 11, 21, 56, 51, DateTimeKind.Unspecified).AddTicks(4505)
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CandidateId = "8ca319b2-762d-45e3-8b26-edd6b1f4ba75",
-                            ExamDate = new DateTime(2022, 6, 20, 15, 42, 11, 39, DateTimeKind.Local).AddTicks(763),
-                            ExamId = 6,
-                            ReportDate = new DateTime(2022, 11, 30, 2, 52, 10, 150, DateTimeKind.Unspecified).AddTicks(5307)
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CandidateId = "be69a4bd-fb90-41dd-b65b-4ff8b619b767",
-                            ExamDate = new DateTime(2021, 12, 8, 20, 27, 31, 86, DateTimeKind.Local).AddTicks(1583),
-                            ExamId = 7,
-                            ReportDate = new DateTime(2022, 11, 14, 15, 57, 55, 848, DateTimeKind.Unspecified).AddTicks(8759)
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CandidateId = "9407b6e2-f46e-4a79-a725-dfb1e15e2915",
-                            ExamDate = new DateTime(2021, 6, 20, 8, 58, 23, 27, DateTimeKind.Local).AddTicks(521),
-                            ExamId = 4,
-                            ReportDate = new DateTime(2022, 10, 16, 4, 13, 14, 558, DateTimeKind.Unspecified).AddTicks(1260)
-                        },
-                        new
-                        {
-                            Id = 6,
-                            CandidateId = "8ca319b2-762d-45e3-8b26-edd6b1f4ba75",
-                            ExamDate = new DateTime(2021, 10, 5, 3, 39, 26, 733, DateTimeKind.Local).AddTicks(7789),
-                            ExamId = 3,
-                            ReportDate = new DateTime(2022, 8, 14, 10, 20, 32, 623, DateTimeKind.Unspecified).AddTicks(5797)
-                        },
-                        new
-                        {
-                            Id = 7,
-                            CandidateId = "be69a4bd-fb90-41dd-b65b-4ff8b619b767",
-                            ExamDate = new DateTime(2021, 12, 29, 0, 10, 24, 143, DateTimeKind.Local).AddTicks(3883),
-                            ExamId = 3,
-                            ReportDate = new DateTime(2022, 8, 21, 18, 0, 24, 402, DateTimeKind.Unspecified).AddTicks(2325)
-                        },
-                        new
-                        {
-                            Id = 8,
-                            CandidateId = "9407b6e2-f46e-4a79-a725-dfb1e15e2915",
-                            ExamDate = new DateTime(2021, 4, 14, 17, 31, 13, 4, DateTimeKind.Local).AddTicks(1709),
-                            ExamId = 3,
-                            ReportDate = new DateTime(2022, 10, 8, 5, 54, 0, 759, DateTimeKind.Unspecified).AddTicks(5543)
-                        },
-                        new
-                        {
-                            Id = 9,
-                            CandidateId = "be69a4bd-fb90-41dd-b65b-4ff8b619b767",
-                            ExamDate = new DateTime(2021, 5, 2, 5, 36, 5, 80, DateTimeKind.Local).AddTicks(1390),
-                            ExamId = 2,
-                            ReportDate = new DateTime(2022, 7, 24, 11, 33, 13, 611, DateTimeKind.Unspecified).AddTicks(6051)
-                        },
-                        new
-                        {
-                            Id = 10,
-                            CandidateId = "be69a4bd-fb90-41dd-b65b-4ff8b619b767",
-                            ExamDate = new DateTime(2022, 9, 11, 17, 54, 3, 135, DateTimeKind.Local).AddTicks(7509),
-                            ExamId = 7,
-                            ReportDate = new DateTime(2022, 11, 2, 20, 21, 34, 458, DateTimeKind.Unspecified).AddTicks(5362)
-                        });
                 });
 
             modelBuilder.Entity("ModelLibrary.Models.Exams.CandidateExamAnswers", b =>
@@ -1158,7 +943,7 @@ namespace WebApp4a.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("CandidateExamId")
+                    b.Property<int?>("CandidateExamId")
                         .HasColumnType("int");
 
                     b.Property<string>("ChosenOption")
@@ -1175,88 +960,6 @@ namespace WebApp4a.Migrations
                     b.HasIndex("CandidateExamId");
 
                     b.ToTable("CandidateExamAnswers");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CandidateExamId = 9,
-                            ChosenOption = "<h2>this is an option</h2>",
-                            CorrectOption = "<h1>this is an option</h1>",
-                            IsCorrect = false
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CandidateExamId = 1,
-                            ChosenOption = "<h3>this is an option</h3>",
-                            CorrectOption = "<h2>this is an option</h2>",
-                            IsCorrect = false
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CandidateExamId = 3,
-                            ChosenOption = "<h1>this is an option</h1>",
-                            CorrectOption = "<h3>this is an option</h3>",
-                            IsCorrect = false
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CandidateExamId = 8,
-                            ChosenOption = "<h1>this is an option</h1>",
-                            CorrectOption = "<h1>this is an option</h1>",
-                            IsCorrect = false
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CandidateExamId = 3,
-                            ChosenOption = "<h2>this is an option</h2>",
-                            CorrectOption = "<h1>this is an option</h1>",
-                            IsCorrect = false
-                        },
-                        new
-                        {
-                            Id = 6,
-                            CandidateExamId = 8,
-                            ChosenOption = "<h2>this is an option</h2>",
-                            CorrectOption = "<h3>this is an option</h3>",
-                            IsCorrect = false
-                        },
-                        new
-                        {
-                            Id = 7,
-                            CandidateExamId = 9,
-                            ChosenOption = "<h3>this is an option</h3>",
-                            CorrectOption = "<h3>this is an option</h3>",
-                            IsCorrect = false
-                        },
-                        new
-                        {
-                            Id = 8,
-                            CandidateExamId = 1,
-                            ChosenOption = "<h2>this is an option</h2>",
-                            CorrectOption = "<h3>this is an option</h3>",
-                            IsCorrect = false
-                        },
-                        new
-                        {
-                            Id = 9,
-                            CandidateExamId = 10,
-                            ChosenOption = "<h2>this is an option</h2>",
-                            CorrectOption = "<h2>this is an option</h2>",
-                            IsCorrect = false
-                        },
-                        new
-                        {
-                            Id = 10,
-                            CandidateExamId = 8,
-                            ChosenOption = "<h1>this is an option</h1>",
-                            CorrectOption = "<h2>this is an option</h2>",
-                            IsCorrect = false
-                        });
                 });
 
             modelBuilder.Entity("ModelLibrary.Models.Exams.Exam", b =>
@@ -1267,7 +970,7 @@ namespace WebApp4a.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("CertificateId")
+                    b.Property<int?>("CertificateId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -1275,105 +978,6 @@ namespace WebApp4a.Migrations
                     b.HasIndex("CertificateId");
 
                     b.ToTable("Exams");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CertificateId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CertificateId = 1
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CertificateId = 2
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CertificateId = 3
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CertificateId = 3
-                        },
-                        new
-                        {
-                            Id = 6,
-                            CertificateId = 3
-                        },
-                        new
-                        {
-                            Id = 7,
-                            CertificateId = 4
-                        });
-                });
-
-            modelBuilder.Entity("ModelLibrary.Models.Exams.ExamQuestion", b =>
-                {
-                    b.Property<int>("ExamsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("QuestionId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ExamsId", "QuestionId");
-
-                    b.HasIndex("QuestionId");
-
-                    b.ToTable("ExamQuestion");
-
-                    b.HasData(
-                        new
-                        {
-                            ExamsId = 1,
-                            QuestionId = 1
-                        },
-                        new
-                        {
-                            ExamsId = 1,
-                            QuestionId = 2
-                        },
-                        new
-                        {
-                            ExamsId = 1,
-                            QuestionId = 3
-                        },
-                        new
-                        {
-                            ExamsId = 1,
-                            QuestionId = 4
-                        },
-                        new
-                        {
-                            ExamsId = 1,
-                            QuestionId = 5
-                        },
-                        new
-                        {
-                            ExamsId = 2,
-                            QuestionId = 6
-                        },
-                        new
-                        {
-                            ExamsId = 2,
-                            QuestionId = 7
-                        },
-                        new
-                        {
-                            ExamsId = 2,
-                            QuestionId = 8
-                        },
-                        new
-                        {
-                            ExamsId = 2,
-                            QuestionId = 9
-                        });
                 });
 
             modelBuilder.Entity("ModelLibrary.Models.Questions.Option", b =>
@@ -1405,70 +1009,70 @@ namespace WebApp4a.Migrations
                             Id = 1,
                             Correct = false,
                             QuestionId = 1,
-                            Text = "<h2>this is an option</h2>"
+                            Text = "<h1>this is an option</h1>"
                         },
                         new
                         {
                             Id = 2,
                             Correct = false,
-                            QuestionId = 9,
-                            Text = "<h2>this is an option</h2>"
+                            QuestionId = 2,
+                            Text = "<h1>this is an option</h1>"
                         },
                         new
                         {
                             Id = 3,
                             Correct = false,
-                            QuestionId = 5,
+                            QuestionId = 8,
                             Text = "<h1>this is an option</h1>"
                         },
                         new
                         {
                             Id = 4,
                             Correct = false,
-                            QuestionId = 1,
-                            Text = "<h1>this is an option</h1>"
+                            QuestionId = 6,
+                            Text = "<h2>this is an option</h2>"
                         },
                         new
                         {
                             Id = 5,
                             Correct = false,
-                            QuestionId = 9,
-                            Text = "<h3>this is an option</h3>"
+                            QuestionId = 1,
+                            Text = "<h2>this is an option</h2>"
                         },
                         new
                         {
                             Id = 6,
                             Correct = false,
-                            QuestionId = 9,
-                            Text = "<h3>this is an option</h3>"
+                            QuestionId = 5,
+                            Text = "<h1>this is an option</h1>"
                         },
                         new
                         {
                             Id = 7,
                             Correct = false,
-                            QuestionId = 10,
-                            Text = "<h2>this is an option</h2>"
+                            QuestionId = 6,
+                            Text = "<h1>this is an option</h1>"
                         },
                         new
                         {
                             Id = 8,
                             Correct = false,
-                            QuestionId = 9,
-                            Text = "<h1>this is an option</h1>"
+                            QuestionId = 5,
+                            Text = "<h2>this is an option</h2>"
                         },
                         new
                         {
                             Id = 9,
                             Correct = false,
-                            QuestionId = 5,
-                            Text = "<h3>this is an option</h3>"
+                            QuestionId = 7,
+                            Text = "<h1>this is an option</h1>"
                         },
                         new
                         {
                             Id = 10,
                             Correct = false,
-                            QuestionId = 4,
-                            Text = "<h3>this is an option</h3>"
+                            QuestionId = 6,
+                            Text = "<h1>this is an option</h1>"
                         });
                 });
 
@@ -1503,71 +1107,101 @@ namespace WebApp4a.Migrations
                             Id = 1,
                             DifficultyLevelId = 2,
                             Text = "<h1>this is question</h1>",
-                            TopicId = 1
+                            TopicId = 5
                         },
                         new
                         {
                             Id = 2,
                             DifficultyLevelId = 2,
                             Text = "<h3>this is question</h3>",
-                            TopicId = 3
+                            TopicId = 1
                         },
                         new
                         {
                             Id = 3,
                             DifficultyLevelId = 1,
                             Text = "<h1>this is question</h1>",
-                            TopicId = 8
+                            TopicId = 10
                         },
                         new
                         {
                             Id = 4,
                             DifficultyLevelId = 3,
                             Text = "<h1>this is question</h1>",
-                            TopicId = 5
+                            TopicId = 7
                         },
                         new
                         {
                             Id = 5,
-                            DifficultyLevelId = 2,
+                            DifficultyLevelId = 1,
                             Text = "<h1>this is question</h1>",
-                            TopicId = 1
+                            TopicId = 5
                         },
                         new
                         {
                             Id = 6,
-                            DifficultyLevelId = 2,
-                            Text = "<h3>this is question</h3>",
-                            TopicId = 2
+                            DifficultyLevelId = 1,
+                            Text = "<h1>this is question</h1>",
+                            TopicId = 9
                         },
                         new
                         {
                             Id = 7,
                             DifficultyLevelId = 3,
+                            Text = "<h1>this is question</h1>",
+                            TopicId = 9
+                        },
+                        new
+                        {
+                            Id = 8,
+                            DifficultyLevelId = 1,
                             Text = "<h2>this is question</h2>",
                             TopicId = 2
                         },
                         new
                         {
-                            Id = 8,
-                            DifficultyLevelId = 3,
-                            Text = "<h3>this is question</h3>",
-                            TopicId = 2
-                        },
-                        new
-                        {
                             Id = 9,
-                            DifficultyLevelId = 3,
+                            DifficultyLevelId = 2,
                             Text = "<h1>this is question</h1>",
-                            TopicId = 5
+                            TopicId = 3
                         },
                         new
                         {
                             Id = 10,
-                            DifficultyLevelId = 3,
+                            DifficultyLevelId = 2,
                             Text = "<h1>this is question</h1>",
                             TopicId = 6
                         });
+                });
+
+            modelBuilder.Entity("CertificateTopic", b =>
+                {
+                    b.HasOne("ModelLibrary.Models.Certificates.Certificate", null)
+                        .WithMany()
+                        .HasForeignKey("CertificatesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ModelLibrary.Models.Certificates.Topic", null)
+                        .WithMany()
+                        .HasForeignKey("TopicsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ExamQuestion", b =>
+                {
+                    b.HasOne("ModelLibrary.Models.Exams.Exam", null)
+                        .WithMany()
+                        .HasForeignKey("ExamsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ModelLibrary.Models.Questions.Question", null)
+                        .WithMany()
+                        .HasForeignKey("QuestionsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -1625,7 +1259,7 @@ namespace WebApp4a.Migrations
                 {
                     b.HasOne("ModelLibrary.Models.Candidates.Candidate", "Candidate")
                         .WithMany("Address")
-                        .HasForeignKey("CandidateId");
+                        .HasForeignKey("CandidateAppUserId");
 
                     b.HasOne("ModelLibrary.Models.Candidates.Country", "Country")
                         .WithMany("Addresses")
@@ -1671,38 +1305,15 @@ namespace WebApp4a.Migrations
                     b.Navigation("PhotoIdType");
                 });
 
-            modelBuilder.Entity("ModelLibrary.Models.Certificates.CertificateTopic", b =>
-                {
-                    b.HasOne("ModelLibrary.Models.Certificates.Certificate", "Certificate")
-                        .WithMany("Topics")
-                        .HasForeignKey("CertificateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ModelLibrary.Models.Certificates.Topic", "Topic")
-                        .WithMany("Certificates")
-                        .HasForeignKey("TopicId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Certificate");
-
-                    b.Navigation("Topic");
-                });
-
             modelBuilder.Entity("ModelLibrary.Models.Exams.CandidateExam", b =>
                 {
                     b.HasOne("ModelLibrary.Models.Candidates.Candidate", "Candidate")
                         .WithMany("CandidateExams")
-                        .HasForeignKey("CandidateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CandidateAppUserId");
 
                     b.HasOne("ModelLibrary.Models.Exams.Exam", "Exam")
                         .WithMany("CandidateExams")
-                        .HasForeignKey("ExamId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ExamId");
 
                     b.Navigation("Candidate");
 
@@ -1713,9 +1324,7 @@ namespace WebApp4a.Migrations
                 {
                     b.HasOne("ModelLibrary.Models.Exams.CandidateExam", "CandidateExam")
                         .WithMany("CandidateExamAnswers")
-                        .HasForeignKey("CandidateExamId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CandidateExamId");
 
                     b.Navigation("CandidateExam");
                 });
@@ -1724,30 +1333,9 @@ namespace WebApp4a.Migrations
                 {
                     b.HasOne("ModelLibrary.Models.Certificates.Certificate", "Certificate")
                         .WithMany("Exams")
-                        .HasForeignKey("CertificateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CertificateId");
 
                     b.Navigation("Certificate");
-                });
-
-            modelBuilder.Entity("ModelLibrary.Models.Exams.ExamQuestion", b =>
-                {
-                    b.HasOne("ModelLibrary.Models.Exams.Exam", "Exam")
-                        .WithMany("Questions")
-                        .HasForeignKey("ExamsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ModelLibrary.Models.Questions.Question", "Question")
-                        .WithMany("Exams")
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Exam");
-
-                    b.Navigation("Question");
                 });
 
             modelBuilder.Entity("ModelLibrary.Models.Questions.Option", b =>
@@ -1816,8 +1404,6 @@ namespace WebApp4a.Migrations
             modelBuilder.Entity("ModelLibrary.Models.Certificates.Certificate", b =>
                 {
                     b.Navigation("Exams");
-
-                    b.Navigation("Topics");
                 });
 
             modelBuilder.Entity("ModelLibrary.Models.Certificates.DifficultyLevel", b =>
@@ -1827,8 +1413,6 @@ namespace WebApp4a.Migrations
 
             modelBuilder.Entity("ModelLibrary.Models.Certificates.Topic", b =>
                 {
-                    b.Navigation("Certificates");
-
                     b.Navigation("Questions");
                 });
 
@@ -1840,14 +1424,10 @@ namespace WebApp4a.Migrations
             modelBuilder.Entity("ModelLibrary.Models.Exams.Exam", b =>
                 {
                     b.Navigation("CandidateExams");
-
-                    b.Navigation("Questions");
                 });
 
             modelBuilder.Entity("ModelLibrary.Models.Questions.Question", b =>
                 {
-                    b.Navigation("Exams");
-
                     b.Navigation("Options");
                 });
 #pragma warning restore 612, 618
