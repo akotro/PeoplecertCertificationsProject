@@ -8,19 +8,31 @@ using System.Security.Principal;
 using System.Net;
 using ModelLibrary.Models.Certificates;
 using ModelLibrary.Models.Questions;
+using ModelLibrary.Models.Exams;
+using System.Security.Cryptography.X509Certificates;
 
 namespace WebApp4a.Data.ModelBuilderExtensions
 {
     public static class SeedExtention
     {
-        public static void Seed(this ModelBuilder modelBuilder)
-        {
+        public static void Seed(this ModelBuilder modelBuilder )
+        { 
 
-            //SampleData.Initialize(app.ApplicationServices);
+            //public static ModelBuilder sasd = new ModelBuilder();
+        //private static ApplicationDbContext _context { get; set; }
+        //static SeedExtention (ApplicationDbContext context)
+        //{
+        //_context = context;
+        //}
+        //var db = new ApplicationDbContext();
 
-            // Bogus RAndomizer set to generate repeatable data sets.
-            Randomizer.Seed = new Random(8675309);
+
+        //SampleData.Initialize(app.ApplicationServices);
+
+        // Bogus RAndomizer set to generate repeatable data sets.
+        Randomizer.Seed = new Random(8675309);
             var faker = new Faker();
+            var fakeNum10 = faker.Random.Number(1, 10);
 
             #region // Adding AppUsers
 
@@ -115,7 +127,7 @@ namespace WebApp4a.Data.ModelBuilderExtensions
                 .RuleFor(u => u.Landline, f => f.Phone.PhoneNumber())
                 .RuleFor(u => u.Mobile, f => f.Phone.PhoneNumber())
                 .RuleFor(u => u.CandidateNumber, f => f.Random.Number(100000000, 999999999).ToString())
-                .RuleFor(u => u.PhotoIdNumber, f => f.Random.String(6))
+                .RuleFor(u => u.PhotoIdNumber, f => f.Random.AlphaNumeric(6))
                 .RuleFor(u => u.DateOfBirth, f => f.Date.Past(100, DateTime.Now))
                 .RuleFor(u => u.PhotoIdIssueDate, f => f.Date.Past(10, DateTime.Now))
                 .RuleFor(u => u.GenderId, f => f.Random.Number(1, genderEntries.Count))
@@ -138,14 +150,13 @@ namespace WebApp4a.Data.ModelBuilderExtensions
                 .RuleFor(u => u.City, f => f.Address.City())
                 .RuleFor(u => u.State, f => f.Address.State())
                 .RuleFor(u => u.PostalCode, f => f.Address.ZipCode());
-            //.RuleFor(u => u.CandidateAppUserId, f => f.PickRandom(fakeGuids));
 
             var fakeAddresses = addressFaker.Generate(10);
             for (int i = 0; i < fakeAddresses.Count; i++)
             {
                 fakeAddresses[i].Id = i + 1;
                 fakeAddresses[i].CountryId = fakeCountries[i].Id;
-                //fakeAddresses[i].CandidateAppUserId = fakeGuids[faker.Random.Number(3)];
+                fakeAddresses[i].CandidateId = fakeCandidates[faker.Random.Number(fakeCandidates.Count-1)].AppUserId;
             }
 
             modelBuilder.Entity<ModelLibrary.Models.Candidates.Address>().HasData(fakeAddresses);
@@ -154,7 +165,7 @@ namespace WebApp4a.Data.ModelBuilderExtensions
             #region// Seeding Topics table
 
             var topicFaker = new Faker<Topic>()
-                .RuleFor(u => u.Name, f => f.Lorem.Words(2).ToString())
+                .RuleFor(u => u.Name, f => f.Random.Words(3).ToString())
                 .RuleFor(u => u.MaxMarks, f => f.Random.Number(20, 40));
 
             var fakeTopics = topicFaker.Generate(10);
@@ -208,6 +219,95 @@ namespace WebApp4a.Data.ModelBuilderExtensions
             modelBuilder.Entity<Option>().HasData(fakeOptions);
             #endregion
 
+            #region // Seeding Certificates table
+            var certFaker = new Faker<Certificate>()
+                .RuleFor(c => c.Title, f => f.Random.Words(3))
+                .RuleFor(c => c.Description, f => f.Random.Words(10))
+                .RuleFor(c => c.Category, f => f.Random.Words(1))
+                .RuleFor(c => c.Active, f => f.Random.Bool());
+               
+
+
+            var fakeCerts = certFaker.Generate(10);
+            for (int i = 0; i < fakeCerts.Count; i++)
+            {
+                fakeCerts[i].Id = i + 1;
+                fakeCerts[i].PassingMark = 0;
+                //var faketopicsforCert = new List<Topic>();
+                //for (int j=0; j<3; j++)
+                //{
+                //    faketopicsforCert.Add(fakeTopics[fakeNum10]);
+                //}
+                //fakeCerts[i].Topics = faketopicsforCert;
+            }
+            modelBuilder.Entity<Certificate>().HasData(fakeCerts);
+
+            #endregion
+
+            #region // Seeding CertificateTopic join table
+            //var fakeCertificateTopics = new List<CertificateTopic>();
+            //for (int i = 0; i < 30; i++)
+            //{
+            //    //var valuesleft = fakeTopics;
+            //    for (int j = 0; j < 3; j++)
+            //    {
+            //        fakeCertificateTopics.Add(new CertificateTopic()
+            //        {
+            //            //TopicId = j,
+            //        //    fakeCertificateTopics[i].CertificateId = faker.PickRandom<int>(fakeCerts[fakeNum10 - 1].Id);
+            //        //fakeCertificateTopics[i].TopicId = faker.PickRandom<int>(fakeTopics[fakeNum10 - 1].Id);
+            //            //CertificateId = i
+            //        });
+
+            //    }
+            //}
+            modelBuilder.Entity<CertificateTopic>().HasData(
+                new CertificateTopic { TopicId = 1, CertificateId = 1 },
+                new CertificateTopic { TopicId = 2, CertificateId = 1 },
+                new CertificateTopic { TopicId = 3, CertificateId = 1 },
+                new CertificateTopic { TopicId = 4, CertificateId = 2 },
+                new CertificateTopic { TopicId = 5, CertificateId = 2 },
+                new CertificateTopic { TopicId = 6, CertificateId = 2 },
+                new CertificateTopic { TopicId = 4, CertificateId = 3 },
+                new CertificateTopic { TopicId = 2, CertificateId = 3 },
+                new CertificateTopic { TopicId = 1, CertificateId = 3 }
+                );
+            #endregion
+
+            #region // Seeding Exams table
+
+            modelBuilder.Entity<Exam>().HasData(
+                new Exam {Id = 1, CertificateId = 1 },
+                new Exam {Id = 2, CertificateId = 1 },
+                new Exam {Id = 3, CertificateId = 2 },
+                new Exam {Id = 4, CertificateId = 3 },
+                new Exam {Id = 5, CertificateId = 3 },
+                new Exam {Id = 6, CertificateId = 3 },
+                new Exam {Id = 7, CertificateId = 4 }
+                );
+
+            #endregion
+
+            #region // Seeding ExamQuestion table
+
+            modelBuilder.Entity<ExamQuestion>().HasData(
+                new ExamQuestion { ExamsId = 1, QuestionId = 1 },
+                new ExamQuestion { ExamsId = 1, QuestionId = 2 },
+                new ExamQuestion { ExamsId = 1, QuestionId = 3 },
+                new ExamQuestion { ExamsId = 1, QuestionId = 4 },
+                new ExamQuestion { ExamsId = 1, QuestionId = 5 },
+                new ExamQuestion { ExamsId = 2, QuestionId = 6 },
+                new ExamQuestion { ExamsId = 2, QuestionId = 7 },
+                new ExamQuestion { ExamsId = 2, QuestionId = 8 },
+                new ExamQuestion { ExamsId = 2, QuestionId = 9 }
+                );
+
+            #endregion
+
+            #region // Seeding CAndiadateExam table
+
+
+            #endregion
         }
     }
-}
+    }
