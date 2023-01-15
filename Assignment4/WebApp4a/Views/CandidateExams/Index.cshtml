@@ -29,17 +29,11 @@
                     @foreach (var option in item.Options)
                     {
                         @option.Text
-                        @*@Html.RadioButtonFor(modelItem => option, option.Correct)*@
                         <input type="hidden" name=@option.Id value=@option.Correct />
                         @Html.RadioButton(option.Text, option.Correct, false)
                     }
                 </td>
             </tr>
         }
-        <tr>
-            <td>
-                <input type="submit" class="btn btn-primary" value="Save" />
-            </td>
-        </tr>
     </tbody>
 </table>

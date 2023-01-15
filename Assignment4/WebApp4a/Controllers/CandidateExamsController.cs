@@ -49,16 +49,6 @@ namespace WebApp4a.Controllers
             return View(candidateExam);
         }
 
-        private IEnumerable<Question> GetExam(int examId)
-        {
-            var exam = _context.Exams
-                .Include(p => p.Questions)
-                .ThenInclude(p => p.Options)
-                .Where(p => p.Id == examId).SingleOrDefault();
-
-            return exam.Questions;
-        }
-
         private bool CandidateExamExists(int id)
         {
           return _context.CandidateExams.Any(e => e.Id == id);
