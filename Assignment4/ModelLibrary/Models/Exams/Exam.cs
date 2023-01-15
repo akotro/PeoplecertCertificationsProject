@@ -12,6 +12,5 @@ public class Exam
     public virtual Certificate? Certificate { get; set; }
     public virtual ICollection<ExamQuestion>? Questions { get; set; }
 
-    public virtual ICollection<CandidateExam>?
-        CandidateExams { get; set; } // NOTE(akotro): Reverse Navigation
+    public virtual ICollection<CandidateExam>? CandidateExams { get; set; } // NOTE:(akotro) Reverse Navigation
 }

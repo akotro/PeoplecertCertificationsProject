@@ -5,7 +5,7 @@ namespace ModelLibrary.Models.Candidates
 {
     public class Candidate
     {
-        public string AppUserId { get; set; } // NOTE(akotro): PK + FK to AppUser
+        public string AppUserId { get; set; } // NOTE:(akotro) PK + FK to AppUser
         public AppUser AppUser { get; set; }
 
         public string? FirstName { get; set; }
@@ -31,6 +31,6 @@ namespace ModelLibrary.Models.Candidates
         public virtual ICollection<Address>? Address { get; set; }
 
         public virtual ICollection<CandidateExam>?
-            CandidateExams { get; set; } // NOTE(akotro): Reverse Navigation
+            CandidateExams { get; set; } // NOTE:(akotro) Reverse Navigation
     }
 }

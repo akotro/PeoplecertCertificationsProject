@@ -6,6 +6,7 @@ using ModelLibrary.Models.Candidates;
 using ModelLibrary.Models.Certificates;
 using ModelLibrary.Models.Exams;
 using System.Reflection.Emit;
+using ModelLibrary.Models.Questions;
 using WebApp4a.Data.ModelBuilderExtensions;
 
 namespace WebApp4a.Data
@@ -21,8 +22,11 @@ namespace WebApp4a.Data
         public virtual DbSet<Country> Countries { get; set; }
 
         public virtual DbSet<Certificate> Certificates { get; set; }
+
         //public virtual DbSet<CertificateTopic> CertificateTopic { get; set; }
         public virtual DbSet<Topic> Topics { get; set; }
+
+        public virtual DbSet<Question>? Questions { get; set; }
         public virtual DbSet<DifficultyLevel> DifficultyLevels { get; set; }
 
         public virtual DbSet<Exam> Exams { get; set; }
@@ -40,31 +44,36 @@ namespace WebApp4a.Data
             // Join tables configuration
             builder.Entity<CertificateTopic>()
                 .HasKey(t => new { t.CertificateId, t.TopicId });
-            builder.Entity<CertificateTopic>()
+            builder
+                .Entity<CertificateTopic>()
                 .HasOne(c => c.Certificate)
                 .WithMany(c => c.Topics)
                 .HasForeignKey(t => t.CertificateId);
-            builder.Entity<CertificateTopic>()
+            builder
+                .Entity<CertificateTopic>()
                 .HasOne(c => c.Topic)
                 .WithMany(c => c.Certificates)
                 .HasForeignKey(t => t.TopicId);
 
-            builder.Entity<ExamQuestion>()
-              .HasKey(t => new { t.ExamsId, t.QuestionId });
-            builder.Entity<ExamQuestion>()
+            builder.Entity<ExamQuestion>().HasKey(t => new { t.ExamsId, t.QuestionId });
+            builder
+                .Entity<ExamQuestion>()
                 .HasOne(c => c.Exam)
                 .WithMany(c => c.Questions)
                 .HasForeignKey(t => t.ExamsId);
-            builder.Entity<ExamQuestion>()
+            builder
+                .Entity<ExamQuestion>()
                 .HasOne(c => c.Question)
                 .WithMany(c => c.Exams)
                 .HasForeignKey(t => t.QuestionId);
 
-            builder.Entity<CandidateExam>()
+            builder
+                .Entity<CandidateExam>()
                 .HasOne(c => c.Candidate)
                 .WithMany(c => c.CandidateExams)
                 .HasForeignKey(t => t.CandidateId);
-            builder.Entity<CandidateExam>()
+            builder
+                .Entity<CandidateExam>()
                 .HasOne(c => c.Exam)
                 .WithMany(c => c.CandidateExams)
                 .HasForeignKey(t => t.ExamId);
@@ -91,8 +100,8 @@ namespace WebApp4a.Data
 
             builder.Seed();
 
-
             #region // NOTE(akotro): Configures AppUserId to be Candidate's PK + FK to AppUser
+
             builder
                 .Entity<AppUser>()
                 .HasOne(a => a.Candidate)
@@ -100,9 +109,8 @@ namespace WebApp4a.Data
                 .HasForeignKey<Candidate>(c => c.AppUserId)
                 .IsRequired(false);
             builder.Entity<Candidate>().HasKey(c => c.AppUserId);
+
             #endregion
-
         }
-
     }
 }

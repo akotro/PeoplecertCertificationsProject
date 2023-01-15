@@ -12,6 +12,6 @@ namespace ModelLibrary.Models.Candidates
         public string? NativeLanguage { get; set; }
 
         public virtual ICollection<Candidate>?
-            Candidates { get; set; } // NOTE(akotro): Reverse navigation
+            Candidates { get; set; } // NOTE:(akotro) Reverse navigation
     }
 }
