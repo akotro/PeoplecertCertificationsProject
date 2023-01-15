@@ -22,18 +22,11 @@
                         @Html.DisplayFor(modelItem => item.Text)
                     </td>
                     <td>
-                        @foreach (var option in item.Options)
-                        {
-                            @option.Text
-                            @:&nbsp;
-                            @Html.RadioButton(option.Text, option.Correct, false)
-                            @Html.Hidden("hiddens", option.Correct)                            
-                            @:&nbsp;
-                            @:&nbsp;
-                        }
+                        @Html.DropDownList("DropDownOptions", new SelectList(item.Options,"Correct", "Text"), new { @class = "form-control" })
                     </td>
                 </tr>
             }
+
         </tbody>
     </table>
 
