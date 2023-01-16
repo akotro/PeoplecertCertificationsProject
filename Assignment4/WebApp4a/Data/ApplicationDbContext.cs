@@ -42,31 +42,6 @@ namespace WebApp4a.Data
         {
             base.OnModelCreating(builder);
             // Join tables configuration
-            builder.Entity<CertificateTopic>()
-                .HasKey(t => new { t.CertificateId, t.TopicId });
-            builder
-                .Entity<CertificateTopic>()
-                .HasOne(c => c.Certificate)
-                .WithMany(c => c.Topics)
-                .HasForeignKey(t => t.CertificateId);
-            builder
-                .Entity<CertificateTopic>()
-                .HasOne(c => c.Topic)
-                .WithMany(c => c.Certificates)
-                .HasForeignKey(t => t.TopicId);
-
-            builder.Entity<ExamQuestion>().HasKey(t => new { t.ExamsId, t.QuestionId });
-            builder
-                .Entity<ExamQuestion>()
-                .HasOne(c => c.Exam)
-                .WithMany(c => c.Questions)
-                .HasForeignKey(t => t.ExamsId);
-            builder
-                .Entity<ExamQuestion>()
-                .HasOne(c => c.Question)
-                .WithMany(c => c.Exams)
-                .HasForeignKey(t => t.QuestionId);
-
             builder
                 .Entity<CandidateExam>()
                 .HasOne(c => c.Candidate)
@@ -78,27 +53,8 @@ namespace WebApp4a.Data
                 .WithMany(c => c.CandidateExams)
                 .HasForeignKey(t => t.ExamId);
 
-            //builder.Entity<Candidate>()
-            //       .HasMany(c => c.CandidateExams)
-            //       .WithOne(e => e.Candidate)
-            //       .HasForeignKey(ce => ce.CandidateId);
 
-            //builder.Entity<Exam>()
-            //    .HasMany(e => e.CandidateExams)
-            //    .WithOne(c => c.Exam)
-            //    .HasForeignKey(ce => ce.ExamId);
-
-            //builder.Entity<Certificate>()
-            //    .HasMany(c => c.Topics)
-            //    .WithMany(c => c.Certificates)
-            //    .UsingEntity<CertificateTopic>(ct =>
-            //    {
-            //        ct.ToTable("CertificateTopic");
-            //        ct.HasOne(x => x.Certificate).WithMany().HasForeignKey("CertificateId");
-            //        ct.HasOne(x => x.Topic).WithMany().HasForeignKey("TopicId");
-            //    });
-
-            builder.Seed();
+            builder.Seed(this);
 
             #region // NOTE(akotro): Configures AppUserId to be Candidate's PK + FK to AppUser
 

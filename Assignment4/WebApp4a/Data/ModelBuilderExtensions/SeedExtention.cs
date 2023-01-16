@@ -244,7 +244,7 @@ namespace WebApp4a.Data.ModelBuilderExtensions
 
             #endregion
 
-            #region // Seeding CertificateTopic join table
+            //#region // Seeding CertificateTopic join table
             //var fakeCertificateTopics = new List<CertificateTopic>();
             //for (int i = 0; i < 30; i++)
             //{
