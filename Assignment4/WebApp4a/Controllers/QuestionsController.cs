@@ -59,8 +59,6 @@ namespace WebApp4a.Controllers
 
         private List<SelectListItem>? GetTopicSelectList(Question? question)
         {
-            // NOTE:(akotro) Is this Include needed here?
-            // var topics = _context.Topics.Include(t => t.Certificates).ToList();
             var topics = _context.Topics.ToList();
             if (topics == null || topics.Count <= 0)
                 return null;
@@ -139,7 +137,18 @@ namespace WebApp4a.Controllers
         {
             ViewData.Add("Topic", GetTopicSelectList(null));
 
-            return View();
+            var newQuestion = new Question()
+            {
+                Options = new List<Option>()
+                {
+                    new Option(),
+                    new Option(),
+                    new Option(),
+                    new Option()
+                }
+            };
+
+            return View(newQuestion);
         }
 
         // POST: Questions/Create
@@ -149,11 +158,32 @@ namespace WebApp4a.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
             [Bind("Id,Text,DifficultyLevel")] Question question,
-            [Bind("Topic")] int topic
+            [Bind("Topic")] int topic,
+            [Bind("Text1")] string text1,
+            [Bind("Correct1")] bool correct1,
+            [Bind("Text1")] string text2,
+            [Bind("Correct1")] bool correct2,
+            [Bind("Text1")] string text3,
+            [Bind("Correct1")] bool correct3,
+            [Bind("Text1")] string text4,
+            [Bind("Correct1")] bool correct4
         )
         {
             if (ModelState.IsValid)
             {
+                var optionsDict = new Dictionary<string, bool>()
+                {
+                    { text1, correct1 },
+                    { text2, correct2 },
+                    { text3, correct3 },
+                    { text4, correct4 }
+                };
+                question.Options = new List<Option>();
+                foreach (var pair in optionsDict)
+                {
+                    question.Options.Add(new Option() { Text = pair.Key, Correct = pair.Value });
+                }
+
                 PopulateQuestion(question, topic);
 
                 _context.Add(question);
