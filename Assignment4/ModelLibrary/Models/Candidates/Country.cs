@@ -11,7 +11,6 @@ namespace ModelLibrary.Models.Candidates
         public int Id { get; set; }
         public string? CountryOfResidence { get; set; }
 
-        public virtual ICollection<Address>?
-            Addresses { get; set; } // NOTE(akotro): Reverse navigation
+        public virtual ICollection<Address>? Addresses { get; set; } // NOTE:(akotro) Reverse navigation
     }
 }

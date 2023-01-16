@@ -20,6 +20,6 @@ namespace ModelLibrary.Models.Candidates
         public GenderEnum? GenderType { get; set; }
 
         public virtual ICollection<Candidate>?
-            Candidates { get; set; } // NOTE(akotro): Reverse navigation
+            Candidates { get; set; } // NOTE:(akotro) Reverse navigation
     }
 }

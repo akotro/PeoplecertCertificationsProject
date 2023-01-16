@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ModelLibrary.Models;
 using WebApp4a.Data;
+using WebApp4a.Data.Repositories;
 
 namespace WebApp4a
 {
@@ -12,17 +13,30 @@ namespace WebApp4a
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(connectionString));
+            var connectionString =
+                builder.Configuration.GetConnectionString("DefaultConnection")
+                ?? throw new InvalidOperationException(
+                    "Connection string 'DefaultConnection' not found."
+                );
+            builder.Services.AddDbContext<ApplicationDbContext>(
+                options => options.UseSqlServer(connectionString)
+            );
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            builder.Services
+                .AddDefaultIdentity<AppUser>(
+                    options => options.SignIn.RequireConfirmedAccount = false
+                )
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddRazorPages();
-            
-            builder.Services.AddMvc();//giannis enable mvc ???
-            builder.Services.AddControllersWithViews();//giannis enable mvc ???
+            builder.Services.AddMvc();
+            builder.Services.AddControllersWithViews();
+
+            // -----------------------------
+            //Agkiz, Added Transient service repo
+            builder.Services.AddTransient<IExamRepository, ExamRepository>();
+
+            // -----------------------------
 
             var app = builder.Build();
 
@@ -47,6 +61,7 @@ namespace WebApp4a
             app.UseAuthorization();
 
             app.MapRazorPages();
+            app.MapDefaultControllerRoute();
 
             
             app.MapDefaultControllerRoute(); //giannis mvc routing enable?
