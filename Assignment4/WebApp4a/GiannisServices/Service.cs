@@ -37,7 +37,7 @@ namespace WebApp4a.GiannisServices
                     var selectListItem = new SelectListItem()
                     {
                         Disabled = false,
-                        Group = group,
+                        Group = null,
                         Selected = false,
                         Text = $"Id:{exam.Id}, {exam.Certificate.Title}",
                         Value = exam.Id.ToString()
