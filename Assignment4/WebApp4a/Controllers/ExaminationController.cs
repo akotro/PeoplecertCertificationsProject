@@ -13,45 +13,41 @@ using ModelLibrary.Models.Exams;
 using ModelLibrary.Models.Questions;
 using NuGet.Common;
 using WebApp4a.Data;
+using WebApp4a.Data.Repositories;
 
 namespace WebApp4a.Controllers
 {
     public class ExaminationController : Controller
     {
-        private readonly ApplicationDbContext _context;
-        private static int _examId;
+        private static CandidateExam _candidateExam;
 
-        public ExaminationController(ApplicationDbContext context)
+        private readonly IExamRepository _examRepository;
+
+        public ExaminationController(IExamRepository adminrepository)
         {
-            _context = context;
+            _examRepository = adminrepository;
         }
 
+        /// <summary>
+        /// vmavraganis: Async Task to create the UI for the candidate examination (questions + options)
+        /// </summary>
         public async Task<IActionResult> Exam()
         {
-            // Needs dummy data for candidate exam and a candidate to work (we need it)
-            //var candidateExam = await _context.CandidateExams.FindAsync(1);
-
-            //if (candidateExam != null && candidateExam.Candidate != null)
-            //{
-            //    ViewBag.Title = $"Examination for {candidateExam.Candidate.FirstName} {candidateExam.Candidate.LastName}";
-            //} else
-            //{
-            //    return NotFound();
-            //}            
-
-            _examId = 1;// Need Id from John
-            return View(await GetAllQuestionsAsync());
+            return View(await _examRepository.GetAllQuestionsAsync(_candidateExam));
         }
 
+        /// <summary>
+        /// vmavraganis: Async Task to get the selected options from the user in each question (true || false)
+        /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> GetAnswers(IEnumerable<bool> DropDownOptions)
         {
             if (ModelState.IsValid)
             {
-                var candidateExam = await AddCandidateExam(DropDownOptions);
+                var candidateExam = await _examRepository.AddCandidateExam(DropDownOptions, _candidateExam);
 
-                return await Task.Run(() => RedirectToAction("Index", "CandidateExam", candidateExam));
+                return await Task.Run(() => RedirectToAction("Results", "CandidateExam", candidateExam));
             }
 
             return await Task.Run(() => RedirectToAction("Exam"));
