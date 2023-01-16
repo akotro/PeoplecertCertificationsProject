@@ -14,7 +14,7 @@ namespace WebApp4a
 
             // Add services to the container.
             var connectionString =
-                builder.Configuration.GetConnectionString("DefaultConnection")
+                builder.Configuration.GetConnectionString("giannis")
                 ?? throw new InvalidOperationException(
                     "Connection string 'DefaultConnection' not found."
                 );
@@ -64,7 +64,6 @@ namespace WebApp4a
             app.MapDefaultControllerRoute();
 
             
-            app.MapDefaultControllerRoute(); //giannis mvc routing enable?
 
             app.Run();
         }
