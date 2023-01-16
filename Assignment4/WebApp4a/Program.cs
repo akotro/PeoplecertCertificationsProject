@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ModelLibrary.Models;
 using WebApp4a.Data;
+using WebApp4a.Data.Repositories;
 
 namespace WebApp4a
 {
@@ -30,6 +31,12 @@ namespace WebApp4a
             builder.Services.AddRazorPages();
             builder.Services.AddMvc();
             builder.Services.AddControllersWithViews();
+
+            // -----------------------------
+            //Agkiz, Added Transient service repo
+            builder.Services.AddTransient<IExamRepository, ExamRepository>();
+
+            // -----------------------------
 
             var app = builder.Build();
 
