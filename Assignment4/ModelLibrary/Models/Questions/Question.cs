@@ -11,7 +11,7 @@ public class Question
     public virtual Topic? Topic { get; set; }
     public int DifficultyLevelId { get; set; }
     public virtual DifficultyLevel? DifficultyLevel { get; set; }
-    public virtual ICollection<ExamQuestion>? Exams { get; set; }
+    public virtual ICollection<Exam>? Exams { get; set; }
 
     public virtual ICollection<Option>? Options { get; set; } // NOTE:(akotro) Reverse Navigation
 }

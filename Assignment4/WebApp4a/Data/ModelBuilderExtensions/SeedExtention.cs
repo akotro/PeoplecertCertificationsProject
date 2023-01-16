@@ -15,7 +15,7 @@ namespace WebApp4a.Data.ModelBuilderExtensions
 {
     public static class SeedExtention
     {
-        public static void Seed(this ModelBuilder modelBuilder)
+        public static void Seed(this ModelBuilder modelBuilder, ApplicationDbContext db)
         {
 
             //public static ModelBuilder sasd = new ModelBuilder();
@@ -261,18 +261,18 @@ namespace WebApp4a.Data.ModelBuilderExtensions
 
             //    }
             //}
-            modelBuilder.Entity<CertificateTopic>().HasData(
-                new CertificateTopic { TopicId = 1, CertificateId = 1 },
-                new CertificateTopic { TopicId = 2, CertificateId = 1 },
-                new CertificateTopic { TopicId = 3, CertificateId = 1 },
-                new CertificateTopic { TopicId = 4, CertificateId = 2 },
-                new CertificateTopic { TopicId = 5, CertificateId = 2 },
-                new CertificateTopic { TopicId = 6, CertificateId = 2 },
-                new CertificateTopic { TopicId = 4, CertificateId = 3 },
-                new CertificateTopic { TopicId = 2, CertificateId = 3 },
-                new CertificateTopic { TopicId = 1, CertificateId = 3 }
-                );
-            #endregion
+            //modelBuilder.Entity<CertificateTopic>().HasData(
+            //    new CertificateTopic { TopicId = 1, CertificateId = 1 },
+            //    new CertificateTopic { TopicId = 2, CertificateId = 1 },
+            //    new CertificateTopic { TopicId = 3, CertificateId = 1 },
+            //    new CertificateTopic { TopicId = 4, CertificateId = 2 },
+            //    new CertificateTopic { TopicId = 5, CertificateId = 2 },
+            //    new CertificateTopic { TopicId = 6, CertificateId = 2 },
+            //    new CertificateTopic { TopicId = 4, CertificateId = 3 },
+            //    new CertificateTopic { TopicId = 2, CertificateId = 3 },
+            //    new CertificateTopic { TopicId = 1, CertificateId = 3 }
+            //    );
+            //#endregion
 
             #region // Seeding Exams table
 
@@ -291,17 +291,17 @@ namespace WebApp4a.Data.ModelBuilderExtensions
 
             #region // Seeding ExamQuestion table
 
-            modelBuilder.Entity<ExamQuestion>().HasData(
-                new ExamQuestion { ExamsId = 1, QuestionId = 1 },
-                new ExamQuestion { ExamsId = 1, QuestionId = 2 },
-                new ExamQuestion { ExamsId = 1, QuestionId = 3 },
-                new ExamQuestion { ExamsId = 1, QuestionId = 4 },
-                new ExamQuestion { ExamsId = 1, QuestionId = 5 },
-                new ExamQuestion { ExamsId = 2, QuestionId = 6 },
-                new ExamQuestion { ExamsId = 2, QuestionId = 7 },
-                new ExamQuestion { ExamsId = 2, QuestionId = 8 },
-                new ExamQuestion { ExamsId = 2, QuestionId = 9 }
-                );
+            //modelBuilder.Entity<ExamQuestion>().HasData(
+            //    new ExamQuestion { ExamsId = 1, QuestionId = 1 },
+            //    new ExamQuestion { ExamsId = 1, QuestionId = 2 },
+            //    new ExamQuestion { ExamsId = 1, QuestionId = 3 },
+            //    new ExamQuestion { ExamsId = 1, QuestionId = 4 },
+            //    new ExamQuestion { ExamsId = 1, QuestionId = 5 },
+            //    new ExamQuestion { ExamsId = 2, QuestionId = 6 },
+            //    new ExamQuestion { ExamsId = 2, QuestionId = 7 },
+            //    new ExamQuestion { ExamsId = 2, QuestionId = 8 },
+            //    new ExamQuestion { ExamsId = 2, QuestionId = 9 }
+            //    );
 
             #endregion
 
