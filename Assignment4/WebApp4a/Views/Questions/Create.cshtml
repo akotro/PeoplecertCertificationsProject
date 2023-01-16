@@ -29,12 +29,15 @@
                 @Html.DropDownList("Topic", "Select Topic")
                 <span asp-validation-for="Topic" class="text-danger"></span>
             </div>
+            <hr/>
 
             @for (int i = 0, optionNumber = 1; i < Model.Options.Count; i++, optionNumber++)
             {
                 <h4>
                     Option @optionNumber
                 </h4>
+                <hr/>
+
                 <div class="form-group">
                     <label asp-for="Options.ElementAt(i).Text" class="control-label"></label>
                     @{

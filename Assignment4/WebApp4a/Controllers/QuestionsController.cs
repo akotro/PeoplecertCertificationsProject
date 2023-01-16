@@ -93,8 +93,21 @@ namespace WebApp4a.Controllers
             return result;
         }
 
-        private void PopulateQuestion(Question question, int topicId)
+        private void PopulateQuestion(
+            Question question,
+            int topicId,
+            Dictionary<string, bool> optionsDict
+        )
         {
+            if (optionsDict != null && question.Options.Any(o => o.Id == 0))
+            {
+                question.Options = new List<Option>();
+                foreach (var pair in optionsDict)
+                {
+                    question.Options.Add(new Option() { Text = pair.Key, Correct = pair.Value });
+                }
+            }
+
             question.DifficultyLevel = GetDifficultyLevel(question);
             question.Topic = _context.Topics.Find(topicId);
         }
@@ -123,6 +136,7 @@ namespace WebApp4a.Controllers
             var question = await _context.Questions
                 .Include(q => q.DifficultyLevel)
                 .Include(q => q.Topic)
+                .Include(q => q.Options)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (question == null)
             {
@@ -184,7 +198,7 @@ namespace WebApp4a.Controllers
                     question.Options.Add(new Option() { Text = pair.Key, Correct = pair.Value });
                 }
 
-                PopulateQuestion(question, topic);
+                PopulateQuestion(question, topic, optionsDict);
 
                 _context.Add(question);
                 await _context.SaveChangesAsync();
@@ -205,6 +219,7 @@ namespace WebApp4a.Controllers
             var question = await _context.Questions
                 .Include(q => q.DifficultyLevel)
                 .Include(q => q.Topic)
+                .Include(q => q.Options)
                 .FirstOrDefaultAsync(q => q.Id == id);
 
             ViewData.Add("Topic", GetTopicSelectList(question));
@@ -226,6 +241,14 @@ namespace WebApp4a.Controllers
             int id,
             [Bind("Id,Text,DifficultyLevel")] Question question,
             [Bind("Topic")] int topic
+        // [Bind("Text1")] string text1,
+        // [Bind("Correct1")] bool correct1,
+        // [Bind("Text1")] string text2,
+        // [Bind("Correct1")] bool correct2,
+        // [Bind("Text1")] string text3,
+        // [Bind("Correct1")] bool correct3,
+        // [Bind("Text1")] string text4,
+        // [Bind("Correct1")] bool correct4
         )
         {
             if (id != question.Id)
@@ -237,7 +260,17 @@ namespace WebApp4a.Controllers
             {
                 try
                 {
-                    PopulateQuestion(question, topic);
+                    // TODO:(akotro) Should editing questions be done with Option MVC
+
+                    // var optionsDict = new Dictionary<string, bool>()
+                    // {
+                    //     { text1, correct1 },
+                    //     { text2, correct2 },
+                    //     { text3, correct3 },
+                    //     { text4, correct4 }
+                    // };
+
+                    PopulateQuestion(question, topic, null);
 
                     _context.Update(question);
                     await _context.SaveChangesAsync();

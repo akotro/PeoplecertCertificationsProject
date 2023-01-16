@@ -32,6 +32,33 @@
                 @Html.DropDownList("Topic", "Select Topic")
                 <span asp-validation-for="Topic" class="text-danger"></span>
             </div>
+
+            @*             <hr/> *@
+            @*             @for (int i = 0, optionNumber = 1; i < Model.Options.Count; i++, optionNumber++) *@
+            @*             { *@
+            @*                 <h4> *@
+            @*                     Option @optionNumber *@
+            @*                 </h4> *@
+            @*                 <hr/> *@
+            @* *@
+            @*                 <div class="form-group"> *@
+            @*                     <label asp-for="Options.ElementAt(i).Text" class="control-label"></label> *@
+            @*                     @{ *@
+            @*                         var textName = $"Text{optionNumber}"; *@
+            @*                     } *@
+            @*                     <input name="@textName" asp-for="Options.ElementAt(i).Text" class="form-control"/> *@
+            @*                     <span asp-validation-for="Options.ElementAt(i).Text" class="text-danger"></span> *@
+            @*                 </div> *@
+            @*                 <div class="form-group"> *@
+            @*                     <label asp-for="Options.ElementAt(i).Correct" class="control-label"></label> *@
+            @*                     @{ *@
+            @*                         var correctName = $"Correct{optionNumber}"; *@
+            @*                     } *@
+            @*                     @Html.CheckBox(@correctName, Model.Options.ElementAt(i).Correct) *@
+            @*                     <span asp-validation-for="Options.ElementAt(i).Correct" class="text-danger"></span> *@
+            @*                 </div> *@
+            @*             } *@
+
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary"/>
             </div>

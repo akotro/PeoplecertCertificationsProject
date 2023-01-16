@@ -26,17 +26,16 @@ namespace WebApp4a.Data
         //public virtual DbSet<CertificateTopic> CertificateTopic { get; set; }
         public virtual DbSet<Topic> Topics { get; set; }
 
-        public virtual DbSet<Question>? Questions { get; set; }
+        public virtual DbSet<Question> Questions { get; set; }
         public virtual DbSet<DifficultyLevel> DifficultyLevels { get; set; }
+        public virtual DbSet<Option> Options { get; set; }
 
         public virtual DbSet<Exam> Exams { get; set; }
         public virtual DbSet<CandidateExam> CandidateExams { get; set; }
         public virtual DbSet<CandidateExamAnswers> CandidateExamAnswers { get; set; }
 
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) :
-            base(options)
-        {
-        }
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        { }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -52,7 +51,6 @@ namespace WebApp4a.Data
                 .HasOne(c => c.Exam)
                 .WithMany(c => c.CandidateExams)
                 .HasForeignKey(t => t.ExamId);
-
 
             builder.Seed(this);
 
