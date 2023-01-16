@@ -63,8 +63,6 @@ namespace WebApp4a
             app.MapRazorPages();
             app.MapDefaultControllerRoute();
 
-            app.MapDefaultControllerRoute(); //giannis mvc routing enable?
-
             app.Run();
         }
     }
