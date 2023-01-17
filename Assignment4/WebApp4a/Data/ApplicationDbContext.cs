@@ -26,7 +26,8 @@ namespace WebApp4a.Data
         //public virtual DbSet<CertificateTopic> CertificateTopic { get; set; }
         public virtual DbSet<Topic> Topics { get; set; }
 
-        public virtual DbSet<Question>? Questions { get; set; }
+        public virtual DbSet<Question> Questions { get; set; }
+        public virtual DbSet<Option> Options { get; set; }
         public virtual DbSet<DifficultyLevel> DifficultyLevels { get; set; }
 
         public virtual DbSet<Exam> Exams { get; set; }
@@ -42,19 +43,18 @@ namespace WebApp4a.Data
         {
             base.OnModelCreating(builder);
             // Join tables configuration
-            builder
-                .Entity<CandidateExam>()
-                .HasOne(c => c.Candidate)
-                .WithMany(c => c.CandidateExams)
-                .HasForeignKey(t => t.CandidateId);
-            builder
-                .Entity<CandidateExam>()
-                .HasOne(c => c.Exam)
-                .WithMany(c => c.CandidateExams)
-                .HasForeignKey(t => t.ExamId);
+            //builder
+            //    .Entity<CandidateExam>()
+            //    .HasOne(c => c.Candidate)
+            //    .WithMany(c => c.CandidateExams)
+            //    .HasForeignKey(t => t.CandidateId);
+            //builder
+            //    .Entity<CandidateExam>()
+            //    .HasOne(c => c.Exam)
+            //    .WithMany(c => c.CandidateExams)
+            //    .HasForeignKey(t => t.ExamId);
 
 
-            builder.Seed(this);
 
             #region // NOTE(akotro): Configures AppUserId to be Candidate's PK + FK to AppUser
 
@@ -67,6 +67,12 @@ namespace WebApp4a.Data
             builder.Entity<Candidate>().HasKey(c => c.AppUserId);
 
             #endregion
+            builder.Seed(this);
+
         }
+            //var cand = this.Candidates.FirstOrDefault();
+
+
+        
     }
 }

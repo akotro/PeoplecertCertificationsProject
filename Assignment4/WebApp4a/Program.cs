@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ModelLibrary.Models;
+using System.Reflection.Metadata;
 using WebApp4a.Data;
+using WebApp4a.Data.Seed;
 using WebApp4a.Data.Repositories;
 
 namespace WebApp4a
@@ -14,7 +16,7 @@ namespace WebApp4a
 
             // Add services to the container.
             var connectionString =
-                builder.Configuration.GetConnectionString("DefaultConnection")
+                builder.Configuration.GetConnectionString("localhost")
                 ?? throw new InvalidOperationException(
                     "Connection string 'DefaultConnection' not found."
                 );
@@ -52,6 +54,8 @@ namespace WebApp4a
                 app.UseHsts();
             }
 
+         
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -63,9 +67,11 @@ namespace WebApp4a
             app.MapRazorPages();
             app.MapDefaultControllerRoute();
 
-            
+
             app.MapDefaultControllerRoute(); //giannis mvc routing enable?
 
+            SeedIfNotExists.SeedIfEmpty(app);
+         
             app.Run();
         }
     }
