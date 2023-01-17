@@ -10,7 +10,11 @@
         <thead>
             <tr>
                 <th>Questions</th>
-                <th>Available Answers</th>
+                <th>Option 1</th>
+                <th>Option 2</th>
+                <th>Option 3</th>
+                <th>Option 4</th>
+                <th>Selected Answer</th>
             </tr>
         </thead>
         <tbody>
@@ -19,10 +23,19 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Text)
+                        @Html.Raw(System.Web.HttpUtility.HtmlDecode(item.Text))
                     </td>
+                    @foreach (var option in item.Options)
+                    {
+                        <td>
+                            @*var counter = 1; // Note (vmavraganis): We use this in case we want a dynamic number of options
+                <p>Option @counter</p>*@
+                            @Html.Raw(System.Web.HttpUtility.HtmlDecode(option.Text))
+                        </td>
+                    }
                     <td>
-                        @Html.DropDownList("DropDownOptions", new SelectList(item.Options,"Correct", "Text"), new { @class = "form-control" })
+                        @*@Html.DropDownList("DropDownOptions", new SelectList(item.Options,"Correct", "Text"), new { @class = "form-control" })*@
+                        @Html.DropDownList("DropDownOptions", new SelectList(ViewBag.SelectOptions, "Text", "Value"),  new { @class = "form-control" })
                     </td>
                 </tr>
             }

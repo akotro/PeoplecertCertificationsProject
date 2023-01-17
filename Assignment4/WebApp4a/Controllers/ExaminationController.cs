@@ -33,6 +33,7 @@ namespace WebApp4a.Controllers
         /// </summary>
         public async Task<IActionResult> Exam()
         {
+            PopulateDropDownOptions();
             return View(await _examRepository.GetAllQuestionsAsync(_candidateExam));
         }
 
@@ -41,7 +42,7 @@ namespace WebApp4a.Controllers
         /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> GetAnswers(IEnumerable<bool> DropDownOptions)
+        public async Task<IActionResult> GetAnswers(IEnumerable<string> DropDownOptions)
         {
             if (ModelState.IsValid)
             {
@@ -52,5 +53,17 @@ namespace WebApp4a.Controllers
 
             return await Task.Run(() => RedirectToAction("Exam"));
         }
+
+        /// <summary>
+        /// vmavraganis: Populates the drop down list with the options 1 to 4 for the user to select one
+        /// </summary>
+        private void PopulateDropDownOptions()
+        {
+            var list = new List<SelectListItem>();
+            for (var i = 1; i < 5; i++)
+                list.Add(new SelectListItem { Text = i.ToString(), Value = i.ToString() });
+            ViewBag.SelectOptions = list;
+        }
+
     }
 }
