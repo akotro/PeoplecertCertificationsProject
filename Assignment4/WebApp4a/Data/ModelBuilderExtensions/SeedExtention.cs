@@ -18,17 +18,6 @@ namespace WebApp4a.Data.ModelBuilderExtensions
         public static void Seed(this ModelBuilder modelBuilder, ApplicationDbContext db)
         {
 
-            //public static ModelBuilder sasd = new ModelBuilder();
-            //private static ApplicationDbContext _context { get; set; }
-            //static SeedExtention (ApplicationDbContext context)
-            //{
-            //_context = context;
-            //}
-            //var db = new ApplicationDbContext();
-
-
-            //SampleData.Initialize(app.ApplicationServices);
-
             // Bogus RAndomizer set to generate repeatable data sets.
             Randomizer.Seed = new Random(8675309);
             var faker = new Faker();
@@ -244,36 +233,6 @@ namespace WebApp4a.Data.ModelBuilderExtensions
 
             #endregion
 
-            //#region // Seeding CertificateTopic join table
-            //var fakeCertificateTopics = new List<CertificateTopic>();
-            //for (int i = 0; i < 30; i++)
-            //{
-            //    //var valuesleft = fakeTopics;
-            //    for (int j = 0; j < 3; j++)
-            //    {
-            //        fakeCertificateTopics.Add(new CertificateTopic()
-            //        {
-            //            //TopicId = j,
-            //        //    fakeCertificateTopics[i].CertificateId = faker.PickRandom<int>(fakeCerts[fakeNum10 - 1].Id);
-            //        //fakeCertificateTopics[i].TopicId = faker.PickRandom<int>(fakeTopics[fakeNum10 - 1].Id);
-            //            //CertificateId = i
-            //        });
-
-            //    }
-            //}
-            //modelBuilder.Entity<CertificateTopic>().HasData(
-            //    new CertificateTopic { TopicId = 1, CertificateId = 1 },
-            //    new CertificateTopic { TopicId = 2, CertificateId = 1 },
-            //    new CertificateTopic { TopicId = 3, CertificateId = 1 },
-            //    new CertificateTopic { TopicId = 4, CertificateId = 2 },
-            //    new CertificateTopic { TopicId = 5, CertificateId = 2 },
-            //    new CertificateTopic { TopicId = 6, CertificateId = 2 },
-            //    new CertificateTopic { TopicId = 4, CertificateId = 3 },
-            //    new CertificateTopic { TopicId = 2, CertificateId = 3 },
-            //    new CertificateTopic { TopicId = 1, CertificateId = 3 }
-            //    );
-            //#endregion
-
             #region // Seeding Exams table
 
             var fakeExamEntries = new List<Exam>(){
@@ -289,24 +248,7 @@ namespace WebApp4a.Data.ModelBuilderExtensions
 
             #endregion
 
-            #region // Seeding ExamQuestion table
-
-            //modelBuilder.Entity<ExamQuestion>().HasData(
-            //    new ExamQuestion { ExamsId = 1, QuestionId = 1 },
-            //    new ExamQuestion { ExamsId = 1, QuestionId = 2 },
-            //    new ExamQuestion { ExamsId = 1, QuestionId = 3 },
-            //    new ExamQuestion { ExamsId = 1, QuestionId = 4 },
-            //    new ExamQuestion { ExamsId = 1, QuestionId = 5 },
-            //    new ExamQuestion { ExamsId = 2, QuestionId = 6 },
-            //    new ExamQuestion { ExamsId = 2, QuestionId = 7 },
-            //    new ExamQuestion { ExamsId = 2, QuestionId = 8 },
-            //    new ExamQuestion { ExamsId = 2, QuestionId = 9 }
-            //    );
-
-            #endregion
-
             #region // Seeding CAndiadateExam table
-
 
             var candiExamFaker = new Faker<CandidateExam>()
                 .RuleFor(c => c.ExamDate, f => f.Date.Past(2, DateTime.Now))

@@ -12,8 +12,8 @@ using WebApp4a.Data;
 namespace WebApp4a.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230115144352_full_seed_NOansweres")]
-    partial class full_seed_NOansweres
+    [Migration("20230116232244_added_MaxMark_to_Certificate")]
+    partial class added_MaxMark_to_Certificate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,6 +23,36 @@ namespace WebApp4a.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("CertificateTopic", b =>
+                {
+                    b.Property<int>("CertificatesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TopicsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CertificatesId", "TopicsId");
+
+                    b.HasIndex("TopicsId");
+
+                    b.ToTable("CertificateTopic");
+                });
+
+            modelBuilder.Entity("ExamQuestion", b =>
+                {
+                    b.Property<int>("ExamsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("QuestionsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ExamsId", "QuestionsId");
+
+                    b.HasIndex("QuestionsId");
+
+                    b.ToTable("ExamQuestion");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -230,13 +260,13 @@ namespace WebApp4a.Migrations
                         {
                             Id = "9407b6e2-f46e-4a79-a725-dfb1e15e2915",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "aaa50580-6a51-4e6e-930b-8a1011c847fd",
+                            ConcurrencyStamp = "f2d9f618-7700-482c-8891-2058f2a6ee69",
                             Email = "admin0@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumber = "1234567890",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "a38847fa-f68f-4780-b5ed-a93072d1e7f1",
+                            SecurityStamp = "0b9cc35b-cfd9-41ea-9010-43117d21e21d",
                             TwoFactorEnabled = false,
                             UserName = "Admin0"
                         },
@@ -244,13 +274,13 @@ namespace WebApp4a.Migrations
                         {
                             Id = "be69a4bd-fb90-41dd-b65b-4ff8b619b767",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "beeae3e7-2792-4e07-b3a4-510e7d9b9692",
+                            ConcurrencyStamp = "a88d600e-76c5-4aff-96d6-18603245d42d",
                             Email = "admin1@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumber = "1234567890",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "423b1b6a-dfc6-4442-b7b0-19eef8efa1f2",
+                            SecurityStamp = "87972167-2451-4f97-9025-7e99e49414af",
                             TwoFactorEnabled = false,
                             UserName = "Admin1"
                         },
@@ -258,13 +288,13 @@ namespace WebApp4a.Migrations
                         {
                             Id = "8ca319b2-762d-45e3-8b26-edd6b1f4ba75",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "3ce1141d-28cb-4037-8f9e-bf9bd78c134a",
+                            ConcurrencyStamp = "5bf40999-f2d8-4d13-a878-df40866d03c9",
                             Email = "admin2@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumber = "1234567890",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "5c1ac1b3-69e5-4015-af97-57a1550b5fcf",
+                            SecurityStamp = "06a74940-3fb2-4dd0-b02d-8ef147e4566b",
                             TwoFactorEnabled = false,
                             UserName = "Admin2"
                         },
@@ -272,13 +302,13 @@ namespace WebApp4a.Migrations
                         {
                             Id = "f60a904a-aba6-4635-892d-f38919b09896",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "c7b7290a-c966-4411-8827-d916116d1897",
+                            ConcurrencyStamp = "ac7fdbb6-4ee6-475a-9bac-e644b62b8048",
                             Email = "admin3@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumber = "1234567890",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "67aa63b0-22e7-4fa1-93d6-3c24f78ec726",
+                            SecurityStamp = "fd746ada-6e8d-4e0a-9701-08d41bf640d0",
                             TwoFactorEnabled = false,
                             UserName = "Admin3"
                         });
@@ -493,7 +523,7 @@ namespace WebApp4a.Migrations
                         {
                             AppUserId = "9407b6e2-f46e-4a79-a725-dfb1e15e2915",
                             CandidateNumber = "420088571",
-                            DateOfBirth = new DateTime(1991, 11, 4, 10, 8, 30, 266, DateTimeKind.Local).AddTicks(2362),
+                            DateOfBirth = new DateTime(1991, 11, 5, 18, 47, 22, 526, DateTimeKind.Local).AddTicks(3990),
                             Email = "Otho_Pfannerstill31@gmail.com",
                             FirstName = "Josianne",
                             GenderId = 2,
@@ -502,7 +532,7 @@ namespace WebApp4a.Migrations
                             LastName = "Pfeffer",
                             MiddleName = "Yolanda",
                             Mobile = "351-303-5993 x592",
-                            PhotoIdIssueDate = new DateTime(2022, 2, 24, 11, 53, 52, 783, DateTimeKind.Local).AddTicks(7998),
+                            PhotoIdIssueDate = new DateTime(2022, 2, 25, 20, 32, 45, 43, DateTimeKind.Local).AddTicks(9628),
                             PhotoIdNumber = "bfqee8",
                             PhotoIdTypeId = 4
                         },
@@ -510,7 +540,7 @@ namespace WebApp4a.Migrations
                         {
                             AppUserId = "be69a4bd-fb90-41dd-b65b-4ff8b619b767",
                             CandidateNumber = "136721276",
-                            DateOfBirth = new DateTime(1988, 7, 19, 9, 23, 28, 141, DateTimeKind.Local).AddTicks(1876),
+                            DateOfBirth = new DateTime(1988, 7, 20, 18, 2, 20, 401, DateTimeKind.Local).AddTicks(3484),
                             Email = "Dedrick_Lynch@hotmail.com",
                             FirstName = "Adeline",
                             GenderId = 4,
@@ -519,7 +549,7 @@ namespace WebApp4a.Migrations
                             LastName = "Dietrich",
                             MiddleName = "Aiyana",
                             Mobile = "(750) 481-1897",
-                            PhotoIdIssueDate = new DateTime(2018, 1, 8, 22, 15, 34, 565, DateTimeKind.Local).AddTicks(8544),
+                            PhotoIdIssueDate = new DateTime(2018, 1, 10, 6, 54, 26, 826, DateTimeKind.Local).AddTicks(148),
                             PhotoIdNumber = "cb4osy",
                             PhotoIdTypeId = 5
                         },
@@ -527,7 +557,7 @@ namespace WebApp4a.Migrations
                         {
                             AppUserId = "8ca319b2-762d-45e3-8b26-edd6b1f4ba75",
                             CandidateNumber = "153060623",
-                            DateOfBirth = new DateTime(1956, 1, 5, 11, 45, 7, 868, DateTimeKind.Local).AddTicks(7187),
+                            DateOfBirth = new DateTime(1956, 1, 6, 20, 24, 0, 128, DateTimeKind.Local).AddTicks(8794),
                             Email = "Kory27@gmail.com",
                             FirstName = "Dakota",
                             GenderId = 4,
@@ -536,7 +566,7 @@ namespace WebApp4a.Migrations
                             LastName = "Wilkinson",
                             MiddleName = "Bridie",
                             Mobile = "1-783-633-4424",
-                            PhotoIdIssueDate = new DateTime(2022, 9, 13, 23, 31, 59, 150, DateTimeKind.Local).AddTicks(9901),
+                            PhotoIdIssueDate = new DateTime(2022, 9, 15, 8, 10, 51, 411, DateTimeKind.Local).AddTicks(1507),
                             PhotoIdNumber = "f1lklm",
                             PhotoIdTypeId = 3
                         });
@@ -746,6 +776,9 @@ namespace WebApp4a.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("MaxMark")
+                        .HasColumnType("int");
+
                     b.Property<int?>("PassingMark")
                         .HasColumnType("int");
 
@@ -849,68 +882,6 @@ namespace WebApp4a.Migrations
                         });
                 });
 
-            modelBuilder.Entity("ModelLibrary.Models.Certificates.CertificateTopic", b =>
-                {
-                    b.Property<int>("CertificateId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TopicId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CertificateId", "TopicId");
-
-                    b.HasIndex("TopicId");
-
-                    b.ToTable("CertificateTopic");
-
-                    b.HasData(
-                        new
-                        {
-                            CertificateId = 1,
-                            TopicId = 1
-                        },
-                        new
-                        {
-                            CertificateId = 1,
-                            TopicId = 2
-                        },
-                        new
-                        {
-                            CertificateId = 1,
-                            TopicId = 3
-                        },
-                        new
-                        {
-                            CertificateId = 2,
-                            TopicId = 4
-                        },
-                        new
-                        {
-                            CertificateId = 2,
-                            TopicId = 5
-                        },
-                        new
-                        {
-                            CertificateId = 2,
-                            TopicId = 6
-                        },
-                        new
-                        {
-                            CertificateId = 3,
-                            TopicId = 4
-                        },
-                        new
-                        {
-                            CertificateId = 3,
-                            TopicId = 2
-                        },
-                        new
-                        {
-                            CertificateId = 3,
-                            TopicId = 1
-                        });
-                });
-
             modelBuilder.Entity("ModelLibrary.Models.Certificates.DifficultyLevel", b =>
                 {
                     b.Property<int>("Id")
@@ -941,6 +912,11 @@ namespace WebApp4a.Migrations
                         {
                             Id = 3,
                             Difficulty = 2
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Difficulty = 3
                         });
                 });
 
@@ -1036,7 +1012,8 @@ namespace WebApp4a.Migrations
                     b.Property<string>("AssessmentCode")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CandidateAppUserId")
+                    b.Property<string>("CandidateId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int?>("CandidateScore")
@@ -1045,7 +1022,7 @@ namespace WebApp4a.Migrations
                     b.Property<DateTime?>("ExamDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("ExamId")
+                    b.Property<int>("ExamId")
                         .HasColumnType("int");
 
                     b.Property<int?>("MaxScore")
@@ -1062,11 +1039,93 @@ namespace WebApp4a.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CandidateAppUserId");
+                    b.HasIndex("CandidateId");
 
                     b.HasIndex("ExamId");
 
                     b.ToTable("CandidateExams");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CandidateId = "be69a4bd-fb90-41dd-b65b-4ff8b619b767",
+                            ExamDate = new DateTime(2021, 12, 17, 23, 9, 18, 640, DateTimeKind.Local).AddTicks(6534),
+                            ExamId = 7,
+                            ReportDate = new DateTime(2022, 9, 17, 16, 33, 0, 696, DateTimeKind.Unspecified).AddTicks(954)
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CandidateId = "8ca319b2-762d-45e3-8b26-edd6b1f4ba75",
+                            ExamDate = new DateTime(2021, 12, 26, 8, 49, 20, 570, DateTimeKind.Local).AddTicks(7896),
+                            ExamId = 4,
+                            ReportDate = new DateTime(2022, 12, 25, 15, 40, 10, 944, DateTimeKind.Unspecified).AddTicks(8788)
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CandidateId = "8ca319b2-762d-45e3-8b26-edd6b1f4ba75",
+                            ExamDate = new DateTime(2022, 6, 21, 23, 11, 57, 879, DateTimeKind.Local).AddTicks(3396),
+                            ExamId = 6,
+                            ReportDate = new DateTime(2022, 12, 1, 3, 40, 58, 559, DateTimeKind.Unspecified).AddTicks(1)
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CandidateId = "be69a4bd-fb90-41dd-b65b-4ff8b619b767",
+                            ExamDate = new DateTime(2021, 12, 10, 3, 57, 17, 926, DateTimeKind.Local).AddTicks(4261),
+                            ExamId = 7,
+                            ReportDate = new DateTime(2022, 11, 15, 14, 33, 49, 936, DateTimeKind.Unspecified).AddTicks(6907)
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CandidateId = "9407b6e2-f46e-4a79-a725-dfb1e15e2915",
+                            ExamDate = new DateTime(2021, 6, 21, 16, 28, 9, 867, DateTimeKind.Local).AddTicks(3195),
+                            ExamId = 4,
+                            ReportDate = new DateTime(2022, 10, 16, 22, 35, 32, 351, DateTimeKind.Unspecified).AddTicks(6467)
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CandidateId = "8ca319b2-762d-45e3-8b26-edd6b1f4ba75",
+                            ExamDate = new DateTime(2021, 10, 6, 11, 9, 13, 574, DateTimeKind.Local).AddTicks(460),
+                            ExamId = 3,
+                            ReportDate = new DateTime(2022, 8, 14, 19, 43, 14, 499, DateTimeKind.Unspecified).AddTicks(2307)
+                        },
+                        new
+                        {
+                            Id = 7,
+                            CandidateId = "be69a4bd-fb90-41dd-b65b-4ff8b619b767",
+                            ExamDate = new DateTime(2021, 12, 30, 7, 40, 10, 983, DateTimeKind.Local).AddTicks(6550),
+                            ExamId = 3,
+                            ReportDate = new DateTime(2022, 8, 22, 4, 26, 3, 7, DateTimeKind.Unspecified).AddTicks(7679)
+                        },
+                        new
+                        {
+                            Id = 8,
+                            CandidateId = "9407b6e2-f46e-4a79-a725-dfb1e15e2915",
+                            ExamDate = new DateTime(2021, 4, 16, 1, 0, 59, 844, DateTimeKind.Local).AddTicks(4371),
+                            ExamId = 3,
+                            ReportDate = new DateTime(2022, 10, 8, 23, 8, 6, 721, DateTimeKind.Unspecified).AddTicks(2164)
+                        },
+                        new
+                        {
+                            Id = 9,
+                            CandidateId = "be69a4bd-fb90-41dd-b65b-4ff8b619b767",
+                            ExamDate = new DateTime(2021, 5, 3, 13, 5, 51, 920, DateTimeKind.Local).AddTicks(4048),
+                            ExamId = 2,
+                            ReportDate = new DateTime(2022, 7, 24, 17, 55, 45, 687, DateTimeKind.Unspecified).AddTicks(6041)
+                        },
+                        new
+                        {
+                            Id = 10,
+                            CandidateId = "be69a4bd-fb90-41dd-b65b-4ff8b619b767",
+                            ExamDate = new DateTime(2022, 9, 13, 1, 23, 49, 976, DateTimeKind.Local).AddTicks(163),
+                            ExamId = 7,
+                            ReportDate = new DateTime(2022, 11, 3, 17, 15, 51, 106, DateTimeKind.Unspecified).AddTicks(3468)
+                        });
                 });
 
             modelBuilder.Entity("ModelLibrary.Models.Exams.CandidateExamAnswers", b =>
@@ -1077,7 +1136,7 @@ namespace WebApp4a.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("CandidateExamId")
+                    b.Property<int>("CandidateExamId")
                         .HasColumnType("int");
 
                     b.Property<string>("ChosenOption")
@@ -1094,6 +1153,88 @@ namespace WebApp4a.Migrations
                     b.HasIndex("CandidateExamId");
 
                     b.ToTable("CandidateExamAnswers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CandidateExamId = 9,
+                            ChosenOption = "<h2>this is an option</h2>",
+                            CorrectOption = "<h1>this is an option</h1>",
+                            IsCorrect = false
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CandidateExamId = 1,
+                            ChosenOption = "<h3>this is an option</h3>",
+                            CorrectOption = "<h2>this is an option</h2>",
+                            IsCorrect = false
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CandidateExamId = 3,
+                            ChosenOption = "<h1>this is an option</h1>",
+                            CorrectOption = "<h3>this is an option</h3>",
+                            IsCorrect = false
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CandidateExamId = 8,
+                            ChosenOption = "<h1>this is an option</h1>",
+                            CorrectOption = "<h1>this is an option</h1>",
+                            IsCorrect = false
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CandidateExamId = 3,
+                            ChosenOption = "<h2>this is an option</h2>",
+                            CorrectOption = "<h1>this is an option</h1>",
+                            IsCorrect = false
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CandidateExamId = 8,
+                            ChosenOption = "<h2>this is an option</h2>",
+                            CorrectOption = "<h3>this is an option</h3>",
+                            IsCorrect = false
+                        },
+                        new
+                        {
+                            Id = 7,
+                            CandidateExamId = 9,
+                            ChosenOption = "<h3>this is an option</h3>",
+                            CorrectOption = "<h3>this is an option</h3>",
+                            IsCorrect = false
+                        },
+                        new
+                        {
+                            Id = 8,
+                            CandidateExamId = 1,
+                            ChosenOption = "<h2>this is an option</h2>",
+                            CorrectOption = "<h3>this is an option</h3>",
+                            IsCorrect = false
+                        },
+                        new
+                        {
+                            Id = 9,
+                            CandidateExamId = 10,
+                            ChosenOption = "<h2>this is an option</h2>",
+                            CorrectOption = "<h2>this is an option</h2>",
+                            IsCorrect = false
+                        },
+                        new
+                        {
+                            Id = 10,
+                            CandidateExamId = 8,
+                            ChosenOption = "<h1>this is an option</h1>",
+                            CorrectOption = "<h2>this is an option</h2>",
+                            IsCorrect = false
+                        });
                 });
 
             modelBuilder.Entity("ModelLibrary.Models.Exams.Exam", b =>
@@ -1148,68 +1289,6 @@ namespace WebApp4a.Migrations
                         {
                             Id = 7,
                             CertificateId = 4
-                        });
-                });
-
-            modelBuilder.Entity("ModelLibrary.Models.Exams.ExamQuestion", b =>
-                {
-                    b.Property<int>("ExamsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("QuestionId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ExamsId", "QuestionId");
-
-                    b.HasIndex("QuestionId");
-
-                    b.ToTable("ExamQuestion");
-
-                    b.HasData(
-                        new
-                        {
-                            ExamsId = 1,
-                            QuestionId = 1
-                        },
-                        new
-                        {
-                            ExamsId = 1,
-                            QuestionId = 2
-                        },
-                        new
-                        {
-                            ExamsId = 1,
-                            QuestionId = 3
-                        },
-                        new
-                        {
-                            ExamsId = 1,
-                            QuestionId = 4
-                        },
-                        new
-                        {
-                            ExamsId = 1,
-                            QuestionId = 5
-                        },
-                        new
-                        {
-                            ExamsId = 2,
-                            QuestionId = 6
-                        },
-                        new
-                        {
-                            ExamsId = 2,
-                            QuestionId = 7
-                        },
-                        new
-                        {
-                            ExamsId = 2,
-                            QuestionId = 8
-                        },
-                        new
-                        {
-                            ExamsId = 2,
-                            QuestionId = 9
                         });
                 });
 
@@ -1332,20 +1411,20 @@ namespace WebApp4a.Migrations
 
                     b.HasIndex("TopicId");
 
-                    b.ToTable("Question");
+                    b.ToTable("Questions");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            DifficultyLevelId = 2,
+                            DifficultyLevelId = 3,
                             Text = "<h1>this is question</h1>",
                             TopicId = 1
                         },
                         new
                         {
                             Id = 2,
-                            DifficultyLevelId = 2,
+                            DifficultyLevelId = 3,
                             Text = "<h3>this is question</h3>",
                             TopicId = 3
                         },
@@ -1359,14 +1438,14 @@ namespace WebApp4a.Migrations
                         new
                         {
                             Id = 4,
-                            DifficultyLevelId = 3,
+                            DifficultyLevelId = 4,
                             Text = "<h1>this is question</h1>",
                             TopicId = 5
                         },
                         new
                         {
                             Id = 5,
-                            DifficultyLevelId = 2,
+                            DifficultyLevelId = 3,
                             Text = "<h1>this is question</h1>",
                             TopicId = 1
                         },
@@ -1380,14 +1459,14 @@ namespace WebApp4a.Migrations
                         new
                         {
                             Id = 7,
-                            DifficultyLevelId = 3,
+                            DifficultyLevelId = 4,
                             Text = "<h2>this is question</h2>",
                             TopicId = 2
                         },
                         new
                         {
                             Id = 8,
-                            DifficultyLevelId = 3,
+                            DifficultyLevelId = 4,
                             Text = "<h3>this is question</h3>",
                             TopicId = 2
                         },
@@ -1401,10 +1480,40 @@ namespace WebApp4a.Migrations
                         new
                         {
                             Id = 10,
-                            DifficultyLevelId = 3,
+                            DifficultyLevelId = 4,
                             Text = "<h1>this is question</h1>",
                             TopicId = 6
                         });
+                });
+
+            modelBuilder.Entity("CertificateTopic", b =>
+                {
+                    b.HasOne("ModelLibrary.Models.Certificates.Certificate", null)
+                        .WithMany()
+                        .HasForeignKey("CertificatesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ModelLibrary.Models.Certificates.Topic", null)
+                        .WithMany()
+                        .HasForeignKey("TopicsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ExamQuestion", b =>
+                {
+                    b.HasOne("ModelLibrary.Models.Exams.Exam", null)
+                        .WithMany()
+                        .HasForeignKey("ExamsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ModelLibrary.Models.Questions.Question", null)
+                        .WithMany()
+                        .HasForeignKey("QuestionsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -1508,34 +1617,19 @@ namespace WebApp4a.Migrations
                     b.Navigation("PhotoIdType");
                 });
 
-            modelBuilder.Entity("ModelLibrary.Models.Certificates.CertificateTopic", b =>
-                {
-                    b.HasOne("ModelLibrary.Models.Certificates.Certificate", "Certificate")
-                        .WithMany("Topics")
-                        .HasForeignKey("CertificateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ModelLibrary.Models.Certificates.Topic", "Topic")
-                        .WithMany("Certificates")
-                        .HasForeignKey("TopicId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Certificate");
-
-                    b.Navigation("Topic");
-                });
-
             modelBuilder.Entity("ModelLibrary.Models.Exams.CandidateExam", b =>
                 {
                     b.HasOne("ModelLibrary.Models.Candidates.Candidate", "Candidate")
                         .WithMany("CandidateExams")
-                        .HasForeignKey("CandidateAppUserId");
+                        .HasForeignKey("CandidateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("ModelLibrary.Models.Exams.Exam", "Exam")
                         .WithMany("CandidateExams")
-                        .HasForeignKey("ExamId");
+                        .HasForeignKey("ExamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Candidate");
 
@@ -1546,7 +1640,9 @@ namespace WebApp4a.Migrations
                 {
                     b.HasOne("ModelLibrary.Models.Exams.CandidateExam", "CandidateExam")
                         .WithMany("CandidateExamAnswers")
-                        .HasForeignKey("CandidateExamId");
+                        .HasForeignKey("CandidateExamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("CandidateExam");
                 });
@@ -1560,25 +1656,6 @@ namespace WebApp4a.Migrations
                         .IsRequired();
 
                     b.Navigation("Certificate");
-                });
-
-            modelBuilder.Entity("ModelLibrary.Models.Exams.ExamQuestion", b =>
-                {
-                    b.HasOne("ModelLibrary.Models.Exams.Exam", "Exam")
-                        .WithMany("Questions")
-                        .HasForeignKey("ExamsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ModelLibrary.Models.Questions.Question", "Question")
-                        .WithMany("Exams")
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Exam");
-
-                    b.Navigation("Question");
                 });
 
             modelBuilder.Entity("ModelLibrary.Models.Questions.Option", b =>
@@ -1647,8 +1724,6 @@ namespace WebApp4a.Migrations
             modelBuilder.Entity("ModelLibrary.Models.Certificates.Certificate", b =>
                 {
                     b.Navigation("Exams");
-
-                    b.Navigation("Topics");
                 });
 
             modelBuilder.Entity("ModelLibrary.Models.Certificates.DifficultyLevel", b =>
@@ -1658,8 +1733,6 @@ namespace WebApp4a.Migrations
 
             modelBuilder.Entity("ModelLibrary.Models.Certificates.Topic", b =>
                 {
-                    b.Navigation("Certificates");
-
                     b.Navigation("Questions");
                 });
 
@@ -1671,14 +1744,10 @@ namespace WebApp4a.Migrations
             modelBuilder.Entity("ModelLibrary.Models.Exams.Exam", b =>
                 {
                     b.Navigation("CandidateExams");
-
-                    b.Navigation("Questions");
                 });
 
             modelBuilder.Entity("ModelLibrary.Models.Questions.Question", b =>
                 {
-                    b.Navigation("Exams");
-
                     b.Navigation("Options");
                 });
 #pragma warning restore 612, 618

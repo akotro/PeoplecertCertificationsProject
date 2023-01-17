@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ModelLibrary.Models;
+using System.Reflection.Metadata;
 using WebApp4a.Data;
+using WebApp4a.Data.Seed;
 using WebApp4a.Data.Repositories;
 
 namespace WebApp4a
@@ -62,6 +64,9 @@ namespace WebApp4a
 
             app.MapRazorPages();
             app.MapDefaultControllerRoute();
+            // Seeds the joining Tables, calculates and changes the MaxMarks and Passing Marks of each certificate
+            // according to the topics it has
+            SeedIfNotExists.SeedIfEmpty(app);
 
             app.Run();
         }
