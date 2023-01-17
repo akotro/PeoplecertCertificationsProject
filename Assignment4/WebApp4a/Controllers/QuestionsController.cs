@@ -147,7 +147,7 @@ namespace WebApp4a.Controllers
             return View(question);
         }
 
-        // GET: Question/Create
+        // GET: Questions/Create
         public ActionResult Create()
         {
             var questionDto = new QuestionDto()
@@ -171,7 +171,7 @@ namespace WebApp4a.Controllers
             return View(questionDto);
         }
 
-        // POST: Question/Create
+        // POST: Questions/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(QuestionDto questionDto)
@@ -196,7 +196,7 @@ namespace WebApp4a.Controllers
             return View(questionDto);
         }
 
-        // GET: Question/Edit/5
+        // GET: Questions/Edit/5
         public ActionResult Edit(int id)
         {
             var question = _context.Questions
@@ -234,7 +234,7 @@ namespace WebApp4a.Controllers
             return View(questionDto);
         }
 
-        // POST: Question/Edit/5
+        // POST: Questions/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, QuestionDto questionDto)
