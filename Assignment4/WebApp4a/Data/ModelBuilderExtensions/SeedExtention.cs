@@ -187,10 +187,6 @@ namespace WebApp4a.Data.ModelBuilderExtensions
             modelBuilder.Entity<Question>().HasData(fakeQuestions);
             #endregion
 
-            //var optionFaker = new Faker<Option>()
-            //    .RuleFor(c => c.Text, f => f.PickRandom(options));
-
-            //var fakeOptions = optionFaker.Generate(10);
             #region// Seeding Options table
             var options = new string[] {
                 "<h1>this is an option1</h1>",
@@ -213,11 +209,9 @@ namespace WebApp4a.Data.ModelBuilderExtensions
                     else
                         option.Correct = false;
 
-
                     option.Text = faker.PickRandom(options);
                     fakeOptions.Add(option);
                     optionIndex++;
-
 
                 }
             }
