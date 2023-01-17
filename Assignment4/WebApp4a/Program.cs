@@ -16,7 +16,7 @@ namespace WebApp4a
 
             // Add services to the container.
             var connectionString =
-                builder.Configuration.GetConnectionString("DefaultConnection")
+                builder.Configuration.GetConnectionString("giannis")
                 ?? throw new InvalidOperationException(
                     "Connection string 'DefaultConnection' not found."
                 );
@@ -66,10 +66,8 @@ namespace WebApp4a
 
             app.MapRazorPages();
             app.MapDefaultControllerRoute();
-
-
-            app.MapDefaultControllerRoute(); //giannis mvc routing enable?
-
+            // Seeds the joining Tables, calculates and changes the MaxMarks and Passing Marks of each certificate 
+            // according to the topics it has
             SeedIfNotExists.SeedIfEmpty(app);
          
             app.Run();
