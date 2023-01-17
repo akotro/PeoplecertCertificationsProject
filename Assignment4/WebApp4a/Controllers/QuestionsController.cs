@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ModelLibrary.Models.Certificates;
+using ModelLibrary.Models.DTO.Questions;
 using ModelLibrary.Models.Questions;
 using WebApp4a.Data;
 
@@ -208,89 +209,181 @@ namespace WebApp4a.Controllers
             return View(question);
         }
 
-        // GET: Questions/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        // // GET: Questions/Edit/5
+        // public async Task<IActionResult> Edit(int? id)
+        // {
+        //     if (id == null || _context.Questions == null)
+        //     {
+        //         return NotFound();
+        //     }
+
+        //     var question = await _context.Questions
+        //         .Include(q => q.DifficultyLevel)
+        //         .Include(q => q.Topic)
+        //         .Include(q => q.Options)
+        //         .FirstOrDefaultAsync(q => q.Id == id);
+
+        //     ViewData.Add("Topic", GetTopicSelectList(question));
+
+        //     if (question == null)
+        //     {
+        //         return NotFound();
+        //     }
+
+        //     return View(question);
+        // }
+
+        // // POST: Questions/Edit/5
+        // // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // [HttpPost]
+        // [ValidateAntiForgeryToken]
+        // public async Task<IActionResult> Edit(
+        //     int id,
+        //     [Bind("Id,Text,DifficultyLevel")] Question question,
+        //     [Bind("Topic")] int topic
+        // // [Bind("Text1")] string text1,
+        // // [Bind("Correct1")] bool correct1,
+        // // [Bind("Text1")] string text2,
+        // // [Bind("Correct1")] bool correct2,
+        // // [Bind("Text1")] string text3,
+        // // [Bind("Correct1")] bool correct3,
+        // // [Bind("Text1")] string text4,
+        // // [Bind("Correct1")] bool correct4
+        // )
+        // {
+        //     if (id != question.Id)
+        //     {
+        //         return NotFound();
+        //     }
+
+        //     if (ModelState.IsValid)
+        //     {
+        //         try
+        //         {
+        //             // TODO:(akotro) Should editing questions be done with Option MVC
+
+        //             // var optionsDict = new Dictionary<string, bool>()
+        //             // {
+        //             //     { text1, correct1 },
+        //             //     { text2, correct2 },
+        //             //     { text3, correct3 },
+        //             //     { text4, correct4 }
+        //             // };
+
+        //             PopulateQuestion(question, topic, null);
+
+        //             _context.Update(question);
+        //             await _context.SaveChangesAsync();
+        //         }
+        //         catch (DbUpdateConcurrencyException)
+        //         {
+        //             if (!QuestionExists(question.Id))
+        //             {
+        //                 return NotFound();
+        //             }
+        //             else
+        //             {
+        //                 throw;
+        //             }
+        //         }
+
+        //         return RedirectToAction(nameof(Index));
+        //     }
+
+        //     return View(question);
+        // }
+
+        // GET: Question/Edit/5
+        public ActionResult Edit(int id)
         {
-            if (id == null || _context.Questions == null)
-            {
-                return NotFound();
-            }
-
-            var question = await _context.Questions
-                .Include(q => q.DifficultyLevel)
-                .Include(q => q.Topic)
+            // Retrieve the question and its options from the database
+            var question = _context.Questions
                 .Include(q => q.Options)
-                .FirstOrDefaultAsync(q => q.Id == id);
+                .FirstOrDefault(q => q.Id == id);
 
-            ViewData.Add("Topic", GetTopicSelectList(question));
-
-            if (question == null)
+            // Create a DTO object to hold the data for the view
+            var questionDto = new QuestionDto
             {
-                return NotFound();
-            }
+                Id = question.Id,
+                Text = question.Text,
+                TopicId = question.TopicId,
+                DifficultyLevelId = question.DifficultyLevelId,
+                Options = question.Options
+                    .Select(
+                        o =>
+                            new OptionDto
+                            {
+                                Id = o.Id,
+                                Text = o.Text,
+                                Correct = o.Correct
+                            }
+                    )
+                    .ToList()
+            };
 
-            return View(question);
+            ViewBag.Topics = _context.Topics.Select(
+                t => new SelectListItem { Text = t.Name, Value = t.Id.ToString() }
+            );
+            ViewBag.DifficultyLevels = _context.DifficultyLevels.Select(
+                d => new SelectListItem { Text = d.Difficulty.ToString(), Value = d.Id.ToString() }
+            );
+
+            return View(questionDto);
         }
 
-        // POST: Questions/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Question/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(
-            int id,
-            [Bind("Id,Text,DifficultyLevel")] Question question,
-            [Bind("Topic")] int topic
-        // [Bind("Text1")] string text1,
-        // [Bind("Correct1")] bool correct1,
-        // [Bind("Text1")] string text2,
-        // [Bind("Correct1")] bool correct2,
-        // [Bind("Text1")] string text3,
-        // [Bind("Correct1")] bool correct3,
-        // [Bind("Text1")] string text4,
-        // [Bind("Correct1")] bool correct4
-        )
+        public ActionResult Edit(int id, QuestionDto questionDto)
         {
-            if (id != question.Id)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
-                try
+                // Retrieve the question and its options from the database
+                var question = _context.Questions
+                    .Include(q => q.Options)
+                    .FirstOrDefault(q => q.Id == id);
+
+                // Update the question properties
+                question.Text = questionDto.Text;
+                question.TopicId = questionDto.TopicId;
+                question.DifficultyLevelId = questionDto.DifficultyLevelId;
+
+                // Update the options
+                var optionsToDelete = question.Options
+                    .Where(o => !questionDto.Options.Any(odto => odto.Id == o.Id))
+                    .ToList();
+                foreach (var option in optionsToDelete)
                 {
-                    // TODO:(akotro) Should editing questions be done with Option MVC
-
-                    // var optionsDict = new Dictionary<string, bool>()
-                    // {
-                    //     { text1, correct1 },
-                    //     { text2, correct2 },
-                    //     { text3, correct3 },
-                    //     { text4, correct4 }
-                    // };
-
-                    PopulateQuestion(question, topic, null);
-
-                    _context.Update(question);
-                    await _context.SaveChangesAsync();
+                    _context.Remove(option);
                 }
-                catch (DbUpdateConcurrencyException)
+
+                foreach (var optionDto in questionDto.Options)
                 {
-                    if (!QuestionExists(question.Id))
+                    var option = question.Options.FirstOrDefault(o => o.Id == optionDto.Id);
+                    if (option != null)
                     {
-                        return NotFound();
+                        option.Text = optionDto.Text;
+                        option.Correct = optionDto.Correct;
                     }
                     else
                     {
-                        throw;
+                        question.Options.Add(
+                            new Option
+                            {
+                                Text = optionDto.Text,
+                                Correct = optionDto.Correct,
+                                QuestionId = question.Id
+                            }
+                        );
                     }
                 }
 
+                _context.SaveChanges();
+
                 return RedirectToAction(nameof(Index));
             }
-
-            return View(question);
+            return View(questionDto);
         }
 
         // GET: Questions/Delete/5
