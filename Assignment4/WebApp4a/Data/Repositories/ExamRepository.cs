@@ -70,18 +70,6 @@ namespace WebApp4a.Data.Repositories
                     candScore++;
                 }
 
-                var examAnswers = new CandidateExamAnswers
-                {
-                    //Note(vmavraganis): needs fixing for later steps (get the correct and choosen options as string)
-                    CorrectOption = "correct",
-                    ChosenOption = "choosen",
-                    IsCorrect = item,
-                    CandidateExam = candidateExam
-                };
-
-                _context.CandidateExamAnswers.Add(examAnswers);
-            }
-
             candidateExam.CandidateScore = candScore;
             candidateExam.PercentScore = CalculatePercentageScore(candidateExam.Exam.Questions.Count, candScore);
             candidateExam.Result = Passed(candidateExam.Exam.Questions.Count, candScore);
