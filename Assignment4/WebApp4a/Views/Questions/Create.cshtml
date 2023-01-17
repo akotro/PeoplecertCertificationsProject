@@ -1,103 +1,54 @@
-@using ModelLibrary.Models.Certificates
-@using ModelLibrary.Models.Questions
-@model ModelLibrary.Models.Questions.Question
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model ModelLibrary.Models.DTO.Questions.QuestionDto
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create Question";
 }
 
-<h1>Create</h1>
+<h2>Create Question</h2>
 
-<h4>Question</h4>
-<hr/>
-<div class="row">
-    <div class="col-md-10">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-
-                <label asp-for="Text" class="control-label"></label>
-                <input asp-for="Text" id="mainEditor" class="form-control"/>
-                <span asp-validation-for="Text" class="text-danger"> </span>
-                <hr />
-            </div>
-            @*------------------------------------*@
-            <script>
-                ClassicEditor.create(document.querySelector('#mainEditor'))
-                    .then(editor => {
-                        console.log(editor);
-                    })
-                    .catch(error => {
-                        console.error(error);
-                    });
-            </script>
-            @*------------------------------------*@
-            <div class="form-group">
-                <label asp-for="DifficultyLevel.Difficulty" class="control-label"></label>
-                @Html.DropDownListFor(q => q.DifficultyLevel.Difficulty, Html.GetEnumSelectList<DifficultyEnum>())
-                <span asp-validation-for="DifficultyLevel.Difficulty" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Topic" class="control-label"></label>
-                @Html.DropDownList("Topic", "Select Topic")
-                <span asp-validation-for="Topic" class="text-danger"></span>
-            </div>
-            <hr/>
-
-            <div class="container-fluid">
-                @for (int i = 0, optionNumber = 1; i < Model.Options.Count; i++, optionNumber++)
-                {
-                    <div>
-                    <h4>
-                        Option @optionNumber 
-                    </h4>
-                    <hr />
-                    <div class="form-group">
-                        <label asp-for="Options.ElementAt(i).Text" class="control-label"></label>
-                            @{
-                                var textName = $"Text{optionNumber}";
-                                var optionEditor = $"optionEditor{optionNumber}";
-                            }
-                        <input name="@textName" asp-for="Options.ElementAt(i).Text" id="@optionEditor"  class="form-control" />
-                        <span asp-validation-for="Options.ElementAt(i).Text" class="text-danger"></span>
-                        @*------------------------------------*@
-                        
-                            <script>
-                                ClassicEditor.create(document.querySelector('#@optionEditor'))
-                                    .then(editor => {
-                                        console.log(editor);
-                                    })
-                                    .catch(error => {
-                                        console.error(error);
-                                    });
-                            </script>
-                        
-                        @*------------------------------------*@
-                    </div>
-
-                    <div class="form-group">
-                        <label asp-for="Options.ElementAt(i).Correct" class="control-label"></label>
-                        @{
-                            var correctName = $"Correct{optionNumber}";
-                        }
-                        @Html.CheckBox(@correctName, Model.Options.ElementAt(i).Correct)
-                        <span asp-validation-for="Options.ElementAt(i).Correct" class="text-danger"></span>
-                    </div>
-                    </div>
-                }
-
-            </div>
-           
-
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary"/>
-            </div>
-        </form>
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="Text"></label>
+        <input asp-for="Text" class="form-control"/>
+        <span asp-validation-for="Text"></span>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-
+    <div class="form-group">
+        <label asp-for="TopicId"></label>
+        <select asp-for="TopicId" asp-items="ViewBag.Topics"></select>
+        <span asp-validation-for="TopicId"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="DifficultyLevelId"></label>
+        <select asp-for="DifficultyLevelId" asp-items="ViewBag.DifficultyLevels"></select>
+        <span asp-validation-for="DifficultyLevelId"></span>
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Option</th>
+            <th>Text</th>
+            <th>Correct</th>
+        </tr>
+        </thead>
+        <tbody>
+        @for (int i = 0, optionNumber = 1; i < Model.Options.Count; i++, optionNumber++)
+        {
+            <tr>
+                <td>
+                    @optionNumber
+                </td>
+                <td>
+                    <input asp-for="Options[i].Text" class="form-control"/>
+                    <span asp-validation-for="Options[i].Text"></span>
+                </td>
+                <td>
+                    <input asp-for="Options[i].Correct" type="checkbox"/>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    <input type="submit" value="Create" class="btn btn-primary"/>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
