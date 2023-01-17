@@ -187,23 +187,39 @@ namespace WebApp4a.Data.ModelBuilderExtensions
             modelBuilder.Entity<Question>().HasData(fakeQuestions);
             #endregion
 
+            //var optionFaker = new Faker<Option>()
+            //    .RuleFor(c => c.Text, f => f.PickRandom(options));
+
+            //var fakeOptions = optionFaker.Generate(10);
             #region// Seeding Options table
             var options = new string[] {
-                "<h1>this is an option</h1>",
-                "<h2>this is an option</h2>",
-                "<h3>this is an option</h3>",
-                "<h1>this is an option</h1>" };
+                "<h1>this is an option1</h1>",
+                "<h2>this is an option2</h2>",
+                "<h3>this is an option3</h3>",
+                "<h1>this is an option4</h1>" };
 
-            var optionFaker = new Faker<Option>()
-                .RuleFor(c => c.Text, f => f.PickRandom(options))
-                .RuleFor(c => c.QuestionId, f => f.Random.Number(1, fakeQuestions.Count));
-
-
-            var fakeOptions = optionFaker.Generate(10);
+            var fakeOptions = new List<Option>();
+            int optionIndex = 0;
             for (int i = 0; i < fakeQuestions.Count; i++)
             {
-                fakeOptions[i].Id = i + 1;
-                fakeOptions[i].Correct = false;
+                for (int j = 0; j < 4; j++)
+                {
+                    var option = new Option();
+                    option.QuestionId = i + 1;
+                    option.Id = optionIndex + 1;
+
+                    if (j == 0)
+                        option.Correct = true;
+                    else
+                        option.Correct = false;
+
+
+                    option.Text = faker.PickRandom(options);
+                    fakeOptions.Add(option);
+                    optionIndex++;
+
+
+                }
             }
             modelBuilder.Entity<Option>().HasData(fakeOptions);
             #endregion
