@@ -1298,7 +1298,7 @@ namespace WebApp4a.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<bool?>("Correct")
+                    b.Property<bool>("Correct")
                         .HasColumnType("bit");
 
                     b.Property<int>("QuestionId")

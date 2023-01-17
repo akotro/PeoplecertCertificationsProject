@@ -16,7 +16,7 @@ namespace WebApp4a
 
             // Add services to the container.
             var connectionString =
-                builder.Configuration.GetConnectionString("giannis")
+                builder.Configuration.GetConnectionString("DefaultConnection")
                 ?? throw new InvalidOperationException(
                     "Connection string 'DefaultConnection' not found."
                 );
@@ -54,8 +54,6 @@ namespace WebApp4a
                 app.UseHsts();
             }
 
-         
-
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -66,10 +64,10 @@ namespace WebApp4a
 
             app.MapRazorPages();
             app.MapDefaultControllerRoute();
-            // Seeds the joining Tables, calculates and changes the MaxMarks and Passing Marks of each certificate 
+            // Seeds the joining Tables, calculates and changes the MaxMarks and Passing Marks of each certificate
             // according to the topics it has
             SeedIfNotExists.SeedIfEmpty(app);
-         
+
             app.Run();
         }
     }
