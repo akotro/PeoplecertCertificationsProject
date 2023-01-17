@@ -122,7 +122,7 @@ namespace WebApp4a.Controllers
                         .Include(q => q.Topic)
                         .ToListAsync()
                 )
-                : Problem("Entity set 'ApplicationDbContext.Question'  is null.");
+                : Problem("Entity set 'ApplicationDbContext.Questions'  is null.");
         }
 
         // GET: Questions/Details/5

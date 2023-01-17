@@ -23,7 +23,6 @@ namespace WebApp4a.Data
 
         public virtual DbSet<Certificate> Certificates { get; set; }
 
-        //public virtual DbSet<CertificateTopic> CertificateTopic { get; set; }
         public virtual DbSet<Topic> Topics { get; set; }
 
         public virtual DbSet<Question> Questions { get; set; }
