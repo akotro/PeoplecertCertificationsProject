@@ -108,7 +108,6 @@ namespace WebApp4a.Data.Repositories
             int candidateScore = 0;
             foreach (var question in questions)
             {
-                string? correct = question.Options.FirstOrDefault(option => option.Correct.HasValue && option.Correct.Value).Text;
                 //Note (vmavraganis): we use hasValue only when the correct is nullable, after it we can just regular expresion with Where
                 string? choosen = question.Options.ElementAt(int.Parse(dropDownOptions.ElementAt(index)) - 1).Text;
                 bool? isCorrect = question.Options.ElementAt(int.Parse(dropDownOptions.ElementAt(index)) - 1).Correct;
