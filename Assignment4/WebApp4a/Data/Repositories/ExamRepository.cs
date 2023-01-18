@@ -123,6 +123,7 @@ namespace WebApp4a.Data.Repositories
                 //string? correct = question.Options.FirstOrDefault(option => option.Correct).Text;
                 string? correct = question.Options.FirstOrDefault(option => option.Correct).Text;
                 string? choosen = question.Options.ElementAt(int.Parse(dropDownOptions.ElementAt(index)) - 1).Text;
+                //Note (vmavraganis): dropDownOptions.ElementAt(index)) - 1 == dropDown hold 1 to 4 so we subtract 1 to get the corresponding entry at options (0 to 3)
                 bool? isCorrect = question.Options.ElementAt(int.Parse(dropDownOptions.ElementAt(index)) - 1).Correct;
                 //Note (vmavraganis): remove nullable if model is changed
 
