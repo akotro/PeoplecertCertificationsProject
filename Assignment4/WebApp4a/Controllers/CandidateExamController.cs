@@ -57,8 +57,6 @@ namespace WebApp4a.Controllers
         public IActionResult Create()
         {
 
-            //ClaimsPrincipal principal = HttpContext.User as ClaimsPrincipal; //giannis doesnt know how it works you need it to get UserId
-            //ViewBag.Princip = principal;
             var list = _service.GetExamsSelectList(_service.GetAllExams());
             ViewData.Add("examsSelectList", list);
             ViewBag.List = list;

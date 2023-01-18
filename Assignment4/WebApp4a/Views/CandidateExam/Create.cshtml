@@ -62,12 +62,10 @@
                 @Html.LabelFor(model => model.Exam,htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
                   
-                    @*@Html.DropDownList("examsSelectList", ViewBag.List ,"kati",null)*@
                     <select asp-for="ExamId" asp-items="ViewBag.List"></select>
                     @Html.ValidationMessageFor(model => model.Exam, "", new { @class = "text-danger" })
                 </div>
             </div>
-            @*<input name="UserId" value="@UserId" type="hidden" />*@
             
 
 
