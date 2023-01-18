@@ -55,8 +55,6 @@ namespace WebApp4a.Data.Repositories
         /// </summary>
         public async Task<CandidateExam> AddCandidateExam(IEnumerable<string> dropDownOptions, CandidateExam candidateExam)
         {
-            int candScore = 0;
-
             candidateExam.MaxScore = candidateExam.Exam.Questions.Count;            
             candidateExam.ReportDate = DateAndTime.Now;
             candidateExam.AssessmentCode = "CB";
@@ -134,13 +132,11 @@ namespace WebApp4a.Data.Repositories
 
                 var examAnswers = new CandidateExamAnswers
                 {
-                    //Note(vmavraganis): needs fixing for later steps (get the correct and choosen options as string)
                     CorrectOption = correct,
                     ChosenOption = choosen,
                     IsCorrect = isCorrect,
                     CandidateExam = candidateExam
                 };
-
                 _context.CandidateExamAnswers.Add(examAnswers);
                 i++;
             }
