@@ -56,7 +56,7 @@ namespace WebApp4a.Data.Repositories
         /// <summary>
         /// vmavraganis: Async Task to add the new examAnswers and update the candidateExam
         /// </summary>
-        public async Task<CandidateExam> AddCandidateExam(IEnumerable<string> dropDownOptions, CandidateExam candidateExam)
+        public async Task<CandidateExam> UpdateCandidateExam(IEnumerable<string> dropDownOptions, CandidateExam candidateExam)
         {
             candidateExam = _context.CandidateExams.Find(1); //Note (vmavraganis): remove this line when real candidateExam is provided
 
@@ -69,7 +69,7 @@ namespace WebApp4a.Data.Repositories
 
             _context.CandidateExams.Update(candidateExam);
 
-            int candScore = CalculateFinalScore(dropDownOptions, candidateExam.Exam.Questions, candidateExam);
+            int candScore = AddCandidateExamAnswers(dropDownOptions, candidateExam.Exam.Questions, candidateExam);
 
             candidateExam.CandidateScore = candScore;
             candidateExam.PercentScore = CalculatePercentageScore(candidateExam.Exam.Questions.Count, candScore);
@@ -84,7 +84,7 @@ namespace WebApp4a.Data.Repositories
         /// vmavraganis: Calculates the percentage score based on the maxScore and the candidateScore
         /// </summary>
         /// <returns>The percentage score of the candidate</returns>
-        private decimal CalculatePercentageScore(int maxScore, int candidateScore)
+        public decimal CalculatePercentageScore(int maxScore, int candidateScore)
         {
             return (candidateScore / maxScore) * 100;
         }
@@ -93,7 +93,7 @@ namespace WebApp4a.Data.Repositories
         /// vmavraganis: Calculates the passingMark % of both scores (candidate and max)
         /// </summary>
         /// <returns>The passed results for the candidate (bool)</returns>
-        private bool Passed(int maxScore, int candidateScore, double passingMark)
+        public bool Passed(int maxScore, int candidateScore, double passingMark)
         {
             passingMark = (passingMark / 100);
             //Note (vmavraganis): calculate's the percentage based on the passing mark (assumes this is the 100%) and then checks for the candidate's mark
@@ -114,7 +114,7 @@ namespace WebApp4a.Data.Repositories
         /// vmavraganis: Calculates the final score of the candidate and adds the exam answers entities
         /// </summary>
         /// <returns>The final score of the candidate (score)</returns>
-        private int CalculateFinalScore(IEnumerable<string> dropDownOptions, IEnumerable<Question> questions, CandidateExam candidateExam)
+        public int AddCandidateExamAnswers(IEnumerable<string> dropDownOptions, IEnumerable<Question> questions, CandidateExam candidateExam)
         {
             int index = 0;
             int candidateScore = 0;
