@@ -31,8 +31,12 @@ namespace WebApp4a.Controllers
         /// <summary>
         /// vmavraganis: Async Task to create the UI for the candidate examination (questions + options)
         /// </summary>
-        public async Task<IActionResult> Exam()
+        public async Task<IActionResult> Exam(CandidateExam candidateExam)
         {
+            //Note (vmavraganis): provide CandidateExam from the user selection
+            _candidateExam = candidateExam; 
+
+            PopulateDropDownOptions();
             return View(await _examRepository.GetAllQuestionsAsync(_candidateExam));
         }
 
@@ -41,16 +45,28 @@ namespace WebApp4a.Controllers
         /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> GetAnswers(IEnumerable<bool> DropDownOptions)
+        public async Task<IActionResult> GetAnswers(IEnumerable<string> DropDownOptions)
         {
             if (ModelState.IsValid)
             {
-                var candidateExam = await _examRepository.AddCandidateExam(DropDownOptions, _candidateExam);
+                var candidateExam = await _examRepository.UpdateCandidateExam(DropDownOptions, _candidateExam);
 
                 return await Task.Run(() => RedirectToAction("Results", "CandidateExam", candidateExam));
             }
 
             return await Task.Run(() => RedirectToAction("Exam"));
         }
+
+        /// <summary>
+        /// vmavraganis: Populates the drop down list with the options 1 to 4 for the user to select one
+        /// </summary>
+        private void PopulateDropDownOptions()
+        {
+            var list = new List<SelectListItem>();
+            for (var i = 1; i < 5; i++)
+                list.Add(new SelectListItem { Text = i.ToString(), Value = i.ToString() });
+            ViewBag.SelectOptions = list;
+        }
+
     }
 }

@@ -49,7 +49,7 @@ namespace WebApp4a.Controllers
             {
                 return NotFound();
             }
-
+            //return await Task.Run(() => RedirectToAction("Exam", "Examination", candidateExam));
             return View(candidateExam);
         }
 
