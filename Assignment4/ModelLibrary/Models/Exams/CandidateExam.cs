@@ -12,7 +12,7 @@ public class CandidateExam
     public DateTime? ReportDate { get; set; }
     public int? CandidateScore { get; set; }
     public string? AssessmentCode { get; set; }
-    public string CandidateId { get; set; }
+    public string? CandidateId { get; set; }
     public virtual Candidate? Candidate { get; set; }
     public int ExamId { get; set; }
     public virtual Exam? Exam { get; set; }

@@ -31,8 +31,11 @@ namespace WebApp4a.Controllers
         /// <summary>
         /// vmavraganis: Async Task to create the UI for the candidate examination (questions + options)
         /// </summary>
-        public async Task<IActionResult> Exam()
+        public async Task<IActionResult> Exam(CandidateExam candidateExam)
         {
+            //Note (vmavraganis): provide CandidateExam from the user selection
+            _candidateExam = candidateExam; 
+
             PopulateDropDownOptions();
             return View(await _examRepository.GetAllQuestionsAsync(_candidateExam));
         }
@@ -46,7 +49,7 @@ namespace WebApp4a.Controllers
         {
             if (ModelState.IsValid)
             {
-                var candidateExam = await _examRepository.AddCandidateExam(DropDownOptions, _candidateExam);
+                var candidateExam = await _examRepository.UpdateCandidateExam(DropDownOptions, _candidateExam);
 
                 return await Task.Run(() => RedirectToAction("Results", "CandidateExam", candidateExam));
             }
