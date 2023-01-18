@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using ModelLibrary.Models;
 using ModelLibrary.Models.Exams;
 using System.Security.Claims;
 using WebApp4a.Data;
@@ -11,11 +13,13 @@ namespace WebApp4a.Controllers
     {
         private readonly ApplicationDbContext _context;
         private Service _service;
+        private readonly UserManager<AppUser> _userManager;
 
-        public CandidateExamController(ApplicationDbContext context)
+        public CandidateExamController(ApplicationDbContext context,UserManager<AppUser> userManager)
         {
             _context = context;
             _service = new Service(_context);
+            _userManager = userManager;
         }
 
         public async Task<IActionResult> Results(CandidateExam candidateExam)
@@ -52,9 +56,11 @@ namespace WebApp4a.Controllers
         // GET: CandidateExams/Create
         public IActionResult Create()
         {
-            ClaimsPrincipal principal = HttpContext.User as ClaimsPrincipal; //giannis doesnt know how it works you need it to get UserId
-            ViewBag.Princip = principal;
-            ViewData.Add("examsSelectList", _service.GetExamsSelectList(_service.GetAllExams()));
+
+            var list = _service.GetExamsSelectList(_service.GetAllExams());
+            ViewData.Add("examsSelectList", list);
+            ViewBag.List = list;
+            //ViewData["examsSelectList"] = _service.GetExamsSelectList(_service.GetAllExams());
             return View();
         }
 
@@ -63,15 +69,20 @@ namespace WebApp4a.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Result,MaxScore,PercentScore,ExamDate,ReportDate,CandidateScore,AssessmentCode")] CandidateExam candidateExam,
-            [Bind("examsSelectList")] int examsSelectList, string UserId)
+        public async Task<IActionResult> Create([Bind("Id,Result,MaxScore,PercentScore,ExamDate,ReportDate,CandidateScore,AssessmentCode,ExamId")] CandidateExam candidateExam
+            /*[Bind("examsSelectList")] int examsSelectList,*/ /*string UserId*/)
         {
 
-            var candidate = _service.GetCandidateByUserId(UserId);
+            //var candidate = _service.GetCandidateByUserId(UserId);
+            
+            var cands = _context.Candidates.Count();
+            var candidate = _context.Candidates.Where(cand => cand.AppUserId == _userManager.GetUserId(HttpContext.User)).FirstOrDefault();
 
-            int examIdFromDropDown = examsSelectList;
-            candidateExam.Exam = _context.Exams.Find(examIdFromDropDown); //me basi to id toy drop down vazei sto candidateexam to exam
+            //int examIdFromDropDown = examsSelectList;
+            candidateExam.Exam = _context.Exams.Find(candidateExam.ExamId); //me basi to id toy drop down vazei sto candidateexam to exam
             candidateExam.Candidate = candidate;
+            candidateExam.CandidateId = candidate.AppUserId;
+            candidateExam.ExamId = candidateExam.ExamId;
 
 
             if (ModelState.IsValid)
