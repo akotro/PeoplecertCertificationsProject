@@ -10,9 +10,22 @@
 <form asp-action="Create" method="post">
     <div class="form-group">
         <label asp-for="Text"></label>
-        <input asp-for="Text" class="form-control"/>
+        <textarea asp-for="Text" id="mainEditor" class="form-control"></textarea>
         <span asp-validation-for="Text"></span>
     </div>
+
+    <script>
+        
+      
+        ClassicEditor.create(document.querySelector('#mainEditor'))
+            .then(editor => {
+                console.log(editor);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
+
     <div class="form-group">
         <label asp-for="TopicId"></label>
         <select asp-for="TopicId" asp-items="ViewBag.Topics"></select>
@@ -32,21 +45,38 @@
         </tr>
         </thead>
         <tbody>
+
         @for (int i = 0, optionNumber = 1; i < Model.Options.Count; i++, optionNumber++)
         {
+               
+                    var optionEditor = $"optionEditor{i}";
+                  
+
+
             <tr>
                 <td>
                     @optionNumber
                 </td>
                 <td>
-                    <input asp-for="Options[i].Text" class="form-control"/>
+                    <textarea asp-for="Options[i].Text" id="@optionEditor" class="form-control"></textarea>
                     <span asp-validation-for="Options[i].Text"></span>
                 </td>
                 <td>
                     <input asp-for="Options[i].Correct" type="checkbox"/>
                 </td>
             </tr>
-        }
+                <script>
+                    ClassicEditor.create(document.querySelector('#@optionEditor'))
+                        .then(editor => {
+                            console.log(editor);
+                        })
+                        .catch(error => {
+                            console.error(error);
+                        });
+                </script>
+
+            }
+
         </tbody>
     </table>
     <input type="submit" value="Create" class="btn btn-primary"/>
