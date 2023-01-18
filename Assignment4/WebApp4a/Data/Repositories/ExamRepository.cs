@@ -142,51 +142,6 @@ namespace WebApp4a.Data.Repositories
                 index++;
             }
             return candidateScore;
-
-
-
-
-            //int candidateFinalScore = 0;
-            //int i = 0; //Note (vmavraganis): counter for the outer foreach to get themapping of the question with the selected user option
-
-            //foreach (var question in questions)
-            //{
-            //    string correct = string.Empty;
-            //    string choosen = string.Empty;
-            //    bool isCorrect = false;
-            //    int counter = 1; //Note (vmavraganis): used to map the selected option with the available options for the question
-
-            //    foreach (var option in question.Options)
-            //    {
-            //        if (option.Correct == true) //Note (vmavraganis): sets the correct option
-            //        {
-            //            correct = option.Text;
-            //        }
-
-            //        if (counter == Int32.Parse(dropDownOptions.ToList()[i])) //Note(vmavraganis): sets the selected option and the evaluation
-            //        {
-            //            choosen = option.Text;
-            //            isCorrect = option.Correct;
-            //        }
-
-            //        counter++;
-            //    }
-
-            //    var examAnswers = new CandidateExamAnswers
-            //    {
-            //        CorrectOption = correct,
-            //        ChosenOption = choosen,
-            //        IsCorrect = isCorrect,
-            //        CandidateExam = candidateExam
-            //    };
-            //    _context.CandidateExamAnswers.Add(examAnswers);
-            //    i++;
-            //}
-
-            //return candidateFinalScore;
-
-
-
         }
 
         private bool _dispose = false;
