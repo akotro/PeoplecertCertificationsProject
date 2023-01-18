@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ModelLibrary.Models.Certificates;
+using ModelLibrary.Models.DTO.Questions;
 using ModelLibrary.Models.Questions;
 using WebApp4a.Data;
 
@@ -59,8 +60,6 @@ namespace WebApp4a.Controllers
 
         private List<SelectListItem>? GetTopicSelectList(Question? question)
         {
-            // NOTE:(akotro) Is this Include needed here?
-            // var topics = _context.Topics.Include(t => t.Certificates).ToList();
             var topics = _context.Topics.ToList();
             if (topics == null || topics.Count <= 0)
                 return null;
@@ -95,8 +94,21 @@ namespace WebApp4a.Controllers
             return result;
         }
 
-        private void PopulateQuestion(Question question, int topicId)
+        private void PopulateQuestion(
+            Question question,
+            int topicId,
+            Dictionary<string, bool> optionsDict
+        )
         {
+            if (optionsDict != null && question.Options.Any(o => o.Id == 0))
+            {
+                question.Options = new List<Option>();
+                foreach (var pair in optionsDict)
+                {
+                    question.Options.Add(new Option() { Text = pair.Key, Correct = pair.Value });
+                }
+            }
+
             question.DifficultyLevel = GetDifficultyLevel(question);
             question.Topic = _context.Topics.Find(topicId);
         }
@@ -111,7 +123,7 @@ namespace WebApp4a.Controllers
                         .Include(q => q.Topic)
                         .ToListAsync()
                 )
-                : Problem("Entity set 'ApplicationDbContext.Question'  is null.");
+                : Problem("Entity set 'ApplicationDbContext.Questions'  is null.");
         }
 
         // GET: Questions/Details/5
@@ -125,6 +137,7 @@ namespace WebApp4a.Controllers
             var question = await _context.Questions
                 .Include(q => q.DifficultyLevel)
                 .Include(q => q.Topic)
+                .Include(q => q.Options)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (question == null)
             {
@@ -135,99 +148,143 @@ namespace WebApp4a.Controllers
         }
 
         // GET: Questions/Create
-        public IActionResult Create()
+        public ActionResult Create()
         {
-            ViewData.Add("Topic", GetTopicSelectList(null));
+            var questionDto = new QuestionDto()
+            {
+                Options = new List<OptionDto>()
+                {
+                    new OptionDto(),
+                    new OptionDto(),
+                    new OptionDto(),
+                    new OptionDto()
+                }
+            };
 
-            return View();
+            ViewBag.Topics = _context.Topics.Select(
+                t => new SelectListItem { Text = t.Name, Value = t.Id.ToString() }
+            );
+            ViewBag.DifficultyLevels = _context.DifficultyLevels.Select(
+                d => new SelectListItem { Text = d.Difficulty.ToString(), Value = d.Id.ToString() }
+            );
+
+            return View(questionDto);
         }
 
         // POST: Questions/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(
-            [Bind("Id,Text,DifficultyLevel")] Question question,
-            [Bind("Topic")] int topic
-        )
+        public ActionResult Create(QuestionDto questionDto)
         {
             if (ModelState.IsValid)
             {
-                PopulateQuestion(question, topic);
+                var question = new Question
+                {
+                    Text = questionDto.Text,
+                    TopicId = questionDto.TopicId,
+                    DifficultyLevelId = questionDto.DifficultyLevelId,
+                    Options = questionDto.Options
+                        .Select(o => new Option { Text = o.Text, Correct = o.Correct })
+                        .ToList()
+                };
 
-                _context.Add(question);
-                await _context.SaveChangesAsync();
+                _context.Questions.Add(question);
+                _context.SaveChanges();
+
                 return RedirectToAction(nameof(Index));
             }
-
-            return View(question);
+            return View(questionDto);
         }
 
         // GET: Questions/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public ActionResult Edit(int id)
         {
-            if (id == null || _context.Questions == null)
+            var question = _context.Questions
+                .Include(q => q.Options)
+                .FirstOrDefault(q => q.Id == id);
+
+            // TODO:(akotro) Add null checks
+
+            var questionDto = new QuestionDto
             {
-                return NotFound();
-            }
+                Id = question.Id,
+                Text = question.Text,
+                TopicId = question.TopicId,
+                DifficultyLevelId = question.DifficultyLevelId,
+                Options = question.Options
+                    .Select(
+                        o =>
+                            new OptionDto
+                            {
+                                Id = o.Id,
+                                Text = o.Text,
+                                Correct = o.Correct
+                            }
+                    )
+                    .ToList()
+            };
 
-            var question = await _context.Questions
-                .Include(q => q.DifficultyLevel)
-                .Include(q => q.Topic)
-                .FirstOrDefaultAsync(q => q.Id == id);
+            ViewBag.Topics = _context.Topics.Select(
+                t => new SelectListItem { Text = t.Name, Value = t.Id.ToString() }
+            );
+            ViewBag.DifficultyLevels = _context.DifficultyLevels.Select(
+                d => new SelectListItem { Text = d.Difficulty.ToString(), Value = d.Id.ToString() }
+            );
 
-            ViewData.Add("Topic", GetTopicSelectList(question));
-
-            if (question == null)
-            {
-                return NotFound();
-            }
-
-            return View(question);
+            return View(questionDto);
         }
 
         // POST: Questions/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(
-            int id,
-            [Bind("Id,Text,DifficultyLevel")] Question question,
-            [Bind("Topic")] int topic
-        )
+        public ActionResult Edit(int id, QuestionDto questionDto)
         {
-            if (id != question.Id)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
-                try
-                {
-                    PopulateQuestion(question, topic);
+                var question = _context.Questions
+                    .Include(q => q.Options)
+                    .FirstOrDefault(q => q.Id == id);
 
-                    _context.Update(question);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
+                // TODO:(akotro) Add null checks
+
+                question.Text = questionDto.Text;
+                question.TopicId = questionDto.TopicId;
+                question.DifficultyLevelId = questionDto.DifficultyLevelId;
+
+                var optionsToDelete = question.Options
+                    .Where(o => !questionDto.Options.Any(odto => odto.Id == o.Id))
+                    .ToList();
+                foreach (var option in optionsToDelete)
                 {
-                    if (!QuestionExists(question.Id))
+                    _context.Remove(option);
+                }
+
+                foreach (var optionDto in questionDto.Options)
+                {
+                    var option = question.Options.FirstOrDefault(o => o.Id == optionDto.Id);
+                    if (option != null)
                     {
-                        return NotFound();
+                        option.Text = optionDto.Text;
+                        option.Correct = optionDto.Correct;
                     }
                     else
                     {
-                        throw;
+                        question.Options.Add(
+                            new Option
+                            {
+                                Text = optionDto.Text,
+                                Correct = optionDto.Correct,
+                                QuestionId = question.Id
+                            }
+                        );
                     }
                 }
 
+                _context.SaveChanges();
+
                 return RedirectToAction(nameof(Index));
             }
-
-            return View(question);
+            return View(questionDto);
         }
 
         // GET: Questions/Delete/5

@@ -23,7 +23,6 @@ namespace WebApp4a.Data
 
         public virtual DbSet<Certificate> Certificates { get; set; }
 
-        //public virtual DbSet<CertificateTopic> CertificateTopic { get; set; }
         public virtual DbSet<Topic> Topics { get; set; }
 
         public virtual DbSet<Question> Questions { get; set; }
@@ -34,10 +33,8 @@ namespace WebApp4a.Data
         public virtual DbSet<CandidateExam> CandidateExams { get; set; }
         public virtual DbSet<CandidateExamAnswers> CandidateExamAnswers { get; set; }
 
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) :
-            base(options)
-        {
-        }
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        { }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -68,11 +65,7 @@ namespace WebApp4a.Data
 
             #endregion
             builder.Seed(this);
-
         }
-            //var cand = this.Candidates.FirstOrDefault();
-
-
-        
+        //var cand = this.Candidates.FirstOrDefault();
     }
 }

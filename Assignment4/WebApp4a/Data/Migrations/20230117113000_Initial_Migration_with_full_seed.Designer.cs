@@ -12,8 +12,8 @@ using WebApp4a.Data;
 namespace WebApp4a.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230116223015_fullSeed_non_relational")]
-    partial class fullSeed_non_relational
+    [Migration("20230117113000_Initial_Migration_with_full_seed")]
+    partial class Initial_Migration_with_full_seed
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -260,13 +260,13 @@ namespace WebApp4a.Migrations
                         {
                             Id = "9407b6e2-f46e-4a79-a725-dfb1e15e2915",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "7594f323-827a-448b-8bdf-605beec8f614",
+                            ConcurrencyStamp = "9ac9997b-c048-4c5b-bce2-fef08e7655f9",
                             Email = "admin0@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumber = "1234567890",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "6ad2f95c-3fb3-4bf5-aa52-dcadce4779ee",
+                            SecurityStamp = "bbe4f88d-5144-454d-aa12-6b96f4582700",
                             TwoFactorEnabled = false,
                             UserName = "Admin0"
                         },
@@ -274,13 +274,13 @@ namespace WebApp4a.Migrations
                         {
                             Id = "be69a4bd-fb90-41dd-b65b-4ff8b619b767",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "050f94f7-269b-4c1e-8b54-c1e72ddbe449",
+                            ConcurrencyStamp = "6fab076b-ab92-40c0-bfe6-67ff7f499140",
                             Email = "admin1@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumber = "1234567890",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "6e1aeac1-355d-4157-8307-bf881c07654c",
+                            SecurityStamp = "d04a9955-3d6b-4c73-b1b1-8c995c18f208",
                             TwoFactorEnabled = false,
                             UserName = "Admin1"
                         },
@@ -288,13 +288,13 @@ namespace WebApp4a.Migrations
                         {
                             Id = "8ca319b2-762d-45e3-8b26-edd6b1f4ba75",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "b90eaff4-a593-4647-b144-d531397ba900",
+                            ConcurrencyStamp = "144e0919-b3fc-44c6-9a36-4e437a171e28",
                             Email = "admin2@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumber = "1234567890",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "e5a94cb2-f585-421a-8deb-acf7dde77dc6",
+                            SecurityStamp = "9463a244-3b2a-4603-9932-68777898625d",
                             TwoFactorEnabled = false,
                             UserName = "Admin2"
                         },
@@ -302,13 +302,13 @@ namespace WebApp4a.Migrations
                         {
                             Id = "f60a904a-aba6-4635-892d-f38919b09896",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "f9faf7c0-3cd3-4092-baae-6aa37a11d11e",
+                            ConcurrencyStamp = "99990011-954f-49a6-9a80-a2e8c2a823b3",
                             Email = "admin3@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumber = "1234567890",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "80c6714c-0738-4cb9-b2f2-f950db5efd43",
+                            SecurityStamp = "1ae79543-1bae-4f59-b0ce-eebbdcd337c2",
                             TwoFactorEnabled = false,
                             UserName = "Admin3"
                         });
@@ -523,7 +523,7 @@ namespace WebApp4a.Migrations
                         {
                             AppUserId = "9407b6e2-f46e-4a79-a725-dfb1e15e2915",
                             CandidateNumber = "420088571",
-                            DateOfBirth = new DateTime(1991, 11, 5, 17, 54, 53, 854, DateTimeKind.Local).AddTicks(7227),
+                            DateOfBirth = new DateTime(1991, 11, 6, 6, 54, 38, 415, DateTimeKind.Local).AddTicks(2505),
                             Email = "Otho_Pfannerstill31@gmail.com",
                             FirstName = "Josianne",
                             GenderId = 2,
@@ -532,7 +532,7 @@ namespace WebApp4a.Migrations
                             LastName = "Pfeffer",
                             MiddleName = "Yolanda",
                             Mobile = "351-303-5993 x592",
-                            PhotoIdIssueDate = new DateTime(2022, 2, 25, 19, 40, 16, 372, DateTimeKind.Local).AddTicks(2836),
+                            PhotoIdIssueDate = new DateTime(2022, 2, 26, 8, 40, 0, 932, DateTimeKind.Local).AddTicks(8144),
                             PhotoIdNumber = "bfqee8",
                             PhotoIdTypeId = 4
                         },
@@ -540,7 +540,7 @@ namespace WebApp4a.Migrations
                         {
                             AppUserId = "be69a4bd-fb90-41dd-b65b-4ff8b619b767",
                             CandidateNumber = "136721276",
-                            DateOfBirth = new DateTime(1988, 7, 20, 17, 9, 51, 729, DateTimeKind.Local).AddTicks(6613),
+                            DateOfBirth = new DateTime(1988, 7, 21, 6, 9, 36, 290, DateTimeKind.Local).AddTicks(1972),
                             Email = "Dedrick_Lynch@hotmail.com",
                             FirstName = "Adeline",
                             GenderId = 4,
@@ -549,7 +549,7 @@ namespace WebApp4a.Migrations
                             LastName = "Dietrich",
                             MiddleName = "Aiyana",
                             Mobile = "(750) 481-1897",
-                            PhotoIdIssueDate = new DateTime(2018, 1, 10, 6, 1, 58, 154, DateTimeKind.Local).AddTicks(3276),
+                            PhotoIdIssueDate = new DateTime(2018, 1, 10, 19, 1, 42, 714, DateTimeKind.Local).AddTicks(8638),
                             PhotoIdNumber = "cb4osy",
                             PhotoIdTypeId = 5
                         },
@@ -557,7 +557,7 @@ namespace WebApp4a.Migrations
                         {
                             AppUserId = "8ca319b2-762d-45e3-8b26-edd6b1f4ba75",
                             CandidateNumber = "153060623",
-                            DateOfBirth = new DateTime(1956, 1, 6, 19, 31, 31, 457, DateTimeKind.Local).AddTicks(1897),
+                            DateOfBirth = new DateTime(1956, 1, 7, 8, 31, 16, 17, DateTimeKind.Local).AddTicks(7272),
                             Email = "Kory27@gmail.com",
                             FirstName = "Dakota",
                             GenderId = 4,
@@ -566,7 +566,7 @@ namespace WebApp4a.Migrations
                             LastName = "Wilkinson",
                             MiddleName = "Bridie",
                             Mobile = "1-783-633-4424",
-                            PhotoIdIssueDate = new DateTime(2022, 9, 15, 7, 18, 22, 739, DateTimeKind.Local).AddTicks(4609),
+                            PhotoIdIssueDate = new DateTime(2022, 9, 15, 20, 18, 7, 299, DateTimeKind.Local).AddTicks(9987),
                             PhotoIdNumber = "f1lklm",
                             PhotoIdTypeId = 3
                         });
@@ -776,6 +776,9 @@ namespace WebApp4a.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("MaxMark")
+                        .HasColumnType("int");
+
                     b.Property<int?>("PassingMark")
                         .HasColumnType("int");
 
@@ -790,92 +793,92 @@ namespace WebApp4a.Migrations
                         new
                         {
                             Id = 1,
-                            Active = false,
-                            Category = "reinvent",
-                            Description = "CSS Legacy AI Secured Guinea-Bissau SAS non-volatile Brunei Darussalam Rustic Berkshire",
+                            Active = true,
+                            Category = "payment",
+                            Description = "reinvent invoice compressing De-engineered viral invoice Walks Rhode Island Refined Director",
                             PassingMark = 0,
-                            Title = "mobile interfaces revolutionize"
+                            Title = "Brunei Darussalam Rustic Berkshire"
                         },
                         new
                         {
                             Id = 2,
                             Active = false,
-                            Category = "asymmetric",
-                            Description = "index Designer bypass JBOD world-class Landing invoice open-source Human invoice",
+                            Category = "neural",
+                            Description = "invoice asymmetric District Denar Toys, Games & Movies Curve bandwidth empower Handmade Steel Bike Wooden",
                             PassingMark = 0,
-                            Title = "SAS conglomeration Incredible Plastic Tuna"
+                            Title = "invoice open-source Human"
                         },
                         new
                         {
                             Id = 3,
-                            Active = false,
-                            Category = "Berkshire",
-                            Description = "Small Cotton Keyboard bandwidth empower Handmade Steel Bike Wooden neural parse TCP Incredible open architecture",
+                            Active = true,
+                            Category = "Frozen",
+                            Description = "Berkshire Kyat Taiwan Centralized Division Generic Wooden Ball Accountability Viaduct panel Credit Card Account",
                             PassingMark = 0,
-                            Title = "Ranch Antigua and Barbuda Infrastructure"
+                            Title = "Facilitator Home open architecture"
                         },
                         new
                         {
                             Id = 4,
                             Active = false,
-                            Category = "synthesizing",
-                            Description = "Coves web-enabled ADP Mobility Metal Checking Account Security Personal Loan Account Cayman Islands Central",
+                            Category = "Awesome Wooden Chair",
+                            Description = "synthesizing calculate killer synthesizing initiative Response Lesotho Loti magenta Avon Planner",
                             PassingMark = 0,
-                            Title = "Malaysia AGP Unbranded Cotton Keyboard"
+                            Title = "Personal Loan Account Cayman Islands Central"
                         },
                         new
                         {
                             Id = 5,
-                            Active = false,
-                            Category = "Paradigm",
-                            Description = "Cambridgeshire orchestration Manager Latvian Lats Tasty Rubber Keyboard Drive Refined Concrete Cheese functionalities Assurance Lead",
+                            Active = true,
+                            Category = "frictionless",
+                            Description = "Lead Paradigm copying Home Loan Account Path Practical Metal Chicken killer Interactions Group Avon",
                             PassingMark = 0,
-                            Title = "withdrawal metrics copy"
+                            Title = "optimizing functionalities Assurance"
                         },
                         new
                         {
                             Id = 6,
-                            Active = true,
-                            Category = "back up",
-                            Description = "Points Forint methodologies Chief convergence Incredible Plastic Ball Route primary withdrawal copying",
+                            Active = false,
+                            Category = "Vanuatu",
+                            Description = "copying back up optimizing withdrawal user-centric architectures Strategist Granite dot-com synthesizing",
                             PassingMark = 0,
-                            Title = "extensible Investment Account Drives"
+                            Title = "Route primary withdrawal"
                         },
                         new
                         {
                             Id = 7,
-                            Active = true,
-                            Category = "hack",
-                            Description = "Wyoming Liaison Guam Suriname haptic Infrastructure ivory payment Kids multi-byte",
+                            Active = false,
+                            Category = "Human",
+                            Description = "multi-byte hack attitude quantifying Handcrafted Plastic Towels Home Loan Account Generic viral Ergonomic Cotton Gloves Synergized",
                             PassingMark = 0,
-                            Title = "synthesize frictionless AI"
+                            Title = "ivory payment Kids"
                         },
                         new
                         {
                             Id = 8,
-                            Active = false,
-                            Category = "Barbados Dollar",
-                            Description = "New Mexico California Money Market Account orchestrate Fantastic Plastic Bike JSON Forward Iowa Crescent deposit",
+                            Active = true,
+                            Category = "customized",
+                            Description = "Barbados Dollar synthesizing quantifying Clothing, Grocery & Games Virgin Islands, U.S. clicks-and-mortar Wooden database CSS hybrid",
                             PassingMark = 0,
-                            Title = "Fresh deposit withdrawal"
+                            Title = "Iowa Crescent deposit"
                         },
                         new
                         {
                             Id = 9,
-                            Active = false,
-                            Category = "bleeding-edge",
-                            Description = "Drives Virgin Islands, U.S. clicks-and-mortar Wooden database CSS hybrid customized full-range B2B",
+                            Active = true,
+                            Category = "COM",
+                            Description = "withdrawal Central Synchronised Pitcairn Islands Fantastic Metal Pizza Fantastic Frozen Towels index Gorgeous Fresh Cheese Central Montana",
                             PassingMark = 0,
-                            Title = "transmit deposit payment"
+                            Title = "e-services frame Mountains"
                         },
                         new
                         {
                             Id = 10,
                             Active = false,
-                            Category = "Orchestrator",
-                            Description = "Pitcairn Islands Fantastic Metal Pizza Fantastic Frozen Towels index Gorgeous Fresh Cheese Central Montana COM Progressive harness",
+                            Category = "Union",
+                            Description = "Minnesota Tonga productivity Oklahoma multi-byte Money Market Account Gibraltar EXE overriding Handcrafted Fresh Hat",
                             PassingMark = 0,
-                            Title = "withdrawal Central Synchronised"
+                            Title = "withdrawal holistic Auto Loan Account"
                         });
                 });
 
@@ -1047,81 +1050,81 @@ namespace WebApp4a.Migrations
                         {
                             Id = 1,
                             CandidateId = "be69a4bd-fb90-41dd-b65b-4ff8b619b767",
-                            ExamDate = new DateTime(2021, 12, 17, 22, 16, 49, 966, DateTimeKind.Local).AddTicks(8168),
-                            ExamId = 7,
-                            ReportDate = new DateTime(2022, 9, 17, 16, 9, 20, 748, DateTimeKind.Unspecified).AddTicks(4282)
+                            ExamDate = new DateTime(2021, 1, 25, 12, 42, 38, 707, DateTimeKind.Local).AddTicks(8065),
+                            ExamId = 2,
+                            ReportDate = new DateTime(2023, 1, 8, 4, 31, 49, 126, DateTimeKind.Unspecified).AddTicks(9922)
                         },
                         new
                         {
                             Id = 2,
-                            CandidateId = "8ca319b2-762d-45e3-8b26-edd6b1f4ba75",
-                            ExamDate = new DateTime(2021, 12, 26, 7, 56, 51, 896, DateTimeKind.Local).AddTicks(9514),
-                            ExamId = 4,
-                            ReportDate = new DateTime(2022, 12, 25, 14, 53, 1, 394, DateTimeKind.Unspecified).AddTicks(4259)
+                            CandidateId = "be69a4bd-fb90-41dd-b65b-4ff8b619b767",
+                            ExamDate = new DateTime(2022, 2, 5, 2, 18, 54, 93, DateTimeKind.Local).AddTicks(6021),
+                            ExamId = 2,
+                            ReportDate = new DateTime(2022, 9, 22, 18, 32, 24, 718, DateTimeKind.Unspecified).AddTicks(4307)
                         },
                         new
                         {
                             Id = 3,
-                            CandidateId = "8ca319b2-762d-45e3-8b26-edd6b1f4ba75",
-                            ExamDate = new DateTime(2022, 6, 21, 22, 19, 29, 205, DateTimeKind.Local).AddTicks(5008),
-                            ExamId = 6,
-                            ReportDate = new DateTime(2022, 12, 1, 2, 59, 37, 971, DateTimeKind.Unspecified).AddTicks(1103)
+                            CandidateId = "be69a4bd-fb90-41dd-b65b-4ff8b619b767",
+                            ExamDate = new DateTime(2023, 1, 6, 13, 19, 51, 135, DateTimeKind.Local).AddTicks(6121),
+                            ExamId = 1,
+                            ReportDate = new DateTime(2022, 8, 20, 8, 51, 47, 299, DateTimeKind.Unspecified).AddTicks(4650)
                         },
                         new
                         {
                             Id = 4,
-                            CandidateId = "be69a4bd-fb90-41dd-b65b-4ff8b619b767",
-                            ExamDate = new DateTime(2021, 12, 10, 3, 4, 49, 252, DateTimeKind.Local).AddTicks(5820),
-                            ExamId = 7,
-                            ReportDate = new DateTime(2022, 11, 15, 13, 56, 10, 790, DateTimeKind.Unspecified).AddTicks(1458)
+                            CandidateId = "8ca319b2-762d-45e3-8b26-edd6b1f4ba75",
+                            ExamDate = new DateTime(2021, 4, 15, 2, 4, 40, 110, DateTimeKind.Local).AddTicks(7910),
+                            ExamId = 2,
+                            ReportDate = new DateTime(2022, 9, 7, 19, 43, 30, 269, DateTimeKind.Unspecified).AddTicks(6838)
                         },
                         new
                         {
                             Id = 5,
-                            CandidateId = "9407b6e2-f46e-4a79-a725-dfb1e15e2915",
-                            ExamDate = new DateTime(2021, 6, 21, 15, 35, 41, 193, DateTimeKind.Local).AddTicks(4750),
-                            ExamId = 4,
-                            ReportDate = new DateTime(2022, 10, 16, 22, 4, 55, 751, DateTimeKind.Unspecified).AddTicks(314)
+                            CandidateId = "8ca319b2-762d-45e3-8b26-edd6b1f4ba75",
+                            ExamDate = new DateTime(2021, 12, 31, 15, 2, 11, 209, DateTimeKind.Local).AddTicks(2150),
+                            ExamId = 7,
+                            ReportDate = new DateTime(2022, 9, 2, 23, 7, 55, 831, DateTimeKind.Unspecified).AddTicks(5880)
                         },
                         new
                         {
                             Id = 6,
-                            CandidateId = "8ca319b2-762d-45e3-8b26-edd6b1f4ba75",
-                            ExamDate = new DateTime(2021, 10, 6, 10, 16, 44, 900, DateTimeKind.Local).AddTicks(2011),
-                            ExamId = 3,
-                            ReportDate = new DateTime(2022, 8, 14, 19, 27, 36, 955, DateTimeKind.Unspecified).AddTicks(3802)
+                            CandidateId = "9407b6e2-f46e-4a79-a725-dfb1e15e2915",
+                            ExamDate = new DateTime(2022, 11, 9, 22, 17, 11, 713, DateTimeKind.Local).AddTicks(7661),
+                            ExamId = 1,
+                            ReportDate = new DateTime(2022, 8, 5, 2, 59, 37, 888, DateTimeKind.Unspecified).AddTicks(5686)
                         },
                         new
                         {
                             Id = 7,
-                            CandidateId = "be69a4bd-fb90-41dd-b65b-4ff8b619b767",
-                            ExamDate = new DateTime(2021, 12, 30, 6, 47, 42, 309, DateTimeKind.Local).AddTicks(8098),
-                            ExamId = 3,
-                            ReportDate = new DateTime(2022, 8, 22, 4, 8, 40, 586, DateTimeKind.Unspecified).AddTicks(7501)
+                            CandidateId = "9407b6e2-f46e-4a79-a725-dfb1e15e2915",
+                            ExamDate = new DateTime(2021, 12, 20, 18, 52, 2, 381, DateTimeKind.Local).AddTicks(5348),
+                            ExamId = 5,
+                            ReportDate = new DateTime(2022, 12, 19, 7, 44, 53, 285, DateTimeKind.Unspecified).AddTicks(9640)
                         },
                         new
                         {
                             Id = 8,
-                            CandidateId = "9407b6e2-f46e-4a79-a725-dfb1e15e2915",
-                            ExamDate = new DateTime(2021, 4, 16, 0, 8, 31, 170, DateTimeKind.Local).AddTicks(5916),
+                            CandidateId = "8ca319b2-762d-45e3-8b26-edd6b1f4ba75",
+                            ExamDate = new DateTime(2022, 1, 18, 1, 0, 26, 392, DateTimeKind.Local).AddTicks(1707),
                             ExamId = 3,
-                            ReportDate = new DateTime(2022, 10, 8, 22, 39, 23, 747, DateTimeKind.Unspecified).AddTicks(9308)
+                            ReportDate = new DateTime(2022, 8, 20, 9, 2, 50, 913, DateTimeKind.Unspecified).AddTicks(6451)
                         },
                         new
                         {
                             Id = 9,
-                            CandidateId = "be69a4bd-fb90-41dd-b65b-4ff8b619b767",
-                            ExamDate = new DateTime(2021, 5, 3, 12, 13, 23, 246, DateTimeKind.Local).AddTicks(5589),
-                            ExamId = 2,
-                            ReportDate = new DateTime(2022, 7, 24, 17, 45, 8, 324, DateTimeKind.Unspecified).AddTicks(3859)
+                            CandidateId = "9407b6e2-f46e-4a79-a725-dfb1e15e2915",
+                            ExamDate = new DateTime(2022, 12, 5, 18, 28, 38, 99, DateTimeKind.Local).AddTicks(724),
+                            ExamId = 1,
+                            ReportDate = new DateTime(2022, 7, 10, 7, 1, 28, 938, DateTimeKind.Unspecified).AddTicks(3649)
                         },
                         new
                         {
                             Id = 10,
-                            CandidateId = "be69a4bd-fb90-41dd-b65b-4ff8b619b767",
-                            ExamDate = new DateTime(2022, 9, 13, 0, 31, 21, 302, DateTimeKind.Local).AddTicks(1701),
-                            ExamId = 7,
-                            ReportDate = new DateTime(2022, 11, 3, 16, 41, 1, 281, DateTimeKind.Unspecified).AddTicks(4768)
+                            CandidateId = "9407b6e2-f46e-4a79-a725-dfb1e15e2915",
+                            ExamDate = new DateTime(2021, 4, 21, 8, 33, 12, 947, DateTimeKind.Local).AddTicks(675),
+                            ExamId = 6,
+                            ReportDate = new DateTime(2022, 12, 31, 19, 38, 24, 321, DateTimeKind.Unspecified).AddTicks(676)
                         });
                 });
 
@@ -1155,81 +1158,81 @@ namespace WebApp4a.Migrations
                         new
                         {
                             Id = 1,
-                            CandidateExamId = 9,
-                            ChosenOption = "<h2>this is an option</h2>",
-                            CorrectOption = "<h1>this is an option</h1>",
+                            CandidateExamId = 2,
+                            ChosenOption = "<h2>this is an option2</h2>",
+                            CorrectOption = "<h1>this is an option4</h1>",
                             IsCorrect = false
                         },
                         new
                         {
                             Id = 2,
                             CandidateExamId = 1,
-                            ChosenOption = "<h3>this is an option</h3>",
-                            CorrectOption = "<h2>this is an option</h2>",
+                            ChosenOption = "<h1>this is an option4</h1>",
+                            CorrectOption = "<h2>this is an option2</h2>",
                             IsCorrect = false
                         },
                         new
                         {
                             Id = 3,
-                            CandidateExamId = 3,
-                            ChosenOption = "<h1>this is an option</h1>",
-                            CorrectOption = "<h3>this is an option</h3>",
+                            CandidateExamId = 5,
+                            ChosenOption = "<h1>this is an option4</h1>",
+                            CorrectOption = "<h2>this is an option2</h2>",
                             IsCorrect = false
                         },
                         new
                         {
                             Id = 4,
-                            CandidateExamId = 8,
-                            ChosenOption = "<h1>this is an option</h1>",
-                            CorrectOption = "<h1>this is an option</h1>",
+                            CandidateExamId = 6,
+                            ChosenOption = "<h1>this is an option4</h1>",
+                            CorrectOption = "<h2>this is an option2</h2>",
                             IsCorrect = false
                         },
                         new
                         {
                             Id = 5,
-                            CandidateExamId = 3,
-                            ChosenOption = "<h2>this is an option</h2>",
-                            CorrectOption = "<h1>this is an option</h1>",
+                            CandidateExamId = 4,
+                            ChosenOption = "<h1>this is an option4</h1>",
+                            CorrectOption = "<h1>this is an option4</h1>",
                             IsCorrect = false
                         },
                         new
                         {
                             Id = 6,
-                            CandidateExamId = 8,
-                            ChosenOption = "<h2>this is an option</h2>",
-                            CorrectOption = "<h3>this is an option</h3>",
+                            CandidateExamId = 1,
+                            ChosenOption = "<h1>this is an option4</h1>",
+                            CorrectOption = "<h1>this is an option1</h1>",
                             IsCorrect = false
                         },
                         new
                         {
                             Id = 7,
-                            CandidateExamId = 9,
-                            ChosenOption = "<h3>this is an option</h3>",
-                            CorrectOption = "<h3>this is an option</h3>",
+                            CandidateExamId = 7,
+                            ChosenOption = "<h3>this is an option3</h3>",
+                            CorrectOption = "<h2>this is an option2</h2>",
                             IsCorrect = false
                         },
                         new
                         {
                             Id = 8,
-                            CandidateExamId = 1,
-                            ChosenOption = "<h2>this is an option</h2>",
-                            CorrectOption = "<h3>this is an option</h3>",
+                            CandidateExamId = 4,
+                            ChosenOption = "<h1>this is an option4</h1>",
+                            CorrectOption = "<h1>this is an option4</h1>",
                             IsCorrect = false
                         },
                         new
                         {
                             Id = 9,
-                            CandidateExamId = 10,
-                            ChosenOption = "<h2>this is an option</h2>",
-                            CorrectOption = "<h2>this is an option</h2>",
+                            CandidateExamId = 6,
+                            ChosenOption = "<h1>this is an option4</h1>",
+                            CorrectOption = "<h1>this is an option4</h1>",
                             IsCorrect = false
                         },
                         new
                         {
                             Id = 10,
-                            CandidateExamId = 8,
-                            ChosenOption = "<h1>this is an option</h1>",
-                            CorrectOption = "<h2>this is an option</h2>",
+                            CandidateExamId = 7,
+                            ChosenOption = "<h2>this is an option2</h2>",
+                            CorrectOption = "<h1>this is an option4</h1>",
                             IsCorrect = false
                         });
                 });
@@ -1297,7 +1300,7 @@ namespace WebApp4a.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<bool?>("Correct")
+                    b.Property<bool>("Correct")
                         .HasColumnType("bit");
 
                     b.Property<int>("QuestionId")
@@ -1310,78 +1313,288 @@ namespace WebApp4a.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("Option");
+                    b.ToTable("Options");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            Correct = false,
+                            Correct = true,
                             QuestionId = 1,
-                            Text = "<h2>this is an option</h2>"
+                            Text = "<h2>this is an option2</h2>"
                         },
                         new
                         {
                             Id = 2,
                             Correct = false,
-                            QuestionId = 9,
-                            Text = "<h2>this is an option</h2>"
+                            QuestionId = 1,
+                            Text = "<h1>this is an option1</h1>"
                         },
                         new
                         {
                             Id = 3,
                             Correct = false,
-                            QuestionId = 5,
-                            Text = "<h1>this is an option</h1>"
+                            QuestionId = 1,
+                            Text = "<h2>this is an option2</h2>"
                         },
                         new
                         {
                             Id = 4,
                             Correct = false,
                             QuestionId = 1,
-                            Text = "<h1>this is an option</h1>"
+                            Text = "<h1>this is an option4</h1>"
                         },
                         new
                         {
                             Id = 5,
-                            Correct = false,
-                            QuestionId = 9,
-                            Text = "<h3>this is an option</h3>"
+                            Correct = true,
+                            QuestionId = 2,
+                            Text = "<h1>this is an option4</h1>"
                         },
                         new
                         {
                             Id = 6,
                             Correct = false,
-                            QuestionId = 9,
-                            Text = "<h3>this is an option</h3>"
+                            QuestionId = 2,
+                            Text = "<h2>this is an option2</h2>"
                         },
                         new
                         {
                             Id = 7,
                             Correct = false,
-                            QuestionId = 10,
-                            Text = "<h2>this is an option</h2>"
+                            QuestionId = 2,
+                            Text = "<h1>this is an option4</h1>"
                         },
                         new
                         {
                             Id = 8,
                             Correct = false,
-                            QuestionId = 9,
-                            Text = "<h1>this is an option</h1>"
+                            QuestionId = 2,
+                            Text = "<h1>this is an option1</h1>"
                         },
                         new
                         {
                             Id = 9,
-                            Correct = false,
-                            QuestionId = 5,
-                            Text = "<h3>this is an option</h3>"
+                            Correct = true,
+                            QuestionId = 3,
+                            Text = "<h3>this is an option3</h3>"
                         },
                         new
                         {
                             Id = 10,
                             Correct = false,
+                            QuestionId = 3,
+                            Text = "<h1>this is an option4</h1>"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Correct = false,
+                            QuestionId = 3,
+                            Text = "<h3>this is an option3</h3>"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Correct = false,
+                            QuestionId = 3,
+                            Text = "<h1>this is an option4</h1>"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Correct = true,
                             QuestionId = 4,
-                            Text = "<h3>this is an option</h3>"
+                            Text = "<h2>this is an option2</h2>"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Correct = false,
+                            QuestionId = 4,
+                            Text = "<h1>this is an option4</h1>"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            Correct = false,
+                            QuestionId = 4,
+                            Text = "<h1>this is an option1</h1>"
+                        },
+                        new
+                        {
+                            Id = 16,
+                            Correct = false,
+                            QuestionId = 4,
+                            Text = "<h1>this is an option4</h1>"
+                        },
+                        new
+                        {
+                            Id = 17,
+                            Correct = true,
+                            QuestionId = 5,
+                            Text = "<h3>this is an option3</h3>"
+                        },
+                        new
+                        {
+                            Id = 18,
+                            Correct = false,
+                            QuestionId = 5,
+                            Text = "<h2>this is an option2</h2>"
+                        },
+                        new
+                        {
+                            Id = 19,
+                            Correct = false,
+                            QuestionId = 5,
+                            Text = "<h3>this is an option3</h3>"
+                        },
+                        new
+                        {
+                            Id = 20,
+                            Correct = false,
+                            QuestionId = 5,
+                            Text = "<h2>this is an option2</h2>"
+                        },
+                        new
+                        {
+                            Id = 21,
+                            Correct = true,
+                            QuestionId = 6,
+                            Text = "<h1>this is an option4</h1>"
+                        },
+                        new
+                        {
+                            Id = 22,
+                            Correct = false,
+                            QuestionId = 6,
+                            Text = "<h1>this is an option4</h1>"
+                        },
+                        new
+                        {
+                            Id = 23,
+                            Correct = false,
+                            QuestionId = 6,
+                            Text = "<h2>this is an option2</h2>"
+                        },
+                        new
+                        {
+                            Id = 24,
+                            Correct = false,
+                            QuestionId = 6,
+                            Text = "<h3>this is an option3</h3>"
+                        },
+                        new
+                        {
+                            Id = 25,
+                            Correct = true,
+                            QuestionId = 7,
+                            Text = "<h2>this is an option2</h2>"
+                        },
+                        new
+                        {
+                            Id = 26,
+                            Correct = false,
+                            QuestionId = 7,
+                            Text = "<h1>this is an option4</h1>"
+                        },
+                        new
+                        {
+                            Id = 27,
+                            Correct = false,
+                            QuestionId = 7,
+                            Text = "<h1>this is an option4</h1>"
+                        },
+                        new
+                        {
+                            Id = 28,
+                            Correct = false,
+                            QuestionId = 7,
+                            Text = "<h1>this is an option1</h1>"
+                        },
+                        new
+                        {
+                            Id = 29,
+                            Correct = true,
+                            QuestionId = 8,
+                            Text = "<h1>this is an option4</h1>"
+                        },
+                        new
+                        {
+                            Id = 30,
+                            Correct = false,
+                            QuestionId = 8,
+                            Text = "<h1>this is an option4</h1>"
+                        },
+                        new
+                        {
+                            Id = 31,
+                            Correct = false,
+                            QuestionId = 8,
+                            Text = "<h1>this is an option4</h1>"
+                        },
+                        new
+                        {
+                            Id = 32,
+                            Correct = false,
+                            QuestionId = 8,
+                            Text = "<h2>this is an option2</h2>"
+                        },
+                        new
+                        {
+                            Id = 33,
+                            Correct = true,
+                            QuestionId = 9,
+                            Text = "<h1>this is an option1</h1>"
+                        },
+                        new
+                        {
+                            Id = 34,
+                            Correct = false,
+                            QuestionId = 9,
+                            Text = "<h1>this is an option4</h1>"
+                        },
+                        new
+                        {
+                            Id = 35,
+                            Correct = false,
+                            QuestionId = 9,
+                            Text = "<h3>this is an option3</h3>"
+                        },
+                        new
+                        {
+                            Id = 36,
+                            Correct = false,
+                            QuestionId = 9,
+                            Text = "<h2>this is an option2</h2>"
+                        },
+                        new
+                        {
+                            Id = 37,
+                            Correct = true,
+                            QuestionId = 10,
+                            Text = "<h1>this is an option4</h1>"
+                        },
+                        new
+                        {
+                            Id = 38,
+                            Correct = false,
+                            QuestionId = 10,
+                            Text = "<h1>this is an option4</h1>"
+                        },
+                        new
+                        {
+                            Id = 39,
+                            Correct = false,
+                            QuestionId = 10,
+                            Text = "<h2>this is an option2</h2>"
+                        },
+                        new
+                        {
+                            Id = 40,
+                            Correct = false,
+                            QuestionId = 10,
+                            Text = "<h3>this is an option3</h3>"
                         });
                 });
 
