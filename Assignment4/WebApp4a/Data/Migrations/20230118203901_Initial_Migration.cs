@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WebApp4a.Migrations
 {
-    public partial class Initial_Migration_with_full_seed : Migration
+    public partial class Initial_Migration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -411,7 +411,7 @@ namespace WebApp4a.Migrations
                     ReportDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CandidateScore = table.Column<int>(type: "int", nullable: true),
                     AssessmentCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CandidateId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CandidateId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     ExamId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -421,8 +421,7 @@ namespace WebApp4a.Migrations
                         name: "FK_CandidateExams_Candidates_CandidateId",
                         column: x => x.CandidateId,
                         principalTable: "Candidates",
-                        principalColumn: "AppUserId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "AppUserId");
                     table.ForeignKey(
                         name: "FK_CandidateExams_Exams_ExamId",
                         column: x => x.ExamId,
@@ -503,10 +502,10 @@ namespace WebApp4a.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "8ca319b2-762d-45e3-8b26-edd6b1f4ba75", 0, "144e0919-b3fc-44c6-9a36-4e437a171e28", "admin2@gmail.com", false, false, null, null, null, null, "1234567890", false, "9463a244-3b2a-4603-9932-68777898625d", false, "Admin2" },
-                    { "9407b6e2-f46e-4a79-a725-dfb1e15e2915", 0, "9ac9997b-c048-4c5b-bce2-fef08e7655f9", "admin0@gmail.com", false, false, null, null, null, null, "1234567890", false, "bbe4f88d-5144-454d-aa12-6b96f4582700", false, "Admin0" },
-                    { "be69a4bd-fb90-41dd-b65b-4ff8b619b767", 0, "6fab076b-ab92-40c0-bfe6-67ff7f499140", "admin1@gmail.com", false, false, null, null, null, null, "1234567890", false, "d04a9955-3d6b-4c73-b1b1-8c995c18f208", false, "Admin1" },
-                    { "f60a904a-aba6-4635-892d-f38919b09896", 0, "99990011-954f-49a6-9a80-a2e8c2a823b3", "admin3@gmail.com", false, false, null, null, null, null, "1234567890", false, "1ae79543-1bae-4f59-b0ce-eebbdcd337c2", false, "Admin3" }
+                    { "8ca319b2-762d-45e3-8b26-edd6b1f4ba75", 0, "a978f757-d5e9-4db3-b88a-263b2d93ee3e", "admin2@gmail.com", true, false, null, "admin2@gmail.com", "admin2@gmail.com", "AQAAAAEAACcQAAAAEM4NbTyVTLGcMUCiFZIcD/7btkWyDWFzb7kXWYbGW15+Urn2zWF2WoegcPCubQxGfQ==", "1234567890", false, "872dbb3d-4617-426d-b261-3dbfc84f3477", false, "admin2@gmail.com" },
+                    { "9407b6e2-f46e-4a79-a725-dfb1e15e2915", 0, "bcbd8611-391b-4c4c-aef7-f90fe0f7a548", "admin0@gmail.com", true, false, null, "admin0@gmail.com", "admin0@gmail.com", "AQAAAAEAACcQAAAAENcImHd56HoMDm+dHGxyYF/Vtt57kRK2eFoMZw6D2Mbmuyu3AVqQ+Io2MqizMeo2dw==", "1234567890", false, "347bf2a2-aec5-4fb0-8728-fb5bded08db0", false, "admin0@gmail.com" },
+                    { "be69a4bd-fb90-41dd-b65b-4ff8b619b767", 0, "9fa2e796-ee9b-45c1-8d2e-add1695493bf", "admin1@gmail.com", true, false, null, "admin1@gmail.com", "admin1@gmail.com", "AQAAAAEAACcQAAAAECB7VdXrfefpuuxQ+T0SD/d0KqA8uEQLGRcm7PDsoDl8N79yQFzaZu3Z/guXnc5I6w==", "1234567890", false, "8e32f631-0d2a-472b-ae8d-6601b253de09", false, "admin1@gmail.com" },
+                    { "f60a904a-aba6-4635-892d-f38919b09896", 0, "e32545fb-a0c3-4e4d-8dba-b2e1c7573291", "admin3@gmail.com", true, false, null, "admin3@gmail.com", "admin3@gmail.com", "AQAAAAEAACcQAAAAEFKDymOEQFf/qXNuzN68WbfFNrfYs2WNp6Om1jF2DnpUuG+zJNQOisSvoc29Ih78qQ==", "1234567890", false, "1f0a56da-e815-4428-8a8e-d8f509d8eed6", false, "admin3@gmail.com" }
                 });
 
             migrationBuilder.InsertData(
@@ -614,9 +613,9 @@ namespace WebApp4a.Migrations
                 columns: new[] { "AppUserId", "CandidateNumber", "DateOfBirth", "Email", "FirstName", "GenderId", "Landline", "LanguageId", "LastName", "MiddleName", "Mobile", "PhotoIdIssueDate", "PhotoIdNumber", "PhotoIdTypeId" },
                 values: new object[,]
                 {
-                    { "8ca319b2-762d-45e3-8b26-edd6b1f4ba75", "153060623", new DateTime(1956, 1, 7, 8, 31, 16, 17, DateTimeKind.Local).AddTicks(7272), "Kory27@gmail.com", "Dakota", 4, "(210) 799-5764 x6282", 1, "Wilkinson", "Bridie", "1-783-633-4424", new DateTime(2022, 9, 15, 20, 18, 7, 299, DateTimeKind.Local).AddTicks(9987), "f1lklm", 3 },
-                    { "9407b6e2-f46e-4a79-a725-dfb1e15e2915", "420088571", new DateTime(1991, 11, 6, 6, 54, 38, 415, DateTimeKind.Local).AddTicks(2505), "Otho_Pfannerstill31@gmail.com", "Josianne", 2, "645.786.1631 x0930", 2, "Pfeffer", "Yolanda", "351-303-5993 x592", new DateTime(2022, 2, 26, 8, 40, 0, 932, DateTimeKind.Local).AddTicks(8144), "bfqee8", 4 },
-                    { "be69a4bd-fb90-41dd-b65b-4ff8b619b767", "136721276", new DateTime(1988, 7, 21, 6, 9, 36, 290, DateTimeKind.Local).AddTicks(1972), "Dedrick_Lynch@hotmail.com", "Adeline", 4, "615.524.9751 x3792", 2, "Dietrich", "Aiyana", "(750) 481-1897", new DateTime(2018, 1, 10, 19, 1, 42, 714, DateTimeKind.Local).AddTicks(8638), "cb4osy", 5 }
+                    { "8ca319b2-762d-45e3-8b26-edd6b1f4ba75", "153060623", new DateTime(1956, 1, 8, 17, 40, 17, 731, DateTimeKind.Local).AddTicks(7120), "Kory27@gmail.com", "Dakota", 4, "(210) 799-5764 x6282", 1, "Wilkinson", "Bridie", "1-783-633-4424", new DateTime(2022, 9, 17, 5, 27, 9, 13, DateTimeKind.Local).AddTicks(9831), "f1lklm", 3 },
+                    { "9407b6e2-f46e-4a79-a725-dfb1e15e2915", "420088571", new DateTime(1991, 11, 7, 16, 3, 40, 129, DateTimeKind.Local).AddTicks(2347), "Otho_Pfannerstill31@gmail.com", "Josianne", 2, "645.786.1631 x0930", 2, "Pfeffer", "Yolanda", "351-303-5993 x592", new DateTime(2022, 2, 27, 17, 49, 2, 646, DateTimeKind.Local).AddTicks(7988), "bfqee8", 4 },
+                    { "be69a4bd-fb90-41dd-b65b-4ff8b619b767", "136721276", new DateTime(1988, 7, 22, 15, 18, 38, 4, DateTimeKind.Local).AddTicks(1851), "Dedrick_Lynch@hotmail.com", "Adeline", 4, "615.524.9751 x3792", 2, "Dietrich", "Aiyana", "(750) 481-1897", new DateTime(2018, 1, 12, 4, 10, 44, 428, DateTimeKind.Local).AddTicks(8516), "cb4osy", 5 }
                 });
 
             migrationBuilder.InsertData(
@@ -672,16 +671,16 @@ namespace WebApp4a.Migrations
                 columns: new[] { "Id", "AssessmentCode", "CandidateId", "CandidateScore", "ExamDate", "ExamId", "MaxScore", "PercentScore", "ReportDate", "Result" },
                 values: new object[,]
                 {
-                    { 1, null, "be69a4bd-fb90-41dd-b65b-4ff8b619b767", null, new DateTime(2021, 1, 25, 12, 42, 38, 707, DateTimeKind.Local).AddTicks(8065), 2, null, null, new DateTime(2023, 1, 8, 4, 31, 49, 126, DateTimeKind.Unspecified).AddTicks(9922), null },
-                    { 2, null, "be69a4bd-fb90-41dd-b65b-4ff8b619b767", null, new DateTime(2022, 2, 5, 2, 18, 54, 93, DateTimeKind.Local).AddTicks(6021), 2, null, null, new DateTime(2022, 9, 22, 18, 32, 24, 718, DateTimeKind.Unspecified).AddTicks(4307), null },
-                    { 3, null, "be69a4bd-fb90-41dd-b65b-4ff8b619b767", null, new DateTime(2023, 1, 6, 13, 19, 51, 135, DateTimeKind.Local).AddTicks(6121), 1, null, null, new DateTime(2022, 8, 20, 8, 51, 47, 299, DateTimeKind.Unspecified).AddTicks(4650), null },
-                    { 4, null, "8ca319b2-762d-45e3-8b26-edd6b1f4ba75", null, new DateTime(2021, 4, 15, 2, 4, 40, 110, DateTimeKind.Local).AddTicks(7910), 2, null, null, new DateTime(2022, 9, 7, 19, 43, 30, 269, DateTimeKind.Unspecified).AddTicks(6838), null },
-                    { 5, null, "8ca319b2-762d-45e3-8b26-edd6b1f4ba75", null, new DateTime(2021, 12, 31, 15, 2, 11, 209, DateTimeKind.Local).AddTicks(2150), 7, null, null, new DateTime(2022, 9, 2, 23, 7, 55, 831, DateTimeKind.Unspecified).AddTicks(5880), null },
-                    { 6, null, "9407b6e2-f46e-4a79-a725-dfb1e15e2915", null, new DateTime(2022, 11, 9, 22, 17, 11, 713, DateTimeKind.Local).AddTicks(7661), 1, null, null, new DateTime(2022, 8, 5, 2, 59, 37, 888, DateTimeKind.Unspecified).AddTicks(5686), null },
-                    { 7, null, "9407b6e2-f46e-4a79-a725-dfb1e15e2915", null, new DateTime(2021, 12, 20, 18, 52, 2, 381, DateTimeKind.Local).AddTicks(5348), 5, null, null, new DateTime(2022, 12, 19, 7, 44, 53, 285, DateTimeKind.Unspecified).AddTicks(9640), null },
-                    { 8, null, "8ca319b2-762d-45e3-8b26-edd6b1f4ba75", null, new DateTime(2022, 1, 18, 1, 0, 26, 392, DateTimeKind.Local).AddTicks(1707), 3, null, null, new DateTime(2022, 8, 20, 9, 2, 50, 913, DateTimeKind.Unspecified).AddTicks(6451), null },
-                    { 9, null, "9407b6e2-f46e-4a79-a725-dfb1e15e2915", null, new DateTime(2022, 12, 5, 18, 28, 38, 99, DateTimeKind.Local).AddTicks(724), 1, null, null, new DateTime(2022, 7, 10, 7, 1, 28, 938, DateTimeKind.Unspecified).AddTicks(3649), null },
-                    { 10, null, "9407b6e2-f46e-4a79-a725-dfb1e15e2915", null, new DateTime(2021, 4, 21, 8, 33, 12, 947, DateTimeKind.Local).AddTicks(675), 6, null, null, new DateTime(2022, 12, 31, 19, 38, 24, 321, DateTimeKind.Unspecified).AddTicks(676), null }
+                    { 1, null, "be69a4bd-fb90-41dd-b65b-4ff8b619b767", null, new DateTime(2021, 1, 26, 21, 51, 40, 425, DateTimeKind.Local).AddTicks(7498), 2, null, null, new DateTime(2023, 1, 9, 12, 16, 41, 808, DateTimeKind.Unspecified).AddTicks(5940), null },
+                    { 2, null, "be69a4bd-fb90-41dd-b65b-4ff8b619b767", null, new DateTime(2022, 2, 6, 11, 27, 55, 811, DateTimeKind.Local).AddTicks(5973), 2, null, null, new DateTime(2022, 9, 23, 10, 12, 59, 49, DateTimeKind.Unspecified).AddTicks(6546), null },
+                    { 3, null, "be69a4bd-fb90-41dd-b65b-4ff8b619b767", null, new DateTime(2023, 1, 7, 22, 28, 52, 853, DateTimeKind.Local).AddTicks(6097), 1, null, null, new DateTime(2022, 8, 20, 19, 32, 29, 431, DateTimeKind.Unspecified).AddTicks(2435), null },
+                    { 4, null, "8ca319b2-762d-45e3-8b26-edd6b1f4ba75", null, new DateTime(2021, 4, 16, 11, 13, 41, 828, DateTimeKind.Local).AddTicks(7902), 2, null, null, new DateTime(2022, 9, 8, 9, 9, 51, 640, DateTimeKind.Unspecified).AddTicks(9298), null },
+                    { 5, null, "8ca319b2-762d-45e3-8b26-edd6b1f4ba75", null, new DateTime(2022, 1, 2, 0, 11, 12, 927, DateTimeKind.Local).AddTicks(2150), 7, null, null, new DateTime(2022, 9, 3, 11, 50, 40, 484, DateTimeKind.Unspecified).AddTicks(9514), null },
+                    { 6, null, "9407b6e2-f46e-4a79-a725-dfb1e15e2915", null, new DateTime(2022, 11, 11, 7, 26, 13, 431, DateTimeKind.Local).AddTicks(7666), 1, null, null, new DateTime(2022, 8, 5, 11, 23, 28, 742, DateTimeKind.Unspecified).AddTicks(5239), null },
+                    { 7, null, "9407b6e2-f46e-4a79-a725-dfb1e15e2915", null, new DateTime(2021, 12, 22, 4, 1, 4, 99, DateTimeKind.Local).AddTicks(5363), 5, null, null, new DateTime(2022, 12, 20, 12, 31, 25, 449, DateTimeKind.Unspecified).AddTicks(3153), null },
+                    { 8, null, "8ca319b2-762d-45e3-8b26-edd6b1f4ba75", null, new DateTime(2022, 1, 19, 10, 9, 28, 110, DateTimeKind.Local).AddTicks(1730), 3, null, null, new DateTime(2022, 8, 20, 19, 43, 37, 182, DateTimeKind.Unspecified).AddTicks(5434), null },
+                    { 9, null, "9407b6e2-f46e-4a79-a725-dfb1e15e2915", null, new DateTime(2022, 12, 7, 3, 37, 39, 817, DateTimeKind.Local).AddTicks(755), 1, null, null, new DateTime(2022, 7, 10, 11, 33, 25, 699, DateTimeKind.Unspecified).AddTicks(9841), null },
+                    { 10, null, "9407b6e2-f46e-4a79-a725-dfb1e15e2915", null, new DateTime(2021, 4, 22, 17, 42, 14, 665, DateTimeKind.Local).AddTicks(714), 6, null, null, new DateTime(2023, 1, 2, 2, 17, 7, 19, DateTimeKind.Unspecified).AddTicks(8400), null }
                 });
 
             migrationBuilder.InsertData(
