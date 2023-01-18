@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualBasic;
+using ModelLibrary.Models.Candidates;
 using ModelLibrary.Models.Exams;
 using ModelLibrary.Models.Questions;
 using System;
@@ -27,6 +28,8 @@ namespace WebApp4a.Data.Repositories
         /// </summary>
         public async Task<IEnumerable<Question>> GetAllQuestionsAsync(CandidateExam candidateExam)
         {
+            candidateExam = _context.CandidateExams.Find(1); //Note (vmavraganis): remove this line when real candidateExam is provided
+
             var exam = await Task.Run(() => _context.Exams
                 .Include(p => p.Questions)
                 .ThenInclude(p => p.Options)
@@ -53,34 +56,21 @@ namespace WebApp4a.Data.Repositories
         /// <summary>
         /// vmavraganis: Async Task to add the new examAnswers and update the candidateExam
         /// </summary>
-        public async Task<CandidateExam> AddCandidateExam(IEnumerable<bool> dropDownOptions, CandidateExam candidateExam)
+        public async Task<CandidateExam> AddCandidateExam(IEnumerable<string> dropDownOptions, CandidateExam candidateExam)
         {
-            int candScore = 0;
+            candidateExam = _context.CandidateExams.Find(1); //Note (vmavraganis): remove this line when real candidateExam is provided
 
-            candidateExam.MaxScore = candidateExam.Exam.Questions.Count;            
+            _context.Entry(candidateExam).Reference(c => c.Exam).Load();
+            var examQuestions = candidateExam.Exam;
+            _context.Entry(examQuestions).Collection(c => c.Questions).Load();
+
+            candidateExam.MaxScore = candidateExam.Exam.Questions.Count;
             candidateExam.ReportDate = DateAndTime.Now;
             candidateExam.AssessmentCode = "CB";
 
             _context.CandidateExams.Update(candidateExam);
 
-            foreach (var item in dropDownOptions)
-            {
-                if (item == true)
-                {
-                    candScore++;
-                }
-
-                var examAnswers = new CandidateExamAnswers
-                {
-                    //Note(vmavraganis): needs fixing for later steps (get the correct and choosen options as string)
-                    CorrectOption = "correct",
-                    ChosenOption = "choosen",
-                    IsCorrect = item,
-                    CandidateExam = candidateExam
-                };
-
-                _context.CandidateExamAnswers.Add(examAnswers);
-            }
+            int candScore = CalculateFinalScore(dropDownOptions, candidateExam.Exam.Questions, candidateExam);
 
             candidateExam.CandidateScore = candScore;
             candidateExam.PercentScore = CalculatePercentageScore(candidateExam.Exam.Questions.Count, candScore);
@@ -105,16 +95,98 @@ namespace WebApp4a.Data.Repositories
         /// <returns>The passed results for the candidate (bool)</returns>
         private bool Passed(int maxScore, int candidateScore)
         {
-            int percentageMaxScore = (int)(maxScore* 65 / 0.01);
+            int percentageMaxScore = (int)(maxScore * 65 / 0.01);
             int percentageCandidateScore = (int)(candidateScore * 65 / 0.01);
 
             if (percentageCandidateScore >= percentageMaxScore)
             {
                 return true;
-            } else
+            }
+            else
             {
                 return false;
             }
+        }
+
+        /// <summary>
+        /// vmavraganis: Calculates the final score of the candidate and adds the exam answers entities
+        /// </summary>
+        /// <returns>The final score of the candidate (score)</returns>
+        private int CalculateFinalScore(IEnumerable<string> dropDownOptions, IEnumerable<Question> questions, CandidateExam candidateExam)
+        {
+            int index = 0;
+            int candidateScore = 0;
+            foreach (var question in questions)
+            {
+                _context.Entry(question).Collection(c => c.Options).Load();
+                //Note (vmavraganis): we use hasValue only when the correct is nullable, after it we can just regular expresion with Where
+                //string? correct = question.Options.FirstOrDefault(option => option.Correct).Text;
+                string? correct = question.Options.FirstOrDefault(option => option.Correct).Text;
+                string? choosen = question.Options.ElementAt(int.Parse(dropDownOptions.ElementAt(index)) - 1).Text;
+                bool? isCorrect = question.Options.ElementAt(int.Parse(dropDownOptions.ElementAt(index)) - 1).Correct;
+                //Note (vmavraganis): remove nullable if model is changed
+
+                if (isCorrect == true)
+                {
+                    candidateScore++;
+                }
+
+                var examAnswers = new CandidateExamAnswers
+                {
+                    CorrectOption = correct,
+                    ChosenOption = choosen,
+                    IsCorrect = isCorrect,
+                    CandidateExam = candidateExam
+                };
+                _context.CandidateExamAnswers.Add(examAnswers);
+                index++;
+            }
+            return candidateScore;
+
+
+
+
+            //int candidateFinalScore = 0;
+            //int i = 0; //Note (vmavraganis): counter for the outer foreach to get themapping of the question with the selected user option
+
+            //foreach (var question in questions)
+            //{
+            //    string correct = string.Empty;
+            //    string choosen = string.Empty;
+            //    bool isCorrect = false;
+            //    int counter = 1; //Note (vmavraganis): used to map the selected option with the available options for the question
+
+            //    foreach (var option in question.Options)
+            //    {
+            //        if (option.Correct == true) //Note (vmavraganis): sets the correct option
+            //        {
+            //            correct = option.Text;
+            //        }
+
+            //        if (counter == Int32.Parse(dropDownOptions.ToList()[i])) //Note(vmavraganis): sets the selected option and the evaluation
+            //        {
+            //            choosen = option.Text;
+            //            isCorrect = option.Correct;
+            //        }
+
+            //        counter++;
+            //    }
+
+            //    var examAnswers = new CandidateExamAnswers
+            //    {
+            //        CorrectOption = correct,
+            //        ChosenOption = choosen,
+            //        IsCorrect = isCorrect,
+            //        CandidateExam = candidateExam
+            //    };
+            //    _context.CandidateExamAnswers.Add(examAnswers);
+            //    i++;
+            //}
+
+            //return candidateFinalScore;
+
+
+
         }
 
         private bool _dispose = false;
