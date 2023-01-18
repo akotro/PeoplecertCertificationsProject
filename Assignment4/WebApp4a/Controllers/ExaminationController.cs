@@ -46,7 +46,7 @@ namespace WebApp4a.Controllers
         {
             if (ModelState.IsValid)
             {
-                var candidateExam = await _examRepository.AddCandidateExam(DropDownOptions, _candidateExam);
+                var candidateExam = await _examRepository.AddCandidateExam(DropDownOptions, new CandidateExam());
 
                 return await Task.Run(() => RedirectToAction("Results", "CandidateExam", candidateExam));
             }
