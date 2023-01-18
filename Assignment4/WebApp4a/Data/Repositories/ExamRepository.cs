@@ -66,7 +66,6 @@ namespace WebApp4a.Data.Repositories
 
             candidateExam.MaxScore = candidateExam.Exam.Questions.Count;
             candidateExam.ReportDate = DateAndTime.Now;
-            candidateExam.AssessmentCode = "CB";
 
             _context.CandidateExams.Update(candidateExam);
 
