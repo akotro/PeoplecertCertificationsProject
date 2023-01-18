@@ -12,8 +12,8 @@ using WebApp4a.Data;
 namespace WebApp4a.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230117113000_Initial_Migration_with_full_seed")]
-    partial class Initial_Migration_with_full_seed
+    [Migration("20230118203901_Initial_Migration")]
+    partial class Initial_Migration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -260,57 +260,69 @@ namespace WebApp4a.Migrations
                         {
                             Id = "9407b6e2-f46e-4a79-a725-dfb1e15e2915",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "9ac9997b-c048-4c5b-bce2-fef08e7655f9",
+                            ConcurrencyStamp = "bcbd8611-391b-4c4c-aef7-f90fe0f7a548",
                             Email = "admin0@gmail.com",
-                            EmailConfirmed = false,
+                            EmailConfirmed = true,
                             LockoutEnabled = false,
+                            NormalizedEmail = "admin0@gmail.com",
+                            NormalizedUserName = "admin0@gmail.com",
+                            PasswordHash = "AQAAAAEAACcQAAAAENcImHd56HoMDm+dHGxyYF/Vtt57kRK2eFoMZw6D2Mbmuyu3AVqQ+Io2MqizMeo2dw==",
                             PhoneNumber = "1234567890",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "bbe4f88d-5144-454d-aa12-6b96f4582700",
+                            SecurityStamp = "347bf2a2-aec5-4fb0-8728-fb5bded08db0",
                             TwoFactorEnabled = false,
-                            UserName = "Admin0"
+                            UserName = "admin0@gmail.com"
                         },
                         new
                         {
                             Id = "be69a4bd-fb90-41dd-b65b-4ff8b619b767",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "6fab076b-ab92-40c0-bfe6-67ff7f499140",
+                            ConcurrencyStamp = "9fa2e796-ee9b-45c1-8d2e-add1695493bf",
                             Email = "admin1@gmail.com",
-                            EmailConfirmed = false,
+                            EmailConfirmed = true,
                             LockoutEnabled = false,
+                            NormalizedEmail = "admin1@gmail.com",
+                            NormalizedUserName = "admin1@gmail.com",
+                            PasswordHash = "AQAAAAEAACcQAAAAECB7VdXrfefpuuxQ+T0SD/d0KqA8uEQLGRcm7PDsoDl8N79yQFzaZu3Z/guXnc5I6w==",
                             PhoneNumber = "1234567890",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "d04a9955-3d6b-4c73-b1b1-8c995c18f208",
+                            SecurityStamp = "8e32f631-0d2a-472b-ae8d-6601b253de09",
                             TwoFactorEnabled = false,
-                            UserName = "Admin1"
+                            UserName = "admin1@gmail.com"
                         },
                         new
                         {
                             Id = "8ca319b2-762d-45e3-8b26-edd6b1f4ba75",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "144e0919-b3fc-44c6-9a36-4e437a171e28",
+                            ConcurrencyStamp = "a978f757-d5e9-4db3-b88a-263b2d93ee3e",
                             Email = "admin2@gmail.com",
-                            EmailConfirmed = false,
+                            EmailConfirmed = true,
                             LockoutEnabled = false,
+                            NormalizedEmail = "admin2@gmail.com",
+                            NormalizedUserName = "admin2@gmail.com",
+                            PasswordHash = "AQAAAAEAACcQAAAAEM4NbTyVTLGcMUCiFZIcD/7btkWyDWFzb7kXWYbGW15+Urn2zWF2WoegcPCubQxGfQ==",
                             PhoneNumber = "1234567890",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "9463a244-3b2a-4603-9932-68777898625d",
+                            SecurityStamp = "872dbb3d-4617-426d-b261-3dbfc84f3477",
                             TwoFactorEnabled = false,
-                            UserName = "Admin2"
+                            UserName = "admin2@gmail.com"
                         },
                         new
                         {
                             Id = "f60a904a-aba6-4635-892d-f38919b09896",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "99990011-954f-49a6-9a80-a2e8c2a823b3",
+                            ConcurrencyStamp = "e32545fb-a0c3-4e4d-8dba-b2e1c7573291",
                             Email = "admin3@gmail.com",
-                            EmailConfirmed = false,
+                            EmailConfirmed = true,
                             LockoutEnabled = false,
+                            NormalizedEmail = "admin3@gmail.com",
+                            NormalizedUserName = "admin3@gmail.com",
+                            PasswordHash = "AQAAAAEAACcQAAAAEFKDymOEQFf/qXNuzN68WbfFNrfYs2WNp6Om1jF2DnpUuG+zJNQOisSvoc29Ih78qQ==",
                             PhoneNumber = "1234567890",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "1ae79543-1bae-4f59-b0ce-eebbdcd337c2",
+                            SecurityStamp = "1f0a56da-e815-4428-8a8e-d8f509d8eed6",
                             TwoFactorEnabled = false,
-                            UserName = "Admin3"
+                            UserName = "admin3@gmail.com"
                         });
                 });
 
@@ -523,7 +535,7 @@ namespace WebApp4a.Migrations
                         {
                             AppUserId = "9407b6e2-f46e-4a79-a725-dfb1e15e2915",
                             CandidateNumber = "420088571",
-                            DateOfBirth = new DateTime(1991, 11, 6, 6, 54, 38, 415, DateTimeKind.Local).AddTicks(2505),
+                            DateOfBirth = new DateTime(1991, 11, 7, 16, 3, 40, 129, DateTimeKind.Local).AddTicks(2347),
                             Email = "Otho_Pfannerstill31@gmail.com",
                             FirstName = "Josianne",
                             GenderId = 2,
@@ -532,7 +544,7 @@ namespace WebApp4a.Migrations
                             LastName = "Pfeffer",
                             MiddleName = "Yolanda",
                             Mobile = "351-303-5993 x592",
-                            PhotoIdIssueDate = new DateTime(2022, 2, 26, 8, 40, 0, 932, DateTimeKind.Local).AddTicks(8144),
+                            PhotoIdIssueDate = new DateTime(2022, 2, 27, 17, 49, 2, 646, DateTimeKind.Local).AddTicks(7988),
                             PhotoIdNumber = "bfqee8",
                             PhotoIdTypeId = 4
                         },
@@ -540,7 +552,7 @@ namespace WebApp4a.Migrations
                         {
                             AppUserId = "be69a4bd-fb90-41dd-b65b-4ff8b619b767",
                             CandidateNumber = "136721276",
-                            DateOfBirth = new DateTime(1988, 7, 21, 6, 9, 36, 290, DateTimeKind.Local).AddTicks(1972),
+                            DateOfBirth = new DateTime(1988, 7, 22, 15, 18, 38, 4, DateTimeKind.Local).AddTicks(1851),
                             Email = "Dedrick_Lynch@hotmail.com",
                             FirstName = "Adeline",
                             GenderId = 4,
@@ -549,7 +561,7 @@ namespace WebApp4a.Migrations
                             LastName = "Dietrich",
                             MiddleName = "Aiyana",
                             Mobile = "(750) 481-1897",
-                            PhotoIdIssueDate = new DateTime(2018, 1, 10, 19, 1, 42, 714, DateTimeKind.Local).AddTicks(8638),
+                            PhotoIdIssueDate = new DateTime(2018, 1, 12, 4, 10, 44, 428, DateTimeKind.Local).AddTicks(8516),
                             PhotoIdNumber = "cb4osy",
                             PhotoIdTypeId = 5
                         },
@@ -557,7 +569,7 @@ namespace WebApp4a.Migrations
                         {
                             AppUserId = "8ca319b2-762d-45e3-8b26-edd6b1f4ba75",
                             CandidateNumber = "153060623",
-                            DateOfBirth = new DateTime(1956, 1, 7, 8, 31, 16, 17, DateTimeKind.Local).AddTicks(7272),
+                            DateOfBirth = new DateTime(1956, 1, 8, 17, 40, 17, 731, DateTimeKind.Local).AddTicks(7120),
                             Email = "Kory27@gmail.com",
                             FirstName = "Dakota",
                             GenderId = 4,
@@ -566,7 +578,7 @@ namespace WebApp4a.Migrations
                             LastName = "Wilkinson",
                             MiddleName = "Bridie",
                             Mobile = "1-783-633-4424",
-                            PhotoIdIssueDate = new DateTime(2022, 9, 15, 20, 18, 7, 299, DateTimeKind.Local).AddTicks(9987),
+                            PhotoIdIssueDate = new DateTime(2022, 9, 17, 5, 27, 9, 13, DateTimeKind.Local).AddTicks(9831),
                             PhotoIdNumber = "f1lklm",
                             PhotoIdTypeId = 3
                         });
@@ -1013,7 +1025,6 @@ namespace WebApp4a.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CandidateId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int?>("CandidateScore")
@@ -1050,81 +1061,81 @@ namespace WebApp4a.Migrations
                         {
                             Id = 1,
                             CandidateId = "be69a4bd-fb90-41dd-b65b-4ff8b619b767",
-                            ExamDate = new DateTime(2021, 1, 25, 12, 42, 38, 707, DateTimeKind.Local).AddTicks(8065),
+                            ExamDate = new DateTime(2021, 1, 26, 21, 51, 40, 425, DateTimeKind.Local).AddTicks(7498),
                             ExamId = 2,
-                            ReportDate = new DateTime(2023, 1, 8, 4, 31, 49, 126, DateTimeKind.Unspecified).AddTicks(9922)
+                            ReportDate = new DateTime(2023, 1, 9, 12, 16, 41, 808, DateTimeKind.Unspecified).AddTicks(5940)
                         },
                         new
                         {
                             Id = 2,
                             CandidateId = "be69a4bd-fb90-41dd-b65b-4ff8b619b767",
-                            ExamDate = new DateTime(2022, 2, 5, 2, 18, 54, 93, DateTimeKind.Local).AddTicks(6021),
+                            ExamDate = new DateTime(2022, 2, 6, 11, 27, 55, 811, DateTimeKind.Local).AddTicks(5973),
                             ExamId = 2,
-                            ReportDate = new DateTime(2022, 9, 22, 18, 32, 24, 718, DateTimeKind.Unspecified).AddTicks(4307)
+                            ReportDate = new DateTime(2022, 9, 23, 10, 12, 59, 49, DateTimeKind.Unspecified).AddTicks(6546)
                         },
                         new
                         {
                             Id = 3,
                             CandidateId = "be69a4bd-fb90-41dd-b65b-4ff8b619b767",
-                            ExamDate = new DateTime(2023, 1, 6, 13, 19, 51, 135, DateTimeKind.Local).AddTicks(6121),
+                            ExamDate = new DateTime(2023, 1, 7, 22, 28, 52, 853, DateTimeKind.Local).AddTicks(6097),
                             ExamId = 1,
-                            ReportDate = new DateTime(2022, 8, 20, 8, 51, 47, 299, DateTimeKind.Unspecified).AddTicks(4650)
+                            ReportDate = new DateTime(2022, 8, 20, 19, 32, 29, 431, DateTimeKind.Unspecified).AddTicks(2435)
                         },
                         new
                         {
                             Id = 4,
                             CandidateId = "8ca319b2-762d-45e3-8b26-edd6b1f4ba75",
-                            ExamDate = new DateTime(2021, 4, 15, 2, 4, 40, 110, DateTimeKind.Local).AddTicks(7910),
+                            ExamDate = new DateTime(2021, 4, 16, 11, 13, 41, 828, DateTimeKind.Local).AddTicks(7902),
                             ExamId = 2,
-                            ReportDate = new DateTime(2022, 9, 7, 19, 43, 30, 269, DateTimeKind.Unspecified).AddTicks(6838)
+                            ReportDate = new DateTime(2022, 9, 8, 9, 9, 51, 640, DateTimeKind.Unspecified).AddTicks(9298)
                         },
                         new
                         {
                             Id = 5,
                             CandidateId = "8ca319b2-762d-45e3-8b26-edd6b1f4ba75",
-                            ExamDate = new DateTime(2021, 12, 31, 15, 2, 11, 209, DateTimeKind.Local).AddTicks(2150),
+                            ExamDate = new DateTime(2022, 1, 2, 0, 11, 12, 927, DateTimeKind.Local).AddTicks(2150),
                             ExamId = 7,
-                            ReportDate = new DateTime(2022, 9, 2, 23, 7, 55, 831, DateTimeKind.Unspecified).AddTicks(5880)
+                            ReportDate = new DateTime(2022, 9, 3, 11, 50, 40, 484, DateTimeKind.Unspecified).AddTicks(9514)
                         },
                         new
                         {
                             Id = 6,
                             CandidateId = "9407b6e2-f46e-4a79-a725-dfb1e15e2915",
-                            ExamDate = new DateTime(2022, 11, 9, 22, 17, 11, 713, DateTimeKind.Local).AddTicks(7661),
+                            ExamDate = new DateTime(2022, 11, 11, 7, 26, 13, 431, DateTimeKind.Local).AddTicks(7666),
                             ExamId = 1,
-                            ReportDate = new DateTime(2022, 8, 5, 2, 59, 37, 888, DateTimeKind.Unspecified).AddTicks(5686)
+                            ReportDate = new DateTime(2022, 8, 5, 11, 23, 28, 742, DateTimeKind.Unspecified).AddTicks(5239)
                         },
                         new
                         {
                             Id = 7,
                             CandidateId = "9407b6e2-f46e-4a79-a725-dfb1e15e2915",
-                            ExamDate = new DateTime(2021, 12, 20, 18, 52, 2, 381, DateTimeKind.Local).AddTicks(5348),
+                            ExamDate = new DateTime(2021, 12, 22, 4, 1, 4, 99, DateTimeKind.Local).AddTicks(5363),
                             ExamId = 5,
-                            ReportDate = new DateTime(2022, 12, 19, 7, 44, 53, 285, DateTimeKind.Unspecified).AddTicks(9640)
+                            ReportDate = new DateTime(2022, 12, 20, 12, 31, 25, 449, DateTimeKind.Unspecified).AddTicks(3153)
                         },
                         new
                         {
                             Id = 8,
                             CandidateId = "8ca319b2-762d-45e3-8b26-edd6b1f4ba75",
-                            ExamDate = new DateTime(2022, 1, 18, 1, 0, 26, 392, DateTimeKind.Local).AddTicks(1707),
+                            ExamDate = new DateTime(2022, 1, 19, 10, 9, 28, 110, DateTimeKind.Local).AddTicks(1730),
                             ExamId = 3,
-                            ReportDate = new DateTime(2022, 8, 20, 9, 2, 50, 913, DateTimeKind.Unspecified).AddTicks(6451)
+                            ReportDate = new DateTime(2022, 8, 20, 19, 43, 37, 182, DateTimeKind.Unspecified).AddTicks(5434)
                         },
                         new
                         {
                             Id = 9,
                             CandidateId = "9407b6e2-f46e-4a79-a725-dfb1e15e2915",
-                            ExamDate = new DateTime(2022, 12, 5, 18, 28, 38, 99, DateTimeKind.Local).AddTicks(724),
+                            ExamDate = new DateTime(2022, 12, 7, 3, 37, 39, 817, DateTimeKind.Local).AddTicks(755),
                             ExamId = 1,
-                            ReportDate = new DateTime(2022, 7, 10, 7, 1, 28, 938, DateTimeKind.Unspecified).AddTicks(3649)
+                            ReportDate = new DateTime(2022, 7, 10, 11, 33, 25, 699, DateTimeKind.Unspecified).AddTicks(9841)
                         },
                         new
                         {
                             Id = 10,
                             CandidateId = "9407b6e2-f46e-4a79-a725-dfb1e15e2915",
-                            ExamDate = new DateTime(2021, 4, 21, 8, 33, 12, 947, DateTimeKind.Local).AddTicks(675),
+                            ExamDate = new DateTime(2021, 4, 22, 17, 42, 14, 665, DateTimeKind.Local).AddTicks(714),
                             ExamId = 6,
-                            ReportDate = new DateTime(2022, 12, 31, 19, 38, 24, 321, DateTimeKind.Unspecified).AddTicks(676)
+                            ReportDate = new DateTime(2023, 1, 2, 2, 17, 7, 19, DateTimeKind.Unspecified).AddTicks(8400)
                         });
                 });
 
@@ -1831,9 +1842,7 @@ namespace WebApp4a.Migrations
                 {
                     b.HasOne("ModelLibrary.Models.Candidates.Candidate", "Candidate")
                         .WithMany("CandidateExams")
-                        .HasForeignKey("CandidateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CandidateId");
 
                     b.HasOne("ModelLibrary.Models.Exams.Exam", "Exam")
                         .WithMany("CandidateExams")
