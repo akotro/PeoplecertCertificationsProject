@@ -31,8 +31,11 @@ namespace WebApp4a.Controllers
         /// <summary>
         /// vmavraganis: Async Task to create the UI for the candidate examination (questions + options)
         /// </summary>
-        public async Task<IActionResult> Exam()
+        public async Task<IActionResult> Exam(CandidateExam candidateExam)
         {
+            //Note (vmavraganis): provide CandidateExam from the user selection
+            _candidateExam = candidateExam; 
+
             PopulateDropDownOptions();
             return View(await _examRepository.GetAllQuestionsAsync(_candidateExam));
         }
