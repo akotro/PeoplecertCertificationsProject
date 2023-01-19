@@ -16,7 +16,7 @@ namespace WebApp4a
 
             // Add services to the container.
             var connectionString =
-                builder.Configuration.GetConnectionString("giannis")
+                builder.Configuration.GetConnectionString("DefaultConnection")
                 ?? throw new InvalidOperationException(
                     "Connection string 'DefaultConnection' not found."
                 );
@@ -37,7 +37,7 @@ namespace WebApp4a
             // -----------------------------
             //Agkiz, Added Transient service repo
             builder.Services.AddTransient<IExamRepository, ExamRepository>();
-
+            builder.Services.AddTransient<IQuestionsRepository, QuestionsRepository>();
             // -----------------------------
 
             var app = builder.Build();
