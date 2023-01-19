@@ -16,7 +16,7 @@ namespace WebApp4a.Controllers
         private readonly ApplicationDbContext _context;
         private Service _service;
         private readonly UserManager<AppUser> _userManager;
-        private static CandidateExam _candidateExam;
+        
         private readonly IExamRepository _examRepository;
 
         public CandidateExamController(ApplicationDbContext context,UserManager<AppUser> userManager, IExamRepository adminrepository)
@@ -94,7 +94,7 @@ namespace WebApp4a.Controllers
             {
                 _context.Add(candidateExam);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Exam",candidateExam);
+                return RedirectToAction("Exam","candidateExam",candidateExam);
             }
             return View(candidateExam);
         }
@@ -108,10 +108,11 @@ namespace WebApp4a.Controllers
         public async Task<IActionResult> Exam(CandidateExam candidateExam)
         {
             //Note (vmavraganis): provide CandidateExam from the user selection
-            _candidateExam = candidateExam;
+            
+            ViewBag.candExamId = candidateExam.Id;
 
             PopulateDropDownOptions();
-            return View(await _examRepository.GetAllQuestionsAsync(_candidateExam));
+            return View(await _examRepository.GetAllQuestionsAsync(candidateExam));
         }
 
 
@@ -120,11 +121,12 @@ namespace WebApp4a.Controllers
         /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> GetAnswers(IEnumerable<string> DropDownOptions)
+        public async Task<IActionResult> GetAnswers(IEnumerable<string> DropDownOptions,int candExamId)
         {
             if (ModelState.IsValid)
             {
-                var candidateExam = await _examRepository.UpdateCandidateExam(DropDownOptions, _candidateExam);
+                var candExam = await _context.CandidateExams.FirstOrDefaultAsync(exams => exams.Id == candExamId);
+                var candidateExam = await _examRepository.UpdateCandidateExam(DropDownOptions, candExam);
 
                 return await Task.Run(() => RedirectToAction("Results", "CandidateExam", candidateExam));
             }

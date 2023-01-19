@@ -28,7 +28,6 @@ namespace WebApp4a.Data.Repositories
         /// </summary>
         public async Task<IEnumerable<Question>> GetAllQuestionsAsync(CandidateExam candidateExam)
         {
-            candidateExam = _context.CandidateExams.Find(1); //Note (vmavraganis): remove this line when real candidateExam is provided
 
             var exam = await Task.Run(() => _context.Exams
                 .Include(p => p.Questions)
@@ -58,7 +57,6 @@ namespace WebApp4a.Data.Repositories
         /// </summary>
         public async Task<CandidateExam> UpdateCandidateExam(IEnumerable<string> dropDownOptions, CandidateExam candidateExam)
         {
-            candidateExam = _context.CandidateExams.Find(1); //Note (vmavraganis): remove this line when real candidateExam is provided
 
             _context.Entry(candidateExam).Reference(c => c.Exam).Load();
             var examQuestions = candidateExam.Exam;

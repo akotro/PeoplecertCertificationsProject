@@ -37,6 +37,8 @@
                         @*@Html.DropDownList("DropDownOptions", new SelectList(item.Options,"Correct", "Text"), new { @class = "form-control" })*@
                         @Html.DropDownList("DropDownOptions", new SelectList(ViewBag.SelectOptions, "Text", "Value"),  new { @class = "form-control" })
                     </td>
+                    @Html.Hidden("candExamId",ViewBag.candExamId,null)
+                    
                 </tr>
             }
 
