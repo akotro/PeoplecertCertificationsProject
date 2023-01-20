@@ -5,6 +5,7 @@ using System.Reflection.Metadata;
 using WebApp4a.Data;
 using WebApp4a.Data.Seed;
 using WebApp4a.Data.Repositories;
+using WebApp4a.Services;
 
 namespace WebApp4a
 {
@@ -16,7 +17,7 @@ namespace WebApp4a
 
             // Add services to the container.
             var connectionString =
-                builder.Configuration.GetConnectionString("giannis")
+                builder.Configuration.GetConnectionString("DefaultConnection")
                 ?? throw new InvalidOperationException(
                     "Connection string 'DefaultConnection' not found."
                 );
@@ -37,7 +38,11 @@ namespace WebApp4a
             // -----------------------------
             //Agkiz, Added Transient service repo
             builder.Services.AddTransient<IExamRepository, ExamRepository>();
-            builder.Services.AddTransient<IQuestionsRepository, QuestionsRepository>();
+
+            // NOTE:(akotro) Should repositories be added as Scoped since we want
+            // only one DbContext for each client request?
+            builder.Services.AddScoped<IQuestionsRepository, QuestionsRepository>();
+            builder.Services.AddTransient<QuestionsService>();
             // -----------------------------
 
             var app = builder.Build();
