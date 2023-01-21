@@ -56,9 +56,8 @@ namespace WebApp4a.Controllers.API
 
             if (ModelState.IsValid)
             {
-                await _questionService.AddAsync(questionDto);
-                return CreatedAtAction(nameof(Get), new { id = questionDto.Id },
-                    questionDto);
+                var addedQuestion = await _questionService.AddAsync(questionDto);
+                return CreatedAtAction(nameof(Get), new { id = addedQuestion.Id }, addedQuestion);
             }
 
             return BadRequest();
@@ -66,8 +65,7 @@ namespace WebApp4a.Controllers.API
 
         // PUT: api/questions/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id,
-            [FromBody] QuestionDto questionDto)
+        public async Task<IActionResult> Update(int id, [FromBody] QuestionDto questionDto)
         {
             if (!_questionService.QuestionsDbSetExists())
             {
