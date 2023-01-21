@@ -6,6 +6,7 @@ using WebApp4a.Data;
 using WebApp4a.Data.Seed;
 using WebApp4a.Data.Repositories;
 using WebApp4a.Services;
+using System.Text.Json.Serialization;
 
 namespace WebApp4a
 {
@@ -34,6 +35,13 @@ namespace WebApp4a
             builder.Services.AddRazorPages();
             builder.Services.AddMvc();
             builder.Services.AddControllersWithViews();
+            builder.Services.AddSwaggerGen(); // NOTE:(akotro) Add Swagger
+            builder.Services
+                .AddControllers()
+                .AddJsonOptions(
+                    options =>
+                        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve
+                );
 
             // -----------------------------
             //Agkiz, Added Transient service repo
@@ -51,6 +59,10 @@ namespace WebApp4a
             if (app.Environment.IsDevelopment())
             {
                 app.UseMigrationsEndPoint();
+
+                // NOTE:(akotro) Use Swagger
+                app.UseSwagger();
+                app.UseSwaggerUI();
             }
             else
             {
