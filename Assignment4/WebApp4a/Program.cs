@@ -6,6 +6,7 @@ using WebApp4a.Data;
 using WebApp4a.Data.Seed;
 using WebApp4a.Data.Repositories;
 using WebApp4a.Services;
+using Microsoft.Extensions.Hosting;
 
 namespace WebApp4a
 {
@@ -69,9 +70,17 @@ namespace WebApp4a
 
             app.MapRazorPages();
             app.MapDefaultControllerRoute();
-            // Seeds the joining Tables, calculates and changes the MaxMarks and Passing Marks of each certificate
-            // according to the topics it has
-            SeedIfNotExists.SeedIfEmpty(app);
+
+            //checks for all the latest migrations
+            //also creates db ifNotExists
+            using (var scope = app.Services.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                db.Database.Migrate();
+            }
+
+            // AGkiz - Seeds dummy data to DB
+            DbSeed.Seed(app);
 
             app.Run();
         }

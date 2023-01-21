@@ -7,7 +7,6 @@ using ModelLibrary.Models.Certificates;
 using ModelLibrary.Models.Exams;
 using System.Reflection.Emit;
 using ModelLibrary.Models.Questions;
-using WebApp4a.Data.ModelBuilderExtensions;
 
 namespace WebApp4a.Data
 {
@@ -39,19 +38,6 @@ namespace WebApp4a.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            // Join tables configuration
-            //builder
-            //    .Entity<CandidateExam>()
-            //    .HasOne(c => c.Candidate)
-            //    .WithMany(c => c.CandidateExams)
-            //    .HasForeignKey(t => t.CandidateId);
-            //builder
-            //    .Entity<CandidateExam>()
-            //    .HasOne(c => c.Exam)
-            //    .WithMany(c => c.CandidateExams)
-            //    .HasForeignKey(t => t.ExamId);
-
-
 
             #region // NOTE(akotro): Configures AppUserId to be Candidate's PK + FK to AppUser
 
@@ -64,8 +50,6 @@ namespace WebApp4a.Data
             builder.Entity<Candidate>().HasKey(c => c.AppUserId);
 
             #endregion
-            builder.Seed(this);
         }
-        //var cand = this.Candidates.FirstOrDefault();
     }
 }
