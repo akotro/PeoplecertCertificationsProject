@@ -18,7 +18,7 @@ namespace WebApp4a
 
             // Add services to the container.
             var connectionString =
-                builder.Configuration.GetConnectionString("DefaultConnection")
+                builder.Configuration.GetConnectionString("giannis")
                 ?? throw new InvalidOperationException(
                     "Connection string 'DefaultConnection' not found."
                 );
@@ -73,11 +73,11 @@ namespace WebApp4a
 
             //checks for all the latest migrations
             //also creates db ifNotExists
-            using (var scope = app.Services.CreateScope())
-            {
-                var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-                db.Database.Migrate();
-            }
+            //using (var scope = app.Services.CreateScope())
+            //{
+            //    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            //    db.Database.Migrate();
+            //}
 
             // AGkiz - Seeds dummy data to DB
             DbSeed.Seed(app);
