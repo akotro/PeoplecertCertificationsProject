@@ -5,8 +5,11 @@
 
 ### Collaborators:
 	
-- Andreas Gkizis
-- Antonis Kotronakis
-- Iasonas Psomadakis
-- Ioannis Mertzanakis
-- Vlasios Mavraganis
+- [Andreas Gkizis](https://github.com/AndreasGkizis)
+- [Antonis Kotronakis](https://github.com/akotro)
+- [Iasonas Psomadakis](https://github.com/IasonasPs)
+- [Ioannis Mertzanakis](https://github.com/IoaMertz)
+- [Vlasios Mavraganis](https://github.com/Vlasis333)
+
+### supervising professor
+[George Pasparakis](https://github.com/davidoster)
