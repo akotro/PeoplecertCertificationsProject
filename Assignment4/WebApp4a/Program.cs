@@ -8,6 +8,10 @@ using WebApp4a.Data.Repositories;
 using WebApp4a.Services;
 using System.Text.Json.Serialization;
 using Microsoft.Extensions.Hosting;
+using AutoMapper;
+using ModelLibrary.Models.DTO.Questions;
+using Microsoft.CodeAnalysis.Options;
+using ModelLibrary.Models.Questions;
 
 namespace WebApp4a
 {
@@ -19,7 +23,7 @@ namespace WebApp4a
 
             // Add services to the container.
             var connectionString =
-                builder.Configuration.GetConnectionString("DefaultConnection")
+                builder.Configuration.GetConnectionString("akotro")
                 ?? throw new InvalidOperationException(
                     "Connection string 'DefaultConnection' not found."
                 );
@@ -53,6 +57,19 @@ namespace WebApp4a
             builder.Services.AddScoped<IQuestionsRepository, QuestionsRepository>();
             builder.Services.AddTransient<QuestionsService>();
             // -----------------------------
+
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.CreateMap<OptionDto, Option>().ReverseMap();
+                // mc.CreateMap<Option, OptionDto>();
+                mc.CreateMap<QuestionDto, Question>()
+                    .ForMember(dest => dest.Options, opt => opt.MapFrom(src => src.Options))
+                    .ReverseMap();
+                // mc.CreateMap<Question, QuestionDto>()
+                //     .ForMember(dest => dest.Options, opt => opt.MapFrom(src => src.Options));
+            });
+            IMapper mapper = mapperConfig.CreateMapper();
+            builder.Services.AddSingleton(mapper);
 
             var app = builder.Build();
 

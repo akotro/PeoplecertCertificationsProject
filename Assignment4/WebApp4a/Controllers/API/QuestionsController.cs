@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using ModelLibrary.Models.DTO.Questions;
 using WebApp4a.Services;
@@ -8,10 +9,12 @@ namespace WebApp4a.Controllers.API
     [ApiController]
     public class QuestionsController : ControllerBase
     {
+        private readonly IMapper _mapper;
         private readonly QuestionsService _questionService;
 
-        public QuestionsController(QuestionsService questionsService)
+        public QuestionsController(IMapper mapper, QuestionsService questionsService)
         {
+            _mapper = mapper;
             _questionService = questionsService;
         }
 
@@ -24,7 +27,8 @@ namespace WebApp4a.Controllers.API
                 return Problem("Entity set 'ApplicationDbContext.Questions' is null.");
             }
 
-            return Ok(await _questionService.GetAllAsync());
+            // return Ok(await _questionService.GetAllAsync());
+            return Ok(_mapper.Map<List<QuestionDto>>(await _questionService.GetAllAsync()));
         }
 
         // GET: api/questions/5
@@ -42,7 +46,8 @@ namespace WebApp4a.Controllers.API
                 return NotFound();
             }
 
-            return Ok(question);
+            // return Ok(question);
+            return Ok(_mapper.Map<QuestionDto>(question));
         }
 
         // POST: api/questions
@@ -57,7 +62,13 @@ namespace WebApp4a.Controllers.API
             if (ModelState.IsValid)
             {
                 var addedQuestion = await _questionService.AddAsync(questionDto);
-                return CreatedAtAction(nameof(Get), new { id = addedQuestion.Id }, addedQuestion);
+                var addedQuestionDto = _mapper.Map<QuestionDto>(addedQuestion);
+                // return CreatedAtAction(nameof(Get), new { id = addedQuestion.Id }, addedQuestion);
+                return CreatedAtAction(
+                    nameof(Get),
+                    new { id = addedQuestionDto.Id },
+                    addedQuestionDto
+                );
             }
 
             return BadRequest();
