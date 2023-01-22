@@ -1,44 +1,35 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using ModelLibrary.Models.Certificates;
 using ModelLibrary.Models.DTO.Questions;
-using ModelLibrary.Models.Questions;
-using WebApp4a.Data;
-using WebApp4a.Data.Repositories;
+using WebApp4a.Services;
 
 namespace WebApp4a.Controllers
 {
     public class QuestionsController : Controller
     {
-        private readonly IQuestionsRepository _questionRepository;
+        private readonly QuestionsService _questionService;
 
-        public QuestionsController(IQuestionsRepository questionsRepository)
+        public QuestionsController(QuestionsService questionsService)
         {
-            _questionRepository = questionsRepository;
+            _questionService = questionsService;
         }
 
         // GET: Questions
         public async Task<IActionResult> Index()
         {
-            return _questionRepository.QuestionsDbSetExists()
-                ? View(await _questionRepository.GetAllAsync())
+            return _questionService.QuestionsDbSetExists()
+                ? View(await _questionService.GetAllAsync())
                 : Problem("Entity set 'ApplicationDbContext.Questions'  is null.");
         }
 
         // GET: Questions/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || !_questionRepository.QuestionsDbSetExists())
+            if (id == null || !_questionService.QuestionsDbSetExists())
             {
                 return NotFound();
             }
 
-            var question = await _questionRepository.GetAsync(id);
+            var question = await _questionService.GetAsync(id);
             if (question == null)
             {
                 return NotFound();
@@ -50,10 +41,10 @@ namespace WebApp4a.Controllers
         // GET: Questions/Create
         public ActionResult Create()
         {
-            var questionDto = _questionRepository.CreateDto();
+            var questionDto = _questionService.CreateDto();
 
-            ViewBag.Topics = _questionRepository.GetTopicsSelectList();
-            ViewBag.DifficultyLevels = _questionRepository.GetDifficultyLevelsSelectList();
+            ViewBag.Topics = _questionService.GetTopicsSelectList();
+            ViewBag.DifficultyLevels = _questionService.GetDifficultyLevelsSelectList();
 
             return View(questionDto);
         }
@@ -65,7 +56,7 @@ namespace WebApp4a.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _questionRepository.AddAsync(questionDto);
+                await _questionService.AddAsync(questionDto);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -75,10 +66,10 @@ namespace WebApp4a.Controllers
         // GET: Questions/Edit/5
         public async Task<ActionResult> Edit(int id)
         {
-            var questionDto = await _questionRepository.CreateDto(id);
+            var questionDto = await _questionService.CreateDto(id);
 
-            ViewBag.Topics = _questionRepository.GetTopicsSelectList();
-            ViewBag.DifficultyLevels = _questionRepository.GetDifficultyLevelsSelectList();
+            ViewBag.Topics = _questionService.GetTopicsSelectList();
+            ViewBag.DifficultyLevels = _questionService.GetDifficultyLevelsSelectList();
 
             return View(questionDto);
         }
@@ -90,7 +81,7 @@ namespace WebApp4a.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _questionRepository.UpdateAsync(id, questionDto);
+                await _questionService.UpdateAsync(id, questionDto);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -100,12 +91,12 @@ namespace WebApp4a.Controllers
         // GET: Questions/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || !_questionRepository.QuestionsDbSetExists())
+            if (id == null || !_questionService.QuestionsDbSetExists())
             {
                 return NotFound();
             }
 
-            var question = await _questionRepository.GetAsync(id, false);
+            var question = await _questionService.GetAsync(id, false);
             if (question == null)
             {
                 return NotFound();
@@ -119,12 +110,12 @@ namespace WebApp4a.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (!_questionRepository.QuestionsDbSetExists())
+            if (!_questionService.QuestionsDbSetExists())
             {
                 return Problem("Entity set 'ApplicationDbContext.Questions' is null.");
             }
 
-            await _questionRepository.Delete(id);
+            await _questionService.Delete(id);
 
             return RedirectToAction(nameof(Index));
         }
