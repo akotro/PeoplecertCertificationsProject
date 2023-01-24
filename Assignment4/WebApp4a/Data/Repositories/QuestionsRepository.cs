@@ -20,6 +20,7 @@ public class QuestionsRepository : IQuestionsRepository
         return await _context.Questions
             .Include(q => q.DifficultyLevel)
             .Include(q => q.Topic)
+            .Include(q => q.Options)
             .ToListAsync();
     }
 
