@@ -1,10 +1,16 @@
+using System.Text.Json.Serialization;
 using Assignment4Final.Data;
-using Assignment4Final.Models;
+using Assignment4Final.Data.Repositories;
+using Assignment4Final.Data.Seed;
+using Assignment4Final.Services;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
-
+using ModelLibrary.Models;
+using ModelLibrary.Models.DTO.Questions;
+using ModelLibrary.Models.Questions;
 
 namespace Assignment4Final
 {
@@ -15,22 +21,64 @@ namespace Assignment4Final
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(connectionString));
+            var connectionString =
+                builder.Configuration.GetConnectionString("DefaultConnection")
+                ?? throw new InvalidOperationException(
+                    "Connection string 'DefaultConnection' not found."
+                );
+            builder.Services.AddDbContext<ApplicationDbContext>(
+                options => options.UseSqlServer(connectionString)
+            );
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            builder.Services
+                .AddDefaultIdentity<AppUser>(
+                    options =>
+                        options.SignIn.RequireConfirmedAccount =
+                            false // NOTE:(akotro) TEMPORARY
+                )
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            builder.Services.AddIdentityServer()
-                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+            builder.Services
+                .AddIdentityServer()
+                .AddApiAuthorization<AppUser, ApplicationDbContext>();
 
-            builder.Services.AddAuthentication()
-                .AddIdentityServerJwt();
+            builder.Services.AddAuthentication().AddIdentityServerJwt();
 
-            builder.Services.AddControllersWithViews();
+            builder.Services
+                .AddControllersWithViews()
+                .AddJsonOptions( // NOTE:(akotro) Configure JsonSerializerOptions
+                    options =>
+                        options.JsonSerializerOptions.ReferenceHandler =
+                            ReferenceHandler.Preserve
+                );
+            builder.Services.AddSwaggerGen(); // NOTE:(akotro) Add Swagger
+
             builder.Services.AddRazorPages();
+
+            // -----------------------------
+            //Agkiz, Added Transient service repo
+            builder.Services.AddTransient<IExamRepository, ExamRepository>();
+
+            // NOTE:(akotro) Should repositories be added as Scoped since we want
+            // only one DbContext for each client request?
+            builder.Services.AddScoped<IQuestionsRepository, QuestionsRepository>();
+            builder.Services.AddTransient<QuestionsService>();
+            // -----------------------------
+
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.CreateMap<OptionDto, Option>().ReverseMap();
+                // mc.CreateMap<Option, OptionDto>();
+                mc.CreateMap<QuestionDto, Question>()
+                    .ForMember(dest => dest.Options,
+                        opt => opt.MapFrom(src => src.Options))
+                    .ReverseMap();
+                // mc.CreateMap<Question, QuestionDto>()
+                //     .ForMember(dest => dest.Options, opt => opt.MapFrom(src => src.Options));
+            });
+            IMapper mapper = mapperConfig.CreateMapper();
+            builder.Services.AddSingleton(mapper);
 
             var app = builder.Build();
 
@@ -38,6 +86,10 @@ namespace Assignment4Final
             if (app.Environment.IsDevelopment())
             {
                 app.UseMigrationsEndPoint();
+
+                // NOTE:(akotro) Use Swagger
+                app.UseSwagger();
+                app.UseSwaggerUI();
             }
             else
             {
@@ -53,12 +105,22 @@ namespace Assignment4Final
             app.UseIdentityServer();
             app.UseAuthorization();
 
-            app.MapControllerRoute(
-                name: "default",
+            app.MapControllerRoute(name: "default",
                 pattern: "{controller}/{action=Index}/{id?}");
             app.MapRazorPages();
 
             app.MapFallbackToFile("index.html");
+
+            //checks for all the latest migrations
+            //also creates db ifNotExists
+            using (var scope = app.Services.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                db.Database.Migrate();
+            }
+
+            // AGkiz - Seeds dummy data to DB
+            DbSeed.Seed(app);
 
             app.Run();
         }
