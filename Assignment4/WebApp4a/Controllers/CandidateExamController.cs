@@ -16,10 +16,14 @@ namespace WebApp4a.Controllers
         private readonly ApplicationDbContext _context;
         private Service _service;
         private readonly UserManager<AppUser> _userManager;
-        
+
         private readonly IExamRepository _examRepository;
 
-        public CandidateExamController(ApplicationDbContext context,UserManager<AppUser> userManager, IExamRepository adminrepository)
+        public CandidateExamController(
+            ApplicationDbContext context,
+            UserManager<AppUser> userManager,
+            IExamRepository adminrepository
+        )
         {
             _context = context;
             _service = new Service(_context);
@@ -30,9 +34,8 @@ namespace WebApp4a.Controllers
         public async Task<IActionResult> Results(CandidateExam candidateExam)
         {
             ViewBag.Title = "Results";
-            return await Task.Run(() =>View(candidateExam));
+            return await Task.Run(() => View(candidateExam));
         }
-
 
         // GET: CandidateExams
         public async Task<IActionResult> Index()
@@ -48,12 +51,13 @@ namespace WebApp4a.Controllers
                 return NotFound();
             }
 
-            var candidateExam = await _context.CandidateExams
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var candidateExam =
+                await _context.CandidateExams.FirstOrDefaultAsync(m => m.Id == id);
             if (candidateExam == null)
             {
                 return NotFound();
             }
+
             //return await Task.Run(() => RedirectToAction("Exam", "Examination", candidateExam));
             return View(candidateExam);
         }
@@ -61,7 +65,6 @@ namespace WebApp4a.Controllers
         // GET: CandidateExams/Create
         public IActionResult Create()
         {
-
             var list = _service.GetExamsSelectList(_service.GetAllExams());
             ViewData.Add("examsSelectList", list);
             ViewBag.List = list;
@@ -74,31 +77,37 @@ namespace WebApp4a.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Result,MaxScore,PercentScore,ExamDate,ReportDate,CandidateScore,AssessmentCode,ExamId")] CandidateExam candidateExam
-            /*[Bind("examsSelectList")] int examsSelectList,*/ /*string UserId*/)
+        public async Task<IActionResult> Create(
+            [Bind(
+                "Id,Result,MaxScore,PercentScore,ExamDate,ReportDate,CandidateScore,AssessmentCode,ExamId"
+            )]
+            CandidateExam candidateExam
+            /*[Bind("examsSelectList")] int examsSelectList,*/
+            /*string UserId*/)
         {
-
-            //var candidate = _service.GetCandidateByUserId(UserId);
-            
-            var cands = _context.Candidates.Count();
-            var candidate = _context.Candidates.Where(cand => cand.AppUserId == _userManager.GetUserId(HttpContext.User)).FirstOrDefault();
+            var candidate = _context.Candidates
+                .Include(c => c.AppUser)
+                .Where(cand =>
+                    cand.AppUser.Id == _userManager.GetUserId(HttpContext.User))
+                .FirstOrDefault();
 
             //int examIdFromDropDown = examsSelectList;
-            candidateExam.Exam = _context.Exams.Find(candidateExam.ExamId); //me basi to id toy drop down vazei sto candidateexam to exam
+            candidateExam.Exam =
+                _context.Exams.Find(candidateExam.Exam
+                    .Id); //me basi to id toy drop down vazei sto candidateexam to exam
             candidateExam.Candidate = candidate;
-            candidateExam.CandidateId = candidate.AppUserId;
+            candidateExam.Candidate = candidate.AppUser.Candidate;
             candidateExam.ExamId = candidateExam.ExamId;
-
 
             if (ModelState.IsValid)
             {
                 _context.Add(candidateExam);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Exam","candidateExam",candidateExam);
+                return RedirectToAction("Exam", "candidateExam", candidateExam);
             }
+
             return View(candidateExam);
         }
-
 
         // Vlasis actions
 
@@ -108,27 +117,36 @@ namespace WebApp4a.Controllers
         public async Task<IActionResult> Exam(CandidateExam candidateExam)
         {
             //Note (vmavraganis): provide CandidateExam from the user selection
-            
+
             ViewBag.candExamId = candidateExam.Id;
 
             PopulateDropDownOptions();
             return View(await _examRepository.GetAllQuestionsAsync(candidateExam));
         }
 
-
         /// <summary>
         /// vmavraganis: Async Task to get the selected options from the user in each question (true || false)
         /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> GetAnswers(IEnumerable<string> DropDownOptions,int candExamId)
+        public async Task<IActionResult> GetAnswers(
+            IEnumerable<string> DropDownOptions,
+            int candExamId
+        )
         {
             if (ModelState.IsValid)
             {
-                var candExam = await _context.CandidateExams.FirstOrDefaultAsync(exams => exams.Id == candExamId);
-                var candidateExam = await _examRepository.UpdateCandidateExam(DropDownOptions, candExam);
+                var candExam = await _context.CandidateExams.FirstOrDefaultAsync(
+                    exams => exams.Id == candExamId
+                );
+                var candidateExam = await _examRepository.UpdateCandidateExam(
+                    DropDownOptions,
+                    candExam
+                );
 
-                return await Task.Run(() => RedirectToAction("Results", "CandidateExam", candidateExam));
+                return await Task.Run(
+                    () => RedirectToAction("Results", "CandidateExam", candidateExam)
+                );
             }
 
             return await Task.Run(() => RedirectToAction("Exam"));
@@ -141,7 +159,8 @@ namespace WebApp4a.Controllers
         {
             var list = new List<SelectListItem>();
             for (var i = 1; i < 5; i++)
-                list.Add(new SelectListItem { Text = i.ToString(), Value = i.ToString() });
+                list.Add(new SelectListItem
+                    { Text = i.ToString(), Value = i.ToString() });
             ViewBag.SelectOptions = list;
         }
     }

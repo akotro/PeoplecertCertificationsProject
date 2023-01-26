@@ -36,9 +36,7 @@ namespace Assignment4Final.Data
         public ApplicationDbContext(
             DbContextOptions options,
             IOptions<OperationalStoreOptions> operationalStoreOptions
-        ) : base(options, operationalStoreOptions)
-        {
-        }
+        ) : base(options, operationalStoreOptions) { }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

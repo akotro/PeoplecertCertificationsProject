@@ -7,6 +7,5 @@ public class CandidateExamAnswers
     public string? ChosenOption { get; set; }
     public bool? IsCorrect { get; set; }
 
-    public int CandidateExamId { get; set; }
     public virtual CandidateExam? CandidateExam { get; set; }
 }

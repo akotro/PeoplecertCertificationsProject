@@ -43,10 +43,12 @@ public class QuestionsRepository : IQuestionsRepository
         var question = new Question
         {
             Text = questionDto.Text,
-            TopicId = questionDto.TopicId,
-            DifficultyLevelId = questionDto.DifficultyLevelId,
+            Topic = await _context.Topics.FindAsync(questionDto.TopicId),
+            DifficultyLevel = await _context.DifficultyLevels.FindAsync(
+                questionDto.DifficultyLevelId
+            ),
             Options = questionDto.Options
-                .Select(o => new Option { Text = o.Text, Correct = o.Correct })
+                ?.Select(o => new Option { Text = o.Text, Correct = o.Correct })
                 .ToList()
         };
 
@@ -65,8 +67,10 @@ public class QuestionsRepository : IQuestionsRepository
         if (question != null)
         {
             question.Text = questionDto.Text;
-            question.TopicId = questionDto.TopicId;
-            question.DifficultyLevelId = questionDto.DifficultyLevelId;
+            question.Topic = await _context.Topics.FindAsync(questionDto.TopicId);
+            question.DifficultyLevel = await _context.DifficultyLevels.FindAsync(
+                questionDto.DifficultyLevelId
+            );
 
             var optionsToDelete = question.Options
                 .Where(o => !questionDto.Options.Any(odto => odto.Id == o.Id))
@@ -91,7 +95,7 @@ public class QuestionsRepository : IQuestionsRepository
                         {
                             Text = optionDto.Text,
                             Correct = optionDto.Correct,
-                            QuestionId = question.Id
+                            Question = question
                         }
                     );
                 }
@@ -137,8 +141,7 @@ public class QuestionsRepository : IQuestionsRepository
     public IQueryable<SelectListItem> GetDifficultyLevelsSelectList()
     {
         return _context.DifficultyLevels.Select(
-            d => new SelectListItem
-                { Text = d.Difficulty.ToString(), Value = d.Id.ToString() }
+            d => new SelectListItem { Text = d.Difficulty.ToString(), Value = d.Id.ToString() }
         );
     }
 
@@ -160,14 +163,16 @@ public class QuestionsRepository : IQuestionsRepository
     {
         var question = await _context.Questions
             .Include(q => q.Options)
+            .Include(q => q.Topic)
+            .Include(q => q.DifficultyLevel)
             .FirstOrDefaultAsync(q => q.Id == id);
 
         return new QuestionDto
         {
             Id = question.Id,
             Text = question.Text,
-            TopicId = question.TopicId,
-            DifficultyLevelId = question.DifficultyLevelId,
+            TopicId = question.Topic.Id,
+            DifficultyLevelId = question.DifficultyLevel.Id,
             Options = question.Options
                 .Select(
                     o =>
