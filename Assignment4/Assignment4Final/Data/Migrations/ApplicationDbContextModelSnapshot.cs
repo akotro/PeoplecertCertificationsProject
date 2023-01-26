@@ -409,13 +409,13 @@ namespace Assignment4Final.Data.Migrations
                     b.Property<string>("Address2")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CandidateId")
+                    b.Property<string>("CandidateAppUserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("City")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CountryId")
+                    b.Property<int?>("CountryId")
                         .HasColumnType("int");
 
                     b.Property<string>("PostalCode")
@@ -426,7 +426,7 @@ namespace Assignment4Final.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CandidateId");
+                    b.HasIndex("CandidateAppUserId");
 
                     b.HasIndex("CountryId");
 
@@ -450,13 +450,13 @@ namespace Assignment4Final.Data.Migrations
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("GenderId")
+                    b.Property<int?>("GenderId")
                         .HasColumnType("int");
 
                     b.Property<string>("Landline")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("LanguageId")
+                    b.Property<int?>("LanguageId")
                         .HasColumnType("int");
 
                     b.Property<string>("LastName")
@@ -474,7 +474,7 @@ namespace Assignment4Final.Data.Migrations
                     b.Property<string>("PhotoIdNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PhotoIdTypeId")
+                    b.Property<int?>("PhotoIdTypeId")
                         .HasColumnType("int");
 
                     b.HasKey("AppUserId");
@@ -629,7 +629,7 @@ namespace Assignment4Final.Data.Migrations
                     b.Property<string>("AssessmentCode")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CandidateId")
+                    b.Property<string>("CandidateAppUserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int?>("CandidateScore")
@@ -638,7 +638,7 @@ namespace Assignment4Final.Data.Migrations
                     b.Property<DateTime?>("ExamDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ExamId")
+                    b.Property<int?>("ExamId")
                         .HasColumnType("int");
 
                     b.Property<int?>("MaxScore")
@@ -655,7 +655,7 @@ namespace Assignment4Final.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CandidateId");
+                    b.HasIndex("CandidateAppUserId");
 
                     b.HasIndex("ExamId");
 
@@ -670,7 +670,7 @@ namespace Assignment4Final.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("CandidateExamId")
+                    b.Property<int?>("CandidateExamId")
                         .HasColumnType("int");
 
                     b.Property<string>("ChosenOption")
@@ -697,7 +697,7 @@ namespace Assignment4Final.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("CertificateId")
+                    b.Property<int?>("CertificateId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -718,7 +718,7 @@ namespace Assignment4Final.Data.Migrations
                     b.Property<bool>("Correct")
                         .HasColumnType("bit");
 
-                    b.Property<int>("QuestionId")
+                    b.Property<int?>("QuestionId")
                         .HasColumnType("int");
 
                     b.Property<string>("Text")
@@ -739,13 +739,13 @@ namespace Assignment4Final.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("DifficultyLevelId")
+                    b.Property<int?>("DifficultyLevelId")
                         .HasColumnType("int");
 
                     b.Property<string>("Text")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TopicId")
+                    b.Property<int?>("TopicId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -842,13 +842,11 @@ namespace Assignment4Final.Data.Migrations
                 {
                     b.HasOne("ModelLibrary.Models.Candidates.Candidate", "Candidate")
                         .WithMany("Address")
-                        .HasForeignKey("CandidateId");
+                        .HasForeignKey("CandidateAppUserId");
 
                     b.HasOne("ModelLibrary.Models.Candidates.Country", "Country")
                         .WithMany("Addresses")
-                        .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CountryId");
 
                     b.Navigation("Candidate");
 
@@ -863,21 +861,15 @@ namespace Assignment4Final.Data.Migrations
 
                     b.HasOne("ModelLibrary.Models.Candidates.Gender", "Gender")
                         .WithMany("Candidates")
-                        .HasForeignKey("GenderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("GenderId");
 
                     b.HasOne("ModelLibrary.Models.Candidates.Language", "Language")
                         .WithMany("Candidates")
-                        .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("LanguageId");
 
                     b.HasOne("ModelLibrary.Models.Candidates.PhotoIdType", "PhotoIdType")
                         .WithMany("Candidates")
-                        .HasForeignKey("PhotoIdTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PhotoIdTypeId");
 
                     b.Navigation("AppUser");
 
@@ -892,13 +884,11 @@ namespace Assignment4Final.Data.Migrations
                 {
                     b.HasOne("ModelLibrary.Models.Candidates.Candidate", "Candidate")
                         .WithMany("CandidateExams")
-                        .HasForeignKey("CandidateId");
+                        .HasForeignKey("CandidateAppUserId");
 
                     b.HasOne("ModelLibrary.Models.Exams.Exam", "Exam")
                         .WithMany("CandidateExams")
-                        .HasForeignKey("ExamId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ExamId");
 
                     b.Navigation("Candidate");
 
@@ -909,9 +899,7 @@ namespace Assignment4Final.Data.Migrations
                 {
                     b.HasOne("ModelLibrary.Models.Exams.CandidateExam", "CandidateExam")
                         .WithMany("CandidateExamAnswers")
-                        .HasForeignKey("CandidateExamId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CandidateExamId");
 
                     b.Navigation("CandidateExam");
                 });
@@ -920,9 +908,7 @@ namespace Assignment4Final.Data.Migrations
                 {
                     b.HasOne("ModelLibrary.Models.Certificates.Certificate", "Certificate")
                         .WithMany("Exams")
-                        .HasForeignKey("CertificateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CertificateId");
 
                     b.Navigation("Certificate");
                 });
@@ -931,9 +917,7 @@ namespace Assignment4Final.Data.Migrations
                 {
                     b.HasOne("ModelLibrary.Models.Questions.Question", "Question")
                         .WithMany("Options")
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("QuestionId");
 
                     b.Navigation("Question");
                 });
@@ -942,15 +926,11 @@ namespace Assignment4Final.Data.Migrations
                 {
                     b.HasOne("ModelLibrary.Models.Certificates.DifficultyLevel", "DifficultyLevel")
                         .WithMany("Questions")
-                        .HasForeignKey("DifficultyLevelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DifficultyLevelId");
 
                     b.HasOne("ModelLibrary.Models.Certificates.Topic", "Topic")
                         .WithMany("Questions")
-                        .HasForeignKey("TopicId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TopicId");
 
                     b.Navigation("DifficultyLevel");
 

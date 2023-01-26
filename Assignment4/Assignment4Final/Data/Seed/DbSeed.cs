@@ -122,8 +122,7 @@ namespace Assignment4Final.Data.Seed
 
                 foreach (var value in Enum.GetValues(typeof(PhotoIdTypeEnum)))
                 {
-                    photoIdTypeEntries.Add(new PhotoIdType
-                        { IdType = (PhotoIdTypeEnum)value });
+                    photoIdTypeEntries.Add(new PhotoIdType { IdType = (PhotoIdTypeEnum)value });
                 }
 
                 // Add and save PhotoIdType Options
@@ -270,8 +269,7 @@ namespace Assignment4Final.Data.Seed
                     .RuleFor(u => u.DateOfBirth, f => f.Date.Past(100, DateTime.Now))
                     .RuleFor(u => u.PhotoIdIssueDate, f => f.Date.Past(10, DateTime.Now))
                     .RuleFor(u => u.Gender, f => f.PickRandom(db.Genders.ToList()))
-                    .RuleFor(u => u.PhotoIdType,
-                        f => f.PickRandom(db.PhotoIdTypes.ToList()))
+                    .RuleFor(u => u.PhotoIdType, f => f.PickRandom(db.PhotoIdTypes.ToList()))
                     .RuleFor(u => u.Language, f => f.PickRandom(db.Languages.ToList()));
 
                 var fakeCandidates = candidateFaker.Generate(db.Users.Count() - 1);
@@ -396,12 +394,14 @@ namespace Assignment4Final.Data.Seed
                     .RuleFor(c => c.Candidate, f => f.PickRandom(db.Candidates.ToList()))
                     .RuleFor(
                         c => c.CandidateExamAnswers,
-                        f => { return candiExamAnsFaker.Generate(100); }
+                        f =>
+                        {
+                            return candiExamAnsFaker.Generate(100);
+                        }
                     )
                     .RuleFor(
                         c => c.ReportDate,
-                        f => f.Date.Between(new DateTime(2022, 6, 10, 0, 0, 0),
-                            DateTime.Now)
+                        f => f.Date.Between(new DateTime(2022, 6, 10, 0, 0, 0), DateTime.Now)
                     );
                 var fakecandiExams = candiExamFaker.Generate(10);
 
@@ -430,7 +430,6 @@ namespace Assignment4Final.Data.Seed
                     item.Questions = examQuestions;
                 }
             }
-
             ;
             db.SaveChanges();
 

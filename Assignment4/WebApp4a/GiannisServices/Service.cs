@@ -17,7 +17,7 @@ namespace WebApp4a.GiannisServices
 
         public Candidate GetCandidateByUserId(string userId)
         {
-            return _context.Candidates.Where(cand => cand.AppUserId == userId).FirstOrDefault();
+            return _context.Candidates.Where(cand => cand.AppUser.Id == userId).FirstOrDefault();
         }
 
         public List<Exam> GetAllExams()

@@ -33,9 +33,7 @@ namespace Assignment4Final
 
             builder.Services
                 .AddDefaultIdentity<AppUser>(
-                    options =>
-                        options.SignIn.RequireConfirmedAccount =
-                            false // NOTE:(akotro) TEMPORARY
+                    options => options.SignIn.RequireConfirmedAccount = false
                 )
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
@@ -49,8 +47,8 @@ namespace Assignment4Final
                 .AddControllersWithViews()
                 .AddJsonOptions( // NOTE:(akotro) Configure JsonSerializerOptions
                     options =>
-                        options.JsonSerializerOptions.ReferenceHandler =
-                            ReferenceHandler.Preserve
+                        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve
+                // TODO:(akotro) JsonStringEnumConverter
                 );
             builder.Services.AddSwaggerGen(); // NOTE:(akotro) Add Swagger
 
@@ -71,8 +69,7 @@ namespace Assignment4Final
                 mc.CreateMap<OptionDto, Option>().ReverseMap();
                 // mc.CreateMap<Option, OptionDto>();
                 mc.CreateMap<QuestionDto, Question>()
-                    .ForMember(dest => dest.Options,
-                        opt => opt.MapFrom(src => src.Options))
+                    .ForMember(dest => dest.Options, opt => opt.MapFrom(src => src.Options))
                     .ReverseMap();
                 // mc.CreateMap<Question, QuestionDto>()
                 //     .ForMember(dest => dest.Options, opt => opt.MapFrom(src => src.Options));
@@ -105,8 +102,7 @@ namespace Assignment4Final
             app.UseIdentityServer();
             app.UseAuthorization();
 
-            app.MapControllerRoute(name: "default",
-                pattern: "{controller}/{action=Index}/{id?}");
+            app.MapControllerRoute(name: "default", pattern: "{controller}/{action=Index}/{id?}");
             app.MapRazorPages();
 
             app.MapFallbackToFile("index.html");

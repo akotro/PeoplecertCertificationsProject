@@ -31,7 +31,7 @@ namespace Assignment4Final.Data.Repositories
             var exam = await Task.Run(() => _context.Exams
                 .Include(p => p.Questions)
                 .ThenInclude(p => p.Options)
-                .Where(p => p.Id == candidateExam.ExamId).SingleOrDefault());
+                .Where(p => p == candidateExam.Exam).SingleOrDefault());
 
             if (exam != null)
             {

@@ -16,7 +16,7 @@ public class CandidateExamService
 
     public Candidate GetCandidateByUserId(string userId)
     {
-        return _context.Candidates.Where(cand => cand.AppUserId == userId)
+        return _context.Candidates.Where(cand => cand.AppUser.Id == userId)
             .FirstOrDefault();
     }
 
