@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using ModelLibrary.Models;
+using ModelLibrary.Models.Certificates;
+using ModelLibrary.Models.DTO.Certificates;
 using ModelLibrary.Models.DTO.Questions;
 using ModelLibrary.Models.Questions;
 
@@ -45,11 +47,12 @@ namespace Assignment4Final
 
             builder.Services
                 .AddControllersWithViews()
-                .AddJsonOptions( // NOTE:(akotro) Configure JsonSerializerOptions
-                    options =>
-                        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve
-                // TODO:(akotro) JsonStringEnumConverter
-                );
+                .AddJsonOptions(options =>
+                {
+                    // NOTE:(akotro) Configure JsonSerializerOptions
+                    // options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                });
             builder.Services.AddSwaggerGen(); // NOTE:(akotro) Add Swagger
 
             builder.Services.AddRazorPages();
@@ -67,12 +70,11 @@ namespace Assignment4Final
             var mapperConfig = new MapperConfiguration(mc =>
             {
                 mc.CreateMap<OptionDto, Option>().ReverseMap();
-                // mc.CreateMap<Option, OptionDto>();
                 mc.CreateMap<QuestionDto, Question>()
                     .ForMember(dest => dest.Options, opt => opt.MapFrom(src => src.Options))
                     .ReverseMap();
-                // mc.CreateMap<Question, QuestionDto>()
-                //     .ForMember(dest => dest.Options, opt => opt.MapFrom(src => src.Options));
+                mc.CreateMap<TopicDto, Topic>().ReverseMap();
+                mc.CreateMap<DifficultyLevelDto, DifficultyLevel>().ReverseMap();
             });
             IMapper mapper = mapperConfig.CreateMapper();
             builder.Services.AddSingleton(mapper);

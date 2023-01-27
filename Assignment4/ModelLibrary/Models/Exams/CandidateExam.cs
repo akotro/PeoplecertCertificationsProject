@@ -12,9 +12,11 @@ public class CandidateExam
     public DateTime? ReportDate { get; set; }
     public int? CandidateScore { get; set; }
     public string? AssessmentCode { get; set; }
+    public string? Voucher { get; set; }
+    public bool? IsModerated { get; set; }
+
     public virtual Candidate? Candidate { get; set; }
     public virtual Exam? Exam { get; set; }
 
-    public virtual ICollection<CandidateExamAnswers>?
-        CandidateExamAnswers { get; set; } // NOTE:(akotro) Reverse Navigation
+    public virtual ICollection<CandidateExamAnswers>? CandidateExamAnswers { get; set; } // NOTE:(akotro) Reverse Navigation
 }
