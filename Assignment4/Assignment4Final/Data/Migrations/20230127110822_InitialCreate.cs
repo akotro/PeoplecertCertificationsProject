@@ -461,6 +461,8 @@ namespace Assignment4Final.Data.Migrations
                     ReportDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CandidateScore = table.Column<int>(type: "int", nullable: true),
                     AssessmentCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Voucher = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsModerated = table.Column<bool>(type: "bit", nullable: true),
                     CandidateAppUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     ExamId = table.Column<int>(type: "int", nullable: true)
                 },
@@ -532,6 +534,7 @@ namespace Assignment4Final.Data.Migrations
                     CorrectOption = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ChosenOption = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsCorrect = table.Column<bool>(type: "bit", nullable: true),
+                    IsCorrectModerated = table.Column<bool>(type: "bit", nullable: true),
                     CandidateExamId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
