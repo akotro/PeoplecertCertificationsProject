@@ -2,21 +2,25 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using ModelLibrary.Models.Questions;
 using ModelLibrary.Models.DTO.Questions;
+using AutoMapper;
+using ModelLibrary.Models.Certificates;
+using ModelLibrary.Models.DTO.Certificates;
 
 namespace Assignment4Final.Data.Repositories;
 
 public class QuestionsRepository : IQuestionsRepository
 {
     private readonly ApplicationDbContext _context;
+    private readonly IMapper _mapper;
 
-    public QuestionsRepository(ApplicationDbContext context)
+    public QuestionsRepository(ApplicationDbContext context, IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
     public async Task<List<Question>> GetAllAsync()
     {
-        // NOTE:(akotro) Without Options
         return await _context.Questions
             .Include(q => q.DifficultyLevel)
             .Include(q => q.Topic)
@@ -43,10 +47,14 @@ public class QuestionsRepository : IQuestionsRepository
         var question = new Question
         {
             Text = questionDto.Text,
-            Topic = await _context.Topics.FindAsync(questionDto.TopicId),
-            DifficultyLevel = await _context.DifficultyLevels.FindAsync(
-                questionDto.DifficultyLevelId
-            ),
+            Topic =
+                questionDto.Topic != null
+                    ? _mapper.Map<Topic>(questionDto.Topic)
+                    : await _context.Topics.FindAsync(questionDto.TopicId),
+            DifficultyLevel =
+                questionDto.DifficultyLevel != null
+                    ? _mapper.Map<DifficultyLevel>(questionDto.DifficultyLevel)
+                    : await _context.DifficultyLevels.FindAsync(questionDto.DifficultyLevelId),
             Options = questionDto.Options
                 ?.Select(o => new Option { Text = o.Text, Correct = o.Correct })
                 .ToList()
@@ -60,44 +68,49 @@ public class QuestionsRepository : IQuestionsRepository
 
     public async Task<Question?> UpdateAsync(int id, QuestionDto questionDto)
     {
-        var question = await _context.Questions
-            .Include(q => q.Options)
-            .FirstOrDefaultAsync(q => q.Id == id);
+        var question = await GetAsync(id);
 
         if (question != null)
         {
             question.Text = questionDto.Text;
-            question.Topic = await _context.Topics.FindAsync(questionDto.TopicId);
-            question.DifficultyLevel = await _context.DifficultyLevels.FindAsync(
-                questionDto.DifficultyLevelId
-            );
+            question.Topic =
+                questionDto.Topic != null
+                    ? _mapper.Map<Topic>(questionDto.Topic)
+                    : await _context.Topics.FindAsync(questionDto.TopicId);
+            question.DifficultyLevel =
+                questionDto.DifficultyLevel != null
+                    ? _mapper.Map<DifficultyLevel>(questionDto.DifficultyLevel)
+                    : await _context.DifficultyLevels.FindAsync(questionDto.DifficultyLevelId);
 
-            var optionsToDelete = question.Options
-                .Where(o => !questionDto.Options.Any(odto => odto.Id == o.Id))
-                .ToList();
-            foreach (var option in optionsToDelete)
+            if (questionDto.Options != null)
             {
-                _context.Remove(option);
-            }
-
-            foreach (var optionDto in questionDto.Options)
-            {
-                var option = question.Options.FirstOrDefault(o => o.Id == optionDto.Id);
-                if (option != null)
+                var optionsToDelete = question.Options
+                    .Where(o => !questionDto.Options.Any(odto => odto.Id == o.Id))
+                    .ToList();
+                foreach (var option in optionsToDelete)
                 {
-                    option.Text = optionDto.Text;
-                    option.Correct = optionDto.Correct;
+                    _context.Remove(option);
                 }
-                else
+
+                foreach (var optionDto in questionDto.Options)
                 {
-                    question.Options.Add(
-                        new Option
-                        {
-                            Text = optionDto.Text,
-                            Correct = optionDto.Correct,
-                            Question = question
-                        }
-                    );
+                    var option = question.Options.FirstOrDefault(o => o.Id == optionDto.Id);
+                    if (option != null)
+                    {
+                        option.Text = optionDto.Text;
+                        option.Correct = optionDto.Correct;
+                    }
+                    else
+                    {
+                        question.Options.Add(
+                            new Option
+                            {
+                                Text = optionDto.Text,
+                                Correct = optionDto.Correct,
+                                Question = question
+                            }
+                        );
+                    }
                 }
             }
 

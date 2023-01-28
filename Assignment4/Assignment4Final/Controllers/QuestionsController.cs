@@ -1,6 +1,7 @@
 using Assignment4Final.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using ModelLibrary.Models.DTO;
 using ModelLibrary.Models.DTO.Questions;
 
 namespace Assignment4Final.Controllers
@@ -22,89 +23,176 @@ namespace Assignment4Final.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
+            // TODO:(akotro) These checks should probably happen in the service or repository!!
+            var response = new BaseResponse<List<QuestionDto>>
+            {
+                RequestId = Guid.NewGuid().ToString(), // FIX:(akotro) Get this from request?
+            };
+
             if (!_questionService.QuestionsDbSetExists())
             {
-                return Problem("Entity set 'ApplicationDbContext.Questions' is null.");
+                response.Success = false;
+                response.Message = "Entity set 'ApplicationDbContext.Questions' is null.";
+                return NotFound(response);
             }
 
-            // return Ok(await _questionService.GetAllAsync());
-            return Ok(
-                _mapper.Map<List<QuestionDto>>(await _questionService.GetAllAsync()));
+            var questionDtos = _mapper.Map<List<QuestionDto>>(await _questionService.GetAllAsync());
+
+            if (questionDtos == null)
+            {
+                response.Success = false;
+                response.Message = "Could not get all Questions.";
+                return NotFound(response);
+            }
+
+            response.Success = true;
+            response.Data = questionDtos;
+
+            return Ok(response);
         }
 
         // GET: api/questions/5
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
+            var response = new BaseResponse<QuestionDto>
+            {
+                RequestId = Guid.NewGuid().ToString(), // FIX:(akotro) Get this from request?
+            };
+
             if (!_questionService.QuestionsDbSetExists())
             {
-                return NotFound();
+                response.Success = false;
+                response.Message = "Entity set 'ApplicationDbContext.Questions' is null.";
+                return NotFound(response);
             }
 
-            var question = await _questionService.GetAsync(id);
-            if (question == null)
+            var questionDto = _mapper.Map<QuestionDto>(await _questionService.GetAsync(id));
+
+            if (questionDto == null)
             {
-                return NotFound();
+                response.Success = false;
+                response.Message = $"Could not get Question with id: {id}";
+                return NotFound(response);
             }
 
-            // return Ok(question);
-            return Ok(_mapper.Map<QuestionDto>(question));
+            response.Success = true;
+            response.Data = questionDto;
+
+            return Ok(response);
         }
 
         // POST: api/questions
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] QuestionDto questionDto)
         {
+            var response = new BaseResponse<QuestionDto>
+            {
+                RequestId = Guid.NewGuid().ToString(), // FIX:(akotro) Get this from request?
+            };
+
             if (!_questionService.QuestionsDbSetExists())
             {
-                return NotFound();
+                response.Success = false;
+                response.Message = "Entity set 'ApplicationDbContext.Questions' is null.";
+                return NotFound(response);
             }
 
             if (ModelState.IsValid)
             {
-                var addedQuestion = await _questionService.AddAsync(questionDto);
-                var addedQuestionDto = _mapper.Map<QuestionDto>(addedQuestion);
-                // return CreatedAtAction(nameof(Get), new { id = addedQuestion.Id }, addedQuestion);
-                return CreatedAtAction(
-                    nameof(Get),
-                    new { id = addedQuestionDto.Id },
-                    addedQuestionDto
+                var addedQuestionDto = _mapper.Map<QuestionDto>(
+                    await _questionService.AddAsync(questionDto)
                 );
+
+                if (addedQuestionDto == null)
+                {
+                    response.Success = false;
+                    response.Message = "Error in creating question.";
+                    return BadRequest(response);
+                }
+
+                response.Success = true;
+                response.Data = addedQuestionDto;
+
+                return CreatedAtAction(nameof(Get), new { id = addedQuestionDto.Id }, response);
             }
 
-            return BadRequest();
+            response.Success = false;
+            response.Message = "Invalid model provided.";
+
+            return BadRequest(response);
         }
 
         // PUT: api/questions/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id,
-            [FromBody] QuestionDto questionDto)
+        public async Task<IActionResult> Update(int id, [FromBody] QuestionDto questionDto)
         {
+            var response = new BaseResponse<QuestionDto>
+            {
+                RequestId = Guid.NewGuid().ToString(), // FIX:(akotro) Get this from request?
+            };
+
             if (!_questionService.QuestionsDbSetExists())
             {
-                return NotFound();
+                response.Success = false;
+                response.Message = "Entity set 'ApplicationDbContext.Questions' is null.";
+                return NotFound(response);
             }
 
             if (ModelState.IsValid)
             {
-                await _questionService.UpdateAsync(id, questionDto);
-                return NoContent();
+                var updatedQuestionDto = _mapper.Map<QuestionDto>(
+                    await _questionService.UpdateAsync(id, questionDto)
+                );
+
+                if (updatedQuestionDto == null)
+                {
+                    response.Success = false;
+                    response.Message = $"Error in updating Question with id: {id}";
+                    return Conflict(response);
+                }
+
+                response.Success = true;
+                response.Data = updatedQuestionDto;
+
+                return Ok(response);
             }
 
-            return BadRequest();
+            response.Success = false;
+            response.Message = "Invalid model provided.";
+
+            return BadRequest(response);
         }
 
         // DELETE: api/questions/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
+            var response = new BaseResponse<QuestionDto>
+            {
+                RequestId = Guid.NewGuid().ToString(), // FIX:(akotro) Get this from request?
+            };
+
             if (!_questionService.QuestionsDbSetExists())
             {
-                return NotFound();
+                response.Success = false;
+                response.Message = "Entity set 'ApplicationDbContext.Questions' is null.";
+                return NotFound(response);
             }
 
-            await _questionService.Delete(id);
-            return NoContent();
+            var deletedQuestionDto = _mapper.Map<QuestionDto>(await _questionService.Delete(id));
+
+            if (deletedQuestionDto == null)
+            {
+                response.Success = false;
+                response.Message = $"Error in deleting Question with id: {id}";
+                return NotFound(response);
+            }
+
+            response.Success = true;
+            response.Data = deletedQuestionDto;
+
+            return Ok(response);
         }
     }
 }
