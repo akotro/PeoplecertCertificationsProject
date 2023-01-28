@@ -10,18 +10,18 @@ namespace Assignment4Final.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ExamsController : ControllerBase
+    public class ExamController : ControllerBase
     {
         private readonly ExamService _examService;
 
-        public ExamsController(ExamService examService)
+        public ExamController(ExamService examService)
         {
             _examService= examService;
         }
         [HttpGet]  //GET: Return all the available Exams in db 
         public async Task<ActionResult<List<ExamDto>>> GetAll()
         {
-            var exams = await  _examService.GetExamsAsync();
+            var exams = await  _examService.GetListOfExamsAsync();
             return Ok(_examService.GetExamDtoList(exams));
 
         }

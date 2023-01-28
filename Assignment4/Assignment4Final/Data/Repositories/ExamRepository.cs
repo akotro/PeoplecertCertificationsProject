@@ -20,5 +20,13 @@ namespace Assignment4Final.Data.Repositories
             }
             return await _context.Exams.ToListAsync();
         }
+
+
+        public async Task<Exam?> GetExamAsync(int id)
+        {
+           return await  _context.Exams.FindAsync(id);
+        }
+
+       
     }
 }

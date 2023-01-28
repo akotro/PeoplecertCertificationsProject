@@ -8,15 +8,15 @@ namespace Assignment4Final.Services
     public class ExamService
     {
         private readonly ExamRepository _repository;
-        private readonly IMapper _mappers;
+        private readonly IMapper _mapper;
 
         public ExamService(ExamRepository repository, IMapper mapper)
         {
             _repository = repository;
-            _mappers = mapper;
+            _mapper = mapper;
         }
         
-        public async Task<List<Exam>> GetExamsAsync()
+        public async Task<List<Exam>> GetListOfExamsAsync()
         {
             return await _repository.GetAllExamsAsync();
         }
@@ -24,7 +24,18 @@ namespace Assignment4Final.Services
 
         public List<ExamDto> GetExamDtoList(List<Exam> exams)
         {
-            return _mappers.Map<List<ExamDto>>(exams);
+            return _mapper.Map<List<ExamDto>>(exams);
+        }
+
+        
+
+        public Exam GetExamFromExamDto(ExamDto examDto)
+        {
+            return _mapper.Map<Exam>(examDto);
+        }
+        public async Task<Exam?> GetExamAsync(int id)
+        {
+            return await _repository.GetExamAsync(id);
         }
 
 

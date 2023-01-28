@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ModelLibrary.Models.DTO.Exams
+namespace ModelLibrary.Models.DTO.CandidateExam
 {
-    public class ExamDto
+    public class CandidateExamDto
     {
-
         public int Id { get; set; }
-        public string CertificateTitle { get; set; }
+        public string ExamCertificateTitle { get; set; }
     }
 }
