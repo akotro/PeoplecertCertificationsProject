@@ -25,7 +25,7 @@ namespace Assignment4Final.Controllers
         {
             var response = new BaseResponse<List<QuestionDto>>
             {
-                RequestId = Guid.NewGuid().ToString(), // FIX:(akotro) Get this from request?
+                RequestId = Guid.NewGuid().ToString()
             };
 
             var questionDtos = _mapper.Map<List<QuestionDto>>(await _questionService.GetAllAsync());

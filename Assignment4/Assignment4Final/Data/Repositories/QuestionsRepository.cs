@@ -133,11 +133,11 @@ public class QuestionsRepository : IQuestionsRepository
 
         return null;
     }
-
     public bool QuestionsDbSetExists()
     {
         return _context.Questions != null;
     }
+
 
     public bool QuestionExists(int id)
     {
