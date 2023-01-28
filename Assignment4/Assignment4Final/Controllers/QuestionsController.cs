@@ -23,18 +23,10 @@ namespace Assignment4Final.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            // TODO:(akotro) These checks should probably happen in the service or repository!!
             var response = new BaseResponse<List<QuestionDto>>
             {
                 RequestId = Guid.NewGuid().ToString(), // FIX:(akotro) Get this from request?
             };
-
-            if (!_questionService.QuestionsDbSetExists())
-            {
-                response.Success = false;
-                response.Message = "Entity set 'ApplicationDbContext.Questions' is null.";
-                return NotFound(response);
-            }
 
             var questionDtos = _mapper.Map<List<QuestionDto>>(await _questionService.GetAllAsync());
 
