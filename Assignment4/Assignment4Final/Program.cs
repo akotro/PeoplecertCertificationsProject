@@ -12,6 +12,8 @@ using ModelLibrary.Models;
 using ModelLibrary.Models.Certificates;
 using ModelLibrary.Models.DTO.Certificates;
 using ModelLibrary.Models.DTO.Questions;
+using ModelLibrary.Models.DTO.Exams;
+using ModelLibrary.Models.Exams;
 using ModelLibrary.Models.Questions;
 
 namespace Assignment4Final
@@ -59,12 +61,15 @@ namespace Assignment4Final
 
             // -----------------------------
             //Agkiz, Added Transient service repo
-            builder.Services.AddTransient<IExamRepository, ExamRepository>();
+            builder.Services.AddTransient<IExamRepository, NotExamRepository>();
 
             // NOTE:(akotro) Should repositories be added as Scoped since we want
             // only one DbContext for each client request?
             builder.Services.AddScoped<IQuestionsRepository, QuestionsRepository>();
             builder.Services.AddTransient<QuestionsService>();
+
+            builder.Services.AddScoped<ExamRepository>();
+            builder.Services.AddScoped<ExamService>();
             // -----------------------------
 
             var mapperConfig = new MapperConfiguration(mc =>
@@ -75,6 +80,9 @@ namespace Assignment4Final
                     .ReverseMap();
                 mc.CreateMap<TopicDto, Topic>().ReverseMap();
                 mc.CreateMap<DifficultyLevelDto, DifficultyLevel>().ReverseMap();
+
+                mc.CreateMap<Exam, ExamDto>().ForPath(dest => dest.CertificateTitle, opt => opt
+                .MapFrom(src => src.Certificate.Title)).ReverseMap();  
             });
             IMapper mapper = mapperConfig.CreateMapper();
             builder.Services.AddSingleton(mapper);
