@@ -1,51 +1,85 @@
 import { Form, Button, Col, Row, FloatingLabel, Stack } from 'react-bootstrap';
-import React, { useState } from 'react';
+import React, { Component, useState } from 'react';
 
 import Multiselect from 'multiselect-react-dropdown';
 
 
-function CreateCertificateForm() {
+class CreateCertificateForm extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            selectedTopics: [],
+            Title: "",
+            Description: "",
+            PassingMark: 0,
+            MaxMark: 0,
+            Category: "",
+            Active: false,
+            Topics: [
+                {
+                    "Id": 1,
+                    "MaxMarks": 100,
+                    "Name": "Math",
+                },
+                {
+                    "Id": 2,
+                    "MaxMarks": 100,
+                    "Name": "Science",
+                },
+                {
+                    "Id": 3,
+                    "MaxMarks": 100,
+                    "Name": "History",
+                },
+                {
+                    "Id": 4,
+                    "MaxMarks": 100,
+                    "Name": "English",
+                }
+            ]
 
-    const [selectedTopics, setselectedTopics] = useState([]);
-    const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("");
-    const [passingMark, setPassingMark] = useState("");
-    const [maxMark, setMaxMark] = useState(0);
-    const [category, setCategory] = useState("");
-    const [active, setActive] = useState(false);
-
-    const [topics, setTopics] = useState([
-        {
-            "Id": 1,
-            "MaxMarks": 100,
-            "Name": "Math",
-        },
-        {
-            "Id": 2,
-            "MaxMarks": 100,
-            "Name": "Science",
-        },
-        {
-            "Id": 3,
-            "MaxMarks": 100,
-            "Name": "History",
-        },
-        {
-            "Id": 4,
-            "MaxMarks": 100,
-            "Name": "English",
         }
-    ]);
+    }
+    //const[selectedTopics, setselectedTopics] = useState([]);
+    //const[Title, setTitle] = useState("");
+    //const[description, setDescription] = useState("");
+    //const[passingMark, setPassingMark] = useState("");
+    //const[maxMark, setMaxMark] = useState(0);
+    //const[category, setCategory] = useState("");
+    //const[active, setActive] = useState(false);
 
-    const CalculateMaxMarks = (selectedTopics) => {
+    //const[topics, setTopics] = useState([
+    //    {
+    //        "Id": 1,
+    //        "MaxMarks": 100,
+    //        "Name": "Math",
+    //    },
+    //    {
+    //        "Id": 2,
+    //        "MaxMarks": 100,
+    //        "Name": "Science",
+    //    },
+    //    {
+    //        "Id": 3,
+    //        "MaxMarks": 100,
+    //        "Name": "History",
+    //    },
+    //    {
+    //        "Id": 4,
+    //        "MaxMarks": 100,
+    //        "Name": "English",
+    //    }
+    //]);
+
+    CalculateMaxMarks = (selectedTopics) => {
         let total = 0;
         selectedTopics.forEach((topic) => {
             total += topic.MaxMarks;
         });
-        setMaxMark(total);
+        this.setState({ MaxMark: total });
     }
 
-    const getTopics = () => {
+    getTopics = () => {
         // make axios call 
         //setTopics(...data);
     }
@@ -53,95 +87,132 @@ function CreateCertificateForm() {
 
 
     //adds the values selectes to the list of topics 
-    const onSelect = (selectedTopics, selectedItem) => {
-        setselectedTopics(selectedTopics => [...selectedTopics, selectedItem]);
-        CalculateMaxMarks(selectedTopics);
+    onSelect = (selectedTopics, selectedItem) => {
+        //if (!selectedTopics.includes(selectedItem)) {
+
+        this.setState(prevState => ({ selectedTopics: [...prevState.selectedTopics, selectedItem] }));
+        this.CalculateMaxMarks(selectedTopics);
+        //}
     }
 
     //removes the values un-selected from the list of topics 
-    const onRemove = (selectedTopics, removedItem) => {
-        setselectedTopics(selectedTopics => selectedTopics.filter(item => item !== removedItem));
-        CalculateMaxMarks(selectedTopics);
+    onRemove = (selectedTopics, removedItem) => {
+        this.setState({ selectedTopics: selectedTopics.filter(item => item !== removedItem) });
+        this.CalculateMaxMarks(selectedTopics);
+
     }
 
-    const handleSubmit = (event) => {
+    handleChange = (event) => {
+
+        if (event.target.name == 'Active'  ) {
+            this.setState(prevState => ({
+                ...prevState,
+                [event.target.name]: event.target.checked
+
+            }));
+        } else {
+            this.setState(prevState => ({
+                ...prevState,
+                [event.target.name]: event.target.value
+
+            }));
+
+        }
+    }
+
+    handleSubmit = (event) => {
         event.preventDefault();
         // handle form submit logic here with an axios post method
+        console.log("Title = ", this.state.Title,
+            "desc = ", this.state.Description,
+            "passmark = ", this.state.passingMark,
+            "maxmark = ", this.state.maxMark,
+            "cat = ", this.state.category,
+            "active = ", this.state.active,
+            "selectedtopics = ", this.state.selectedTopics);
 
-        console.log(title, "desc = " + description, passingMark, maxMark, category, active, selectedTopics);
     }
+    render() {
+        return (
+            <Form onSubmit={this.handleSubmit} >
+                <Stack gap={3}>
+                    <Row >
+                        <Col md={10}>
+                            <Form.Group >
+                                <Form.Label>Title</Form.Label>
+                                <Form.Control type="text"
+                                    name='Title'
+                                    value={this.state.Title} onChange={this.handleChange} />
+                            </Form.Group>
 
-    return (
-        <Form onSubmit={handleSubmit}>
-            <Stack gap={3}>
-                <Row >
-                    <Col md={10}>
-                        <Form.Group >
-                            <Form.Label>Title</Form.Label>
-                            <Form.Control type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
+                        </Col>
+
+                        <Form.Group as={Col}>
+                            <Form.Label>Passing Mark</Form.Label>
+                            <Form.Control type="number" step="1" min="0"
+                                name='PassingMark'
+                                max="100" value={this.state.PassingMark} onChange={this.handleChange} />
                         </Form.Group>
+                    </Row>
+                    <Row>
+                        <Col md={10}>
+                            <Form.Group>
+                                <Form.Label>Category</Form.Label>
+                                <Form.Control type="text"
+                                    name='Category'
+                                    value={this.state.Category} onChange={this.handleChange} />
+                            </Form.Group>
 
-                    </Col>
+                        </Col>
 
-                    <Form.Group as={Col}>
-                        <Form.Label>Passing Mark</Form.Label>
-                        <Form.Control type="number" step="1" min="0"
-                            max="100" value={passingMark} onChange={(e) => setPassingMark(e.target.value)} />
-                    </Form.Group>
-                </Row>
-                <Row>
-                    <Col md={10}>
-                        <Form.Group>
-                            <Form.Label>Category</Form.Label>
-                            <Form.Control type="text" value={category} onChange={(e) => setCategory(e.target.value)} />
+                        <Form.Group as={Col}>
+                            <Form.Label>Max Mark</Form.Label>
+                            <Form.Control type="text" value={this.state.MaxMark} disabled />
                         </Form.Group>
+                    </Row>
 
-                    </Col>
-
-                    <Form.Group as={Col}>
-                        <Form.Label>Max Mark</Form.Label>
-                        <Form.Control type="text" value={maxMark} disabled />
+                    <FloatingLabel label="Description" >
+                        <Form.Control
+                            as="textarea"
+                            name='Description'
+                            style={{ height: '100px' }}
+                            value={this.state.Description} onChange={this.handleChange}
+                        />
+                    </FloatingLabel>
+                    <Form.Group>
+                        <Form.Label>Topics</Form.Label>
+                        <Multiselect
+                            name="Topics"
+                            options={this.state.Topics} // Options to display in the dropdown
+                            onSelect={this.onSelect} // Function will trigger on select event
+                            onRemove={this.onRemove} // Function will trigger on remove event
+                            displayValue="Name" // Property name to display in the dropdown options
+                            placeholder="Please select as many Topics as needed for the certificate"
+                            hidePlaceholder="true"
+                            showCheckbox="true"
+                            closeIcon="cancel"
+                            showArrow="true"
+                            isMulti={true}
+                            value={this.state.selectedTopics}
+                            onChange={this.handleChange}
+                        />
                     </Form.Group>
-                </Row>
-
-                <FloatingLabel label="Description" >
-                    <Form.Control
-                        as="textarea"
-                        style={{ height: '100px' }}
-                        value={description} onChange={(e) => setDescription(e.target.value)}
-                    />
-                </FloatingLabel>
-                <Form.Group>
-                    <Form.Label>Topics</Form.Label>
-                    <Multiselect
-                        options={topics} // Options to display in the dropdown
-                        onSelect={onSelect} // Function will trigger on select event
-                        onRemove={onRemove} // Function will trigger on remove event
-                        displayValue="Name" // Property name to display in the dropdown options
-                        placeholder="Please select as many Topics as needed for the certificate"
-                        hidePlaceholder="true"
-                        showCheckbox="true"
-                        closeIcon="cancel"
-                        showArrow="true"
-                        isMulti={true}
-                        value={topics}
-                        onChange={(e) => setTopics(e.target.value)}
-                    />
-                </Form.Group>
-                <Col xs="auto" className="my-1">
-                    <Form.Check
-                        type="checkbox"
-                        label="Is the certificate available for puchase?"
-                        checked={active}
-                        onChange={(e) => setActive(e.target.checked)}
-                    />
-                </Col>
-                <Button variant="primary" type="submit">
-                    Create
-                </Button>
-            </Stack>
-        </Form>
-    )
+                    <Col xs="auto" className="my-1">
+                        <Form.Check
+                        name='Active'
+                            type="checkbox"
+                            label="Is the certificate available for puchase?"
+                            defaultChecked={this.state.Active}
+                            onChange={this.handleChange}
+                        />
+                    </Col>
+                    <Button variant="primary" type="submit">
+                        Create
+                    </Button>
+                </Stack>
+            </Form>
+        )
+    }
 }
 
 export default CreateCertificateForm;
