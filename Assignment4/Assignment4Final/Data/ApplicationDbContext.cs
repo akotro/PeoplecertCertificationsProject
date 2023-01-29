@@ -54,5 +54,13 @@ namespace Assignment4Final.Data
 
             #endregion
         }
+
+        // NOTE:(akotro) Is this needed? See https://learn.microsoft.com/en-us/ef/core/querying/single-split-queries
+        // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        // {
+        //     optionsBuilder.UseSqlServer(
+        //         o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)
+        //     );
+        // }
     }
 }
