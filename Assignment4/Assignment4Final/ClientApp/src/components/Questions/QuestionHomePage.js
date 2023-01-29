@@ -28,6 +28,13 @@ function Questions()
       console.log(data[0]);
       // resp.data.data[0].options[0].text
 
+      function Replace(temp)
+      {
+        let finalText = temp.replace(<>,"");
+        return finalText
+
+      }
+
     return (
 
         <div className='container-fluid'>
