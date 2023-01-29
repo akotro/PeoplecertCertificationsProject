@@ -28,12 +28,19 @@ function Questions()
       console.log(data[0]);
       // resp.data.data[0].options[0].text
 
+
+      //--------------------------------------------------
+      //filters the text from the raw html 
       function Replace(temp)
       {
-        let finalText = temp.replace(<>,"");
-        return finalText
+        var parser = new DOMParser();
+
+        var doc = parser.parseFromString(temp,'text/html');
+
+        return doc.body.innerText;
 
       }
+      //--------------------------------------------------
 
     return (
 
@@ -54,7 +61,7 @@ function Questions()
                                         {data.map((item,index) => (
                                             <tr>
                                                 <td>{item.id}</td>
-                                                <td>{item.text}</td>
+                                                <td>{Replace(item.text)}</td>
                                                 <td>{item.topic.name}</td>
                                                 <td>
                                                         <Link to="/admin/Questions/QuestionEdit"><Button>Edit</Button></Link>  
