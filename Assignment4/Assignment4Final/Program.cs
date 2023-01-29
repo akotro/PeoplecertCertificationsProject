@@ -61,10 +61,10 @@ namespace Assignment4Final
             //Agkiz, Added Transient service repo
             builder.Services.AddTransient<IExamRepository, ExamRepository>();
 
-            // NOTE:(akotro) Should repositories be added as Scoped since we want
-            // only one DbContext for each client request?
             builder.Services.AddScoped<IQuestionsRepository, QuestionsRepository>();
             builder.Services.AddScoped<QuestionsService>();
+            builder.Services.AddScoped<ICertificatesRepository, CertificatesRepository>();
+            builder.Services.AddScoped<CertificatesService>();
             // -----------------------------
 
             var mapperConfig = new MapperConfiguration(mc =>

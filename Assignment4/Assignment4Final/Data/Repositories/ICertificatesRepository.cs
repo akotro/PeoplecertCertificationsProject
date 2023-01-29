@@ -8,7 +8,6 @@ public interface ICertificatesRepository
     Task<Certificate?> GetAsync(int? id, bool include = true);
     Task<Certificate?> AddAsync(Certificate certificate);
     Task<Certificate?> UpdateAsync(int id, Certificate certificate);
-    Task<Certificate?> Delete(int id);
-    bool CertificatesDbSetExists();
+    Task<Certificate?> DeleteAsync(int id);
     bool CertificateExists(int id);
 }

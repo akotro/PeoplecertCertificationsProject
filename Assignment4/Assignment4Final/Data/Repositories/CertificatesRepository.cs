@@ -55,7 +55,7 @@ public class CertificatesRepository : ICertificatesRepository
         return dbCertificate;
     }
 
-    public async Task<Certificate?> Delete(int id)
+    public async Task<Certificate?> DeleteAsync(int id)
     {
         var certificate = await _context.Certificates.FindAsync(id);
         if (certificate != null)
@@ -67,11 +67,6 @@ public class CertificatesRepository : ICertificatesRepository
         }
 
         return null;
-    }
-
-    public bool CertificatesDbSetExists()
-    {
-        return _context.Certificates != null;
     }
 
     public bool CertificateExists(int id)
