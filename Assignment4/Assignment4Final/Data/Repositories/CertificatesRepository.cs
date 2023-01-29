@@ -20,7 +20,7 @@ public class CertificatesRepository : ICertificatesRepository
             .ToListAsync();
     }
 
-    public async Task<Certificate?> GetAsync(int? id, bool include = true)
+    public async Task<Certificate?> GetAsync(int id, bool include = true)
     {
         if (!include)
         {
@@ -47,7 +47,14 @@ public class CertificatesRepository : ICertificatesRepository
 
         if (dbCertificate != null)
         {
-            dbCertificate = certificate;
+            dbCertificate.Title = certificate.Title;
+            dbCertificate.Description = certificate.Description;
+            dbCertificate.PassingMark = certificate.PassingMark;
+            dbCertificate.MaxMark = certificate.MaxMark;
+            dbCertificate.Category = certificate.Category;
+            dbCertificate.Active = certificate.Active;
+            dbCertificate.Topics = certificate.Topics;
+            dbCertificate.Exams = certificate.Exams;
 
             await _context.SaveChangesAsync();
         }

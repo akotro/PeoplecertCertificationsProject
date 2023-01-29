@@ -22,7 +22,7 @@ public class CertificatesService
         return _mapper.Map<List<CertificateDto>>(certificates);
     }
 
-    public async Task<CertificateDto?> GetAsync(int? id, bool include = true)
+    public async Task<CertificateDto?> GetAsync(int id, bool include = true)
     {
         var certificate = await _repository.GetAsync(id, include);
         return certificate == null ? null : _mapper.Map<CertificateDto>(certificate);
