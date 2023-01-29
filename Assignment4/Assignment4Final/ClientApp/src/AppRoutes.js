@@ -6,7 +6,9 @@ import CreateCertificateForm from './components/Certificate_CRUD/Certificate_Cre
 import EditCertificateForm from './components/Certificate_CRUD/Certificate_Edit'
 import Cert_homepage from './components/Certificate_CRUD/Certificate_Homepage'
 
-import Questions from './components/Questions/QuestionLIst';
+import Questions from './components/Questions/QuestionHomePage';
+import Edit from './components/Questions/QuestionEdit';
+import Create from './components/Questions/QuestionCreate';
 
 const AppRoutes = [
     {
@@ -39,9 +41,19 @@ const AppRoutes = [
         element: <EditCertificateForm />
     },
     {
-        path: '/admin/questions/Home',
+        path: '/admin/Questions/QuestionHomePage',
         // requireAuth: true,
         element: <Questions />
+    }, 
+    {
+        path: '/admin/Questions/QuestionEdit',
+        // requireAuth: true,
+        element: <Edit />
+    },
+    {
+        path: '/admin/Questions/QuestionCreate',
+        // requireAuth: true,
+        element: <Create />
     },
     ...ApiAuthorzationRoutes
 ];

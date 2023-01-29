@@ -16,6 +16,9 @@
 # Mono auto generated files
 mono_crash.*
 
+#VSCode
+ .vscode
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
@@ -112,6 +115,8 @@ ipch/
 *.vsp
 *.vspx
 *.sap
+
+
 
 # Visual Studio Trace Files
 *.e2e
