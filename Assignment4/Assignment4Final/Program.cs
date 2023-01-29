@@ -79,6 +79,11 @@ namespace Assignment4Final
             IMapper mapper = mapperConfig.CreateMapper();
             builder.Services.AddSingleton(mapper);
 
+                builder.Services.AddCors(
+              options => options.AddPolicy("FrontEndPolicy",
+              policy => policy.AllowAnyOrigin().AllowAnyHeader()
+              )); //.WithHeaders((HeaderNames.ContentType, "application/json")));
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -99,6 +104,8 @@ namespace Assignment4Final
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
+
+            app.UseCors("FrontEndPolicy");
 
             app.UseAuthentication();
             app.UseIdentityServer();
