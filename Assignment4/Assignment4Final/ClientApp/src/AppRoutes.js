@@ -33,7 +33,7 @@ const AppRoutes = [
     {
         path: '/admin/certificate/edit/:id',
         // requireAuth: true,
-        element: <EditCertificateForm />
+        element: <EditCertificateForm  />
     },
     ...ApiAuthorzationRoutes
 ];
