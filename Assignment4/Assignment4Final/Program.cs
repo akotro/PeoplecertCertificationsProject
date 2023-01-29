@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using ModelLibrary.Models;
 using ModelLibrary.Models.Certificates;
 using ModelLibrary.Models.DTO.Certificates;
+using ModelLibrary.Models.DTO.Login;
 using ModelLibrary.Models.DTO.Questions;
 using ModelLibrary.Models.Questions;
 
@@ -78,14 +79,18 @@ namespace Assignment4Final
                     .ReverseMap();
                 mc.CreateMap<TopicDto, Topic>().ReverseMap();
                 mc.CreateMap<DifficultyLevelDto, DifficultyLevel>().ReverseMap();
+                mc.CreateMap<AppUser, UserDto>();
             });
             IMapper mapper = mapperConfig.CreateMapper();
             builder.Services.AddSingleton(mapper);
 
-                builder.Services.AddCors(
-              options => options.AddPolicy("FrontEndPolicy",
-              policy => policy.AllowAnyOrigin().AllowAnyHeader()
-              )); //.WithHeaders((HeaderNames.ContentType, "application/json")));
+            builder.Services.AddCors(
+                options =>
+                    options.AddPolicy(
+                        "FrontEndPolicy",
+                        policy => policy.AllowAnyOrigin().AllowAnyHeader()
+                    )
+            ); //.WithHeaders((HeaderNames.ContentType, "application/json")));
 
             var app = builder.Build();
 
