@@ -38,6 +38,7 @@ namespace Assignment4Final
                 .AddDefaultIdentity<AppUser>(
                     options => options.SignIn.RequireConfirmedAccount = false
                 )
+                .AddRoles<IdentityRole>() // NOTE:(akotro) Required for roles
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             builder.Services

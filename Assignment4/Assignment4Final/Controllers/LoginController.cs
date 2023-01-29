@@ -44,10 +44,8 @@ namespace Assignment4Final.Controllers
 
                 var userDto = _mapper.Map<UserDto>(user);
 
-                // NOTE:(akotro) GetRolesAsync requires IUserRoleStore<TUser> to be implemented.
-                // Should we implement a CustomUserRoleStore??
-                // var roles = await _userManager.GetRolesAsync(user);
-                // userDto.Roles = roles.ToList();
+                var roles = await _userManager.GetRolesAsync(user);
+                userDto.Roles = roles.ToList();
 
                 return Ok(userDto);
             }
