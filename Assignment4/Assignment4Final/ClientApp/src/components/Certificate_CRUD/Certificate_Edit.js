@@ -46,6 +46,16 @@ class EditCertificateForm extends Component {
                 console.error(err);
             });
 
+        axios.get(`https://localhost:7196/api/Topics`)
+            .then(res => {
+
+                console.log(res.data.data);
+                this.setState({ allTopics: res.data.data });
+            })
+            .catch(err => {
+                console.error(err);
+            });
+
         //this.setState({
         //    cert: {
         //        "Id": 14,
@@ -112,7 +122,7 @@ class EditCertificateForm extends Component {
 
         this.setState(prevState => ({
             data: {
-                ...prevState.cert,
+                ...prevState.data,
                 maxMark: total
             }
         }));
@@ -232,9 +242,9 @@ class EditCertificateForm extends Component {
                             options={this.state.allTopics} // Options to display in the dropdown
                             onSelect={this.onSelect} // Function will trigger on select event
                             onRemove={this.onRemove} // Function will trigger on remove event
-                            displayValue="Name" // Property name to display in the dropdown options
-                            placeholder="Please select as many Topics as needed for the certificate"
                             selectedValues={this.state.data.topics}
+                            displayValue="name" // Property name to display in the dropdown options
+                            placeholder="Please select as many Topics as needed for the certificate"
                             hidePlaceholder="true"
                             showCheckbox="true"
                             closeIcon="cancel"
