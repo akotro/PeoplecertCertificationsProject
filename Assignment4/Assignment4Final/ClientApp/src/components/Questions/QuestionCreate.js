@@ -13,6 +13,11 @@ function Create()
 {
     axios.post("https://localhost:7196/api/Questions");
 
+    const nums = [1,2,4,5,6];
+
+    const squared = nums.map((item) =>{return item*item})
+
+    console.log(squared);
 
     return(
         
