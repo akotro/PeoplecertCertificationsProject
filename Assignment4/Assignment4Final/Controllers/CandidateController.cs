@@ -1,8 +1,10 @@
 ﻿using Assignment4Final.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing.Matching;
 using ModelLibrary.Models.DTO;
 using ModelLibrary.Models.DTO.Candidates;
+using ModelLibrary.Models.DTO.Certificates;
 using ModelLibrary.Models.DTO.Questions;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -24,26 +26,82 @@ namespace Assignment4Final.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllCandidates()
         {
-            return Ok(await _candidateService.GetAllAsync());
+            return Ok(await _candidateService.GetAll());
         }
 
         // GET api/<CandidateController>/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCandidateById(string id)
         {
-            return Ok(await _candidateService.GetCandidateById(id));
+            var candidate = await _candidateService.GetCandidateById(id);
+            if (candidate == null)
+            {
+                return NotFound(
+                    new BaseResponse<CandidatesDto>
+                    {
+                        Success = false,
+                        Message = $"Candidate: {id} not found."
+                    }
+                );
+            }
+
+            var response = new BaseResponse<CandidatesDto>
+            {
+                Success = true,
+                Data = candidate
+            };
+
+            return Ok(response);
         }
 
         // POST api/<CandidateController>
         [HttpPost]
-        public void CreateCandidate([FromBody] string value)
+        public async Task<IActionResult> CreateCandidate([FromBody] CandidatesDto candidatesDto)
         {
+            var addedCandidate = await _candidateService.AddCandidate(candidatesDto);
+            if (addedCandidate == null)
+            {
+                return BadRequest(
+                    new BaseResponse<CandidatesDto>
+                    {
+                        Success = false,
+                        Message = "Failed to add candidate."
+                    }
+                );
+            }
+
+            var response = new BaseResponse<CandidatesDto>
+            {
+                Success = true,
+                Data = addedCandidate
+            };
+
+            return CreatedAtAction(nameof(GetCandidateById), new { id = addedCandidate.AppUserId }, response);
         }
 
         // PUT api/<CandidateController>/5
         [HttpPut("{id}")]
-        public void UpdateCandidate(int id, [FromBody] string value)
+        public async Task<IActionResult> UpdateCandidate(string id, [FromBody] CandidatesDto candidatesDto)
         {
+            var addedCandidate = await _candidateService.UpdateCandidate(id, candidatesDto);
+            if (addedCandidate == null)
+            {
+                return BadRequest(
+                    new BaseResponse<CandidatesDto>
+                    {
+                        Success = false,
+                        Message = "Failed to add candidate."
+                    }
+                );
+            }
+
+            var response = new BaseResponse<CandidatesDto>
+            {
+                Success = true,
+                Data = addedCandidate
+            };
+
+            return Ok(response);
         }
 
         // DELETE api/<CandidateController>/5

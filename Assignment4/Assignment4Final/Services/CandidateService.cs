@@ -1,9 +1,12 @@
 ﻿using Assignment4Final.Data.Repositories;
 using AutoMapper;
 using ModelLibrary.Models.Candidates;
+using ModelLibrary.Models.Certificates;
 using ModelLibrary.Models.DTO.Candidates;
+using ModelLibrary.Models.DTO.Certificates;
 using ModelLibrary.Models.DTO.Questions;
 using ModelLibrary.Models.Questions;
+using NuGet.Protocol.Core.Types;
 
 namespace Assignment4Final.Services
 {
@@ -18,9 +21,9 @@ namespace Assignment4Final.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<CandidatesDto>> GetAllAsync()
+        public async Task<IEnumerable<CandidatesDto>> GetAll()
         {
-            return _mapper.Map<IEnumerable<CandidatesDto>>(await _candidateRepository.GetAllAsync());
+            return _mapper.Map<IEnumerable<CandidatesDto>>(await _candidateRepository.GetAll());
         }
 
         public async Task<CandidatesDto> GetCandidateById(string appUserId)
@@ -31,6 +34,18 @@ namespace Assignment4Final.Services
         public async Task<CandidatesDto?> DeleteCandidate(string appUserId)
         {
             return _mapper.Map<CandidatesDto>(await _candidateRepository.DeleteCandidate(appUserId));             
+        }
+
+        public async Task<CandidatesDto?> AddCandidate(CandidatesDto candidateDto)
+        {
+            var addedCandidate = await _candidateRepository.AddCandidate(_mapper.Map<Candidate>(candidateDto));
+            return addedCandidate != null ? _mapper.Map<CandidatesDto>(addedCandidate) : null;
+        }
+
+        public async Task<CandidatesDto?> UpdateCandidate(string id, CandidatesDto candidateDto)
+        {
+            var updatedCandidate = await _candidateRepository.UpdateCandidate(id, _mapper.Map<Candidate>(candidateDto));
+            return updatedCandidate != null ? _mapper.Map<CandidatesDto>(updatedCandidate) : null;
         }
     }
 }

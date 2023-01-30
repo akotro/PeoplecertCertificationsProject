@@ -3,6 +3,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ModelLibrary.Models.Candidates;
+using ModelLibrary.Models.Certificates;
 using ModelLibrary.Models.Questions;
 
 namespace Assignment4Final.Data.Repositories
@@ -16,7 +17,7 @@ namespace Assignment4Final.Data.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Candidate>> GetAllAsync()
+        public async Task<IEnumerable<Candidate>> GetAll()
         {
             if (!CandidatesDbSetExists())
             {
@@ -54,6 +55,7 @@ namespace Assignment4Final.Data.Repositories
                 .Include(a => a.Language)
                 .Include(a => a.PhotoIdType)
                 .Include(a => a.Address).ThenInclude(a => a.Country)
+                .Include(a => a.CandidateExams)
                 .FirstOrDefaultAsync(p => p.AppUserId == appUserId);
             if (candidate != null)
             {
@@ -64,6 +66,41 @@ namespace Assignment4Final.Data.Repositories
             }
 
             return null;
+        }
+
+        public async Task<Candidate?> AddCandidate(Candidate candidate)
+        {
+            var candidateEntity = await _context.Candidates.AddAsync(candidate);
+            await _context.SaveChangesAsync();
+
+            return candidateEntity.Entity;
+        }
+
+        public async Task<Candidate?> UpdateCandidate(string id, Candidate candidate)
+        {
+            var candidateToUpdate = await GetCandidate(id);
+
+            if (candidateToUpdate != null)
+            {
+                candidateToUpdate.FirstName = candidate.FirstName;
+                candidateToUpdate.MiddleName = candidate.MiddleName;
+                candidateToUpdate.LastName = candidate.LastName;
+                candidateToUpdate.DateOfBirth = candidate.DateOfBirth;
+                candidateToUpdate.Email = candidate.Email;
+                candidateToUpdate.Landline = candidate.Landline;
+                candidateToUpdate.Mobile = candidate.Mobile;
+                candidateToUpdate.PhotoIdNumber = candidate.PhotoIdNumber;
+                candidateToUpdate.PhotoIdIssueDate = candidate.PhotoIdIssueDate;
+
+                candidateToUpdate.Gender = candidate.Gender;
+                candidateToUpdate.Language = candidate.Language;
+                candidateToUpdate.PhotoIdType = candidate.PhotoIdType;
+                candidateToUpdate.Address = candidate.Address;
+
+                await _context.SaveChangesAsync();
+            }
+
+            return candidateToUpdate;
         }
 
         public bool CandidatesDbSetExists()
