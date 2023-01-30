@@ -69,6 +69,7 @@ namespace Assignment4Final
 
             builder.Services.AddTransient<ICandidateRepository, CandidateRepository>();
             builder.Services.AddTransient<CandidateService>();
+
             builder.Services.AddScoped<ICertificatesRepository, CertificatesRepository>();
             builder.Services.AddScoped<CertificatesService>();
             // -----------------------------
