@@ -93,7 +93,7 @@ namespace Assignment4Final.Controllers
                     {
                         RequestId = Request.HttpContext.TraceIdentifier,
                         Success = false,
-                        Message = "Certificate not found"
+                        Message = $"Certificate with id {id} not found."
                     }
                 );
             }
@@ -119,7 +119,7 @@ namespace Assignment4Final.Controllers
                     {
                         RequestId = Request.HttpContext.TraceIdentifier,
                         Success = false,
-                        Message = "Certificate not found"
+                        Message = $"Certificate with id {id} not found."
                     }
                 );
             }
