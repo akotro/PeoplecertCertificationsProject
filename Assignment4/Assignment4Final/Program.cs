@@ -67,6 +67,8 @@ namespace Assignment4Final
             builder.Services.AddScoped<QuestionsService>();
             builder.Services.AddScoped<ICertificatesRepository, CertificatesRepository>();
             builder.Services.AddScoped<CertificatesService>();
+            builder.Services.AddScoped<ITopicsRepository, TopicsRepository>();
+            builder.Services.AddScoped<TopicsService>();
             // -----------------------------
 
             var mapperConfig = new MapperConfiguration(mc =>
