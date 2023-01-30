@@ -49,7 +49,6 @@ namespace Assignment4Final.Data.Repositories
         public async Task<Candidate?> DeleteCandidate(string appUserId)
         {
             // NOTE(vmavraganis): not working needs to delete candidateExams -> we have to make cascade on delete
-            //var candidate = await _context.Candidates.FindAsync(appUserId);
             var candidate = await _context.Candidates
                 .Include(a => a.Gender)
                 .Include(a => a.Language)
