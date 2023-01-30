@@ -10,6 +10,9 @@ namespace Assignment4Final.Data.Repositories;
 
 public class QuestionsRepository : IQuestionsRepository
 {
+    // TODO:(akotro) This should be refactored to use only entities
+    // and dto operations should be moved to QuestionsService
+
     private readonly ApplicationDbContext _context;
     private readonly IMapper _mapper;
 

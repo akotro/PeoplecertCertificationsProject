@@ -63,13 +63,14 @@ namespace Assignment4Final
             //Agkiz, Added Transient service repo
             builder.Services.AddTransient<IExamRepository, ExamRepository>();
 
-            // NOTE:(akotro) Should repositories be added as Scoped since we want
-            // only one DbContext for each client request?
             builder.Services.AddScoped<IQuestionsRepository, QuestionsRepository>();
             builder.Services.AddTransient<QuestionsService>();
+            builder.Services.AddScoped<QuestionsService>();
 
             builder.Services.AddTransient<ICandidateRepository, CandidateRepository>();
             builder.Services.AddTransient<CandidateService>();
+            builder.Services.AddScoped<ICertificatesRepository, CertificatesRepository>();
+            builder.Services.AddScoped<CertificatesService>();
             // -----------------------------
 
             var mapperConfig = new MapperConfiguration(mc =>
@@ -77,6 +78,9 @@ namespace Assignment4Final
                 mc.CreateMap<OptionDto, Option>().ReverseMap();
                 mc.CreateMap<QuestionDto, Question>()
                     .ForMember(dest => dest.Options, opt => opt.MapFrom(src => src.Options))
+                    .ReverseMap();
+                mc.CreateMap<CertificateDto, Certificate>()
+                    .ForMember(dest => dest.Topics, opt => opt.MapFrom(src => src.Topics))
                     .ReverseMap();
                 mc.CreateMap<TopicDto, Topic>().ReverseMap();
                 mc.CreateMap<DifficultyLevelDto, DifficultyLevel>().ReverseMap();
@@ -96,6 +100,11 @@ namespace Assignment4Final
             });
             IMapper mapper = mapperConfig.CreateMapper();
             builder.Services.AddSingleton(mapper);
+
+                builder.Services.AddCors(
+              options => options.AddPolicy("FrontEndPolicy",
+              policy => policy.AllowAnyOrigin().AllowAnyHeader()
+              )); //.WithHeaders((HeaderNames.ContentType, "application/json")));
 
             var app = builder.Build();
 
@@ -117,6 +126,8 @@ namespace Assignment4Final
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
+
+            app.UseCors("FrontEndPolicy");
 
             app.UseAuthentication();
             app.UseIdentityServer();
