@@ -25,7 +25,7 @@ namespace Assignment4Final
 
             // Add services to the container.
             var connectionString =
-                builder.Configuration.GetConnectionString("DefaultConnection")
+                builder.Configuration.GetConnectionString("localdb")
                 ?? throw new InvalidOperationException(
                     "Connection string 'DefaultConnection' not found."
                 );
@@ -91,9 +91,9 @@ namespace Assignment4Final
 
             builder.Services.AddCors(
                 options =>
-                    options.AddPolicy(
+                    options.AddPolicy( // TODO:(akotro) Is this correct?
                         "FrontEndPolicy",
-                        policy => policy.AllowAnyOrigin().AllowAnyHeader()
+                        policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyOrigin()
                     )
             ); //.WithHeaders((HeaderNames.ContentType, "application/json")));
 
