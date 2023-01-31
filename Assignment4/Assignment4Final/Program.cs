@@ -15,6 +15,9 @@ using ModelLibrary.Models.DTO.Candidates;
 using ModelLibrary.Models.DTO.Certificates;
 using ModelLibrary.Models.DTO.Login;
 using ModelLibrary.Models.DTO.Questions;
+using ModelLibrary.Models.DTO.Exams;
+using ModelLibrary.Models.DTO.CandidateExam;
+using ModelLibrary.Models.Exams;
 using ModelLibrary.Models.Questions;
 
 namespace Assignment4Final
@@ -86,6 +89,13 @@ namespace Assignment4Final
             builder.Services.AddScoped<IGenericRepository<Gender>, GenderRepository>();
             builder.Services.AddScoped<GenderService>();
             // ---------------------------------------------------------------------------------------
+            builder.Services.AddTransient<QuestionsService>();
+
+            builder.Services.AddScoped<ExamRepository>();
+            builder.Services.AddScoped<ExamService>();
+            builder.Services.AddScoped<CandidateExamRepository>();
+            builder.Services.AddScoped<CandidateExamService>();
+            // -----------------------------
 
             // TODO:(akotro) This should be extracted into a helper class
             var mapperConfig = new MapperConfiguration(mc =>
@@ -114,6 +124,12 @@ namespace Assignment4Final
                     .ForMember(c => c.PhotoIdType, opt => opt.MapFrom(src => src.PhotoIdType))
                     .ReverseMap();
                 mc.CreateMap<AppUser, UserDto>();
+
+                mc.CreateMap<Exam, ExamDto>().ForPath(dest => dest.CertificateTitle, opt => opt
+                .MapFrom(src => src.Certificate.Title)).ReverseMap();
+
+                mc.CreateMap<CandidateExam, CandidateExamDto>().ForPath(dest => dest.ExamCertificateTitle, opt => opt
+                .MapFrom(src => src.Exam.Certificate.Title));
             });
             IMapper mapper = mapperConfig.CreateMapper();
             builder.Services.AddSingleton(mapper);
