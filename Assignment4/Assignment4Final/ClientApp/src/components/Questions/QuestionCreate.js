@@ -1,12 +1,12 @@
-import { Form, Button, Col, Row, FloatingLabel, Stack , Table, FormGroup  } from 'react-bootstrap';
+import { Form, Button, Col, Row, FloatingLabel, Stack , Table, FormGroup,Badge } from 'react-bootstrap';
 
 import {React,useState,useEffect,Component} from 'react';
 
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
-
-
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 
 class Create extends Component
@@ -19,13 +19,19 @@ class Create extends Component
                 questionText: "Test question text 1"
 
         }
-        this.handleChange =  this.handleChange.bind(this);
-        this.handleSubmit =  this.handleSubmit.bind(this);
+        // this.handleChange =  this.handleChange.bind(this);
+        // this.handleSubmit =  this.handleSubmit.bind(this);
+     
     }
    //------------------------------------------------
     handleChange = (event) => 
-    {
-            this.setState({questionText:event.target.value});
+    {       
+        // console.log(this.state.questionText);
+        // console.log(event);
+        this.setState({questionText:event});
+        console.log(  this.state.questionText);
+        console.log(  this.state.questionText);
+        console.log(  this.state.questionText);
     }
    //------------------------------------------------
    handleSubmit = (event) => 
@@ -44,7 +50,34 @@ render()
                 <Row>
                     <Col md={10}>
                         <FormGroup>
-                            <Form.Label>Questions Text2</Form.Label>
+                       
+                        <Form.Label >Questions Text</Form.Label>
+                        <CKEditor
+                                editor={ ClassicEditor }
+                                data={this.state.q  }
+                                onReady={ editor => { 
+                                    // You can store the "editor" and use when it is needed.
+                                    // console.log( 'Editor is ready to use!', editor );
+                                } }
+                                // onChange={ this.handleChange }
+                                onChange={ ( event, editor ) => {
+                                    const data = editor.getData();
+                                    this.handleChange(data);
+                                    // console.log( { event, editor, data } );
+                                    // console.log( { event } );
+                                    // console.log( {  editor } );
+                                    // console.log( {  data } );
+
+                                } }
+                                // onBlur={ ( event, editor ) => {
+                                //     console.log( 'Blur.', editor );
+                                // } }
+                                // onFocus={ ( event, editor ) => {
+                                //     console.log( 'Focus.', editor );
+                                // } }
+                        />
+                        {/* ------------------------------------------------ */}
+
                             <Form.Control type="text"
                                     name='QuestionText'
                                     value={this.state.questionText} onChange={this.handleChange} />
