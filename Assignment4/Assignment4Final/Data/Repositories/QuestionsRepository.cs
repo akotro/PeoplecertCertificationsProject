@@ -10,6 +10,9 @@ namespace Assignment4Final.Data.Repositories;
 
 public class QuestionsRepository : IQuestionsRepository
 {
+    // TODO:(akotro) This should be refactored to use only entities
+    // and dto operations should be moved to QuestionsService
+
     private readonly ApplicationDbContext _context;
     private readonly IMapper _mapper;
 
@@ -84,6 +87,7 @@ public class QuestionsRepository : IQuestionsRepository
 
             if (questionDto.Options != null)
             {
+                // TODO:(akotro) Should we remove here?
                 var optionsToDelete = question.Options
                     .Where(o => !questionDto.Options.Any(odto => odto.Id == o.Id))
                     .ToList();
@@ -133,11 +137,11 @@ public class QuestionsRepository : IQuestionsRepository
 
         return null;
     }
-
     public bool QuestionsDbSetExists()
     {
         return _context.Questions != null;
     }
+
 
     public bool QuestionExists(int id)
     {

@@ -9,8 +9,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using ModelLibrary.Models;
+using ModelLibrary.Models.Candidates;
 using ModelLibrary.Models.Certificates;
+using ModelLibrary.Models.DTO.Candidates;
 using ModelLibrary.Models.DTO.Certificates;
+using ModelLibrary.Models.DTO.Login;
 using ModelLibrary.Models.DTO.Questions;
 using ModelLibrary.Models.DTO.Exams;
 using ModelLibrary.Models.DTO.CandidateExam;
@@ -40,6 +43,7 @@ namespace Assignment4Final
                 .AddDefaultIdentity<AppUser>(
                     options => options.SignIn.RequireConfirmedAccount = false
                 )
+                .AddRoles<IdentityRole>() // NOTE:(akotro) Required for roles
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             builder.Services
@@ -60,13 +64,31 @@ namespace Assignment4Final
 
             builder.Services.AddRazorPages();
 
-            // -----------------------------
-            //Agkiz, Added Transient service repo
-            builder.Services.AddTransient<IExamRepository, NotExamRepository>();
+            // ---------------------------------------------------------------------------------------
+            //Agkiz, Add Repositories and Services
+            builder.Services.AddTransient<IExamRepository, ExamRepository>();
 
-            // NOTE:(akotro) Should repositories be added as Scoped since we want
-            // only one DbContext for each client request?
             builder.Services.AddScoped<IQuestionsRepository, QuestionsRepository>();
+            builder.Services.AddScoped<QuestionsService>();
+
+            builder.Services.AddScoped<ICandidateRepository, CandidateRepository>();
+            builder.Services.AddScoped<CandidateService>();
+
+            builder.Services.AddScoped<ICertificatesRepository, CertificatesRepository>();
+            builder.Services.AddScoped<CertificatesService>();
+
+            builder.Services.AddScoped<ITopicsRepository, TopicsRepository>();
+            builder.Services.AddScoped<TopicsService>();
+
+            builder.Services.AddScoped<IDifficultyLevelsRepository, DifficultyLevelsRepository>();
+            builder.Services.AddScoped<DifficultyLevelsService>();
+
+            builder.Services.AddScoped<IGenericRepository<Country>, CountryRepository>();
+            builder.Services.AddScoped<CountryService>();
+
+            builder.Services.AddScoped<IGenericRepository<Gender>, GenderRepository>();
+            builder.Services.AddScoped<GenderService>();
+            // ---------------------------------------------------------------------------------------
             builder.Services.AddTransient<QuestionsService>();
 
             builder.Services.AddScoped<ExamRepository>();
@@ -75,14 +97,33 @@ namespace Assignment4Final
             builder.Services.AddScoped<CandidateExamService>();
             // -----------------------------
 
+            // TODO:(akotro) This should be extracted into a helper class
             var mapperConfig = new MapperConfiguration(mc =>
             {
                 mc.CreateMap<OptionDto, Option>().ReverseMap();
                 mc.CreateMap<QuestionDto, Question>()
                     .ForMember(dest => dest.Options, opt => opt.MapFrom(src => src.Options))
                     .ReverseMap();
+                mc.CreateMap<CertificateDto, Certificate>()
+                    .ForMember(dest => dest.Topics, opt => opt.MapFrom(src => src.Topics))
+                    .ReverseMap();
                 mc.CreateMap<TopicDto, Topic>().ReverseMap();
                 mc.CreateMap<DifficultyLevelDto, DifficultyLevel>().ReverseMap();
+
+                mc.CreateMap<CountryDto, Country>().ReverseMap();
+                mc.CreateMap<AddressDto, Address>()
+                    .ForMember(c => c.Country, opt => opt.MapFrom(src => src.Country))
+                    .ReverseMap();
+                mc.CreateMap<LanguageDto, Language>().ReverseMap();
+                mc.CreateMap<GenderDto, Gender>().ReverseMap();
+                mc.CreateMap<PhotoIdTypeDto, PhotoIdType>().ReverseMap();
+                mc.CreateMap<CandidatesDto, Candidate>()
+                    .ForMember(c => c.Address, opt => opt.MapFrom(src => src.Address))
+                    .ForMember(c => c.Language, opt => opt.MapFrom(src => src.Language))
+                    .ForMember(c => c.Gender, opt => opt.MapFrom(src => src.Gender))
+                    .ForMember(c => c.PhotoIdType, opt => opt.MapFrom(src => src.PhotoIdType))
+                    .ReverseMap();
+                mc.CreateMap<AppUser, UserDto>();
 
                 mc.CreateMap<Exam, ExamDto>().ForPath(dest => dest.CertificateTitle, opt => opt
                 .MapFrom(src => src.Certificate.Title)).ReverseMap();
@@ -92,6 +133,14 @@ namespace Assignment4Final
             });
             IMapper mapper = mapperConfig.CreateMapper();
             builder.Services.AddSingleton(mapper);
+
+            builder.Services.AddCors(
+                options =>
+                    options.AddPolicy( // TODO:(akotro) Is this correct?
+                        "FrontEndPolicy",
+                        policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()
+                    )
+            ); //.WithHeaders((HeaderNames.ContentType, "application/json")));
 
             var app = builder.Build();
 
@@ -113,6 +162,8 @@ namespace Assignment4Final
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
+
+            app.UseCors("FrontEndPolicy");
 
             app.UseAuthentication();
             app.UseIdentityServer();
