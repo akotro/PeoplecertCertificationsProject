@@ -101,6 +101,7 @@ class Cert_homepage extends Component {
                 <Button> edit it</Button>
             </Link>
         )
+        // <Link to="/" component={<Certificate_Edit {...props.id}/>}
 
         // handle edit logic here
         // console.log(`Edit certificate with id: ${id}`);

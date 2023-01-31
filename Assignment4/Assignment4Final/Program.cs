@@ -25,7 +25,7 @@ namespace Assignment4Final
 
             // Add services to the container.
             var connectionString =
-                builder.Configuration.GetConnectionString("DefaultConnection")
+                builder.Configuration.GetConnectionString("localhost")
                 ?? throw new InvalidOperationException(
                     "Connection string 'DefaultConnection' not found."
                 );
@@ -91,7 +91,7 @@ namespace Assignment4Final
                 options =>
                     options.AddPolicy(
                         "FrontEndPolicy",
-                        policy => policy.AllowAnyOrigin().AllowAnyHeader()
+                        policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()
                     )
             ); //.WithHeaders((HeaderNames.ContentType, "application/json")));
 

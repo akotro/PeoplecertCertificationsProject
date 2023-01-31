@@ -84,31 +84,31 @@ class EditCertificateForm extends Component {
         //    }
         //});
 
-        this.setState({
-            // this should be an axios call to all the topics
-            allTopics: [
-                {
-                    "Id": 1,
-                    "MaxMarks": 100,
-                    "Name": "Math",
-                },
-                {
-                    "Id": 2,
-                    "MaxMarks": 100,
-                    "Name": "Science",
-                },
-                {
-                    "Id": 3,
-                    "MaxMarks": 100,
-                    "Name": "History",
-                },
-                {
-                    "Id": 4,
-                    "MaxMarks": 100,
-                    "Name": "English",
-                }
-            ]
-        });
+        //this.setState({
+        //    // this should be an axios call to all the topics
+        //    allTopics: [
+        //        {
+        //            "Id": 1,
+        //            "MaxMarks": 100,
+        //            "Name": "Math",
+        //        },
+        //        {
+        //            "Id": 2,
+        //            "MaxMarks": 100,
+        //            "Name": "Science",
+        //        },
+        //        {
+        //            "Id": 3,
+        //            "MaxMarks": 100,
+        //            "Name": "History",
+        //        },
+        //        {
+        //            "Id": 4,
+        //            "MaxMarks": 100,
+        //            "Name": "English",
+        //        }
+        //    ]
+        //});
     }
 
 
@@ -126,12 +126,6 @@ class EditCertificateForm extends Component {
                 maxMark: total
             }
         }));
-    }
-    // fill the aboe with axios call
-
-    getTopics = () => {
-        // make axios call 
-        //setTopics(...data);
     }
 
 
@@ -176,10 +170,19 @@ class EditCertificateForm extends Component {
 
         }
     }
+    
 
     handleSubmit = (event) => {
         event.preventDefault();
         // handle form submit logic here with an axios post method
+
+        axios.put(`https://localhost:7196/api/Certificates/${this.state.data.id}`, this.state.data)
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
         console.log("title = ", this.state.data.title,
             "desc = ", this.state.data.description,
             "passmark = ", this.state.data.passingMark,
