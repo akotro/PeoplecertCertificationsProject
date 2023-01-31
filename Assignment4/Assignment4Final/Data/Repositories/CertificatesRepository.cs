@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ModelLibrary.Models.Certificates;
+using ModelLibrary.Models.Exams;
 
 namespace Assignment4Final.Data.Repositories;
 
@@ -35,6 +36,8 @@ public class CertificatesRepository : ICertificatesRepository
 
     public async Task<Certificate?> AddAsync(Certificate certificate)
     {
+        await FillNavigationProperties(certificate);
+
         var certificateEntry = await _context.Certificates.AddAsync(certificate);
         await _context.SaveChangesAsync();
 
@@ -55,6 +58,8 @@ public class CertificatesRepository : ICertificatesRepository
             dbCertificate.Active = certificate.Active;
             dbCertificate.Topics = certificate.Topics;
             dbCertificate.Exams = certificate.Exams;
+
+            await FillNavigationProperties(dbCertificate);
 
             await _context.SaveChangesAsync();
         }
@@ -79,5 +84,17 @@ public class CertificatesRepository : ICertificatesRepository
     public bool CertificateExists(int id)
     {
         return (_context.Certificates?.Any(c => c.Id == id)).GetValueOrDefault();
+    }
+
+    private async Task FillNavigationProperties(Certificate certificate)
+    {
+        certificate.Topics = certificate.Topics
+            ?.Select(async t => await _context.Topics.FindAsync(t.Id))
+            .Select(t => t.Result)
+            .ToList();
+        certificate.Exams = certificate.Exams
+            ?.Select(async e => await _context.Exams.FindAsync(e.Id))
+            .Select(e => e.Result)
+            .ToList();
     }
 }
