@@ -67,8 +67,11 @@ class Cert_homepage extends Component {
         console.log(`Delete certificate with id: ${id}`)
 
         axios.delete(`https://localhost:7196/api/Certificates/${id}`)
-            .then(function (response) {
-                console.log(response);
+            .then(response => {
+                //console.log(response.data.data);
+                this.setState(prevState => ({
+                    data: prevState.data.filter(item => item.id !== id)
+                }));
             })
             .catch(function (error) {
                 console.log(error);
