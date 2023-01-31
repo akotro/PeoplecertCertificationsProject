@@ -73,6 +73,7 @@ namespace Assignment4Final
             builder.Services.AddScoped<DifficultyLevelsService>();
             // -----------------------------
 
+            // TODO:(akotro) This should be extracted into a helper class
             var mapperConfig = new MapperConfiguration(mc =>
             {
                 mc.CreateMap<OptionDto, Option>().ReverseMap();
@@ -93,7 +94,7 @@ namespace Assignment4Final
                 options =>
                     options.AddPolicy( // TODO:(akotro) Is this correct?
                         "FrontEndPolicy",
-                        policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyOrigin()
+                        policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()
                     )
             ); //.WithHeaders((HeaderNames.ContentType, "application/json")));
 

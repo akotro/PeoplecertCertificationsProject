@@ -30,6 +30,8 @@ public class TopicsRepository : ITopicsRepository
 
     public async Task<Topic?> AddAsync(Topic topic)
     {
+        await FillNavigationProperties(topic);
+
         var topicEntry = await _context.Topics.AddAsync(topic);
         await _context.SaveChangesAsync();
 
@@ -46,6 +48,8 @@ public class TopicsRepository : ITopicsRepository
             dbTopic.MaxMarks = topic.MaxMarks;
             dbTopic.Certificates = topic.Certificates;
             dbTopic.Questions = topic.Questions;
+
+            await FillNavigationProperties(dbTopic);
 
             await _context.SaveChangesAsync();
         }
@@ -70,5 +74,17 @@ public class TopicsRepository : ITopicsRepository
     public bool TopicExists(int id)
     {
         return (_context.Topics?.Any(t => t.Id == id)).GetValueOrDefault();
+    }
+
+    private async Task FillNavigationProperties(Topic topic)
+    {
+        topic.Certificates = topic.Certificates
+            ?.Select(async c => await _context.Certificates.FindAsync(c.Id))
+            .Select(c => c.Result)
+            .ToList();
+        topic.Questions = topic.Questions
+            ?.Select(async q => await _context.Questions.FindAsync(q.Id))
+            .Select(q => q.Result)
+            .ToList();
     }
 }

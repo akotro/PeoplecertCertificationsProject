@@ -87,6 +87,7 @@ public class QuestionsRepository : IQuestionsRepository
 
             if (questionDto.Options != null)
             {
+                // TODO:(akotro) Should we remove here?
                 var optionsToDelete = question.Options
                     .Where(o => !questionDto.Options.Any(odto => odto.Id == o.Id))
                     .ToList();
