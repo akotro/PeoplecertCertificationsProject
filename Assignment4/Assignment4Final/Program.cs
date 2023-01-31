@@ -13,6 +13,7 @@ using ModelLibrary.Models.Candidates;
 using ModelLibrary.Models.Certificates;
 using ModelLibrary.Models.DTO.Candidates;
 using ModelLibrary.Models.DTO.Certificates;
+using ModelLibrary.Models.DTO.Login;
 using ModelLibrary.Models.DTO.Questions;
 using ModelLibrary.Models.Questions;
 
@@ -39,6 +40,7 @@ namespace Assignment4Final
                 .AddDefaultIdentity<AppUser>(
                     options => options.SignIn.RequireConfirmedAccount = false
                 )
+                .AddRoles<IdentityRole>() // NOTE:(akotro) Required for roles
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             builder.Services
@@ -72,8 +74,13 @@ namespace Assignment4Final
 
             builder.Services.AddScoped<ICertificatesRepository, CertificatesRepository>();
             builder.Services.AddScoped<CertificatesService>();
+            builder.Services.AddScoped<ITopicsRepository, TopicsRepository>();
+            builder.Services.AddScoped<TopicsService>();
+            builder.Services.AddScoped<IDifficultyLevelsRepository, DifficultyLevelsRepository>();
+            builder.Services.AddScoped<DifficultyLevelsService>();
             // -----------------------------
 
+            // TODO:(akotro) This should be extracted into a helper class
             var mapperConfig = new MapperConfiguration(mc =>
             {
                 mc.CreateMap<OptionDto, Option>().ReverseMap();
@@ -98,14 +105,18 @@ namespace Assignment4Final
                     .ForMember(c => c.Gender, opt => opt.MapFrom(src => src.Gender))
                     .ForMember(c => c.PhotoIdType, opt => opt.MapFrom(src => src.PhotoIdType))
                     .ReverseMap();
+                mc.CreateMap<AppUser, UserDto>();
             });
             IMapper mapper = mapperConfig.CreateMapper();
             builder.Services.AddSingleton(mapper);
 
-                builder.Services.AddCors(
-              options => options.AddPolicy("FrontEndPolicy",
-              policy => policy.AllowAnyOrigin().AllowAnyHeader()
-              )); //.WithHeaders((HeaderNames.ContentType, "application/json")));
+            builder.Services.AddCors(
+                options =>
+                    options.AddPolicy( // TODO:(akotro) Is this correct?
+                        "FrontEndPolicy",
+                        policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()
+                    )
+            ); //.WithHeaders((HeaderNames.ContentType, "application/json")));
 
             var app = builder.Build();
 

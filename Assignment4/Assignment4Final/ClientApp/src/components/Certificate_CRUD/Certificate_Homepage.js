@@ -1,91 +1,46 @@
 ﻿import React, { Component, useState } from 'react';
 import { ListGroup, ListGroupItem, Button, Table } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { BrowserRouter, Route } from "react-router-dom";
+import { withRouter } from './../Common/with-router';
+import { BrowserRouter, Route, useParams } from "react-router-dom";
 import Certificate_Create from './Certificate_Create'
 import Certificate_Edit from './Certificate_Edit'
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 
 class Cert_homepage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            certificates: [
-                {
-                    "Id": 12,
-                    "Title": "this is a title",
-                    "Description": "DEscription for 12",
-                    "PassingMark": 65,
-                    "MaxMark": 225,
-                    "Category": "Coding",
-                    "Active": true,
-                    "Topics": [
-                        {
-                            "Id": 1,
-                            "MaxMarks": 100,
-                            "Name": "Math",
-                        },
-                        {
-                            "Id": 2,
-                            "MaxMarks": 100,
-                            "Name": "Science",
-                        },
-                        {
-                            "Id": 3,
-                            "MaxMarks": 100,
-                            "Name": "smething"
-                        }
-                    ]
-
-                },
-                {
-                    "Id": 14,
-                    "Title": "this is a title for 14",
-                    "Description": "description of 14 ",
-                    "PassingMark": 65,
-                    "MaxMark": 600,
-                    "Category": "Coding2",
-                    "Active": false,
-                    "Topics": [
-                        {
-                            "Id": 1,
-                            "MaxMarks": 200,
-                            "Name": "Math",
-                        },
-                        {
-                            "Id": 2,
-                            "MaxMarks": 200,
-                            "Name": "lol",
-                        },
-                        {
-                            "Id": 3,
-                            "MaxMarks": 200,
-                            "Name": "smething"
-                        }
-                    ]
-
-                }
-            ]
-
+            data: []
         }
     }
 
-    // make an axios call once the page is open and fill the certificates const
+    componentDidMount() {
+        // GETs all the certificates and places it is the this.state.data
+        axios.get('https://localhost:7196/api/Certificates')
+            .then(res => {
 
+                console.log(res.data.data);
+                this.setState({ data: res.data.data });
+            })
+            .catch(err => {
+                console.error(err);
+            });
 
-    //const [certificates, setCertificates] = useState([
-
-    //]);
-
+        //console.log(this.state.data)
+    }
+ 
 
     EditButton = (id) => {
         //<Route path="/admin/certificate/edit" component={<Certificate_Edit {...this.state.certificates[id]} />} />
         return (
-            <Link to={`/admin/certificate/edit/${id}`} >
+            <Link to={`/admin/certificate/edit/`+ id} >
                 <Button> edit it</Button>
             </Link>
         )
+        // <Link to="/" component={<Certificate_Edit {...props.id}/>}
 
         // handle edit logic here
         // console.log(`Edit certificate with id: ${id}`);
@@ -121,7 +76,6 @@ class Cert_homepage extends Component {
     };
 
     render() {
-
         return (
             <div>
                 {this.createCertButton()}
@@ -137,20 +91,20 @@ class Cert_homepage extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {this.state.certificates.map((certificate, index) => (
+                        {this.state.data.map((certificate, index) => (
                             <tr key={index}>
-                                <td>{certificate.Title}</td>
-                                <td>{certificate.Description}</td>
-                                <td>{certificate.PassingMark}</td>
-                                <td>{certificate.Category}</td>
+                                <td>{certificate.title}</td>
+                                <td>{certificate.description}</td>
+                                <td>{certificate.passingMark}</td>
+                                <td>{certificate.category}</td>
                                 <td>
-                                    {certificate.Topics.map((topic, i) => (
-                                        <ol key={i}>{topic.Name}</ol>
+                                    {certificate.topics.map((topic, i) => (
+                                        <ol key={i}>{topic.name}</ol>
                                     ))}
                                 </td>
                                 <td>
-                                    {this.EditButton(certificate.Id)}
-                                    <Button variant="danger" onClick={() => this.handleDelete(certificate.Id)}>Delete</Button>
+                                    {this.EditButton(certificate.id)}
+                                    <Button variant="danger" onClick={() => this.handleDelete(certificate.id)}>Delete</Button>
 
                                 </td>
 
@@ -166,4 +120,4 @@ class Cert_homepage extends Component {
 
 }
 
-export default Cert_homepage;
+export default withRouter( Cert_homepage ) ;
