@@ -27,7 +27,7 @@ namespace Assignment4Final
 
             // Add services to the container.
             var connectionString =
-                builder.Configuration.GetConnectionString("localdb")
+                builder.Configuration.GetConnectionString("DefaultConnection")
                 ?? throw new InvalidOperationException(
                     "Connection string 'DefaultConnection' not found."
                 );
@@ -61,12 +61,11 @@ namespace Assignment4Final
 
             builder.Services.AddRazorPages();
 
-            // -----------------------------
-            //Agkiz, Added Transient service repo
+            // ---------------------------------------------------------------------------------------
+            //Agkiz, Add Repositories and Services
             builder.Services.AddTransient<IExamRepository, ExamRepository>();
 
             builder.Services.AddScoped<IQuestionsRepository, QuestionsRepository>();
-            builder.Services.AddTransient<QuestionsService>();
             builder.Services.AddScoped<QuestionsService>();
 
             builder.Services.AddScoped<ICandidateRepository, CandidateRepository>();
@@ -74,11 +73,16 @@ namespace Assignment4Final
 
             builder.Services.AddScoped<ICertificatesRepository, CertificatesRepository>();
             builder.Services.AddScoped<CertificatesService>();
+
             builder.Services.AddScoped<ITopicsRepository, TopicsRepository>();
             builder.Services.AddScoped<TopicsService>();
+
             builder.Services.AddScoped<IDifficultyLevelsRepository, DifficultyLevelsRepository>();
             builder.Services.AddScoped<DifficultyLevelsService>();
-            // -----------------------------
+
+            builder.Services.AddScoped<IGenericRepository<Country>, CountryRepository>();
+            builder.Services.AddScoped<CountryService>();
+            // ---------------------------------------------------------------------------------------
 
             // TODO:(akotro) This should be extracted into a helper class
             var mapperConfig = new MapperConfiguration(mc =>
@@ -95,7 +99,8 @@ namespace Assignment4Final
 
                 mc.CreateMap<CountryDto, Country>().ReverseMap();
                 mc.CreateMap<AddressDto, Address>()
-                    .ForMember(c => c.Country, opt => opt.MapFrom(src => src.Country)).ReverseMap();
+                    .ForMember(c => c.Country, opt => opt.MapFrom(src => src.Country))
+                    .ReverseMap();
                 mc.CreateMap<LanguageDto, Language>().ReverseMap();
                 mc.CreateMap<GenderDto, Gender>().ReverseMap();
                 mc.CreateMap<PhotoIdTypeDto, PhotoIdType>().ReverseMap();
