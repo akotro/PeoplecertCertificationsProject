@@ -9,17 +9,17 @@ namespace Assignment4Final.Controllers;
 [ApiController]
 public class GendersController : ControllerBase
 {
-    private readonly GenderService _genderService;
+    private readonly GendersService _gendersService;
 
-    public GendersController(GenderService genderService)
+    public GendersController(GendersService gendersService)
     {
-        _genderService = genderService;
+        _gendersService = gendersService;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var genders = await _genderService.GetAllAsync();
+        var genders = await _gendersService.GetAllAsync();
         var response = new BaseResponse<List<GenderDto>>
         {
             RequestId = Request.HttpContext.TraceIdentifier,
@@ -33,7 +33,7 @@ public class GendersController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> Get(int id)
     {
-        var gender = await _genderService.GetAsync(id);
+        var gender = await _gendersService.GetAsync(id);
         if (gender == null)
         {
             return NotFound(
@@ -59,7 +59,7 @@ public class GendersController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Add([FromBody] GenderDto genderDto)
     {
-        var addedGender = await _genderService.AddAsync(genderDto);
+        var addedGender = await _gendersService.AddAsync(genderDto);
         if (addedGender == null)
         {
             return BadRequest(
@@ -85,7 +85,7 @@ public class GendersController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] GenderDto genderDto)
     {
-        var updatedGender = await _genderService.UpdateAsync(id, genderDto);
+        var updatedGender = await _gendersService.UpdateAsync(id, genderDto);
         if (updatedGender == null)
         {
             return NotFound(
@@ -111,7 +111,7 @@ public class GendersController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        var deletedGender = await _genderService.DeleteAsync(id);
+        var deletedGender = await _gendersService.DeleteAsync(id);
         if (deletedGender == null)
         {
             return NotFound(
