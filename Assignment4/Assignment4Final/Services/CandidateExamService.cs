@@ -1,56 +1,52 @@
-﻿using Assignment4Final.Data;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Assignment4Final.Data.Repositories;
+using AutoMapper;
 using ModelLibrary.Models.Candidates;
+using ModelLibrary.Models.DTO.CandidateExam;
+using ModelLibrary.Models.DTO.Exams;
 using ModelLibrary.Models.Exams;
 
-namespace Assignment4Final.Services;
-
-public class CandidateExamService
+namespace Assignment4Final.Services
 {
-    private ApplicationDbContext _context;
-
-    public CandidateExamService(ApplicationDbContext context)
+    public class CandidateExamService
     {
-        _context = context;
-    }
 
-    public Candidate GetCandidateByUserId(string userId)
-    {
-        return _context.Candidates.Where(cand => cand.AppUser.Id == userId)
-            .FirstOrDefault();
-    }
+        private readonly CandidateExamRepository _candidateExamRepository;
+        private readonly ExamService _examService;
+        private readonly IMapper _mapper;
 
-    public List<Exam> GetAllExams()
-    {
-        _context.Exams
-            .ToList()
-            .ForEach(exam =>
-                _context.Entry(exam).Reference(exam1 => exam1.Certificate).Load());
-        return _context.Exams.ToList();
-    }
-
-    public List<SelectListItem> GetExamsSelectList(List<Exam> examsList)
-    {
-        if (examsList != null && examsList.Count() > 0)
+        public CandidateExamService(CandidateExamRepository candidateExamRepository,IMapper mapper, ExamService examService)
         {
-            var examsSelectList = new List<SelectListItem>();
-            var group = new SelectListGroup();
-            foreach (var exam in examsList)
-            {
-                var selectListItem = new SelectListItem()
-                {
-                    Disabled = false,
-                    Group = null,
-                    Selected = false,
-                    Text = $"Id:{exam.Id}, {exam.Certificate.Title}",
-                    Value = exam.Id.ToString()
-                };
-                examsSelectList.Add(selectListItem);
-            }
-
-            return examsSelectList;
+            _candidateExamRepository= candidateExamRepository;
+            _mapper= mapper;
+            _examService = examService;    
         }
 
-        return null;
+        public async Task<Candidate?> GetCandidateByUserId(string userId)
+        {
+            return await _candidateExamRepository.GetCandidateByUserId(userId);
+        }
+
+        public async Task<CandidateExam> GetCandidateExamByExam(Exam exam, string userId)
+        {
+           var candidate = await GetCandidateByUserId(userId);
+            var examEntity = await _examService.GetExamAsync(exam.Id); 
+           var candidateExam = new CandidateExam() { Candidate = candidate , Exam = examEntity }; 
+            return candidateExam;
+        }
+
+        public  void AddCandidateExam(ref CandidateExam candidateExam)
+        {
+              _candidateExamRepository.Add(ref candidateExam);
+            
+        }
+        public CandidateExamDto GetCandidateExamDtoFromCandidateExam(CandidateExam candidateExam)
+        {
+            _candidateExamRepository.LoadCertificateOfCandidateExamEntity(ref candidateExam);
+            return _mapper.Map<CandidateExamDto>(candidateExam);
+        }
+
+
+
+
     }
 }
