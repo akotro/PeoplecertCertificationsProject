@@ -73,6 +73,7 @@ namespace Assignment4Final
             builder.Services.AddScoped<DifficultyLevelsService>();
             // -----------------------------
 
+            // TODO:(akotro) This should be extracted into a helper class
             var mapperConfig = new MapperConfiguration(mc =>
             {
                 mc.CreateMap<OptionDto, Option>().ReverseMap();

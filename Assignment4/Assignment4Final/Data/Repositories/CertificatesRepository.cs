@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ModelLibrary.Models.Certificates;
-using ModelLibrary.Models.Exams;
 
 namespace Assignment4Final.Data.Repositories;
 
