@@ -68,9 +68,20 @@ public class CertificatesRepository : ICertificatesRepository
 
     public async Task<Certificate?> DeleteAsync(int id)
     {
-        var certificate = await _context.Certificates.FindAsync(id);
+        var certificate = await _context.Certificates
+            .Include(c => c.Exams)
+            .ThenInclude(e => e.CandidateExams)
+            .FirstOrDefaultAsync(c => c.Id == id);
+
         if (certificate != null)
         {
+            if (certificate.Exams != null)
+            {
+                certificate.Exams
+                    .ToList()
+                    .ForEach(e => e.CandidateExams.ToList().ForEach(ce => ce.Exam = null));
+            }
+
             var certificateEntry = _context.Certificates.Remove(certificate);
             await _context.SaveChangesAsync();
 
