@@ -17,61 +17,8 @@ class Cert_homepage extends Component {
         }
     }
 
-//      {
-//    "Id": 12,
-//        "Title": "this is a title",
-//            "Description": "DEscription for 12",
-//                "PassingMark": 65,
-//                    "MaxMark": 225,
-//                        "Category": "Coding",
-//                            "Active": true,
-//                                "Topics": [
-//                                    {
-//                                        "Id": 1,
-//                                        "MaxMarks": 100,
-//                                        "Name": "Math",
-//                                    },
-//                                    {
-//                                        "Id": 2,
-//                                        "MaxMarks": 100,
-//                                        "Name": "Science",
-//                                    },
-//                                    {
-//                                        "Id": 3,
-//                                        "MaxMarks": 100,
-//                                        "Name": "smething"
-//                                    }
-//                                ]
-
-//},
-//{
-//    "Id": 14,
-//        "Title": "this is a title for 14",
-//            "Description": "description of 14 ",
-//                "PassingMark": 65,
-//                    "MaxMark": 600,
-//                        "Category": "Coding2",
-//                            "Active": false,
-//                                "Topics": [
-//                                    {
-//                                        "Id": 1,
-//                                        "MaxMarks": 200,
-//                                        "Name": "Math",
-//                                    },
-//                                    {
-//                                        "Id": 2,
-//                                        "MaxMarks": 200,
-//                                        "Name": "lol",
-//                                    },
-//                                    {
-//                                        "Id": 3,
-//                                        "MaxMarks": 200,
-//                                        "Name": "smething"
-//                                    }
-//                                ]
-
-//}
     componentDidMount() {
+        // GETs all the certificates and places it is the this.state.data
         axios.get('https://localhost:7196/api/Certificates')
             .then(res => {
 
@@ -84,15 +31,7 @@ class Cert_homepage extends Component {
 
         //console.log(this.state.data)
     }
-    
-
-    // make an axios call once the page is open and fill the certificates const
-
-
-    //const [certificates, setCertificates] = useState([
-
-    //]);
-
+ 
 
     EditButton = (id) => {
         //<Route path="/admin/certificate/edit" component={<Certificate_Edit {...this.state.certificates[id]} />} />

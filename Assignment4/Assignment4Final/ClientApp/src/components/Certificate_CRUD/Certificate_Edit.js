@@ -17,25 +17,16 @@ class EditCertificateForm extends Component {
         this.state = {
             allTopics: [],
             data: {}
-            //cert: {
-            //    Title: "",
-            //    Description: "",
-            //    PassingMark: 0,
-            //    MaxMark: 0,
-            //    Category: "",
-            //    Active: false,
-            //    Topics: [],
-            //}
         }
     }
-    // using id whe can axios call for all the details we need,
 
     componentDidMount() {
-        //const { id } = this.props.params;
-        //let location = useLocation();
+        
+    // using id whe can axios call for all the details we need,
         console.log(this.props.router.params.id);
         let id = this.props.router.params.id;
 
+        // GET details for the certificate with current id
         axios.get(`https://localhost:7196/api/Certificates/${id}`)
             .then(res => {
 
@@ -46,74 +37,18 @@ class EditCertificateForm extends Component {
                 console.error(err);
             });
 
+        // GET all the topics and places int the this.state.allTopics
         axios.get(`https://localhost:7196/api/Topics`)
             .then(res => {
-
-                console.log(res.data.data);
+                //console.log(res.data.data);
                 this.setState({ allTopics: res.data.data });
             })
             .catch(err => {
                 console.error(err);
             });
-
-        //this.setState({
-        //    cert: {
-        //        "Id": 14,
-        //        "Title": "this is a title for 14",
-        //        "Description": "description of 14 ",
-        //        "PassingMark": 65,
-        //        "MaxMark": 600,
-        //        "Category": "Coding2",
-        //        "Active": false,
-        //        "Topics": [
-        //            {
-        //                "Id": 1,
-        //                "MaxMarks": 200,
-        //                "Name": "Math",
-        //            },
-        //            {
-        //                "Id": 2,
-        //                "MaxMarks": 200,
-        //                "Name": "lol",
-        //            },
-        //            {
-        //                "Id": 3,
-        //                "MaxMarks": 200,
-        //                "Name": "smething"
-        //            }]
-        //    }
-        //});
-
-        //this.setState({
-        //    // this should be an axios call to all the topics
-        //    allTopics: [
-        //        {
-        //            "Id": 1,
-        //            "MaxMarks": 100,
-        //            "Name": "Math",
-        //        },
-        //        {
-        //            "Id": 2,
-        //            "MaxMarks": 100,
-        //            "Name": "Science",
-        //        },
-        //        {
-        //            "Id": 3,
-        //            "MaxMarks": 100,
-        //            "Name": "History",
-        //        },
-        //        {
-        //            "Id": 4,
-        //            "MaxMarks": 100,
-        //            "Name": "English",
-        //        }
-        //    ]
-        //});
     }
 
-
-
-
+    // what called recalculates the maxMarks according to the selected topic options
     CalculateMaxMarks = (selectedOptions) => {
         let total = 0;
         selectedOptions.forEach(element => {
@@ -129,8 +64,8 @@ class EditCertificateForm extends Component {
     }
 
 
-    //adds the values selectes to the list of topics 
-    onSelect = (selectedOptions, selectedItem) => {
+    //adds the values selected to the list of topics 
+    onSelect = (selectedOptions) => {
 
         this.setState(prevState => ({
             data: {
@@ -152,6 +87,7 @@ class EditCertificateForm extends Component {
         this.CalculateMaxMarks(selectedOptions);
     }
 
+    // updates any change to the Certificate
     handleChange = (event) => {
         if (event.target.name == 'active') {
             this.setState(prevState => ({
@@ -174,8 +110,8 @@ class EditCertificateForm extends Component {
 
     handleSubmit = (event) => {
         event.preventDefault();
-        // handle form submit logic here with an axios post method
 
+        //PUTs the updated data for the cert 
         axios.put(`https://localhost:7196/api/Certificates/${this.state.data.id}`, this.state.data)
             .then(function (response) {
                 console.log(response);
@@ -183,18 +119,18 @@ class EditCertificateForm extends Component {
             .catch(function (error) {
                 console.log(error);
             });
-        console.log("title = ", this.state.data.title,
-            "desc = ", this.state.data.description,
-            "passmark = ", this.state.data.passingMark,
-            "maxmark = ", this.state.data.maxMark,
-            "cat = ", this.state.data.category,
-            "active = ", this.state.data.active,
-            "Topics = ", this.state.data.topics);
+
+
+        //console.log("title = ", this.state.data.title ,
+        //    "desc = ", this.state.data.description,
+        //    "passmark = ", this.state.data.passingMark,
+        //    "maxmark = ", this.state.data.maxMark,
+        //    "cat = ", this.state.data.category,
+        //    "active = ", this.state.data.active,
+        //    "Topics = ", this.state.data.topics);
     }
 
     render() {
-        //const { cert } = this.props;
-        //console.log(cert)
         return (
             <Form onSubmit={this.handleSubmit} >
                 <Stack gap={3}>

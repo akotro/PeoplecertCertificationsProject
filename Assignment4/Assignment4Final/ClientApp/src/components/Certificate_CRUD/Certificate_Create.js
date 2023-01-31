@@ -15,6 +15,7 @@ class CreateCertificateForm extends Component {
     }
 
     componentDidMount() {
+        // GET all the topics and places int the this.state.allTopics
         axios.get(`https://localhost:7196/api/Topics`)
             .then(res => {
 
@@ -25,7 +26,7 @@ class CreateCertificateForm extends Component {
                 console.error(err);
             });
     }
-
+    // what called recalculates the maxMarks according to the selected topic options
     CalculateMaxMarks = (selectedTopics) => {
         let total = 0;
         selectedTopics.forEach((topic) => {
@@ -66,6 +67,7 @@ class CreateCertificateForm extends Component {
         this.CalculateMaxMarks(selectedOptions);
 
     }
+    // updates any change to the Certificate
 
     handleChange = (event) => {
 
@@ -89,8 +91,7 @@ class CreateCertificateForm extends Component {
 
     handleSubmit = (event) => {
         event.preventDefault();
-        // handle form submit logic here with an axios post method
-
+        //POSTs new Certificate to the back end
         console.log(this.state.newCert)
         axios.post('https://localhost:7196/api/Certificates', this.state.newCert)
             .then(function (response) {
@@ -101,13 +102,13 @@ class CreateCertificateForm extends Component {
             });
 
 
-        console.log("Title = ", this.state.title,
-            "desc = ", this.state.description,
-            "passmark = ", this.state.passingMark,
-            "maxmark = ", this.state.maxMark,
-            "cat = ", this.state.category,
-            "active = ", this.state.active,
-            "selectedtopics = ", this.state.topics);
+        //console.log("Title = ", this.state.title,
+        //    "desc = ", this.state.description,
+        //    "passmark = ", this.state.passingMark,
+        //    "maxmark = ", this.state.maxMark,
+        //    "cat = ", this.state.category,
+        //    "active = ", this.state.active,
+        //    "selectedtopics = ", this.state.topics);
 
     }
     render() {
