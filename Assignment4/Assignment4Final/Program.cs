@@ -82,6 +82,9 @@ namespace Assignment4Final
 
             builder.Services.AddScoped<IGenericRepository<Country>, CountryRepository>();
             builder.Services.AddScoped<CountryService>();
+
+            builder.Services.AddScoped<IGenericRepository<Gender>, GenderRepository>();
+            builder.Services.AddScoped<GenderService>();
             // ---------------------------------------------------------------------------------------
 
             // TODO:(akotro) This should be extracted into a helper class
