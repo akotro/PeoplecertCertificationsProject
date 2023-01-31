@@ -1,5 +1,5 @@
 ﻿import React, { Component, useState } from 'react';
-import { ListGroup, ListGroupItem, Button, Table } from 'react-bootstrap';
+import { ListGroup, ListGroupItem, Button, Table, Row, Stack } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { withRouter } from './../Common/with-router';
 import { BrowserRouter, Route, useParams } from "react-router-dom";
@@ -37,7 +37,7 @@ class Cert_homepage extends Component {
         //<Route path="/admin/certificate/edit" component={<Certificate_Edit {...this.state.certificates[id]} />} />
         return (
             <Link to={`/admin/certificate/edit/`+ id} >
-                <Button> edit it</Button>
+                <Button>Edit</Button>
             </Link>
         )
         // <Link to="/" component={<Certificate_Edit {...props.id}/>}
@@ -65,29 +65,39 @@ class Cert_homepage extends Component {
         // handle delete logic here
         //send axios call with the request to delete using Id
         console.log(`Delete certificate with id: ${id}`)
+
+        axios.delete(`https://localhost:7196/api/Certificates/${id}`)
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     };
 
     createCertButton = () => {
         return (
             <Link to="/admin/certificate/create">
-                <Button> Create a new Certificate </Button>
+                <Button variant='dark' > Create a new Certificate </Button>
             </Link>
         )
     };
 
     render() {
         return (
-            <div>
+            <div className='container-fluid'>
+
                 {this.createCertButton()}
                 <Table striped borderless hover id='list_of_allcerts'>
                     <thead>
                         <tr>
                             <th>Title</th>
                             <th>Description</th>
-                            <th>PassingMark</th>
+                            {/*<th>PassingMark</th>*/}
                             <th>Category</th>
-                            <th>Topics</th>
+                            {/*<th>Topics</th>*/}
                             <th>Actions</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -95,17 +105,21 @@ class Cert_homepage extends Component {
                             <tr key={index}>
                                 <td>{certificate.title}</td>
                                 <td>{certificate.description}</td>
-                                <td>{certificate.passingMark}</td>
+                                {/*<td>{certificate.passingMark}</td>*/}
                                 <td>{certificate.category}</td>
+                                {/*<td>*/}
+                                {/*    {certificate.topics.map((topic, i) => (*/}
+                                {/*        <ol key={i}>{topic.name}</ol>*/}
+                                {/*    ))}*/}
+                                {/*</td>*/}
                                 <td>
-                                    {certificate.topics.map((topic, i) => (
-                                        <ol key={i}>{topic.name}</ol>
-                                    ))}
+                <Stack gap={1}>
+                                    {this.EditButton(certificate.id)}
+
+                                    <Button variant="dark" onClick={() => this.handleDelete(certificate.id)}>Delete</Button>
+                    </Stack>
                                 </td>
                                 <td>
-                                    {this.EditButton(certificate.id)}
-                                    <Button variant="danger" onClick={() => this.handleDelete(certificate.id)}>Delete</Button>
-
                                 </td>
 
                             </tr>
@@ -113,7 +127,6 @@ class Cert_homepage extends Component {
                         ))}
                     </tbody>
                 </Table>
-
             </div>
         );
     }
