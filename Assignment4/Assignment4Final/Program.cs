@@ -30,7 +30,7 @@ namespace Assignment4Final
 
             // Add services to the container.
             var connectionString =
-                builder.Configuration.GetConnectionString("DefaultConnection")
+                builder.Configuration.GetConnectionString("localdb")
                 ?? throw new InvalidOperationException(
                     "Connection string 'DefaultConnection' not found."
                 );
@@ -66,7 +66,8 @@ namespace Assignment4Final
 
             // ---------------------------------------------------------------------------------------
             //Agkiz, Add Repositories and Services
-            builder.Services.AddTransient<IExamRepository, ExamRepository>();
+
+            // builder.Services.AddTransient<IExamRepository, ExamRepository>();
 
             builder.Services.AddScoped<IQuestionsRepository, QuestionsRepository>();
             builder.Services.AddScoped<QuestionsService>();
@@ -88,14 +89,12 @@ namespace Assignment4Final
 
             builder.Services.AddScoped<IGenericRepository<Gender>, GenderRepository>();
             builder.Services.AddScoped<GenderService>();
-            // ---------------------------------------------------------------------------------------
-            builder.Services.AddTransient<QuestionsService>();
 
             builder.Services.AddScoped<ExamRepository>();
             builder.Services.AddScoped<ExamService>();
             builder.Services.AddScoped<CandidateExamRepository>();
             builder.Services.AddScoped<CandidateExamService>();
-            // -----------------------------
+            // ---------------------------------------------------------------------------------------
 
             // TODO:(akotro) This should be extracted into a helper class
             var mapperConfig = new MapperConfiguration(mc =>
@@ -125,11 +124,18 @@ namespace Assignment4Final
                     .ReverseMap();
                 mc.CreateMap<AppUser, UserDto>();
 
-                mc.CreateMap<Exam, ExamDto>().ForPath(dest => dest.CertificateTitle, opt => opt
-                .MapFrom(src => src.Certificate.Title)).ReverseMap();
+                mc.CreateMap<Exam, ExamDto>()
+                    .ForPath(
+                        dest => dest.CertificateTitle,
+                        opt => opt.MapFrom(src => src.Certificate.Title)
+                    )
+                    .ReverseMap();
 
-                mc.CreateMap<CandidateExam, CandidateExamDto>().ForPath(dest => dest.ExamCertificateTitle, opt => opt
-                .MapFrom(src => src.Exam.Certificate.Title));
+                mc.CreateMap<CandidateExam, CandidateExamDto>()
+                    .ForPath(
+                        dest => dest.ExamCertificateTitle,
+                        opt => opt.MapFrom(src => src.Exam.Certificate.Title)
+                    );
             });
             IMapper mapper = mapperConfig.CreateMapper();
             builder.Services.AddSingleton(mapper);
