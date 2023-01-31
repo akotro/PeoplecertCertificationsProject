@@ -9,7 +9,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using ModelLibrary.Models;
+using ModelLibrary.Models.Candidates;
 using ModelLibrary.Models.Certificates;
+using ModelLibrary.Models.DTO.Candidates;
 using ModelLibrary.Models.DTO.Certificates;
 using ModelLibrary.Models.DTO.Login;
 using ModelLibrary.Models.DTO.Questions;
@@ -25,7 +27,7 @@ namespace Assignment4Final
 
             // Add services to the container.
             var connectionString =
-                builder.Configuration.GetConnectionString("DefaultConnection")
+                builder.Configuration.GetConnectionString("localdb")
                 ?? throw new InvalidOperationException(
                     "Connection string 'DefaultConnection' not found."
                 );
@@ -64,7 +66,12 @@ namespace Assignment4Final
             builder.Services.AddTransient<IExamRepository, ExamRepository>();
 
             builder.Services.AddScoped<IQuestionsRepository, QuestionsRepository>();
+            builder.Services.AddTransient<QuestionsService>();
             builder.Services.AddScoped<QuestionsService>();
+
+            builder.Services.AddScoped<ICandidateRepository, CandidateRepository>();
+            builder.Services.AddScoped<CandidateService>();
+
             builder.Services.AddScoped<ICertificatesRepository, CertificatesRepository>();
             builder.Services.AddScoped<CertificatesService>();
             builder.Services.AddScoped<ITopicsRepository, TopicsRepository>();
@@ -85,6 +92,19 @@ namespace Assignment4Final
                     .ReverseMap();
                 mc.CreateMap<TopicDto, Topic>().ReverseMap();
                 mc.CreateMap<DifficultyLevelDto, DifficultyLevel>().ReverseMap();
+
+                mc.CreateMap<CountryDto, Country>().ReverseMap();
+                mc.CreateMap<AddressDto, Address>()
+                    .ForMember(c => c.Country, opt => opt.MapFrom(src => src.Country)).ReverseMap();
+                mc.CreateMap<LanguageDto, Language>().ReverseMap();
+                mc.CreateMap<GenderDto, Gender>().ReverseMap();
+                mc.CreateMap<PhotoIdTypeDto, PhotoIdType>().ReverseMap();
+                mc.CreateMap<CandidatesDto, Candidate>()
+                    .ForMember(c => c.Address, opt => opt.MapFrom(src => src.Address))
+                    .ForMember(c => c.Language, opt => opt.MapFrom(src => src.Language))
+                    .ForMember(c => c.Gender, opt => opt.MapFrom(src => src.Gender))
+                    .ForMember(c => c.PhotoIdType, opt => opt.MapFrom(src => src.PhotoIdType))
+                    .ReverseMap();
                 mc.CreateMap<AppUser, UserDto>();
             });
             IMapper mapper = mapperConfig.CreateMapper();

@@ -97,7 +97,7 @@ namespace WebApp4a.Controllers
                     .Id); //me basi to id toy drop down vazei sto candidateexam to exam
             candidateExam.Candidate = candidate;
             candidateExam.Candidate = candidate.AppUser.Candidate;
-            candidateExam.ExamId = candidateExam.ExamId;
+            //candidateExam.ExamId = candidateExam.ExamId;
 
             if (ModelState.IsValid)
             {
