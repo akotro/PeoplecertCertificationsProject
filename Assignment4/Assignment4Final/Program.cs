@@ -25,7 +25,7 @@ namespace Assignment4Final
 
             // Add services to the container.
             var connectionString =
-                builder.Configuration.GetConnectionString("localdb")
+                builder.Configuration.GetConnectionString("DefaultConnection")
                 ?? throw new InvalidOperationException(
                     "Connection string 'DefaultConnection' not found."
                 );
@@ -93,7 +93,7 @@ namespace Assignment4Final
                 options =>
                     options.AddPolicy( // TODO:(akotro) Is this correct?
                         "FrontEndPolicy",
-                        policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyOrigin()
+                        policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()
                     )
             ); //.WithHeaders((HeaderNames.ContentType, "application/json")));
 
