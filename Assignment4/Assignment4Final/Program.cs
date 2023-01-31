@@ -25,7 +25,7 @@ namespace Assignment4Final
 
             // Add services to the container.
             var connectionString =
-                builder.Configuration.GetConnectionString("localhost")
+                builder.Configuration.GetConnectionString("localdb")
                 ?? throw new InvalidOperationException(
                     "Connection string 'DefaultConnection' not found."
                 );
@@ -69,6 +69,8 @@ namespace Assignment4Final
             builder.Services.AddScoped<CertificatesService>();
             builder.Services.AddScoped<ITopicsRepository, TopicsRepository>();
             builder.Services.AddScoped<TopicsService>();
+            builder.Services.AddScoped<IDifficultyLevelsRepository, DifficultyLevelsRepository>();
+            builder.Services.AddScoped<DifficultyLevelsService>();
             // -----------------------------
 
             var mapperConfig = new MapperConfiguration(mc =>
@@ -89,9 +91,9 @@ namespace Assignment4Final
 
             builder.Services.AddCors(
                 options =>
-                    options.AddPolicy(
+                    options.AddPolicy( // TODO:(akotro) Is this correct?
                         "FrontEndPolicy",
-                        policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()
+                        policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyOrigin()
                     )
             ); //.WithHeaders((HeaderNames.ContentType, "application/json")));
 
