@@ -33,6 +33,17 @@ namespace Assignment4Final.Data.Repositories
         }
 
 
+        public async Task<List<CandidateExam>> GetAllCandidateExamsOfCandidateAsync(Candidate candidate)
+        {
+            return await _context.CandidateExams.Where(candexam => candexam.Candidate == candidate).ToListAsync();
+        }
+        
+        public async Task<List<CandidateExam>> GetTakenCandidateExamsOfCandidateAsync(Candidate candidate)
+        {
+            return await _context.CandidateExams.Include(candExam => candExam.Candidate).Where(candExam => (candExam.Candidate == candidate && candExam.ExamDate != null)).ToListAsync();
+        }
+
+
 
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ModelLibrary.Models;
+using ModelLibrary.Models.DTO.CandidateExam;
 using ModelLibrary.Models.DTO.Exams;
 using ModelLibrary.Models.Exams;
 
@@ -24,7 +25,7 @@ namespace Assignment4Final.Controllers
         }
 
 
-        [HttpGet("{examDto}")] //Get : when the candidate picks an exam it makes a candidate exam for this candidate and the exam he picked
+        [HttpPost("{examDto}")] //Get : when the candidate picks an exam it makes a candidate exam for this candidate and the exam he picked
         public async Task<ActionResult<CandidateExam>> GetCandidateExamFromPickedExam(ExamDto examDto) 
         {
             var exam = _examService.GetExamFromExamDto(examDto);
@@ -34,6 +35,26 @@ namespace Assignment4Final.Controllers
             var candidateExamDto = _candExamService.GetCandidateExamDtoFromCandidateExam(candidateExam);
 
             return Ok(candidateExamDto);
+        }
+
+
+        [HttpGet]
+        public async Task<ActionResult<List<CandidateExamDto>>> GetAllCandidateExamsOfCandidate()
+        {
+
+            var  candidate = await _candExamService.GetCandidateByUserId(_userManager.GetUserId(User));
+            var candidateExamsList = await _candExamService.GetAllCandidateExamsOfCandidateAsync(candidate);
+            return Ok(await Task.Run(() => _candExamService.GetListOfCandidateExamDtosFromListOfCandidateExam(candidateExamsList)));
+
+        }
+
+        [HttpGet("notTaken")]
+        public async Task<ActionResult<List<CandidateExamDto>>> GetTakenCandidateExamsOfCandidate() //Not Debuged all the candidate exams in Seed are Taken . Should i checke if taken by ExamDate?
+        {
+            var candidate = await _candExamService.GetCandidateByUserId(_userManager.GetUserId(User));
+            var candidatesTakenExams = await _candExamService.GetTakenCandidateExamsOfCandidateAsync(candidate);
+            return Ok( _candExamService.GetListOfCandidateExamDtosFromListOfCandidateExam(candidatesTakenExams));
+
         }
     }
 }

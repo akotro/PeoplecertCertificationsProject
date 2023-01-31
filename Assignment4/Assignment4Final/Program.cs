@@ -30,7 +30,7 @@ namespace Assignment4Final
 
             // Add services to the container.
             var connectionString =
-                builder.Configuration.GetConnectionString("DefaultConnection")
+                builder.Configuration.GetConnectionString("localhost")
                 ?? throw new InvalidOperationException(
                     "Connection string 'DefaultConnection' not found."
                 );
@@ -66,7 +66,6 @@ namespace Assignment4Final
 
             // ---------------------------------------------------------------------------------------
             //Agkiz, Add Repositories and Services
-            builder.Services.AddTransient<IExamRepository, ExamRepository>();
 
             builder.Services.AddScoped<IQuestionsRepository, QuestionsRepository>();
             builder.Services.AddScoped<QuestionsService>();

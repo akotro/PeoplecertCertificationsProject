@@ -23,7 +23,7 @@ namespace WebApp4a
 
             // Add services to the container.
             var connectionString =
-                builder.Configuration.GetConnectionString("akotro")
+                builder.Configuration.GetConnectionString("giannis")
                 ?? throw new InvalidOperationException(
                     "Connection string 'DefaultConnection' not found."
                 );
