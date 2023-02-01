@@ -55,8 +55,8 @@ namespace Assignment4Final.Data.Seed
                 List<AppUser> fakeAppUsers = new List<AppUser>();
                 PasswordHasher<AppUser> passHash = new PasswordHasher<AppUser>();
 
-                // create 10 GUIDs
-                for (int i = 0; i < 10; i++)
+                // create 20 GUIDs
+                for (int i = 0; i < 20; i++)
                 {
                     fakeGuids.Add(Guid.NewGuid().ToString());
                 }
@@ -272,7 +272,7 @@ namespace Assignment4Final.Data.Seed
                     .RuleFor(u => u.PhotoIdType, f => f.PickRandom(db.PhotoIdTypes.ToList()))
                     .RuleFor(u => u.Language, f => f.PickRandom(db.Languages.ToList()));
 
-                var fakeCandidates = candidateFaker.Generate(db.Users.Count() - 1);
+                var fakeCandidates = candidateFaker.Generate(db.Users.Count() - 10);
 
                 // Add an existing User Id to a each Candidate
                 for (int i = 0; i < fakeCandidates.Count; i++)
@@ -333,7 +333,7 @@ namespace Assignment4Final.Data.Seed
                         }
                     );
 
-                var fakeQuestions = questionFaker.Generate(100);
+                var fakeQuestions = questionFaker.Generate(10);
                 db.Questions.AddRange(fakeQuestions);
                 db.SaveChanges();
             }
@@ -471,29 +471,4 @@ namespace Assignment4Final.Data.Seed
             db.SaveChanges();
         }
     }
-
-    //if ((int)db.Certificates.Select(c => c.PassingMark) == 0))
-    //{
-
-    //}
-    //var certs = db.Certificates;
-    //for (int j = 1; j < certs.ToList().Count() + 1; j++)
-    //{
-    //    var maxMarksList = certs.Where(i => i.Id == j)
-    //        .Include(x => x.Topics)
-    //        .ToList();  //.ThenInclude(c => c.)
-    //    foreach (var item in maxMarksList)
-    //    {
-    //        item.MaxMark = 0;
-    //        foreach (var topic in item.Topics)
-    //        {
-    //            item.MaxMark = item.MaxMark + topic.MaxMarks;
-    //        }
-    //for (int j = 1; j < certs.ToList().Count() + 1; j++)
-    //{
-    //    var cert = certs.Where(i => i.Id == j).FirstOrDefault();
-    //    var result = cert.MaxMark * (65 / 100.0);
-    //    cert.PassingMark = Convert.ToInt32(result);
-    //};
-    //db.SaveChanges();
 }
