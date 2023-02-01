@@ -3,11 +3,11 @@ using ModelLibrary.Models.Candidates;
 
 namespace Assignment4Final.Data.Repositories;
 
-public class GenderRepository : IGenericRepository<Gender>
+public class GendersRepository : IGenericRepository<Gender>
 {
     private readonly ApplicationDbContext _context;
 
-    public GenderRepository(ApplicationDbContext context)
+    public GendersRepository(ApplicationDbContext context)
     {
         _context = context;
     }

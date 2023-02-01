@@ -3,11 +3,11 @@ using ModelLibrary.Models.Candidates;
 
 namespace Assignment4Final.Data.Repositories;
 
-public class CountryRepository : IGenericRepository<Country>
+public class CountriesRepository : IGenericRepository<Country>
 {
     private readonly ApplicationDbContext _context;
 
-    public CountryRepository(ApplicationDbContext context)
+    public CountriesRepository(ApplicationDbContext context)
     {
         _context = context;
     }

@@ -5,12 +5,12 @@ using ModelLibrary.Models.DTO.Candidates;
 
 namespace Assignment4Final.Services;
 
-public class CountryService
+public class CountriesService
 {
     private readonly IGenericRepository<Country> _repository;
     private readonly IMapper _mapper;
 
-    public CountryService(IGenericRepository<Country> repository, IMapper mapper)
+    public CountriesService(IGenericRepository<Country> repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;
