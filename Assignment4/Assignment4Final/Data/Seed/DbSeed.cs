@@ -333,7 +333,7 @@ namespace Assignment4Final.Data.Seed
                         }
                     );
 
-                var fakeQuestions = questionFaker.Generate(100);
+                var fakeQuestions = questionFaker.Generate(10);
                 db.Questions.AddRange(fakeQuestions);
                 db.SaveChanges();
             }
