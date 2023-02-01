@@ -19,6 +19,8 @@ using ModelLibrary.Models.DTO.Exams;
 using ModelLibrary.Models.DTO.CandidateExam;
 using ModelLibrary.Models.Exams;
 using ModelLibrary.Models.Questions;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Converters;
 
 namespace Assignment4Final
 {
@@ -52,13 +54,21 @@ namespace Assignment4Final
 
             builder.Services.AddAuthentication().AddIdentityServerJwt();
 
+            // builder.Services
+            //     .AddControllersWithViews()
+            //     .AddJsonOptions(options =>
+            //     {
+            //         // NOTE:(akotro) Configure JsonSerializerOptions
+            //         // options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+            //         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            //     });
+
             builder.Services
                 .AddControllersWithViews()
-                .AddJsonOptions(options =>
+                .AddNewtonsoftJson(options =>
                 {
-                    // NOTE:(akotro) Configure JsonSerializerOptions
-                    // options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
-                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                    options.SerializerSettings.Converters.Add(
+                        new StringEnumConverter());
                 });
             builder.Services.AddSwaggerGen(); // NOTE:(akotro) Add Swagger
 
@@ -81,14 +91,24 @@ namespace Assignment4Final
             builder.Services.AddScoped<ITopicsRepository, TopicsRepository>();
             builder.Services.AddScoped<TopicsService>();
 
-            builder.Services.AddScoped<IDifficultyLevelsRepository, DifficultyLevelsRepository>();
+            builder.Services
+                .AddScoped<IDifficultyLevelsRepository, DifficultyLevelsRepository>();
             builder.Services.AddScoped<DifficultyLevelsService>();
 
-            builder.Services.AddScoped<IGenericRepository<Country>, CountryRepository>();
-            builder.Services.AddScoped<CountryService>();
+            builder.Services
+                .AddScoped<IGenericRepository<Country>, CountriesRepository>();
+            builder.Services.AddScoped<CountriesService>();
 
-            builder.Services.AddScoped<IGenericRepository<Gender>, GenderRepository>();
-            builder.Services.AddScoped<GenderService>();
+            builder.Services.AddScoped<IGenericRepository<Gender>, GendersRepository>();
+            builder.Services.AddScoped<GendersService>();
+
+            builder.Services
+                .AddScoped<IGenericRepository<Language>, LanguagesRepository>();
+            builder.Services.AddScoped<LanguagesService>();
+
+            builder.Services
+                .AddScoped<IGenericRepository<PhotoIdType>, PhotoIdTypesRepository>();
+            builder.Services.AddScoped<PhotoIdTypesService>();
 
             builder.Services.AddScoped<ExamRepository>();
             builder.Services.AddScoped<ExamService>();
@@ -101,7 +121,8 @@ namespace Assignment4Final
             {
                 mc.CreateMap<OptionDto, Option>().ReverseMap();
                 mc.CreateMap<QuestionDto, Question>()
-                    .ForMember(dest => dest.Options, opt => opt.MapFrom(src => src.Options))
+                    .ForMember(dest => dest.Options,
+                        opt => opt.MapFrom(src => src.Options))
                     .ReverseMap();
                 mc.CreateMap<CertificateDto, Certificate>()
                     .ForMember(dest => dest.Topics, opt => opt.MapFrom(src => src.Topics))
@@ -120,7 +141,8 @@ namespace Assignment4Final
                     .ForMember(c => c.Address, opt => opt.MapFrom(src => src.Address))
                     .ForMember(c => c.Language, opt => opt.MapFrom(src => src.Language))
                     .ForMember(c => c.Gender, opt => opt.MapFrom(src => src.Gender))
-                    .ForMember(c => c.PhotoIdType, opt => opt.MapFrom(src => src.PhotoIdType))
+                    .ForMember(c => c.PhotoIdType,
+                        opt => opt.MapFrom(src => src.PhotoIdType))
                     .ReverseMap();
                 mc.CreateMap<AppUser, UserDto>();
 
@@ -144,7 +166,8 @@ namespace Assignment4Final
                 options =>
                     options.AddPolicy( // TODO:(akotro) Is this correct?
                         "FrontEndPolicy",
-                        policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()
+                        policy =>
+                            policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()
                     )
             ); //.WithHeaders((HeaderNames.ContentType, "application/json")));
 
@@ -175,7 +198,8 @@ namespace Assignment4Final
             app.UseIdentityServer();
             app.UseAuthorization();
 
-            app.MapControllerRoute(name: "default", pattern: "{controller}/{action=Index}/{id?}");
+            app.MapControllerRoute(name: "default",
+                pattern: "{controller}/{action=Index}/{id?}");
             app.MapRazorPages();
 
             app.MapFallbackToFile("index.html");

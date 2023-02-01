@@ -9,17 +9,17 @@ namespace Assignment4Final.Controllers;
 [ApiController]
 public class CountriesController : ControllerBase
 {
-    private readonly CountryService _countryService;
+    private readonly CountriesService _countriesService;
 
-    public CountriesController(CountryService countryService)
+    public CountriesController(CountriesService countriesService)
     {
-        _countryService = countryService;
+        _countriesService = countriesService;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var countries = await _countryService.GetAllAsync();
+        var countries = await _countriesService.GetAllAsync();
         var response = new BaseResponse<List<CountryDto>>
         {
             RequestId = Request.HttpContext.TraceIdentifier,
@@ -33,7 +33,7 @@ public class CountriesController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> Get(int id)
     {
-        var country = await _countryService.GetAsync(id);
+        var country = await _countriesService.GetAsync(id);
         if (country == null)
         {
             return NotFound(
@@ -59,7 +59,7 @@ public class CountriesController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Add([FromBody] CountryDto countryDto)
     {
-        var addedCountry = await _countryService.AddAsync(countryDto);
+        var addedCountry = await _countriesService.AddAsync(countryDto);
         if (addedCountry == null)
         {
             return BadRequest(
@@ -85,7 +85,7 @@ public class CountriesController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] CountryDto countryDto)
     {
-        var updatedCountry = await _countryService.UpdateAsync(id, countryDto);
+        var updatedCountry = await _countriesService.UpdateAsync(id, countryDto);
         if (updatedCountry == null)
         {
             return NotFound(
@@ -111,7 +111,7 @@ public class CountriesController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        var deletedCountry = await _countryService.DeleteAsync(id);
+        var deletedCountry = await _countriesService.DeleteAsync(id);
         if (deletedCountry == null)
         {
             return NotFound(
