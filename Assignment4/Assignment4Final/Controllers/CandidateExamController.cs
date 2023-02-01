@@ -20,7 +20,6 @@ namespace Assignment4Final.Controllers
             _userManager = userManager;
             _candExamService = candExamService;
             _examService = examService;
-           
         }
 
 

@@ -12,6 +12,8 @@ import Questions from './components/Questions/QuestionHomePage';
 import Edit from './components/Questions/QuestionEdit';
 import Create from './components/Questions/QuestionCreate';
 
+import CandidateHomepage from './components/Candidate_Page/CandidateHomepage';
+
 const AppRoutes = [
     {
         index: true,
@@ -56,6 +58,11 @@ const AppRoutes = [
         path: '/admin/Questions/QuestionCreate',
         // requireAuth: true,
         element: <Create />
+    },
+    {
+        path: '/candidate',
+        // requireAuth: true,
+        element: <CandidateHomepage />
     },
     //this needs to stay as the last path
     {
