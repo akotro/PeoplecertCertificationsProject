@@ -93,6 +93,9 @@ namespace Assignment4Final
             builder.Services.AddScoped<IGenericRepository<Language>, LanguagesRepository>();
             builder.Services.AddScoped<LanguagesService>();
 
+            builder.Services.AddScoped<IGenericRepository<PhotoIdType>, PhotoIdTypesRepository>();
+            builder.Services.AddScoped<PhotoIdTypesService>();
+
             builder.Services.AddScoped<ExamRepository>();
             builder.Services.AddScoped<ExamService>();
             builder.Services.AddScoped<CandidateExamRepository>();
