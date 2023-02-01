@@ -30,7 +30,7 @@ namespace Assignment4Final
 
             // Add services to the container.
             var connectionString =
-                builder.Configuration.GetConnectionString("DefaultConnection")
+                builder.Configuration.GetConnectionString("localdb")
                 ?? throw new InvalidOperationException(
                     "Connection string 'DefaultConnection' not found."
                 );
@@ -89,6 +89,9 @@ namespace Assignment4Final
 
             builder.Services.AddScoped<IGenericRepository<Gender>, GendersRepository>();
             builder.Services.AddScoped<GendersService>();
+
+            builder.Services.AddScoped<IGenericRepository<Language>, LanguagesRepository>();
+            builder.Services.AddScoped<LanguagesService>();
 
             builder.Services.AddScoped<ExamRepository>();
             builder.Services.AddScoped<ExamService>();
