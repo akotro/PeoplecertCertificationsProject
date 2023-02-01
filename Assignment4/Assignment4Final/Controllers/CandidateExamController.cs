@@ -21,16 +21,17 @@ namespace Assignment4Final.Controllers
             _userManager = userManager;
             _candExamService = candExamService;
             _examService = examService;
-           
+
         }
 
 
         [HttpPost("{examDto}")] //Get : when the candidate picks an exam it makes a candidate exam for this candidate and the exam he picked
-        public async Task<ActionResult<CandidateExam>> GetCandidateExamFromPickedExam(ExamDto examDto) 
+        public async Task<ActionResult<CandidateExam>> GetCandidateExamFromPickedExam([FromBody] ExamDto examDto)
         {
             var exam = _examService.GetExamFromExamDto(examDto);
+
             var userId = _userManager.GetUserId(User);
-            var candidateExam = await _candExamService.GetCandidateExamByExam(exam,userId);
+            var candidateExam = await _candExamService.GetCandidateExamByExam(exam, userId);
             await Task.Run(() => _candExamService.AddCandidateExam(ref candidateExam));
             var candidateExamDto = _candExamService.GetCandidateExamDtoFromCandidateExam(candidateExam);
 
@@ -42,7 +43,7 @@ namespace Assignment4Final.Controllers
         public async Task<ActionResult<List<CandidateExamDto>>> GetAllCandidateExamsOfCandidate()
         {
 
-            var  candidate = await _candExamService.GetCandidateByUserId(_userManager.GetUserId(User));
+            var candidate = await _candExamService.GetCandidateByUserId(_userManager.GetUserId(User));
             var candidateExamsList = await _candExamService.GetAllCandidateExamsOfCandidateAsync(candidate);
             return Ok(await Task.Run(() => _candExamService.GetListOfCandidateExamDtosFromListOfCandidateExam(candidateExamsList)));
 
@@ -53,7 +54,7 @@ namespace Assignment4Final.Controllers
         {
             var candidate = await _candExamService.GetCandidateByUserId(_userManager.GetUserId(User));
             var candidatesTakenExams = await _candExamService.GetTakenCandidateExamsOfCandidateAsync(candidate);
-            return Ok( _candExamService.GetListOfCandidateExamDtosFromListOfCandidateExam(candidatesTakenExams));
+            return Ok(_candExamService.GetListOfCandidateExamDtosFromListOfCandidateExam(candidatesTakenExams));
 
         }
     }

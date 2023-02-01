@@ -11,5 +11,6 @@ namespace ModelLibrary.Models.DTO.Exams
 
         public int Id { get; set; }
         public string? CertificateTitle { get; set; }
+        
     }
 }
