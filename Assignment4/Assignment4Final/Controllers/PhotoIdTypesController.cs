@@ -7,24 +7,24 @@ namespace Assignment4Final.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class GendersController : ControllerBase
+public class PhotoIdTypesController : ControllerBase
 {
-    private readonly GendersService _gendersService;
+    private readonly PhotoIdTypesService _photoIdTypesService;
 
-    public GendersController(GendersService gendersService)
+    public PhotoIdTypesController(PhotoIdTypesService photoIdTypesService)
     {
-        _gendersService = gendersService;
+        _photoIdTypesService = photoIdTypesService;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var genders = await _gendersService.GetAllAsync();
-        var response = new BaseResponse<List<GenderDto>>
+        var photoIdTypes = await _photoIdTypesService.GetAllAsync();
+        var response = new BaseResponse<List<PhotoIdTypeDto>>
         {
             RequestId = Request.HttpContext.TraceIdentifier,
             Success = true,
-            Data = genders
+            Data = photoIdTypes
         };
 
         return Ok(response);
@@ -33,76 +33,76 @@ public class GendersController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> Get(int id)
     {
-        var gender = await _gendersService.GetAsync(id);
-        if (gender == null)
+        var photoIdType = await _photoIdTypesService.GetAsync(id);
+        if (photoIdType == null)
         {
             return NotFound(
-                new BaseResponse<GenderDto>
+                new BaseResponse<PhotoIdTypeDto>
                 {
                     RequestId = Request.HttpContext.TraceIdentifier,
                     Success = false,
-                    Message = $"Gender with id {id} not found."
+                    Message = $"PhotoIdType with id {id} not found."
                 }
             );
         }
 
-        var response = new BaseResponse<GenderDto>
+        var response = new BaseResponse<PhotoIdTypeDto>
         {
             RequestId = Request.HttpContext.TraceIdentifier,
             Success = true,
-            Data = gender
+            Data = photoIdType
         };
 
         return Ok(response);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Add([FromBody] GenderDto genderDto)
+    public async Task<IActionResult> Add([FromBody] PhotoIdTypeDto photoIdTypeDto)
     {
-        var addedGender = await _gendersService.AddAsync(genderDto);
-        if (addedGender == null)
+        var addedPhotoIdType = await _photoIdTypesService.AddAsync(photoIdTypeDto);
+        if (addedPhotoIdType == null)
         {
             return BadRequest(
-                new BaseResponse<GenderDto>
+                new BaseResponse<PhotoIdTypeDto>
                 {
                     RequestId = Request.HttpContext.TraceIdentifier,
                     Success = false,
-                    Message = "Failed to add gender."
+                    Message = "Failed to add photoIdType."
                 }
             );
         }
 
-        var response = new BaseResponse<GenderDto>
+        var response = new BaseResponse<PhotoIdTypeDto>
         {
             RequestId = Request.HttpContext.TraceIdentifier,
             Success = true,
-            Data = addedGender
+            Data = addedPhotoIdType
         };
 
-        return CreatedAtAction(nameof(Get), new { id = addedGender.Id }, response);
+        return CreatedAtAction(nameof(Get), new { id = addedPhotoIdType.Id }, response);
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, [FromBody] GenderDto genderDto)
+    public async Task<IActionResult> Update(int id, [FromBody] PhotoIdTypeDto photoIdTypeDto)
     {
-        var updatedGender = await _gendersService.UpdateAsync(id, genderDto);
-        if (updatedGender == null)
+        var updatedPhotoIdType = await _photoIdTypesService.UpdateAsync(id, photoIdTypeDto);
+        if (updatedPhotoIdType == null)
         {
             return NotFound(
-                new BaseResponse<GenderDto>
+                new BaseResponse<PhotoIdTypeDto>
                 {
                     RequestId = Request.HttpContext.TraceIdentifier,
                     Success = false,
-                    Message = $"Gender with id {id} not found."
+                    Message = $"PhotoIdType with id {id} not found."
                 }
             );
         }
 
-        var response = new BaseResponse<GenderDto>
+        var response = new BaseResponse<PhotoIdTypeDto>
         {
             RequestId = Request.HttpContext.TraceIdentifier,
             Success = true,
-            Data = updatedGender
+            Data = updatedPhotoIdType
         };
 
         return Ok(response);
@@ -111,24 +111,24 @@ public class GendersController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        var deletedGender = await _gendersService.DeleteAsync(id);
-        if (deletedGender == null)
+        var deletedPhotoIdType = await _photoIdTypesService.DeleteAsync(id);
+        if (deletedPhotoIdType == null)
         {
             return NotFound(
-                new BaseResponse<GenderDto>
+                new BaseResponse<PhotoIdTypeDto>
                 {
                     RequestId = Request.HttpContext.TraceIdentifier,
                     Success = false,
-                    Message = $"Gender with id {id} not found."
+                    Message = $"PhotoIdType with id {id} not found."
                 }
             );
         }
 
-        var response = new BaseResponse<GenderDto>
+        var response = new BaseResponse<PhotoIdTypeDto>
         {
             RequestId = Request.HttpContext.TraceIdentifier,
             Success = true,
-            Data = deletedGender
+            Data = deletedPhotoIdType
         };
 
         return Ok(response);
