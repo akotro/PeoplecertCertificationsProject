@@ -106,7 +106,11 @@ class EditCertificateForm extends Component {
 
         }
     }
-    
+
+    goBack =() => {
+        const { navigate } = this.props;
+        this.props.router.navigate(-1)
+    }
 
     handleSubmit = (event) => {
         event.preventDefault();
@@ -206,6 +210,7 @@ class EditCertificateForm extends Component {
                     <Button variant="primary" type="submit">
                         Save
                     </Button>
+                    <Button onClick={this.goBack}>Go back</Button>
                 </Stack>
             </Form >
         )

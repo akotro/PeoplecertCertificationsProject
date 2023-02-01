@@ -12,7 +12,7 @@ namespace Assignment4Final.Data.Repositories
             _context = context;
         }
 
-        public async Task<List<Exam>> GetAllExamsAsync(bool include = true )
+        public async Task<List<Exam>> GetAllExamsAsync(bool include = true)
         {
             if (include)
             {
@@ -21,12 +21,11 @@ namespace Assignment4Final.Data.Repositories
             return await _context.Exams.ToListAsync();
         }
 
-
         public async Task<Exam?> GetExamAsync(int id)
         {
-           return await  _context.Exams.FindAsync(id);
+            return await _context.Exams
+                .Include(e => e.Certificate)
+                .FirstOrDefaultAsync(e => e.Id == id);
         }
-
-       
     }
 }

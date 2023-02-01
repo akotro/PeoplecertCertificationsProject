@@ -5,12 +5,12 @@ using ModelLibrary.Models.DTO.Candidates;
 
 namespace Assignment4Final.Services;
 
-public class GenderService
+public class GendersService
 {
     private readonly IGenericRepository<Gender> _repository;
     private readonly IMapper _mapper;
 
-    public GenderService(IGenericRepository<Gender> repository, IMapper mapper)
+    public GendersService(IGenericRepository<Gender> repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;

@@ -7,24 +7,24 @@ namespace Assignment4Final.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class GendersController : ControllerBase
+public class LanguagesController : ControllerBase
 {
-    private readonly GendersService _gendersService;
+    private readonly LanguagesService _languagesService;
 
-    public GendersController(GendersService gendersService)
+    public LanguagesController(LanguagesService languagesService)
     {
-        _gendersService = gendersService;
+        _languagesService = languagesService;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var genders = await _gendersService.GetAllAsync();
-        var response = new BaseResponse<List<GenderDto>>
+        var languages = await _languagesService.GetAllAsync();
+        var response = new BaseResponse<List<LanguageDto>>
         {
             RequestId = Request.HttpContext.TraceIdentifier,
             Success = true,
-            Data = genders
+            Data = languages
         };
 
         return Ok(response);
@@ -33,76 +33,76 @@ public class GendersController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> Get(int id)
     {
-        var gender = await _gendersService.GetAsync(id);
-        if (gender == null)
+        var language = await _languagesService.GetAsync(id);
+        if (language == null)
         {
             return NotFound(
-                new BaseResponse<GenderDto>
+                new BaseResponse<LanguageDto>
                 {
                     RequestId = Request.HttpContext.TraceIdentifier,
                     Success = false,
-                    Message = $"Gender with id {id} not found."
+                    Message = $"Language with id {id} not found."
                 }
             );
         }
 
-        var response = new BaseResponse<GenderDto>
+        var response = new BaseResponse<LanguageDto>
         {
             RequestId = Request.HttpContext.TraceIdentifier,
             Success = true,
-            Data = gender
+            Data = language
         };
 
         return Ok(response);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Add([FromBody] GenderDto genderDto)
+    public async Task<IActionResult> Add([FromBody] LanguageDto languageDto)
     {
-        var addedGender = await _gendersService.AddAsync(genderDto);
-        if (addedGender == null)
+        var addedLanguage = await _languagesService.AddAsync(languageDto);
+        if (addedLanguage == null)
         {
             return BadRequest(
-                new BaseResponse<GenderDto>
+                new BaseResponse<LanguageDto>
                 {
                     RequestId = Request.HttpContext.TraceIdentifier,
                     Success = false,
-                    Message = "Failed to add gender."
+                    Message = "Failed to add language."
                 }
             );
         }
 
-        var response = new BaseResponse<GenderDto>
+        var response = new BaseResponse<LanguageDto>
         {
             RequestId = Request.HttpContext.TraceIdentifier,
             Success = true,
-            Data = addedGender
+            Data = addedLanguage
         };
 
-        return CreatedAtAction(nameof(Get), new { id = addedGender.Id }, response);
+        return CreatedAtAction(nameof(Get), new { id = addedLanguage.Id }, response);
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, [FromBody] GenderDto genderDto)
+    public async Task<IActionResult> Update(int id, [FromBody] LanguageDto languageDto)
     {
-        var updatedGender = await _gendersService.UpdateAsync(id, genderDto);
-        if (updatedGender == null)
+        var updatedLanguage = await _languagesService.UpdateAsync(id, languageDto);
+        if (updatedLanguage == null)
         {
             return NotFound(
-                new BaseResponse<GenderDto>
+                new BaseResponse<LanguageDto>
                 {
                     RequestId = Request.HttpContext.TraceIdentifier,
                     Success = false,
-                    Message = $"Gender with id {id} not found."
+                    Message = $"Language with id {id} not found."
                 }
             );
         }
 
-        var response = new BaseResponse<GenderDto>
+        var response = new BaseResponse<LanguageDto>
         {
             RequestId = Request.HttpContext.TraceIdentifier,
             Success = true,
-            Data = updatedGender
+            Data = updatedLanguage
         };
 
         return Ok(response);
@@ -111,24 +111,24 @@ public class GendersController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        var deletedGender = await _gendersService.DeleteAsync(id);
-        if (deletedGender == null)
+        var deletedLanguage = await _languagesService.DeleteAsync(id);
+        if (deletedLanguage == null)
         {
             return NotFound(
-                new BaseResponse<GenderDto>
+                new BaseResponse<LanguageDto>
                 {
                     RequestId = Request.HttpContext.TraceIdentifier,
                     Success = false,
-                    Message = $"Gender with id {id} not found."
+                    Message = $"Language with id {id} not found."
                 }
             );
         }
 
-        var response = new BaseResponse<GenderDto>
+        var response = new BaseResponse<LanguageDto>
         {
             RequestId = Request.HttpContext.TraceIdentifier,
             Success = true,
-            Data = deletedGender
+            Data = deletedLanguage
         };
 
         return Ok(response);

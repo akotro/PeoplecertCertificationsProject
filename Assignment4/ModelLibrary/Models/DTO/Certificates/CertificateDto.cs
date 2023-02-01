@@ -1,4 +1,7 @@
-﻿namespace ModelLibrary.Models.DTO.Certificates;
+﻿using ModelLibrary.Models.DTO.Exams;
+using Newtonsoft.Json;
+
+namespace ModelLibrary.Models.DTO.Certificates;
 
 public class CertificateDto
 {
@@ -10,4 +13,7 @@ public class CertificateDto
     public string? Category { get; set; }
     public bool? Active { get; set; }
     public List<TopicDto>? Topics { get; set; }
+
+    [JsonProperty(ItemReferenceLoopHandling = ReferenceLoopHandling.Ignore)]
+    public List<ExamDto>? Exams { get; set; }
 }
