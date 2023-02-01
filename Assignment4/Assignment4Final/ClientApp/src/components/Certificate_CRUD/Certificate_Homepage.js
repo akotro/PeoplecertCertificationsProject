@@ -62,17 +62,22 @@ class Cert_homepage extends Component {
 
 
     handleDelete = (id) => {
-        // handle delete logic here
-        //send axios call with the request to delete using Id
-        console.log(`Delete certificate with id: ${id}`)
+        // Asks user if they are sure
+        const confirmDelete = window.confirm("Are you sure you want to delete this certificate?");
 
+        if (confirmDelete) {
+        //send axios call with the request to delete using Id
         axios.delete(`https://localhost:7196/api/Certificates/${id}`)
-            .then(function (response) {
-                console.log(response);
+            .then(response => {
+                //console.log(response.data.data);
+                this.setState(prevState => ({
+                    data: prevState.data.filter(item => item.id !== id)
+                }));
             })
             .catch(function (error) {
                 console.log(error);
             });
+        }
     };
 
     createCertButton = () => {

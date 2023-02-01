@@ -49,20 +49,24 @@ function Questions()
             <div>
                 <Table hover striped >
                                 <thead>
+                                    <tr>
+
                                     <th scope='Col'>Id</th>
                                     <th scope='col'>MainText</th>
                                     <th scope='col'>Topic</th>
                                     <th scope='col'></th>
                                     <th scope='col'></th>
+
+                                    </tr>
                                 </thead>
 
                                 <tbody>
                         
                                         {data.map((item,index) => (
-                                            <tr>
-                                                <td>{item.id}</td>
+                                            <tr key={item.id}>
+                                                <td>{item.id != null && item.id}</td>
                                                 <td>{Replace(item.text)}</td>
-                                                <td>{item.topic.name}</td>
+                                                <td>{item.topic === null ? "No topic selected" : item.topic.name}</td>
                                                 <td>
                                                         <Link to="/admin/Questions/QuestionEdit"><Button>Edit</Button></Link>  
                                                 </td>
