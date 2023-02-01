@@ -17,7 +17,7 @@ const CandidateHomepage = () => {
     //        }
     //    };
     //    fetchCertificates();
-    //}, []);
+    //});
 
 
     const print = () => {

@@ -49,11 +49,11 @@ const AppRoutes = [
         // requireAuth: true,
         element: <Questions />
     },
-    {
-        path: '/admin/Questions/QuestionEdit',
-        // requireAuth: true,
-        element: <Edit />
-    },
+    //{
+    //    path: '/admin/Questions/QuestionEdit',
+    //    // requireAuth: true,
+    //    element: <Edit />
+    //},
     {
         path: '/admin/Questions/QuestionCreate',
         // requireAuth: true,
