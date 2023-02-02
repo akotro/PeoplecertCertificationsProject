@@ -1,131 +1,279 @@
 import { Form, Button, Col, Row, FloatingLabel, Stack , Table, FormGroup,Badge } from 'react-bootstrap';
-
+import Multiselect from 'multiselect-react-dropdown';
 import {React,useState,useEffect,Component} from 'react';
 
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
+
 import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import EditorPlus from 'ckeditor5-classic-plus'; 
+
+import Editor from './Editor';
 
 
-class Create extends Component
+
+
+function Create ()
 {
-    // axios.post("https://localhost:7196/api/Questions");
-    constructor(props)
-    {
-        super(props);
-      this.state = {
-                text: "Test question text 1",
+    const [question,setQuestion] = useState(
+                                                                                  {
+                                                                                    "text": "string",
+                                                                                    "topicId": 0,
+                                                                                    "difficultyLevelId": 0,
+                                                                                    "difficultyLevel": {
+                                                                                                                    "id": 0,
+                                                                                                                    "difficulty": 0
+                                                                                                                  },
+                                                                                    "options": [ ]
+                                                                                  }
+                                                                      ); 
+    const [allTopics,setAllTopics] = useState([]);
 
-        }
-        // this.handleChange =  this.handleChange.bind(this);
-        this.handleSubmit =  this.handleSubmit.bind(this);
-     
-    }
-   //------------------------------------------------
-    handleChange = (event) => 
+    const[options,setOptions] = useState([
+                                                                                      { 
+                                                                                      "id": 0,  
+                                                                                      "text": "",
+                                                                                      "isCorrect": false,},
+                                                                                      { 
+                                                                                        "id": 1,  
+                                                                                        "text": "",
+                                                                                        "isCorrect": false,},
+                                                                                        { 
+                                                                                          "id": 2,  
+                                                                                          "text": "",
+                                                                                          "isCorrect": false,},
+                                                                                          { 
+                                                                                            "id": 3,  
+                                                                                            "text": "",
+                                                                                            "isCorrect": true,},
+                                                                  ]);
+
+   //------------------------------------------------HANDLE CHANGE
+    const handleChange = (data,element) => 
     {       
-        console.log(this.state);
-        // console.log(event);
-        this.setState({text:event});
-    
-    }
-   //------------------------------------------------
-//    handleSubmit = (event) => 
-//    {
-//        alert("A text was submitted:"+this.state.questionText)
-//        event.preventDefault();
-//    }
-   handleSubmit = (event) => {
-    event.preventDefault();
-    //POSTs new Certificate to the back end
-    console.log(this.state);
-    axios.post('https://localhost:7196/api/Questions',this.state )
-        .then(function (response) {
-            console.log("Inside response");
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log("Inside error")
-            console.log(error);
+                        //------------------------------------------------
+                      if(element ==="QuestionText")
+                      {
+                          setQuestion( 
+                            previousQuestion => 
+                            {
+                                return { ...previousQuestion, text: data };
+                              },
+                          ); 
+                        }
+                        //------------------------------------------------
+                        else if(element ==="Option0")//--------------------->>>>>>  
+                        {
+                              setOptions( options.map( option => 
+                                                  {
+                                                    if(option.id === 0)
+                                                    {
+                                                      return { ...option, text: data };
+                                                    }
+                                                    return option;
+                                                  }
+                                              ));
+                        }
+                        else if(element ==="Option1")//--------------------->>>>>>  
+                        {
+                                        setOptions( options.map( option => 
+                                                                        {
+                                                                          if(option.id === 1)
+                                                                          {
+                                                                            return { ...option, text: data };
+                                                                          }
+                                                                          return option;
+                                                                        }
+                                                            ));
+                        }
+                        else if(element ==="Option2")//--------------------->>>>>>  
+                        {
+                                        setOptions( options.map( option => 
+                                                                        {
+                                                                          if(option.id === 2)
+                                                                          {
+                                                                            return { ...option, text: data };
+                                                                          }
+                                                                          return option;
+                                                                        }
+                                                            ));
+                        }
+                        else if(element ==="Option3")//--------------------->>>>>>  
+                        {
+                                        setOptions( options.map( option => 
+                                                                        {
+                                                                          if(option.id === 3)
+                                                                          {
+                                                                            return { ...option, text: data };
+                                                                          }
+                                                                          return option;
+                                                                        }
+                                                            ));
+                        }
+        }
+        
+   
+   //------------------------------------------------HANDLE SUBMIT 
+   const  handleSubmit = (event) => {
+                                                                            event.preventDefault();
+                                                                            console.log("On submit");
+
+                                                                            console.log(options);
+                                                                            setQuestion (previousQuestion =>
+                                                                                                      {
+                                                                                                        return { ...previousQuestion, options: options }; 
+                                                                                                      }
+                                                                                                 );
+                                                                            console.log(question);
+                                                                            axios.post('https://localhost:7196/api/Questions',question )
+                                                                                .then(function (response) {
+                                                                                    console.log("Inside response");
+                                                                                    console.log(response);
+                                                                                })
+                                                                                .catch(function (error) {
+                                                                                    console.log("Inside error")
+                                                                                    console.log(error);
+                                                                                    
+                                                                                });
+                                                            }
+   //------------------------------------------------ON SELECT (MULTISELECT)
+    //adds the values selected to the list of topics 
+
+        const  onSelect = (selectedTopics) => {
              
-        });
-    }
+                              
+          console.log(selectedTopics);
+
+
+              setQuestion(previousQuestion=> ({
+                                                                                ...previousQuestion,
+                                                                                topicId: selectedTopics[0].id,
+                                                                        }
+                                                                       )
+                                );
+
+
+                               
+                                console.log(question);
+              
+              }
+    
+
+  
    //------------------------------------------------
-   componentDidMount()
-   {
-
-
-   }
-
-
-
-
-
-
+        useEffect(
+                    () =>
+                              {       
+                                      console.log("componentDidMount in useEffect");
+                                      // GET all the topics and places int the this.state.allTopics
+                                      axios.get(`https://localhost:7196/api/Topics`)
+                                          .then(res => {
+                                              setAllTopics( res.data.data );
+                                          })
+                                          .catch(err => {
+                                              console.error(err.response.data);
+                                          });
+                                  },[]
+            )
    //------------------------------------------------
    //------------------------------------------------
-render()
-{
+    return (
+      <Form onSubmit={handleSubmit}>
+        <Stack gap={5}>
+                                <Row>             {/* Questions text */}
+                                  <Col md={7}>
+                                    <FormGroup>
+                                      <Form.Label>Questions Text</Form.Label>
+                                                <Editor handleChange={handleChange} element={"QuestionText"} />
+                                    </FormGroup>
+                                  </Col>
 
-    return(
+                                  <Col md={3}>            {/* MULTISELECT */}
+                                    <Form.Group>
+                                      <Form.Label>Topics</Form.Label>
+                                              <Multiselect
+                                                        name="topics"
+                                                        options={allTopics} // Options to display in the dropdown
+                                                        onSelect={onSelect} // Function will trigger on select event
+                                                        // onRemove={onRemove} // Function will trigger on remove event
+                                                        displayValue="name" // Property name to display in the dropdown options
+                                                        placeholder="Please select as many Topics as needed for the certificate"
+                                                        hidePlaceholder="true "
+                                                        showCheckbox="true"
+                                                        closeIcon="cancel"
+                                                        showArrow="true"
+                                                        isMulti={true}
+                                                        singleSelect={true} //Only one topic can be selected
+                                                        // defaultValue={this.state.question.topics}
+                                                        onChange={handleChange}
+                                              />
+                                    </Form.Group>
+                                  </Col>
 
-        <Form onSubmit={this.handleSubmit}>
-            <Stack gap={5}>
-                <Row>
-                    <Col md={10}>
-                        <FormGroup>
-                       
-                        <Form.Label >Questions Text</Form.Label>
-                        <CKEditor
-                                editor={ ClassicEditor }
-                                data={this.state.q  }
-                                onReady={ editor => { 
-                                    // You can store the "editor" and use when it is needed.
-                                    // console.log( 'Editor is ready to use!', editor );
-                                } }
-                                // onChange={ this.handleChange }
-                                onChange={ ( event, editor ) => {
-                                    const data = editor.getData();
-                                    this.handleChange(data);
-                                    // console.log( { event, editor, data } );
-                                    // console.log( { event } );
-                                    // console.log( {  editor } );
-                                    // console.log( {  data } );
-                                } }
-                        />
-                        {/* ------------------------------------------------ */}
+                                </Row>
 
-                            {/* <Form.Control type="text"
-                                    name='QuestionText'
-                                    value={this.state.questionText} onChange={this.handleChange} /> */}
-                        </FormGroup>
-                    </Col>
+                                                        <Row>     {/* 1st Option */}
+                                                                          <Col md={7}>
+                                                                            <FormGroup>
+                                                                              <Form.Label>First Option</Form.Label>
+                                                                         {/* Editor */}
+                                                                              <Editor handleChange={handleChange} element={"Option0"}  />
+                                                                            </FormGroup>
+                                                                          </Col>
+                                                        </Row>
+                                                        <Row>     {/* 2nd Option */}
+                                                                          <Col md={7}>
+                                                                            <FormGroup>
+                                                                              <Form.Label>Second Option</Form.Label>
+                                                                         {/* Editor */}
+                                                                              <Editor handleChange={handleChange} element={"Option1"} />
+                                                                            </FormGroup>
+                                                                          </Col>
+                                                        </Row>
+                                                        <Row>     {/* 3d Option */}
+                                                                          <Col md={7}>
+                                                                            <FormGroup>
+                                                                              <Form.Label>Third Option</Form.Label>
+                                                                         {/* Editor */}
+                                                                              <Editor handleChange={handleChange} element={"Option2"}  />
+                                                                            </FormGroup>
+                                                                          </Col>
+                                                        </Row>
+                                                        <Row>     {/* 4th Option */}
+                                                                          <Col md={7}>
+                                                                            <FormGroup>
+                                                                              <Form.Label>Fourth Option</Form.Label>
+                                                                         {/* Editor */}
+                                                                              <Editor handleChange={handleChange} element={"Option3"}  />
+                                                                            </FormGroup>
+                                                                          </Col>
+                                                        </Row>
+                                                                                                                             
+        
+        
+        <Row>
 
-                </Row>
-                <Row>
-                        <Col md={30}>
-                        <Button variant="primary" type="submit" value={"Submit"} >Create Question</Button>
+          <Col md={30}>
+            <Button variant="primary" type="submit" value={"Submit"}>
+              Create Question
+            </Button>
+          </Col>
+        </Row>
 
-                        </Col>
-                </Row>
+        </Stack>
+      </Form>
+    );
+                                          
+                                              }
+                                              
 
-            </Stack>
-
-
-        </Form>
-    )
-
-
-
-}
 
    
 
 
 
-}
+
 
 
 
