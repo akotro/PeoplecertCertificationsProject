@@ -15,30 +15,56 @@ class Create extends Component
     constructor(props)
     {
         super(props);
-        this.state = {
-                questionText: "Test question text 1"
+      this.state = {
+                text: "Test question text 1",
 
         }
         // this.handleChange =  this.handleChange.bind(this);
-        // this.handleSubmit =  this.handleSubmit.bind(this);
+        this.handleSubmit =  this.handleSubmit.bind(this);
      
     }
    //------------------------------------------------
     handleChange = (event) => 
     {       
-        // console.log(this.state.questionText);
+        console.log(this.state);
         // console.log(event);
-        this.setState({questionText:event});
-        console.log(  this.state.questionText);
-        console.log(  this.state.questionText);
-        console.log(  this.state.questionText);
+        this.setState({text:event});
+    
     }
    //------------------------------------------------
-   handleSubmit = (event) => 
+//    handleSubmit = (event) => 
+//    {
+//        alert("A text was submitted:"+this.state.questionText)
+//        event.preventDefault();
+//    }
+   handleSubmit = (event) => {
+    event.preventDefault();
+    //POSTs new Certificate to the back end
+    console.log(this.state);
+    axios.post('https://localhost:7196/api/Questions',this.state )
+        .then(function (response) {
+            console.log("Inside response");
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log("Inside error")
+            console.log(error);
+             
+        });
+    }
+   //------------------------------------------------
+   componentDidMount()
    {
-       alert("A text was submitted:"+this.state.questionText)
-       event.preventDefault();
+
+
    }
+
+
+
+
+
+
+   //------------------------------------------------
    //------------------------------------------------
 render()
 {
@@ -67,26 +93,23 @@ render()
                                     // console.log( { event } );
                                     // console.log( {  editor } );
                                     // console.log( {  data } );
-
                                 } }
-                                // onBlur={ ( event, editor ) => {
-                                //     console.log( 'Blur.', editor );
-                                // } }
-                                // onFocus={ ( event, editor ) => {
-                                //     console.log( 'Focus.', editor );
-                                // } }
                         />
                         {/* ------------------------------------------------ */}
 
-                            <Form.Control type="text"
+                            {/* <Form.Control type="text"
                                     name='QuestionText'
-                                    value={this.state.questionText} onChange={this.handleChange} />
+                                    value={this.state.questionText} onChange={this.handleChange} /> */}
                         </FormGroup>
                     </Col>
 
                 </Row>
+                <Row>
+                        <Col md={30}>
+                        <Button variant="primary" type="submit" value={"Submit"} >Create Question</Button>
 
-                <Button variant="primary" type="submit" value={"Submit"} >Create Question</Button>
+                        </Col>
+                </Row>
 
             </Stack>
 

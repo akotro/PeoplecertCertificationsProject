@@ -18,6 +18,7 @@ namespace Assignment4Final.Controllers
         {
             _examService= examService;
         }
+
         [HttpGet]  //GET: Return all the available Exams in db 
         public async Task<ActionResult<List<ExamDto>>> GetAll()
         {
