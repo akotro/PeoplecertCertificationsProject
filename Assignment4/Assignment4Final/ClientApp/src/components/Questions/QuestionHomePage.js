@@ -1,16 +1,8 @@
-import { Form, Button, Col, Row, FloatingLabel, Stack , Table  } from 'react-bootstrap';
-
+import { Form, Button, Col, Row, FloatingLabel, Stack , Table, Container  } from 'react-bootstrap';
 import {React,useState,useEffect} from 'react';
 
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-
-
-
-
-
-
-
 
 function Questions()
 {
@@ -24,8 +16,8 @@ function Questions()
         });
       }, []);
    
-      console.log("Testing in Questions");
-      console.log(data[0]);
+    //   console.log("Testing in Questions");
+    //   console.log(data[0]);
       // resp.data.data[0].options[0].text
 
 
@@ -44,7 +36,7 @@ function Questions()
 
     return (
 
-        <div className='container-fluid'>
+        <Container fluid="md">
             <Link to="/admin/Questions/QuestionCreate"><Button variant='dark'>Create new Question</Button></Link> 
             <div>
                 <Table hover striped >
@@ -67,13 +59,10 @@ function Questions()
                                                 <td>{item.id != null && item.id}</td>
                                                 <td>{Replace(item.text)}</td>
                                                 <td>{item.topic === null ? "No topic selected" : item.topic.name}</td>
-                                                <td>
-                                                        <Link to="/admin/Questions/QuestionEdit"><Button>Edit</Button></Link>  
-                                                </td>
-                                                <td>
-                                                <Link to=""><Button variant='dark'>Delete</Button></Link> 
 
-                                                </td>
+                                                {/* <td><Link to="/admin/Questions/QuestionEdit"><Button>Details</Button></Link></td> */}
+                                                <td><Link to="/admin/Questions/QuestionEdit"><Button>Edit</Button></Link></td>
+                                                <td><Link to=""><Button variant='dark'>Delete</Button></Link></td>
                                             </tr>
                                             
                                             ))}
@@ -82,7 +71,7 @@ function Questions()
             </div>
           
               
-        </div>
+        </Container>
     )
     
 

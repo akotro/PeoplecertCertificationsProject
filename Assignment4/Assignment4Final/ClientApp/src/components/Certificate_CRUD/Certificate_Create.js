@@ -42,7 +42,7 @@ class CreateCertificateForm extends Component {
 
 
 
-    //adds the values selectes to the list of topics 
+    //adds the values selected to the list of topics 
     onSelect = (selectedTopics) => {
 
         this.setState(prevState => ({
