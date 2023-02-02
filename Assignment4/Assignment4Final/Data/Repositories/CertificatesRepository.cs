@@ -15,6 +15,7 @@ public class CertificatesRepository : ICertificatesRepository
     public async Task<List<Certificate>> GetAllAsync()
     {
         return await _context.Certificates
+            .AsSplitQuery()
             .Include(c => c.Topics)
             .Include(c => c.Exams)
             .ToListAsync();
@@ -28,6 +29,7 @@ public class CertificatesRepository : ICertificatesRepository
         }
 
         return await _context.Certificates
+            .AsSplitQuery()
             .Include(q => q.Topics)
             .Include(q => q.Exams)
             .FirstOrDefaultAsync(q => q.Id == id);
