@@ -1,38 +1,46 @@
-using System.Text.Json.Serialization;
 using Assignment4Final.Data;
 using Assignment4Final.Data.Repositories;
 using Assignment4Final.Data.Seed;
 using Assignment4Final.Services;
 using AutoMapper;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using ModelLibrary.Models;
 using ModelLibrary.Models.Candidates;
 using ModelLibrary.Models.Certificates;
 using ModelLibrary.Models.DTO.Candidates;
 using ModelLibrary.Models.DTO.Certificates;
-using ModelLibrary.Models.DTO.Login;
 using ModelLibrary.Models.DTO.Questions;
 using ModelLibrary.Models.DTO.Exams;
 using ModelLibrary.Models.DTO.CandidateExam;
 using ModelLibrary.Models.Exams;
 using ModelLibrary.Models.Questions;
-using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Converters;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System.IdentityModel.Tokens.Jwt;
+using ModelLibrary.Models.DTO.Accounts;
+using Microsoft.OpenApi.Models;
 
 namespace Assignment4Final
 {
     public class Program
     {
+        private static IConfiguration Configuration { get; set; }
+
         public static void Main(string[] args)
         {
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+            Configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .Build();
+
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
             var connectionString =
-                builder.Configuration.GetConnectionString("localhost")
+                builder.Configuration.GetConnectionString("localdb")
                 ?? throw new InvalidOperationException(
                     "Connection string 'DefaultConnection' not found."
                 );
@@ -41,27 +49,45 @@ namespace Assignment4Final
             );
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services
-                .AddDefaultIdentity<AppUser>(
-                    options => options.SignIn.RequireConfirmedAccount = false
-                )
-                .AddRoles<IdentityRole>() // NOTE:(akotro) Required for roles
-                .AddEntityFrameworkStores<ApplicationDbContext>();
-
-            builder.Services
-                .AddIdentityServer()
-                .AddApiAuthorization<AppUser, ApplicationDbContext>();
-
-            builder.Services.AddAuthentication().AddIdentityServerJwt();
+            // builder.Services
+            //     .AddDefaultIdentity<AppUser>(
+            //         options => options.SignIn.RequireConfirmedAccount = false
+            //     )
+            //     .AddRoles<IdentityRole>() // NOTE:(akotro) Required for roles
+            //     .AddEntityFrameworkStores<ApplicationDbContext>();
 
             // builder.Services
-            //     .AddControllersWithViews()
-            //     .AddJsonOptions(options =>
-            //     {
-            //         // NOTE:(akotro) Configure JsonSerializerOptions
-            //         // options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
-            //         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-            //     });
+            //     .AddIdentityServer()
+            //     .AddApiAuthorization<AppUser, ApplicationDbContext>();
+
+            // builder.Services.AddAuthentication().AddIdentityServerJwt();
+
+            builder.Services
+                .AddIdentity<AppUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
+            builder.Services
+                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(
+                            Encoding.UTF8.GetBytes(Configuration["keyjwt"])
+                        ),
+                        ClockSkew = TimeSpan.Zero
+                    };
+                });
+
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("IsAdmin", policy => policy.RequireClaim("role", "admin"));
+            });
 
             builder.Services
                 .AddControllersWithViews()
@@ -69,7 +95,41 @@ namespace Assignment4Final
                 {
                     options.SerializerSettings.Converters.Add(new StringEnumConverter());
                 });
-            builder.Services.AddSwaggerGen(); // NOTE:(akotro) Add Swagger
+
+            // NOTE:(akotro) Add Swagger
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.AddSecurityDefinition(
+                    "Bearer",
+                    new OpenApiSecurityScheme
+                    {
+                        Type = SecuritySchemeType.Http,
+                        Scheme = "bearer",
+                        BearerFormat = "JWT",
+                        Name = "Authorization",
+                        In = ParameterLocation.Header,
+                        Description =
+                            "Add the JWT bearer token obtained from authentication to the header."
+                    }
+                );
+
+                c.AddSecurityRequirement(
+                    new OpenApiSecurityRequirement
+                    {
+                        {
+                            new OpenApiSecurityScheme
+                            {
+                                Reference = new OpenApiReference
+                                {
+                                    Type = ReferenceType.SecurityScheme,
+                                    Id = "Bearer"
+                                }
+                            },
+                            new string[] { }
+                        }
+                    }
+                );
+            });
 
             builder.Services.AddRazorPages();
 
@@ -195,7 +255,7 @@ namespace Assignment4Final
             app.UseCors("FrontEndPolicy");
 
             app.UseAuthentication();
-            app.UseIdentityServer();
+            // app.UseIdentityServer();
             app.UseAuthorization();
 
             app.MapControllerRoute(name: "default", pattern: "{controller}/{action=Index}/{id?}");
