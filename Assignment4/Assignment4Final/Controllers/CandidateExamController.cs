@@ -84,7 +84,7 @@ namespace Assignment4Final.Controllers
             {
                 return NotFound("candidateExam with this id not found");
             }
-            return _candExamService.GetQuestionsAndAnsersDto(candExam);
+            return _candExamService.GetQuestionsAndAnswersDto(candExam);
 
         }
 

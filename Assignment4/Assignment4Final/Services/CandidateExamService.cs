@@ -75,7 +75,7 @@ namespace Assignment4Final.Services
             return await _candidateExamRepository.GetCandidateExamByIdsync(id);
         }
 
-        public CandidateExamQuestionsAndAnswersDto GetQuestionsAndAnsersDto(CandidateExam candidateExam)
+        public CandidateExamQuestionsAndAnswersDto GetQuestionsAndAnswersDto(CandidateExam candidateExam)
         {
             var questions = candidateExam.Exam.Questions.ToList();
             questions.ForEach(question => candidateExam.CandidateExamAnswers.Add(new CandidateExamAnswers()));
