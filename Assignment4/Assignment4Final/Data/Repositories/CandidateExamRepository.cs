@@ -28,7 +28,11 @@ namespace Assignment4Final.Data.Repositories
         public void LoadCertificateOfCandidateExamEntity(ref CandidateExam candidateExam)
         {
             _context.Entry(candidateExam).Reference("Exam").Load();
+            if(candidateExam.Exam != null)
+            {
+
             _context.Entry(candidateExam.Exam).Reference("Certificate").Load();
+            }
 
         }
 
