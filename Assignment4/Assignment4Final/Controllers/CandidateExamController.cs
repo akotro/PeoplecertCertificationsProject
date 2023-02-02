@@ -75,11 +75,11 @@ namespace Assignment4Final.Controllers
 
         }
 
-
-        public async Task<ActionResult<CandidateExamQuestionsAndAnswersDto>> GetQuestionsAndAnswers([FromBody] CandidateExamDto candidateExamDto) 
+        [HttpPost("QuestionsAndAnswers")]
+        public async Task<ActionResult<CandidateExamQuestionsAndAnswersDto>> GetQuestionsAndAnswers([FromBody] int id) 
         {
             
-            var candExam = await _candExamService.GetCandidateExamByIdsync(candidateExamDto.Id);
+            var candExam = await _candExamService.GetCandidateExamByIdsync(1002);
             if(candExam == null)
             {
                 return NotFound("candidateExam with this id not found");
@@ -90,7 +90,7 @@ namespace Assignment4Final.Controllers
 
 
 
-
+        
        
     }
 }

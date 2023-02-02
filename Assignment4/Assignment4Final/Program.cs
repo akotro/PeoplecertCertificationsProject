@@ -149,6 +149,7 @@ namespace Assignment4Final
                     .ReverseMap();
 
                 mc.CreateMap<CandidateExam, CandidateExamDto>().ReverseMap();
+                mc.CreateMap<CandidateExamAnswers,CandidateExamAnswersDto>().ReverseMap();
                     
             });
             IMapper mapper = mapperConfig.CreateMapper();

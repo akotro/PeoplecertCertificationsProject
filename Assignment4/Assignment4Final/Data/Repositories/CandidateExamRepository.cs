@@ -22,6 +22,13 @@ namespace Assignment4Final.Data.Repositories
 
         public  void Add( ref CandidateExam candidateExam)
         {
+            if(candidateExam.Id != 0)
+            {
+                _context.CandidateExams.Update(candidateExam);
+                _context.SaveChanges();
+                return;
+
+            }
               _context.CandidateExams.Add(candidateExam);
               _context.SaveChanges();
         }
