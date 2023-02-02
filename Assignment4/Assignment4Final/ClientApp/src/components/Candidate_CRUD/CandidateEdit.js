@@ -10,45 +10,40 @@ import axios from 'axios';
 export default function CandidateEdit(props) {
 
     const params = useParams();
-    const [genders, setGenders] = useState([  ]);
+    const [genders, setGenders] = useState([]);
+    const [languages, setLanguages] = useState([]);
+    const [photoIdTypes, setPhotoIdTypes] = useState([]);
     //console.log(params.id);
     const [candidate, setCandidate] = useState({
-        dateOfBirth: new Date(),
+        dateOfBirth: null,
+        photoIdIssueDate: null,
         gender: [],
         language: [],
         photoIdType: [],
         address: []
     });
 
-
-    //    "appUserId": "51298282-ae59-4a40-abc5-476829cb273c",
-    //    "firstName": "Irwin",
-    //    "middleName": "Margie",
-    //    "lastName": "Aufderhar",
-    //    "dateOfBirth": "1956-07-18T10:53:32.0145514",
-    //    "email": "Nathaniel.MacGyver19@yahoo.com",
-    //    "landline": "590-582-0873",
-    //    "mobile": "513.394.7239 x203",
-    //    "candidateNumber": "838770124",
-    //    "photoIdNumber": "3qjrqa",
-    //    "photoIdIssueDate": "2020-02-03T13:38:12.0597833",
-    //    "gender": "{genderType: \"Male\", id: 2}",
-    //    "language": "{id: 1, nativeLanguage: \"English\"}",
-    //    "photoIdType": "{id: 3, idType: \"National\"}",
-    //    "address": "[{…}, {…}]"
-
-
     useEffect(() => {
         axios.get(`https://localhost:7196/api/Candidate/${params.id}`).then((response) => {
             setCandidate(response.data.data);
-            //console.log(candidate)
         }).catch(function (error) {
             console.log(error);
         });
 
         axios.get(`https://localhost:7196/api/Genders`).then((response) => {
             setGenders(response.data.data);
-            console.log(genders)
+        }).catch(function (error) {
+            console.log(error);
+        });
+
+        axios.get(`https://localhost:7196/api/Languages`).then((response) => {
+            setLanguages(response.data.data);
+        }).catch(function (error) {
+            console.log(error);
+        });
+
+        axios.get(`https://localhost:7196/api/PhotoIdTypes`).then((response) => {
+            setPhotoIdTypes(response.data.data);
         }).catch(function (error) {
             console.log(error);
         });
@@ -76,22 +71,36 @@ export default function CandidateEdit(props) {
         console.log(name);
         console.log(value);
         if (name === "gender") {
-            setCandidate({ ...candidate, [name]: genders.find(item => item.id === Number(value)) } );
+            setCandidate({ ...candidate, [name]: genders.find(item => item.id === Number(value)) });
+        } else if (name === "language") {
+            setCandidate({ ...candidate, [name]: languages.find(item => item.id === Number(value)) });
+        } else if (name === "photoIdType") {
+            setCandidate({ ...candidate, [name]: languages.find(item => item.id === Number(value)) });
         } else {
-        setCandidate({ ...candidate, [name]: value });
-
+            setCandidate({ ...candidate, [name]: value });
         }
 
         console.log(candidate);
     };
+        const convertStringToDate = (dateString) => {
+            //intial format 
+            //2015-07-15
+            const date = new Date(dateString);
+            //Wed Jul 15 2015 00:00:00 GMT-0700 (Pacific Daylight Time)
+            const finalDateString = date.toISOString(date)
+            //2015-07-15T00:00:00.000Z
+
+            console.log(finalDateString); // "1930-07-17T00:00:00.000Z"
+            return finalDateString;
+    }
 
     const convertDateToString = (date) => {
         //console.log(date);
-        const kati = new Date(date);
+        let kati = new Date(date);
+        console.log(candidate.dateOfBirth)
+        console.log(kati);
 
-        //console.log(kati);
-
-        const formattedDate = kati.toISOString().substr(0, 10);
+        let formattedDate = kati.toISOString().substr(0, 10);
 
         //console.log(formattedDate);
 
@@ -104,8 +113,10 @@ export default function CandidateEdit(props) {
     return (
         <div>edit page
             <p>{params.id}</p>
-            <Form onSubmit={handleSubmit}>
+            <Form onSubmit={handleSubmit} className="lead">
                 <Stack gap={3}>
+                    <div className="display-6 fs-2" >Personal Details</div>
+
                     <Row>
                         <Col>
                             <Form.Group >
@@ -133,16 +144,15 @@ export default function CandidateEdit(props) {
                                     onChange={handleChange}>
                                     {genders.map((gender, index) =>
                                         <option key={index}
-                                            value={gender.id }
+                                            value={gender.id}
                                         >{gender.genderType}</option>
-                                        )}
+                                    )}
                                 </Form.Select>
                             </Form.Group>
                         </Col>
                     </Row>
+                    <hr />
                     <Row>
-                        <Col>
-                        </Col>
                         <Col>
                             <Form.Group >
                                 <Form.Label>Date of Birth</Form.Label>
@@ -154,13 +164,94 @@ export default function CandidateEdit(props) {
                         </Col>
                         <Col>
                             <Form.Group >
-                                <Form.Label>Last Name</Form.Label>
-                                <Form.Control type="text" name="lastName" value={candidate.lastName} onChange={handleChange} />
+                                <Form.Label>Native Language</Form.Label>
+                                <Form.Select as="select" name="language"
+                                    value={candidate.language.id}
+                                    onChange={handleChange}>
+                                    {languages.map((lan, index) =>
+                                        <option key={index}
+                                            value={lan.id}
+                                        >{lan.nativeLanguage}</option>
+                                    )}
+                                </Form.Select>
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <hr />
+                    <div className="display-6 fs-2" >Contact Details</div>
+                    <div className="display-6 fs-2" >need to add addresses</div>
+
+                    <Row>
+                        <Col>
+                            <Form.Group >
+                                <Form.Label>Email</Form.Label>
+                                <Form.Control type="email" name="email" value={candidate.email} onChange={handleChange} />
+                            </Form.Group>
+                        </Col>
+                        <Col>
+                            <Form.Group >
+                                <Form.Label>Candidate Number</Form.Label>
+                                <Form.Control type="number" name="candidateNumber" value={candidate.candidateNumber} onChange={handleChange} />
+                            </Form.Group>
+                        </Col>
+                        <Col>
+                            <Form.Group >
+                                <Form.Label>Landline Number</Form.Label>
+                                <Form.Control type="text" name="landline" value={candidate.landline} onChange={handleChange} />
                             </Form.Group>
                         </Col>
 
+                        <Col>
+                            <Form.Group >
+                                <Form.Label>Mobile Number</Form.Label>
+                                <Form.Control type="text" name="mobile" value={candidate.mobile} onChange={handleChange} />
+                            </Form.Group>
+                        </Col>
                     </Row>
 
+
+                    <div className="display-6 fs-2" >Identification Details</div>
+
+                    <Row>
+                        <Col>
+                            <Form.Group >
+                                <Form.Label>Photo ID Number</Form.Label>
+                                <Form.Control type="text" name="photoIdNumber" value={candidate.photoIdNumber} onChange={handleChange} />
+                            </Form.Group>
+                        </Col>
+                        <Col>
+                            <Form.Group >
+                                <Form.Label>Photo Issue Date</Form.Label>
+                                <Form.Control type="date"
+                                    name="photoIdIssueDate"
+                                value={convertDateToString(candidate.photoIdIssueDate)}
+                                    onChange={handleChange} />
+                        </Form.Group>
+                       
+                        </Col>
+                        <Col>
+                            <Form.Group >
+                                <Form.Label>Type of Id</Form.Label>
+                                <Form.Select as="select" name="photoIdType"
+                                    value={candidate.photoIdType.id}
+                                    onChange={handleChange}>
+                                    {photoIdTypes.map((pId, index) =>
+                                        <option key={index}
+                                            value={pId.id}
+                                        >{pId.idType}</option>
+                                    )}
+                                </Form.Select>
+
+                            </Form.Group>
+                        </Col>
+
+                        <Col>
+                            <Form.Group >
+                                <Form.Label>Mobile Number</Form.Label>
+                                <Form.Control type="text" name="mobile" value={candidate.mobile} onChange={handleChange} />
+                            </Form.Group>
+                        </Col>
+                    </Row>
                     <Button variant="primary" type="submit">
                         Save
                     </Button>
