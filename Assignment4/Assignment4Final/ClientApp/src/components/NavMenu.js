@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { LoginMenu } from './api-authorization/LoginMenu';
 import './NavMenu.css';
 
-import { TiHome } from "react-icons/ti";
+//import { TiHome } from "react-icons/ti";
 
 export class NavMenu extends Component {
     static displayName = NavMenu.name;
@@ -47,6 +47,9 @@ export class NavMenu extends Component {
                             </NavItem>
                             <NavItem>
                                 <NavLink tag={Link} className="text-dark" to="/admin/Questions/QuestionHomePage">Questions</NavLink>
+                            </NavItem>
+                            <NavItem>
+                                <NavLink tag={Link} className="text-dark" to="/admin/candidate">CandidatesCrud</NavLink>
                             </NavItem>
                             <NavDropdown title="Candidate">
                                 <NavDropdown.Item>
