@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ModelLibrary.Models.Candidates;
 using ModelLibrary.Models.Exams;
+using NuGet.Versioning;
 
 namespace Assignment4Final.Data.Repositories
 {
@@ -44,18 +45,34 @@ namespace Assignment4Final.Data.Repositories
         
         public async Task<List<CandidateExam>> GetTakenCandidateExamsOfCandidateAsync(Candidate candidate)
         {
-            return await _context.CandidateExams.Include(candExam => candExam.Candidate).Where(candExam => (candExam.Candidate == candidate && candExam.Result == null)).ToListAsync();
+            return await _context.CandidateExams
+                .Include(candExam => candExam.Candidate)
+                .Where(candExam => (candExam.Candidate == candidate && candExam.Result == null))
+                .ToListAsync();
         }
 
         public async Task<CandidateExam?> GetCandidateExamByIdsync(int id)
         {
-            return await _context.CandidateExams.FindAsync(id);
+            return await _context.CandidateExams.
+                Include(candExam => candExam.CandidateExamAnswers)
+                .Include(candExam => candExam.Exam)
+                .ThenInclude(exam => exam.Questions)
+                .ThenInclude(question => question.Options)
+                .Where(candExam => candExam.Id == id).FirstOrDefaultAsync();
         }
 
-        public async Task<Exam?> GetExamFromCandidateExam(CandidateExam candidateExam)
-        {
-            _context.Exams.Include(exam => exam.CandidateExams).Where(exam => exam.CandidateExams.)
-        }
+       //public void LoadCandidateExam(ref CandidateExam candidateExam)
+       // {
+            
+       //     _context.Entry(candidateExam)
+       //       .Collection(e => e.CandidateExams)
+       //         .Query()
+       //         .Include(ce => ce.Candidate)
+       //       .Load();
+       //     _context.Entry(exam)
+       //       .Collection(e => e.Questions)
+       //       .Load();
+       // }
 
     }
 }

@@ -3,6 +3,7 @@ using AutoMapper;
 using ModelLibrary.Models.Candidates;
 using ModelLibrary.Models.DTO.CandidateExam;
 using ModelLibrary.Models.DTO.Exams;
+using ModelLibrary.Models.DTO.Questions;
 using ModelLibrary.Models.Exams;
 
 namespace Assignment4Final.Services
@@ -74,7 +75,16 @@ namespace Assignment4Final.Services
             return await _candidateExamRepository.GetCandidateExamByIdsync(id);
         }
 
-
+        public CandidateExamQuestionsAndAnswersDto GetQuestionsAndAnsersDto(CandidateExam candidateExam)
+        {
+            var questions = candidateExam.Exam.Questions.ToList();
+            questions.ForEach(question => candidateExam.CandidateExamAnswers.Add(new CandidateExamAnswers()));
+            _candidateExamRepository.Add(ref candidateExam);
+            var questionsDtos = _mapper.Map<List<QuestionDto>>(questions);
+            var answersDtos = _mapper.Map<List<CandidateExamAnswersDto>>(candidateExam.CandidateExamAnswers);
+            return new CandidateExamQuestionsAndAnswersDto() { QuestionsDtos = questionsDtos, AnswersDtos = answersDtos };
+            
+        }
         
     }
 }

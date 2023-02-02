@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace ModelLibrary.Models.DTO.CandidateExam
 {
-    public class CandidateExamQuestionsAndAnsersDto
+    public class CandidateExamQuestionsAndAnswersDto
     {
-        public List<QuestionDto> QuestionsDtos { get; set; }
+        public List<QuestionDto>? QuestionsDtos { get; set; }
 
-        public 
+        public List<CandidateExamAnswersDto>? AnswersDtos { get; set; }
     }
 }

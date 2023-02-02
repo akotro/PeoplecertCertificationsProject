@@ -21,6 +21,6 @@ namespace ModelLibrary.Models.DTO.CandidateExam
         public string? AssessmentCode { get; set; }
         public string? Voucher { get; set; }
         public bool? IsModerated { get; set; }
-        public ExamDto? Exam { get; set; }
+        
     }
 }

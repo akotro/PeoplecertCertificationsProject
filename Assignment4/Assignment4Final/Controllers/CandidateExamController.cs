@@ -76,14 +76,15 @@ namespace Assignment4Final.Controllers
         }
 
 
-        public async Task<ActionResult<List<CandidateExamQuestionsAndAnsersDto>>> GetQuestionsAndAnswers([FromBody] CandidateExamDto candidateExamDto) 
+        public async Task<ActionResult<CandidateExamQuestionsAndAnswersDto>> GetQuestionsAndAnswers([FromBody] CandidateExamDto candidateExamDto) 
         {
             
-            var candExam = _candExamService.GetCandidateExamByIdsync(candidateExamDto.Id);
+            var candExam = await _candExamService.GetCandidateExamByIdsync(candidateExamDto.Id);
             if(candExam == null)
             {
                 return NotFound("candidateExam with this id not found");
             }
+            return _candExamService.GetQuestionsAndAnsersDto(candExam);
 
         }
 
