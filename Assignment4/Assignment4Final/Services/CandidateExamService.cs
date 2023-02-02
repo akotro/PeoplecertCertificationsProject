@@ -52,5 +52,21 @@ namespace Assignment4Final.Services
             _candidateExamRepository.LoadCertificateOfCandidateExamEntity(ref candidateExam);
             return _mapper.Map<CandidateExamDto>(candidateExam);
         }
+
+
+        public async Task<List<CandidateExam>> GetAllCandidateExamsOfCandidateAsync(Candidate candidate)
+        {
+            return await _candidateExamRepository.GetAllCandidateExamsOfCandidateAsync(candidate);
+        }
+
+        public async Task<List<CandidateExam>> GetTakenCandidateExamsOfCandidateAsync(Candidate candidate)
+        {
+            return await _candidateExamRepository.GetTakenCandidateExamsOfCandidateAsync(candidate);
+        }
+
+        public List<CandidateExamDto> GetListOfCandidateExamDtosFromListOfCandidateExam(List<CandidateExam> candidateExams)
+        {
+            return _mapper.Map<List<CandidateExamDto>>(candidateExams);
+        }
     }
 }
