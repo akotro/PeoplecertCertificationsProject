@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ModelLibrary.Models;
-using ModelLibrary.Models.DTO.Login;
+using ModelLibrary.Models.DTO.Accounts;
 
 namespace Assignment4Final.Controllers
 {
@@ -37,18 +37,20 @@ namespace Assignment4Final.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginDto loginDto)
         {
-            var user = await _signInManager.UserManager.FindByNameAsync(loginDto.Username);
+            var user =
+                await _signInManager.UserManager.FindByNameAsync(loginDto.Username);
             if (
                 user != null
-                && await _signInManager.UserManager.CheckPasswordAsync(user, loginDto.Password)
+                && await _signInManager.UserManager.CheckPasswordAsync(user,
+                    loginDto.Password)
             )
             {
                 await _signInManager.SignInAsync(user, false);
 
                 var userDto = _mapper.Map<UserDto>(user);
 
-                var roles = await _signInManager.UserManager.GetRolesAsync(user);
-                userDto.Roles = roles.ToList();
+                // var roles = await _signInManager.UserManager.GetRolesAsync(user);
+                // userDto.Roles = roles.ToList();
 
                 return Ok(userDto);
             }
