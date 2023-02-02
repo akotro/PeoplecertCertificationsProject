@@ -52,6 +52,10 @@ namespace Assignment4Final.Controllers
         {
 
             var candidate = await _candExamService.GetCandidateByUserId(_userManager.GetUserId(User));
+            if (candidate == null)
+            {
+                return NotFound(new { description = "Candidate with this userId not found " });
+            }
             var candidateExamsList = await _candExamService.GetAllCandidateExamsOfCandidateAsync(candidate);
             return Ok(await Task.Run(() => _candExamService.GetListOfCandidateExamDtosFromListOfCandidateExam(candidateExamsList)));
 
@@ -60,11 +64,30 @@ namespace Assignment4Final.Controllers
         [HttpGet("notTaken")]
         public async Task<ActionResult<List<CandidateExamDto>>> GetTakenCandidateExamsOfCandidate() //Not Debuged all the candidate exams in Seed are Taken . Should i checke if taken by ExamDate?
         {
+            
             var candidate = await _candExamService.GetCandidateByUserId(_userManager.GetUserId(User));
+            if(candidate == null)
+            {
+                return NotFound(new {description ="Candidate with this userId not found "});
+            }
             var candidatesTakenExams = await _candExamService.GetTakenCandidateExamsOfCandidateAsync(candidate);
             return Ok(_candExamService.GetListOfCandidateExamDtosFromListOfCandidateExam(candidatesTakenExams));
 
         }
+
+
+        public async Task<ActionResult<List<CandidateExamQuestionsAndAnsersDto>>> GetQuestionsAndAnswers([FromBody] CandidateExamDto candidateExamDto) 
+        {
+            
+            var candExam = _candExamService.GetCandidateExamByIdsync(candidateExamDto.Id);
+            if(candExam == null)
+            {
+                return NotFound("candidateExam with this id not found");
+            }
+
+        }
+
+
 
 
        

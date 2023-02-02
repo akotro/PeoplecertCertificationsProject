@@ -68,5 +68,13 @@ namespace Assignment4Final.Services
         {
             return _mapper.Map<List<CandidateExamDto>>(candidateExams);
         }
+
+        public async Task<CandidateExam?> GetCandidateExamByIdsync(int id)
+        {
+            return await _candidateExamRepository.GetCandidateExamByIdsync(id);
+        }
+
+
+        
     }
 }

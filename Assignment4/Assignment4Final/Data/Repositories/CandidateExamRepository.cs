@@ -47,7 +47,15 @@ namespace Assignment4Final.Data.Repositories
             return await _context.CandidateExams.Include(candExam => candExam.Candidate).Where(candExam => (candExam.Candidate == candidate && candExam.Result == null)).ToListAsync();
         }
 
+        public async Task<CandidateExam?> GetCandidateExamByIdsync(int id)
+        {
+            return await _context.CandidateExams.FindAsync(id);
+        }
 
+        public async Task<Exam?> GetExamFromCandidateExam(CandidateExam candidateExam)
+        {
+            _context.Exams.Include(exam => exam.CandidateExams).Where(exam => exam.CandidateExams.)
+        }
 
     }
 }
