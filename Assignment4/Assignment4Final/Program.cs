@@ -86,7 +86,23 @@ namespace Assignment4Final
 
             builder.Services.AddAuthorization(options =>
             {
+                // NOTE:(akotro) Admin has full rights to all data
                 options.AddPolicy("IsAdmin", policy => policy.RequireClaim("role", "admin"));
+
+                // NOTE:(akotro) Marker has right to mark assigned exams at a specific time
+                options.AddPolicy("IsMarker", policy => policy.RequireClaim("role", "marker"));
+
+                // NOTE:(akotro) Quality Control has new rights to all data
+                options.AddPolicy(
+                    "IsQualityControl",
+                    policy => policy.RequireClaim("role", "qualitycontrol")
+                );
+
+                // NOTE:(akotro) Candidate can see and buy certificates and take exams
+                options.AddPolicy(
+                    "IsCandidate",
+                    policy => policy.RequireClaim("role", "candidate")
+                );
             });
 
             builder.Services
