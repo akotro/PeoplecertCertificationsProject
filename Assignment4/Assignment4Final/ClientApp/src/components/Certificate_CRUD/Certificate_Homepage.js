@@ -9,6 +9,10 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 
+//import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+//import { faEnvelope, faTrashCan } from '@fortawesome/free-solid-svg-icons'
+
+
 class Cert_homepage extends Component {
     constructor(props) {
         super(props);
@@ -17,66 +21,89 @@ class Cert_homepage extends Component {
         }
     }
 
+    //---------------------------------------
+    //need to implement random select for examIds
+    //-----------------------------------
+    //const generateRandomNumber = () => {
+    //    const randomNumber = Math.floor(Math.random() * questionAnswer.length);
+    //    setRandomNumber(randomNumber)
+    //}
+    // --------------------------------
+
     componentDidMount() {
         // GETs all the certificates and places it is the this.state.data
         axios.get('https://localhost:7196/api/Certificates')
             .then(res => {
-
-                console.log(res.data.data);
-                this.setState({ data: res.data.data });
+                if (this.props.user) {
+                    // if the user is a candidate, show only active products
+                    if (this.props.user.usertype === "candidate") {
+                        this.setState({ data: res.data.data.filter(item => item.active === true) },
+                            () => { console.log(this.state.data) }
+                        );
+                    } else if ((this.props.user.usertype === "placeholder")) {
+                        //show data for placeholder
+                    }
+                } else {
+                    //if none of the above, show all products
+                    this.setState({ data: res.data.data })
+                }
             })
             .catch(err => {
                 console.error(err);
             });
 
-        //console.log(this.state.data)
+        console.log(this.state.data)
+
+
+
+        // do i need to make the special call?
+        // or should back end figure out what user is making the call?
     }
- 
+
+
+    handleBuy = (id) => {
+        //console.log("handle buy")
+        const cert = this.state.data.filter(item => item.id === id)[0];
+        //console.log(cert);
+        //console.log(cert.exams[0].id);
+
+        const examDTO = { id: cert.exams[0].id, cert }
+        console.log(JSON.stringify(examDTO))
+
+        axios.post(`https://localhost:7196/api/CandidateExam`, examDTO)
+            .then(res => {
+                console.log(res);
+                //this.setState({ data: res.data.data });
+            })
+            .catch(err => {
+                console.error(err);
+            });
+    }
 
     EditButton = (id) => {
-        //<Route path="/admin/certificate/edit" component={<Certificate_Edit {...this.state.certificates[id]} />} />
         return (
-            <Link to={`/admin/certificate/edit/`+ id} >
-                <Button>Edit</Button>
+            <Link to={`/admin/certificate/edit/` + id} >
+                <Button className="mx-1">Edit</Button>
             </Link>
         )
-        // <Link to="/" component={<Certificate_Edit {...props.id}/>}
-
-        // handle edit logic here
-        // console.log(`Edit certificate with id: ${id}`);
-        // return (
-        //     <Link to="/admin/certificate/create"
-        //         state={{ cert: certificates[id] }}
-        //     >
-        //         <Button> Edit </Button>
-
-        //     </Link>
-        // )
-        //let props = certificates[id]
-        //<Route path"/admin/certificate/create";, render={(props) => <Certificate_Create {...props }/> }/>
-        //history({
-        //    pathname: '',
-        //    state: {object: certificates[id]}
-        //});
     };
-
 
     handleDelete = (id) => {
         // Asks user if they are sure
         const confirmDelete = window.confirm("Are you sure you want to delete this certificate?");
 
         if (confirmDelete) {
-        //send axios call with the request to delete using Id
-        axios.delete(`https://localhost:7196/api/Certificates/${id}`)
-            .then(response => {
-                //console.log(response.data.data);
-                this.setState(prevState => ({
-                    data: prevState.data.filter(item => item.id !== id)
-                }));
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+            //send axios call with the request to delete using Id
+            axios.delete(`https://localhost:7196/api/Certificates/${id}`)
+                .then(response => {
+                    //console.log(response.data.data);
+                    this.setState(prevState => ({
+                        data: prevState.data.filter(item => item.id !== id)
+                    }));
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
         }
     };
 
@@ -88,11 +115,45 @@ class Cert_homepage extends Component {
         )
     };
 
+    makebuttons = (certId) => {
+
+        if (this.props.user) {
+            if (this.props.user.usertype === "candidate") {
+                return (
+                    <td>
+                        <div className='d-flex '>
+                        <Button variant="success" onClick={() => this.handleBuy(certId)} >buy</Button>
+                        <Button>details</Button>
+                        </div>
+                    </td>
+                );
+            } else if ((this.props.user.usertype === "placeholder")) {
+                return (
+                    <td>
+                        {/*some other buttons */}
+                    </td>
+                );
+            }
+        }
+        return (
+            <td>
+                <div className='d-flex'>
+                    {this.EditButton(certId)}
+                    <Button variant="dark" className="mx-1" onClick={() => this.handleDelete(certId)}>
+                        {/*<FontAwesomeIcon icon={['fa', 'trash-can']} />*/}
+                        {/*<FontAwesomeIcon icon="fa-solid fa-trash-can" />*/}
+                        Delete
+                    </Button>
+                </div>
+            </td>
+        );
+
+    };
+
     render() {
         return (
             <div className='container-fluid'>
-
-                {this.createCertButton()}
+                {this.props.user ? null : this.createCertButton()}
                 <Table striped borderless hover id='list_of_allcerts'>
                     <thead>
                         <tr>
@@ -101,8 +162,8 @@ class Cert_homepage extends Component {
                             {/*<th>PassingMark</th>*/}
                             <th>Category</th>
                             {/*<th>Topics</th>*/}
+                            {/*<th></th>*/}
                             <th>Actions</th>
-                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -117,13 +178,7 @@ class Cert_homepage extends Component {
                                 {/*        <ol key={i}>{topic.name}</ol>*/}
                                 {/*    ))}*/}
                                 {/*</td>*/}
-                                <td>
-                <Stack gap={1}>
-                                    {this.EditButton(certificate.id)}
-
-                                    <Button variant="dark" onClick={() => this.handleDelete(certificate.id)}>Delete</Button>
-                    </Stack>
-                                </td>
+                                {this.makebuttons(certificate.id)}
                                 <td>
                                 </td>
 
@@ -134,8 +189,9 @@ class Cert_homepage extends Component {
                 </Table>
             </div>
         );
-    }
+    };
 
 }
 
-export default withRouter( Cert_homepage ) ;
+
+export default withRouter(Cert_homepage);

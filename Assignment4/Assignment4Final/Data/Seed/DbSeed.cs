@@ -9,12 +9,13 @@ using ModelLibrary.Models;
 using System.Reflection.Emit;
 using System;
 using Bogus.DataSets;
+using System.Security.Claims;
 
 namespace Assignment4Final.Data.Seed
 {
     public static class DbSeed
     {
-        public static void Seed(WebApplication? app)
+        public static async Task Seed(WebApplication? app)
         {
             using (var scope = app.Services.CreateScope())
             {
@@ -26,6 +27,9 @@ namespace Assignment4Final.Data.Seed
                     SeedRelatedTables(db);
                     SeedJoiningTables(db);
                     SeedCalculatedFields(db);
+
+                    var userManager = service.GetRequiredService<UserManager<AppUser>>();
+                    await SeedRoles(db, userManager);
                 }
                 catch (Exception ex)
                 {
@@ -61,27 +65,107 @@ namespace Assignment4Final.Data.Seed
                     fakeGuids.Add(Guid.NewGuid().ToString());
                 }
 
+                int candidateIndex = 1;
+                int adminIndex = 1;
+                int markerIndex = 1;
+                int qualitycontrolIndex = 1;
+
                 // Create details for the fake AppUsers
                 for (int i = 0; i < fakeGuids.Count; i++)
                 {
-                    fakeAppUsers.Add(
-                        new AppUser()
-                        {
-                            Id = fakeGuids[i],
-                            UserName = $"admin{i}@gmail.com",
-                            NormalizedUserName = $"admin{i}@gmail.com",
-                            Email = $"admin{i}@gmail.com",
-                            NormalizedEmail = $"admin{i}@gmail.com",
-                            LockoutEnabled = false,
-                            PhoneNumber = "1234567890",
-                            SecurityStamp = Guid.NewGuid().ToString(),
-                            EmailConfirmed = true,
-                        }
-                    );
-                    fakeAppUsers[i].PasswordHash = passHash.HashPassword(
-                        fakeAppUsers[i],
-                        $"Admin{i}!"
-                    );
+                    if (i < 10) // NOTE:(akotro) Make 10 candidates
+                    {
+                        fakeAppUsers.Add(
+                            new AppUser()
+                            {
+                                Id = fakeGuids[i],
+                                UserName = $"candidate{candidateIndex}@gmail.com",
+                                NormalizedUserName = $"candidate{candidateIndex}@gmail.com",
+                                Email = $"candidate{candidateIndex}@gmail.com",
+                                NormalizedEmail = $"candidate{candidateIndex}@gmail.com",
+                                LockoutEnabled = false,
+                                PhoneNumber = "1234567890",
+                                SecurityStamp = Guid.NewGuid().ToString(),
+                                EmailConfirmed = true,
+                            }
+                        );
+                        fakeAppUsers[i].PasswordHash = passHash.HashPassword(
+                            fakeAppUsers[i],
+                            $"Candidate{candidateIndex}!"
+                        );
+
+                        candidateIndex++;
+                    }
+                    else if (i >= 10 && i < 14) // NOTE:(akotro) Make 4 admins
+                    {
+                        fakeAppUsers.Add(
+                            new AppUser()
+                            {
+                                Id = fakeGuids[i],
+                                UserName = $"admin{adminIndex}@gmail.com",
+                                NormalizedUserName = $"admin{adminIndex}@gmail.com",
+                                Email = $"admin{adminIndex}@gmail.com",
+                                NormalizedEmail = $"admin{adminIndex}@gmail.com",
+                                LockoutEnabled = false,
+                                PhoneNumber = "1234567890",
+                                SecurityStamp = Guid.NewGuid().ToString(),
+                                EmailConfirmed = true,
+                            }
+                        );
+                        fakeAppUsers[i].PasswordHash = passHash.HashPassword(
+                            fakeAppUsers[i],
+                            $"Admin{adminIndex}!"
+                        );
+
+                        adminIndex++;
+                    }
+                    else if (i >= 14 && i < 18) // NOTE:(akotro) Make 4 markers
+                    {
+                        fakeAppUsers.Add(
+                            new AppUser()
+                            {
+                                Id = fakeGuids[i],
+                                UserName = $"marker{markerIndex}@gmail.com",
+                                NormalizedUserName = $"marker{markerIndex}@gmail.com",
+                                Email = $"marker{markerIndex}@gmail.com",
+                                NormalizedEmail = $"marker{markerIndex}@gmail.com",
+                                LockoutEnabled = false,
+                                PhoneNumber = "1234567890",
+                                SecurityStamp = Guid.NewGuid().ToString(),
+                                EmailConfirmed = true,
+                            }
+                        );
+                        fakeAppUsers[i].PasswordHash = passHash.HashPassword(
+                            fakeAppUsers[i],
+                            $"marker{markerIndex}!"
+                        );
+
+                        markerIndex++;
+                    }
+                    else // NOTE:(akotro) Make 2 qualitycontrols
+                    {
+                        fakeAppUsers.Add(
+                            new AppUser()
+                            {
+                                Id = fakeGuids[i],
+                                UserName = $"qualitycontrol{qualitycontrolIndex}@gmail.com",
+                                NormalizedUserName =
+                                    $"qualitycontrol{qualitycontrolIndex}@gmail.com",
+                                Email = $"qualitycontrol{qualitycontrolIndex}@gmail.com",
+                                NormalizedEmail = $"qualitycontrol{qualitycontrolIndex}@gmail.com",
+                                LockoutEnabled = false,
+                                PhoneNumber = "1234567890",
+                                SecurityStamp = Guid.NewGuid().ToString(),
+                                EmailConfirmed = true,
+                            }
+                        );
+                        fakeAppUsers[i].PasswordHash = passHash.HashPassword(
+                            fakeAppUsers[i],
+                            $"qualitycontrol{qualitycontrolIndex}!"
+                        );
+
+                        qualitycontrolIndex++;
+                    }
                 }
 
                 // Add and save Users
@@ -286,6 +370,26 @@ namespace Assignment4Final.Data.Seed
 
             #endregion
 
+            #region // Seeding Marker table
+
+            if (!db.Markers.Any())
+            {
+                var markerFaker = new Faker<Marker>();
+                var fakeMarkers = markerFaker.Generate(4);
+
+                for (int i = 0; i < fakeMarkers.Count; i++)
+                {
+                    fakeMarkers[i].AppUserId = db.Users
+                        .Where(u => u.Email.StartsWith("marker"))
+                        .ToList()[i].Id;
+                }
+
+                db.Markers.AddRange(fakeMarkers);
+                db.SaveChanges();
+            }
+
+            #endregion
+
 
             #region // Seeding Addresses table
 
@@ -379,6 +483,10 @@ namespace Assignment4Final.Data.Seed
             {
                 var candiExamAnsFaker = new Faker<CandidateExamAnswers>()
                     .RuleFor(
+                        c => c.QuestionText,
+                        f => f.PickRandom(db.Questions.ToList()).Text.ToString()
+                    )
+                    .RuleFor(
                         c => c.ChosenOption,
                         f => f.PickRandom(db.Options.ToList()).Text.ToString()
                     )
@@ -396,13 +504,14 @@ namespace Assignment4Final.Data.Seed
                         c => c.CandidateExamAnswers,
                         f =>
                         {
-                            return candiExamAnsFaker.Generate(100);
+                            return candiExamAnsFaker.Generate(10);
                         }
                     )
                     .RuleFor(
                         c => c.ReportDate,
                         f => f.Date.Between(new DateTime(2022, 6, 10, 0, 0, 0), DateTime.Now)
-                    );
+                    )
+                    .RuleFor(c => c.Marker, f => f.PickRandom(db.Markers.ToList()));
                 var fakecandiExams = candiExamFaker.Generate(10);
 
                 db.CandidateExams.AddRange(fakecandiExams);
@@ -469,6 +578,58 @@ namespace Assignment4Final.Data.Seed
             }
 
             db.SaveChanges();
+        }
+
+        public static async Task SeedRoles(
+            ApplicationDbContext db,
+            UserManager<AppUser> userManager
+        )
+        {
+            if (!db.UserClaims.Any())
+            {
+                // NOTE:(akotro) Add admin roles
+                var admins = await userManager.Users
+                    .Where(u => u.Email.StartsWith("admin"))
+                    .ToListAsync();
+
+                foreach (var admin in admins)
+                {
+                    await userManager.AddClaimAsync(admin, new Claim("role", "admin"));
+                }
+
+                // NOTE:(akotro) Add candidate roles
+                var candidates = await userManager.Users
+                    .Where(u => u.Email.StartsWith("candidate"))
+                    .ToListAsync();
+
+                foreach (var candidate in candidates)
+                {
+                    await userManager.AddClaimAsync(candidate, new Claim("role", "candidate"));
+                }
+
+                // NOTE:(akotro) Add marker roles
+                var markers = await userManager.Users
+                    .Where(u => u.Email.StartsWith("marker"))
+                    .ToListAsync();
+
+                foreach (var marker in markers)
+                {
+                    await userManager.AddClaimAsync(marker, new Claim("role", "marker"));
+                }
+
+                // NOTE:(akotro) Add qualitycontrol roles
+                var qualitycontrols = await userManager.Users
+                    .Where(u => u.Email.StartsWith("qualitycontrol"))
+                    .ToListAsync();
+
+                foreach (var qualitycontrol in qualitycontrols)
+                {
+                    await userManager.AddClaimAsync(
+                        qualitycontrol,
+                        new Claim("role", "qualitycontrol")
+                    );
+                }
+            }
         }
     }
 }
