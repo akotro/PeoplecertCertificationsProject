@@ -370,6 +370,26 @@ namespace Assignment4Final.Data.Seed
 
             #endregion
 
+            #region // Seeding Marker table
+
+            if (!db.Markers.Any())
+            {
+                var markerFaker = new Faker<Marker>();
+                var fakeMarkers = markerFaker.Generate(4);
+
+                for (int i = 0; i < fakeMarkers.Count; i++)
+                {
+                    fakeMarkers[i].AppUserId = db.Users
+                        .Where(u => u.Email.StartsWith("marker"))
+                        .ToList()[i].Id;
+                }
+
+                db.Markers.AddRange(fakeMarkers);
+                db.SaveChanges();
+            }
+
+            #endregion
+
 
             #region // Seeding Addresses table
 
@@ -463,6 +483,10 @@ namespace Assignment4Final.Data.Seed
             {
                 var candiExamAnsFaker = new Faker<CandidateExamAnswers>()
                     .RuleFor(
+                        c => c.QuestionText,
+                        f => f.PickRandom(db.Questions.ToList()).Text.ToString()
+                    )
+                    .RuleFor(
                         c => c.ChosenOption,
                         f => f.PickRandom(db.Options.ToList()).Text.ToString()
                     )
@@ -480,13 +504,14 @@ namespace Assignment4Final.Data.Seed
                         c => c.CandidateExamAnswers,
                         f =>
                         {
-                            return candiExamAnsFaker.Generate(100);
+                            return candiExamAnsFaker.Generate(10);
                         }
                     )
                     .RuleFor(
                         c => c.ReportDate,
                         f => f.Date.Between(new DateTime(2022, 6, 10, 0, 0, 0), DateTime.Now)
-                    );
+                    )
+                    .RuleFor(c => c.Marker, f => f.PickRandom(db.Markers.ToList()));
                 var fakecandiExams = candiExamFaker.Generate(10);
 
                 db.CandidateExams.AddRange(fakecandiExams);
