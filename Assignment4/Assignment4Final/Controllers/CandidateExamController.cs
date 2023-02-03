@@ -90,19 +90,38 @@ namespace Assignment4Final.Controllers
             {
                 return NotFound(new {description ="Candidate with this userId not found "});
             }
-            var candidatesTakenExams = await _candExamService.GetTakenCandidateExamsOfCandidateAsync(candidate);
+            var candidatesTakenExams = await _candExamService.GetNotTakenCandidateExamsOfCandidateAsync(candidate);
             return Ok(_candExamService.GetListOfCandidateExamDtosFromListOfCandidateExam(candidatesTakenExams));
 
         }
 
 
-        [HttpPut("StartExam")] // this Api is for getting a CandidateExamDto full with the CandidatesAnswers and ExamsQuestions 
+        [HttpPut("StartExam")] // this Api is for getting a CandidateExamDto full with the CandidatesAnswers and ExamsQuestions when an Exam is starting
         public async Task<ActionResult<CandidateExamDto>> GetCandExmWithAnswers([FromBody] int candExamId)
         {
-            var candExamDto = await _candExamService.UpdateWithAnswersCandidateExamDtoAsync(candExamId);
+            var candidateExam = await _candExamService.GetCandidateExamByIdAsync(candExamId);
+            
+            if ( candidateExam == null  || candidateExam.CandidateExamAnswers == null || candidateExam.Result != null)
+            {
+                return NotFound(new { message = "CandidateExam Not Found Or arleady taken"});
 
+            }
+            
+            if(candidateExam.CandidateExamAnswers.Count() > 0 )
+            {
+                return _candExamService.GetCandidateExamDto(candidateExam);
+            }
+            var candExamDto = await _candExamService.UpdateWithAnswersCandidateExamDtoAsync(candidateExam);
             return Ok(candExamDto);  
 
+        }
+
+        [HttpPut("EndExam")] //Api to end the exam procces 
+        public async Task<ActionResult<CandidateExamDto>> GetCandidateExamWithResults([FromBody] int candExamId)
+        {
+            var candidateExam = await _candExamService.GetCandidateExamByIdAsync(candExamId);
+            var candidateExamUpdated = await _candExamService.UpdatdeWithResults(candidateExam);
+            return Ok(_candExamService.GetCandidateExamDto(candidateExamUpdated));
         }
 
 

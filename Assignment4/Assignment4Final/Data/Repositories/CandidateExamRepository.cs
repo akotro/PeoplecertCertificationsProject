@@ -20,7 +20,7 @@ namespace Assignment4Final.Data.Repositories
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<CandidateExam> Add(CandidateExam candidateExam)
+        public async Task<CandidateExam> AddAsync(CandidateExam candidateExam)
         {
             CandidateExam candidateExamResult = null;
             if(candidateExam.Id != 0)
@@ -52,7 +52,7 @@ namespace Assignment4Final.Data.Repositories
             return await _context.CandidateExams.Where(candExam => candExam.Candidate == candidate).ToListAsync();
         }
         
-        public async Task<List<CandidateExam>> GetTakenCandidateExamsOfCandidateAsync(Candidate candidate)
+        public async Task<List<CandidateExam>> GetNotTakenCandidateExamsOfCandidateAsync(Candidate candidate)
         {
             return await _context.CandidateExams
                 .Include(candExam => candExam.Candidate)
