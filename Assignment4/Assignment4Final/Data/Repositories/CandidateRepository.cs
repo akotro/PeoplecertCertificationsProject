@@ -1,4 +1,6 @@
-﻿using Assignment4Final.Services;
+﻿using System.Collections;
+using System.Linq.Expressions;
+using Assignment4Final.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -73,7 +75,52 @@ namespace Assignment4Final.Data.Repositories
 
         public async Task<Candidate?> AddCandidate(Candidate candidate)
         {
-            await FillNavigationProperties(candidate);
+            if (candidate.Gender != null)
+            {
+                candidate.Gender = await _context.Genders.FindAsync(candidate.Gender.Id);
+            }
+
+            if (candidate.Language != null)
+            {
+                candidate.Language = await _context.Languages.FindAsync(candidate.Language.Id);
+            }
+
+            if (candidate.PhotoIdType != null)
+            {
+                candidate.PhotoIdType = await _context.PhotoIdTypes.FindAsync(
+                    candidate.PhotoIdType.Id
+                );
+            }
+
+            if (candidate.Address != null)
+            {
+                if (candidate.Address.Any())
+                {
+                    foreach (var address in candidate.Address)
+                    {
+                        var dbAddress = _context.Addresses
+                            .Include(a => a.Country)
+                            .FirstOrDefault(a => a.Id == address.Id);
+                        if (dbAddress != null)
+                        {
+                            dbAddress.Address1 = address.Address1;
+                            dbAddress.Address2 = address.Address2;
+                            dbAddress.City = address.City;
+                            dbAddress.State = address.State;
+                            dbAddress.PostalCode = address.PostalCode;
+                            dbAddress.Country = await _context.Countries.FindAsync(
+                                address.Country.Id
+                            );
+                        }
+                        else
+                        {
+                            address.Country = await _context.Countries.FindAsync(
+                                address.Country.Id
+                            );
+                        }
+                    }
+                }
+            }
 
             var candidateEntity = await _context.Candidates.AddAsync(candidate);
             await _context.SaveChangesAsync();
@@ -102,30 +149,232 @@ namespace Assignment4Final.Data.Repositories
                 candidateToUpdate.PhotoIdType = candidate.PhotoIdType;
                 candidateToUpdate.Address = candidate.Address;
 
-                await FillNavigationProperties(candidateToUpdate);
-
                 await _context.SaveChangesAsync();
             }
 
             return candidateToUpdate;
         }
 
+        public async Task<Candidate?> UpdateCandidateAsync(Candidate candidate)
+        {
+            var dbCandidate = await _context.Candidates
+                .Include(c => c.AppUser)
+                .Include(c => c.Gender)
+                .Include(c => c.Language)
+                .Include(c => c.PhotoIdType)
+                .Include(c => c.Address)
+                .ThenInclude(a => a.Country)
+                .FirstOrDefaultAsync(c => c.AppUserId == candidate.AppUserId);
+
+            if (dbCandidate != null)
+            {
+                dbCandidate.FirstName = candidate.FirstName;
+                dbCandidate.MiddleName = candidate.MiddleName;
+                dbCandidate.LastName = candidate.LastName;
+                dbCandidate.DateOfBirth = candidate.DateOfBirth;
+                dbCandidate.Email = candidate.Email;
+                dbCandidate.Landline = candidate.Landline;
+                dbCandidate.Mobile = candidate.Mobile;
+                dbCandidate.CandidateNumber = candidate.CandidateNumber;
+                dbCandidate.PhotoIdNumber = candidate.PhotoIdNumber;
+                dbCandidate.PhotoIdIssueDate = candidate.PhotoIdIssueDate;
+
+                if (candidate.Gender != null)
+                {
+                    dbCandidate.Gender = await _context.Genders.FindAsync(candidate.Gender.Id);
+                }
+
+                if (candidate.Language != null)
+                {
+                    dbCandidate.Language = await _context.Languages.FindAsync(
+                        candidate.Language.Id
+                    );
+                }
+
+                if (candidate.PhotoIdType != null)
+                {
+                    dbCandidate.PhotoIdType = await _context.PhotoIdTypes.FindAsync(
+                        candidate.PhotoIdType.Id
+                    );
+                }
+
+                if (candidate.Address != null)
+                {
+                    if (candidate.Address.Any())
+                    {
+                        foreach (var address in candidate.Address)
+                        {
+                            var dbAddress = dbCandidate.Address.FirstOrDefault(
+                                a => a.Id == address.Id
+                            );
+                            if (dbAddress != null)
+                            {
+                                dbAddress.Address1 = address.Address1;
+                                dbAddress.Address2 = address.Address2;
+                                dbAddress.City = address.City;
+                                dbAddress.State = address.State;
+                                dbAddress.PostalCode = address.PostalCode;
+                                dbAddress.Country = await _context.Countries.FindAsync(
+                                    address.Country.Id
+                                );
+                            }
+                            else
+                            {
+                                dbCandidate.Address.Add(
+                                    new Address
+                                    {
+                                        Address1 = address.Address1,
+                                        Address2 = address.Address2,
+                                        City = address.City,
+                                        State = address.State,
+                                        PostalCode = address.PostalCode,
+                                        Country = await _context.Countries.FindAsync(
+                                            address.Country.Id
+                                        )
+                                    }
+                                );
+                            }
+                        }
+                    }
+                }
+            }
+
+            await _context.SaveChangesAsync();
+
+            return dbCandidate;
+        }
+
+        // public async Task<TEntity> AddOrUpdateEntity<TEntity>(
+        //     TEntity entity,
+        //     params Expression<Func<TEntity, object>>[] navigationProperties
+        // ) where TEntity : class
+        // {
+        //     foreach (var navigationProperty in navigationProperties)
+        //     {
+        //         var relatedEntity = navigationProperty.Compile()(entity);
+        //         if (relatedEntity == null)
+        //             continue;
+
+        //         if (relatedEntity is IEnumerable)
+        //         {
+        //             var relatedEntities = (relatedEntity as IEnumerable).Cast<object>();
+        //             foreach (var relatedEntityItem in relatedEntities)
+        //             {
+        //                 var existingRelatedEntity = await FindRelatedEntity(relatedEntityItem);
+        //                 if (existingRelatedEntity == null)
+        //                 {
+        //                     _context.Add(relatedEntityItem);
+        //                 }
+        //                 else
+        //                 {
+        //                     _context
+        //                         .Entry(existingRelatedEntity)
+        //                         .CurrentValues.SetValues(relatedEntityItem);
+        //                 }
+        //             }
+        //         }
+        //         else
+        //         {
+        //             var existingRelatedEntity = await FindRelatedEntity(relatedEntity);
+        //             if (existingRelatedEntity == null)
+        //             {
+        //                 _context.Add(relatedEntity);
+        //             }
+        //             else
+        //             {
+        //                 _context
+        //                     .Entry(existingRelatedEntity)
+        //                     .CurrentValues.SetValues(relatedEntity);
+        //             }
+        //         }
+        //     }
+
+        //     var existingEntity = await FindEntity(entity, navigationProperties);
+        //     if (existingEntity == null)
+        //     {
+        //         _context.Add(entity);
+        //     }
+        //     else
+        //     {
+        //         _context.Entry(existingEntity).CurrentValues.SetValues(entity);
+        //     }
+
+        //     await _context.SaveChangesAsync();
+
+        //     return await FindEntity(entity, navigationProperties);
+        // }
+
+        // private async Task<TEntity> FindEntity<TEntity>(
+        //     TEntity entity,
+        //     Expression<Func<TEntity, object>>[] navigationProperties
+        // ) where TEntity : class
+        // {
+        //     var entityType = _context.Model.FindRuntimeEntityType(typeof(TEntity));
+        //     var keyValues = entityType
+        //         .FindPrimaryKey()
+        //         .Properties.Select(property => property.PropertyInfo.GetValue(entity))
+        //         .ToArray();
+
+        //     var query = _context.Set<TEntity>().AsQueryable();
+        //     foreach (var navigationProperty in navigationProperties)
+        //     {
+        //         query = query.Include(navigationProperty);
+        //     }
+
+        //     return await query.FirstOrDefaultAsync(
+        //         entityType
+        //             .FindPrimaryKey()
+        //             .Properties.Zip(
+        //                 keyValues,
+        //                 (p, v) =>
+        //                     Expression.Equal(
+        //                         Expression.Property(
+        //                             Expression.Parameter(entityType.ClrType),
+        //                             p.Name
+        //                         ),
+        //                         Expression.Constant(v)
+        //                     )
+        //             )
+        //             .Aggregate((expr1, expr2) => Expression.And(expr1, expr2))
+        //     );
+        // }
+
+        // private async Task<object> FindRelatedEntity(object relatedEntity)
+        // {
+        //     var relatedEntityType = _context.Model.FindRuntimeEntityType(relatedEntity.GetType());
+        //     var keyValues = relatedEntityType
+        //         .FindPrimaryKey()
+        //         .Properties.Select(property => property.PropertyInfo.GetValue(relatedEntity))
+        //         .ToArray();
+
+        //     var query = _context.Set(relatedEntityType.ClrType).AsQueryable();
+
+        //     foreach (var navigationProperty in relatedEntityType.GetNavigations())
+        //     {
+        //         query = query.Include(navigationProperty.Name);
+        //     }
+
+        //     return await query.FirstOrDefaultAsync(
+        //         relatedEntityType
+        //             .FindPrimaryKey()
+        //             .Properties.Zip(
+        //                 keyValues,
+        //                 (p, v) =>
+        //                     Expression.Equal(
+        //                         Expression.Property(
+        //                             Expression.Parameter(relatedEntityType.ClrType),
+        //                             p.Name
+        //                         ),
+        //                         Expression.Constant(v)
+        //                     )
+        //             )
+        //             .Aggregate((expr1, expr2) => Expression.And(expr1, expr2))
+        //     );
+        // }
+
         public bool CandidatesDbSetExists()
         {
             return _context.Candidates != null;
-        }
-
-        private async Task FillNavigationProperties(Candidate candidate)
-        {
-            candidate.Address = candidate.Address
-                ?.Select(async t => await _context.Addresses.FindAsync(t.Id))
-                .Select(t => t.Result)
-                .ToList();
-            candidate.Gender = await _context.Genders.FindAsync(candidate.Gender?.Id);
-            candidate.Language = await _context.Languages.FindAsync(candidate.Language?.Id);
-            candidate.PhotoIdType = await _context.PhotoIdTypes.FindAsync(
-                candidate.PhotoIdType?.Id
-            );
         }
     }
 }
