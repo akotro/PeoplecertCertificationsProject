@@ -273,12 +273,10 @@ namespace Assignment4Final.Data.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -315,12 +313,10 @@ namespace Assignment4Final.Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
@@ -575,6 +571,9 @@ namespace Assignment4Final.Data.Migrations
                     b.Property<int?>("PassingMark")
                         .HasColumnType("int");
 
+                    b.Property<double?>("Price")
+                        .HasColumnType("float");
+
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
@@ -644,6 +643,12 @@ namespace Assignment4Final.Data.Migrations
                     b.Property<bool?>("IsModerated")
                         .HasColumnType("bit");
 
+                    b.Property<string>("MarkerAppUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("MarkingDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<int?>("MaxScore")
                         .HasColumnType("int");
 
@@ -664,6 +669,8 @@ namespace Assignment4Final.Data.Migrations
                     b.HasIndex("CandidateAppUserId");
 
                     b.HasIndex("ExamId");
+
+                    b.HasIndex("MarkerAppUserId");
 
                     b.ToTable("CandidateExams");
                 });
@@ -691,6 +698,9 @@ namespace Assignment4Final.Data.Migrations
                     b.Property<bool?>("IsCorrectModerated")
                         .HasColumnType("bit");
 
+                    b.Property<string>("QuestionText")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CandidateExamId");
@@ -714,6 +724,16 @@ namespace Assignment4Final.Data.Migrations
                     b.HasIndex("CertificateId");
 
                     b.ToTable("Exams");
+                });
+
+            modelBuilder.Entity("ModelLibrary.Models.Exams.Marker", b =>
+                {
+                    b.Property<string>("AppUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("AppUserId");
+
+                    b.ToTable("Markers");
                 });
 
             modelBuilder.Entity("ModelLibrary.Models.Questions.Option", b =>
@@ -899,9 +919,15 @@ namespace Assignment4Final.Data.Migrations
                         .WithMany("CandidateExams")
                         .HasForeignKey("ExamId");
 
+                    b.HasOne("ModelLibrary.Models.Exams.Marker", "Marker")
+                        .WithMany("CandidateExams")
+                        .HasForeignKey("MarkerAppUserId");
+
                     b.Navigation("Candidate");
 
                     b.Navigation("Exam");
+
+                    b.Navigation("Marker");
                 });
 
             modelBuilder.Entity("ModelLibrary.Models.Exams.CandidateExamAnswers", b =>
@@ -920,6 +946,15 @@ namespace Assignment4Final.Data.Migrations
                         .HasForeignKey("CertificateId");
 
                     b.Navigation("Certificate");
+                });
+
+            modelBuilder.Entity("ModelLibrary.Models.Exams.Marker", b =>
+                {
+                    b.HasOne("ModelLibrary.Models.AppUser", "AppUser")
+                        .WithOne("Marker")
+                        .HasForeignKey("ModelLibrary.Models.Exams.Marker", "AppUserId");
+
+                    b.Navigation("AppUser");
                 });
 
             modelBuilder.Entity("ModelLibrary.Models.Questions.Option", b =>
@@ -949,6 +984,9 @@ namespace Assignment4Final.Data.Migrations
             modelBuilder.Entity("ModelLibrary.Models.AppUser", b =>
                 {
                     b.Navigation("Candidate")
+                        .IsRequired();
+
+                    b.Navigation("Marker")
                         .IsRequired();
                 });
 
@@ -1000,6 +1038,11 @@ namespace Assignment4Final.Data.Migrations
                 });
 
             modelBuilder.Entity("ModelLibrary.Models.Exams.Exam", b =>
+                {
+                    b.Navigation("CandidateExams");
+                });
+
+            modelBuilder.Entity("ModelLibrary.Models.Exams.Marker", b =>
                 {
                     b.Navigation("CandidateExams");
                 });

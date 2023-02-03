@@ -32,17 +32,18 @@ namespace Assignment4Final.Data
         public virtual DbSet<Exam> Exams { get; set; }
         public virtual DbSet<CandidateExam> CandidateExams { get; set; }
         public virtual DbSet<CandidateExamAnswers> CandidateExamAnswers { get; set; }
+        public virtual DbSet<Marker> Markers { get; set; }
 
         public ApplicationDbContext(
             DbContextOptions options,
             IOptions<OperationalStoreOptions> operationalStoreOptions
-        ) : base(options, operationalStoreOptions) { }
+        ) : base(options, operationalStoreOptions)
+        {
+        }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-
-            #region // NOTE(akotro): Configures AppUserId to be Candidate's PK + FK to AppUser
 
             builder
                 .Entity<AppUser>()
@@ -52,7 +53,13 @@ namespace Assignment4Final.Data
                 .IsRequired(false);
             builder.Entity<Candidate>().HasKey(c => c.AppUserId);
 
-            #endregion
+            builder
+                .Entity<AppUser>()
+                .HasOne(a => a.Marker)
+                .WithOne(m => m.AppUser)
+                .HasForeignKey<Marker>(m => m.AppUserId)
+                .IsRequired(false);
+            builder.Entity<Marker>().HasKey(m => m.AppUserId);
         }
 
         // NOTE:(akotro) Is this needed? See https://learn.microsoft.com/en-us/ef/core/querying/single-split-queries

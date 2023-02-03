@@ -11,6 +11,7 @@ public class Certificate
     public int? MaxMark { get; set; }
     public string? Category { get; set; }
     public bool? Active { get; set; }
+    public double? Price { get; set; }
     public virtual ICollection<Topic>? Topics { get; set; }
 
     public virtual ICollection<Exam>?

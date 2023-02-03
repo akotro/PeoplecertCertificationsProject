@@ -3,6 +3,7 @@
 public class CandidateExamAnswers
 {
     public int Id { get; set; }
+    public string? QuestionText { get; set; }
     public string? CorrectOption { get; set; }
     public string? ChosenOption { get; set; }
     public bool? IsCorrect { get; set; }

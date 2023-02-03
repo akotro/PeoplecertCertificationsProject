@@ -59,7 +59,8 @@ namespace Assignment4Final.Data.Migrations
                     PassingMark = table.Column<int>(type: "int", nullable: true),
                     MaxMark = table.Column<int>(type: "int", nullable: true),
                     Category = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Active = table.Column<bool>(type: "bit", nullable: true)
+                    Active = table.Column<bool>(type: "bit", nullable: true),
+                    Price = table.Column<double>(type: "float", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -248,8 +249,8 @@ namespace Assignment4Final.Data.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
-                    ProviderKey = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
@@ -293,8 +294,8 @@ namespace Assignment4Final.Data.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -306,6 +307,22 @@ namespace Assignment4Final.Data.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Markers",
+                columns: table => new
+                {
+                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Markers", x => x.AppUserId);
+                    table.ForeignKey(
+                        name: "FK_Markers_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -463,6 +480,8 @@ namespace Assignment4Final.Data.Migrations
                     AssessmentCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Voucher = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsModerated = table.Column<bool>(type: "bit", nullable: true),
+                    MarkingDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    MarkerAppUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     CandidateAppUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     ExamId = table.Column<int>(type: "int", nullable: true)
                 },
@@ -479,6 +498,11 @@ namespace Assignment4Final.Data.Migrations
                         column: x => x.ExamId,
                         principalTable: "Exams",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_CandidateExams_Markers_MarkerAppUserId",
+                        column: x => x.MarkerAppUserId,
+                        principalTable: "Markers",
+                        principalColumn: "AppUserId");
                 });
 
             migrationBuilder.CreateTable(
@@ -531,6 +555,7 @@ namespace Assignment4Final.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    QuestionText = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CorrectOption = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ChosenOption = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsCorrect = table.Column<bool>(type: "bit", nullable: true),
@@ -610,6 +635,11 @@ namespace Assignment4Final.Data.Migrations
                 name: "IX_CandidateExams_ExamId",
                 table: "CandidateExams",
                 column: "ExamId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CandidateExams_MarkerAppUserId",
+                table: "CandidateExams",
+                column: "MarkerAppUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Candidates_GenderId",
@@ -753,13 +783,13 @@ namespace Assignment4Final.Data.Migrations
                 name: "Exams");
 
             migrationBuilder.DropTable(
+                name: "Markers");
+
+            migrationBuilder.DropTable(
                 name: "DifficultyLevels");
 
             migrationBuilder.DropTable(
                 name: "Topics");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Genders");
@@ -772,6 +802,9 @@ namespace Assignment4Final.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Certificates");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
         }
     }
 }
