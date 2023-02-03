@@ -222,19 +222,11 @@ namespace Assignment4Final
                 mc.CreateMap<AppUser, UserDto>();
 
                 mc.CreateMap<Exam, ExamDto>()
-                    .ForPath(
-                        dest => dest.CertificateTitle,
-                        opt => opt.MapFrom(src => src.Certificate.Title)
-                    )
                     .ReverseMap();
 
-                mc.CreateMap<CandidateExam, CandidateExamDto>()
-                    .ForPath(
-                        dest => dest.ExamCertificateTitle,
-                        opt => opt.MapFrom(src => src.Exam.Certificate.Title)
-                    );
-
-                mc.CreateMap<CandidateExamAnswersDto, CandidateExamAnswers>().ReverseMap();
+                mc.CreateMap<CandidateExam, CandidateExamDto>().ReverseMap();
+                mc.CreateMap<CandidateExamAnswers,CandidateExamAnswersDto>().ReverseMap();
+                    
             });
             IMapper mapper = mapperConfig.CreateMapper();
             builder.Services.AddSingleton(mapper);
