@@ -28,8 +28,9 @@ namespace Assignment4Final.Data.Repositories
                 .Include(a => a.Gender)
                 .Include(a => a.Language)
                 .Include(a => a.PhotoIdType)
-                .Include(a => a.Address).ThenInclude(a => a.Country)
-                .ToListAsync();            
+                .Include(a => a.Address)
+                .ThenInclude(a => a.Country)
+                .ToListAsync();
         }
 
         public async Task<Candidate?> GetCandidate(string appUserId)
@@ -43,7 +44,8 @@ namespace Assignment4Final.Data.Repositories
                 .Include(a => a.Gender)
                 .Include(a => a.Language)
                 .Include(a => a.PhotoIdType)
-                .Include(a => a.Address).ThenInclude(a => a.Country)
+                .Include(a => a.Address)
+                .ThenInclude(a => a.Country)
                 .FirstOrDefaultAsync(p => p.AppUserId == appUserId);
         }
 
@@ -54,7 +56,8 @@ namespace Assignment4Final.Data.Repositories
                 .Include(a => a.Gender)
                 .Include(a => a.Language)
                 .Include(a => a.PhotoIdType)
-                .Include(a => a.Address).ThenInclude(a => a.Country)
+                .Include(a => a.Address)
+                .ThenInclude(a => a.Country)
                 .Include(a => a.CandidateExams)
                 .FirstOrDefaultAsync(p => p.AppUserId == appUserId);
             if (candidate != null)
@@ -70,6 +73,8 @@ namespace Assignment4Final.Data.Repositories
 
         public async Task<Candidate?> AddCandidate(Candidate candidate)
         {
+            await FillNavigationProperties(candidate);
+
             var candidateEntity = await _context.Candidates.AddAsync(candidate);
             await _context.SaveChangesAsync();
 
@@ -97,6 +102,8 @@ namespace Assignment4Final.Data.Repositories
                 candidateToUpdate.PhotoIdType = candidate.PhotoIdType;
                 candidateToUpdate.Address = candidate.Address;
 
+                await FillNavigationProperties(candidateToUpdate);
+
                 await _context.SaveChangesAsync();
             }
 
@@ -106,6 +113,19 @@ namespace Assignment4Final.Data.Repositories
         public bool CandidatesDbSetExists()
         {
             return _context.Candidates != null;
+        }
+
+        private async Task FillNavigationProperties(Candidate candidate)
+        {
+            candidate.Address = candidate.Address
+                ?.Select(async t => await _context.Addresses.FindAsync(t.Id))
+                .Select(t => t.Result)
+                .ToList();
+            candidate.Gender = await _context.Genders.FindAsync(candidate.Gender?.Id);
+            candidate.Language = await _context.Languages.FindAsync(candidate.Language?.Id);
+            candidate.PhotoIdType = await _context.PhotoIdTypes.FindAsync(
+                candidate.PhotoIdType?.Id
+            );
         }
     }
 }
