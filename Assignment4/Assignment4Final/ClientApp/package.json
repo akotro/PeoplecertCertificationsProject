@@ -3,16 +3,39 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@ckeditor/ckeditor5-build-classic": "^36.0.0",
-    "@ckeditor/ckeditor5-build-inline": "^36.0.0",
-    "@ckeditor/ckeditor5-react": "^5.0.6",
-    "@fortawesome/fontawesome-svg-core": "^6.2.1",
-    "@fortawesome/free-regular-svg-icons": "^6.2.1",
-    "@fortawesome/free-solid-svg-icons": "^6.2.1",
-    "@fortawesome/react-fontawesome": "^0.2.0",
+  
+  
     "axios": "^1.2.6",
     "babel-plugin-macros": "^3.1.0",
     "bootstrap": "^5.2.3",
+    
+    "@ckeditor/ckeditor5-autoformat": "^35.4.0",
+    "@ckeditor/ckeditor5-basic-styles": "^35.4.0",
+    "@ckeditor/ckeditor5-build-classic": "^35.4.0",
+    "@ckeditor/ckeditor5-code-block": "^35.4.0",
+    "@ckeditor/ckeditor5-editor-classic": "^35.4.0",
+    "@ckeditor/ckeditor5-essentials": "^35.4.0",
+    "@ckeditor/ckeditor5-markdown-gfm": "^35.4.0",
+    "@ckeditor/ckeditor5-react": "^5.0.6",
+    "ckeditor5-classic-plus": "^35.0.1",
+    "@ckeditor/ckeditor5-upload": "^35.4.0",
+    
+    
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+
+
+
+
+
+
+
+
+
+
+
+
     "http-proxy-middleware": "^2.0.6",
     "jquery": "^3.6.0",
     "merge": "^2.1.1",
