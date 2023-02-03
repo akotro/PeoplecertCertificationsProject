@@ -15,13 +15,13 @@ namespace Assignment4Final.Services
         private readonly CandidateExamRepository _candidateExamRepository;
         private readonly ExamService _examService;
         private readonly IMapper _mapper;
-        CertificatesRepository _certificatesRepository;
+        private readonly ICertificatesRepository _certificatesRepository;
 
         public CandidateExamService(
             CandidateExamRepository candidateExamRepository,
             IMapper mapper,
             ExamService examService,
-            CertificatesRepository certificatesRepository
+            ICertificatesRepository certificatesRepository
 
         )
         {
