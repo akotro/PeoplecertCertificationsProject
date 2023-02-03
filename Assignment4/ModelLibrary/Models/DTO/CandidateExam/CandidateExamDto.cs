@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ModelLibrary.Models.DTO.Exams;
+using ModelLibrary.Models.Exams;
+using Newtonsoft.Json;
 
 namespace ModelLibrary.Models.DTO.CandidateExam
 {
@@ -21,6 +23,10 @@ namespace ModelLibrary.Models.DTO.CandidateExam
         public string? AssessmentCode { get; set; }
         public string? Voucher { get; set; }
         public bool? IsModerated { get; set; }
-        
+
+        [JsonProperty(ItemReferenceLoopHandling = ReferenceLoopHandling.Ignore)]
+        public virtual ICollection<CandidateExamAnswersDto>?
+        CandidateExamAnswersDtos
+        { get; set; }
     }
 }

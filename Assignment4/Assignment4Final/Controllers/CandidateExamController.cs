@@ -1,9 +1,11 @@
-﻿using Assignment4Final.Services;
+﻿using Assignment4Final.Data.Repositories;
+using Assignment4Final.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ModelLibrary.Models;
 using ModelLibrary.Models.DTO.CandidateExam;
+using ModelLibrary.Models.DTO.Certificates;
 using ModelLibrary.Models.DTO.Exams;
 using ModelLibrary.Models.Exams;
 
@@ -21,37 +23,51 @@ namespace Assignment4Final.Controllers
             UserManager<AppUser> userManager,
             CandidateExamService candExamService,
             ExamService examService
+            
         )
         {
             _userManager = userManager;
             _candExamService = candExamService;
             _examService = examService;
+            
         }
 
-        //Post : when the candidate picks an exam it makes a candidate exam for this candidate and the exam he picked
-        [HttpPost]
-        public async Task<ActionResult<CandidateExam>> GetCandidateExamFromPickedExam(
-            [FromBody] ExamDto examDto
-        )
-        {
-            var exam = _examService.GetExamFromExamDto(examDto);
+        ////Post : when the candidate picks an exam it makes a candidate exam for this candidate and the exam he picked
+        //[HttpPost]
+        //public async Task<ActionResult<CandidateExam>> GetCandidateExamFromPickedExam(
+        //    [FromBody] ExamDto examDto
+        //)
+        //{
+        //    var exam = _examService.GetExamFromExamDto(examDto);
 
+        //    var userId = _userManager.GetUserId(User);
+        //    var candidateExam = await _candExamService.GetCandidateExamByExam(exam, userId);
+        //    await Task.Run(() => _candExamService.AddCandidateExam(ref candidateExam));
+        //    var candidateExamDto = _candExamService.GetCandidateExamDtoFromCandidateExam(
+        //        candidateExam
+        //    );
+
+        //    return Ok(candidateExamDto);
+        //}
+
+
+
+        [HttpPost("certificateDto")] //this API is so a candidate can buy from the available certificates
+        public async Task<ActionResult<CandidateExamDto>> Get([FromBody] CertificateDto certificateDto)
+        {
             var userId = _userManager.GetUserId(User);
-            var candidateExam = await _candExamService.GetCandidateExamByExam(exam, userId);
-            await Task.Run(() => _candExamService.AddCandidateExam(ref candidateExam));
-            var candidateExamDto = _candExamService.GetCandidateExamDtoFromCandidateExam(
-                candidateExam
-            );
-
-            return Ok(candidateExamDto);
+            var candExamDto = await  _candExamService.GetCandidateExamByCertificateAsync(certificateDto,userId);
+            return Ok(candExamDto);
         }
 
 
-        [HttpGet]
-        public async Task<ActionResult<List<CandidateExamDto>>> GetAllCandidateExamsOfCandidate()
+
+
+        [HttpGet] // All the candidateExams the candidate has bought . both taken and not taken 
+        public async Task<ActionResult<List<CandidateExamDto>>> GetAll()
         {
 
-            var candidate = await _candExamService.GetCandidateByUserId(_userManager.GetUserId(User));
+            var candidate = await _candExamService.GetCandidateByUserIdAsync(_userManager.GetUserId(User));
             if (candidate == null)
             {
                 return NotFound(new { description = "Candidate with this userId not found " });
@@ -61,11 +77,12 @@ namespace Assignment4Final.Controllers
 
         }
 
-        [HttpGet("notTaken")]
-        public async Task<ActionResult<List<CandidateExamDto>>> GetTakenCandidateExamsOfCandidate() //Not Debuged all the candidate exams in Seed are Taken . Should i checke if taken by ExamDate?
+
+        [HttpGet("notTaken")] // all the CandidateExams the candidate has bought but not yet taken (picked by cendidateExam.Result == null)
+        public async Task<ActionResult<List<CandidateExamDto>>> GetAllNotTaken() //Not Debuged all the candidate exams in Seed are Taken . Should i checke if taken by ExamDate?
         {
             
-            var candidate = await _candExamService.GetCandidateByUserId(_userManager.GetUserId(User));
+            var candidate = await _candExamService.GetCandidateByUserIdAsync(_userManager.GetUserId(User));
             if(candidate == null)
             {
                 return NotFound(new {description ="Candidate with this userId not found "});
@@ -75,20 +92,38 @@ namespace Assignment4Final.Controllers
 
         }
 
-        [HttpPost("QuestionsAndAnswers")]
-        public async Task<ActionResult<CandidateExamQuestionsAndAnswersDto>> GetQuestionsAndAnswers([FromBody] int id) 
-        {
-            
-            var candExam = await _candExamService.GetCandidateExamByIdsync(1002);
-            if(candExam == null)
-            {
-                return NotFound("candidateExam with this id not found");
-            }
-            return _candExamService.GetQuestionsAndAnswersDto(candExam);
 
-            
+        [HttpPut("StartExam")] // this Api is for getting a CandidateExamDto full with the CandidatesAnswers and ExamsQuestions 
+        public async Task<ActionResult<CandidateExamDto>> Get([FromBody] CandidateExamDto candidateExamDto)
+        {
+            var candExamDto = await _candExamService.UpdateWithAnswersCandidateExamDtoAsync(candidateExamDto);
+
+            return Ok(candExamDto);  
 
         }
+
+
+
+
+
+
+
+
+
+        //[HttpPost("QuestionsAndAnswers")]
+        //public async Task<ActionResult<CandidateExamQuestionsAndAnswersDto>> GetQuestionsAndAnswers([FromBody] int id) 
+        //{
+            
+        //    var candExam = await _candExamService.GetCandidateExamByIdsync(1002);
+        //    if(candExam == null)
+        //    {
+        //        return NotFound("candidateExam with this id not found");
+        //    }
+        //    return _candExamService.GetQuestionsAndAnswersDto(candExam);
+
+            
+
+        //}
 
 
 

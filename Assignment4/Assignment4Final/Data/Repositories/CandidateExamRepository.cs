@@ -14,7 +14,7 @@ namespace Assignment4Final.Data.Repositories
             _context = context;
         }
 
-        public async Task<Candidate?> GetCandidateByUserId(string userId)
+        public async Task<Candidate?> GetCandidateByUserIdAsync(string userId)
         {
             return await  _context.Candidates.Where(cand => cand.AppUser.Id == userId)
                 .FirstOrDefaultAsync();
@@ -47,7 +47,7 @@ namespace Assignment4Final.Data.Repositories
 
         public async Task<List<CandidateExam>> GetAllCandidateExamsOfCandidateAsync(Candidate candidate)
         {
-            return await _context.CandidateExams.Where(candexam => candexam.Candidate == candidate).ToListAsync();
+            return await _context.CandidateExams.Where(candExam => candExam.Candidate == candidate).ToListAsync();
         }
         
         public async Task<List<CandidateExam>> GetTakenCandidateExamsOfCandidateAsync(Candidate candidate)
@@ -58,7 +58,7 @@ namespace Assignment4Final.Data.Repositories
                 .ToListAsync();
         }
 
-        public async Task<CandidateExam?> GetCandidateExamByIdsync(int id)
+        public async Task<CandidateExam?> GetCandidateExamByIdAsync(int id)
         {
             return await _context.CandidateExams.
                 Include(candExam => candExam.CandidateExamAnswers)
