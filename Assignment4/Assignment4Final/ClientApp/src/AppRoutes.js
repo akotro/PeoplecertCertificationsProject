@@ -12,6 +12,12 @@ import Questions from './components/Questions/QuestionHomePage';
 import Edit from './components/Questions/QuestionEdit';
 import Create from './components/Questions/QuestionCreate';
 
+import CandidateList from './components/Candidate_CRUD/CandidateList'
+import CandidateEdit from "./components/Candidate_CRUD/CandidateEdit";
+
+
+import CandidateHomepage from './components/Candidate_Page/CandidateHomepage';
+
 const AppRoutes = [
     {
         index: true,
@@ -47,15 +53,30 @@ const AppRoutes = [
         // requireAuth: true,
         element: <Questions />
     },
-    {
-        path: '/admin/Questions/QuestionEdit',
-        // requireAuth: true,
-        element: <Edit />
-    },
+    //{
+    //    path: '/admin/Questions/QuestionEdit',
+    //    // requireAuth: true,
+    //    element: <Edit />
+    //},
     {
         path: '/admin/Questions/QuestionCreate',
         // requireAuth: true,
         element: <Create />
+    },
+    {
+        path: '/admin/candidate',
+        // requireAuth: true,
+        element: <CandidateList />
+    },
+    {
+        path: '/admin/candidate/:id',
+        // requireAuth: true,
+        element: <CandidateEdit />
+    },
+    {
+        path: '/candidate',
+        // requireAuth: true,
+        element: <CandidateHomepage />
     },
     //this needs to stay as the last path
     {
