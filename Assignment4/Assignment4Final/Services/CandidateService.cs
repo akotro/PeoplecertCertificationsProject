@@ -33,18 +33,35 @@ namespace Assignment4Final.Services
 
         public async Task<CandidatesDto?> DeleteCandidate(string appUserId)
         {
-            return _mapper.Map<CandidatesDto>(await _candidateRepository.DeleteCandidate(appUserId));             
+            return _mapper.Map<CandidatesDto>(
+                await _candidateRepository.DeleteCandidate(appUserId)
+            );
         }
 
         public async Task<CandidatesDto?> AddCandidate(CandidatesDto candidateDto)
         {
-            var addedCandidate = await _candidateRepository.AddCandidate(_mapper.Map<Candidate>(candidateDto));
+            var addedCandidate = await _candidateRepository.AddCandidate(
+                _mapper.Map<Candidate>(candidateDto)
+            );
             return addedCandidate != null ? _mapper.Map<CandidatesDto>(addedCandidate) : null;
         }
 
         public async Task<CandidatesDto?> UpdateCandidate(string id, CandidatesDto candidateDto)
         {
-            var updatedCandidate = await _candidateRepository.UpdateCandidate(id, _mapper.Map<Candidate>(candidateDto));
+            // var updatedCandidate = await _candidateRepository.AddOrUpdateEntity<Candidate>(
+            //     _mapper.Map<Candidate>(candidateDto),
+            //     c => c.Address,
+            //     c => c.Gender,
+            //     c => c.Language,
+            //     c => c.PhotoIdType
+            // );
+            // var updatedCandidate = await _candidateRepository.UpdateCandidate(
+            //     id,
+            //     _mapper.Map<Candidate>(candidateDto)
+            // );
+            var updatedCandidate = await _candidateRepository.UpdateCandidateAsync(
+                _mapper.Map<Candidate>(candidateDto)
+            );
             return updatedCandidate != null ? _mapper.Map<CandidatesDto>(updatedCandidate) : null;
         }
     }

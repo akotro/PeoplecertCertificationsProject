@@ -1,4 +1,5 @@
-﻿using ModelLibrary.Models.Candidates;
+﻿using System.Linq.Expressions;
+using ModelLibrary.Models.Candidates;
 
 namespace Assignment4Final.Data.Repositories
 {
@@ -10,5 +11,7 @@ namespace Assignment4Final.Data.Repositories
         public bool CandidatesDbSetExists();
         public Task<Candidate?> AddCandidate(Candidate candidate);
         public Task<Candidate?> UpdateCandidate(string id, Candidate candidate);
+
+        public Task<Candidate?> UpdateCandidateAsync(Candidate candidate);
     }
 }
