@@ -40,7 +40,7 @@ namespace Assignment4Final
 
             // Add services to the container.
             var connectionString =
-                builder.Configuration.GetConnectionString("DefaultConnection")
+                builder.Configuration.GetConnectionString("localdb")
                 ?? throw new InvalidOperationException(
                     "Connection string 'DefaultConnection' not found."
                 );
@@ -87,12 +87,10 @@ namespace Assignment4Final
             builder.Services.AddAuthorization(options =>
             {
                 // NOTE:(akotro) Admin has full rights to all data
-                options.AddPolicy("IsAdmin",
-                    policy => policy.RequireClaim("role", "admin"));
+                options.AddPolicy("IsAdmin", policy => policy.RequireClaim("role", "admin"));
 
                 // NOTE:(akotro) Marker has right to mark assigned exams at a specific time
-                options.AddPolicy("IsMarker",
-                    policy => policy.RequireClaim("role", "marker"));
+                options.AddPolicy("IsMarker", policy => policy.RequireClaim("role", "marker"));
 
                 // NOTE:(akotro) Quality Control has new rights to all data
                 options.AddPolicy(
@@ -111,8 +109,7 @@ namespace Assignment4Final
                 .AddControllersWithViews()
                 .AddNewtonsoftJson(options =>
                 {
-                    options.SerializerSettings.Converters.Add(
-                        new StringEnumConverter());
+                    options.SerializerSettings.Converters.Add(new StringEnumConverter());
                 });
 
             // NOTE:(akotro) Add Swagger
@@ -169,23 +166,19 @@ namespace Assignment4Final
             builder.Services.AddScoped<ITopicsRepository, TopicsRepository>();
             builder.Services.AddScoped<TopicsService>();
 
-            builder.Services
-                .AddScoped<IDifficultyLevelsRepository, DifficultyLevelsRepository>();
+            builder.Services.AddScoped<IDifficultyLevelsRepository, DifficultyLevelsRepository>();
             builder.Services.AddScoped<DifficultyLevelsService>();
 
-            builder.Services
-                .AddScoped<IGenericRepository<Country>, CountriesRepository>();
+            builder.Services.AddScoped<IGenericRepository<Country>, CountriesRepository>();
             builder.Services.AddScoped<CountriesService>();
 
             builder.Services.AddScoped<IGenericRepository<Gender>, GendersRepository>();
             builder.Services.AddScoped<GendersService>();
 
-            builder.Services
-                .AddScoped<IGenericRepository<Language>, LanguagesRepository>();
+            builder.Services.AddScoped<IGenericRepository<Language>, LanguagesRepository>();
             builder.Services.AddScoped<LanguagesService>();
 
-            builder.Services
-                .AddScoped<IGenericRepository<PhotoIdType>, PhotoIdTypesRepository>();
+            builder.Services.AddScoped<IGenericRepository<PhotoIdType>, PhotoIdTypesRepository>();
             builder.Services.AddScoped<PhotoIdTypesService>();
 
             builder.Services.AddScoped<ExamRepository>();
@@ -205,8 +198,7 @@ namespace Assignment4Final
             {
                 mc.CreateMap<OptionDto, Option>().ReverseMap();
                 mc.CreateMap<QuestionDto, Question>()
-                    .ForMember(dest => dest.Options,
-                        opt => opt.MapFrom(src => src.Options))
+                    .ForMember(dest => dest.Options, opt => opt.MapFrom(src => src.Options))
                     .ReverseMap();
                 mc.CreateMap<CertificateDto, Certificate>()
                     .ForMember(dest => dest.Topics, opt => opt.MapFrom(src => src.Topics))
@@ -225,16 +217,14 @@ namespace Assignment4Final
                     .ForMember(c => c.Address, opt => opt.MapFrom(src => src.Address))
                     .ForMember(c => c.Language, opt => opt.MapFrom(src => src.Language))
                     .ForMember(c => c.Gender, opt => opt.MapFrom(src => src.Gender))
-                    .ForMember(c => c.PhotoIdType,
-                        opt => opt.MapFrom(src => src.PhotoIdType))
+                    .ForMember(c => c.PhotoIdType, opt => opt.MapFrom(src => src.PhotoIdType))
                     .ReverseMap();
                 mc.CreateMap<AppUser, UserDto>();
 
                 mc.CreateMap<Exam, ExamDto>().ReverseMap();
 
                 mc.CreateMap<CandidateExam, CandidateExamDto>().ReverseMap();
-                mc.CreateMap<CandidateExamAnswers, CandidateExamAnswersDto>()
-                    .ReverseMap();
+                mc.CreateMap<CandidateExamAnswers, CandidateExamAnswersDto>().ReverseMap();
             });
             IMapper mapper = mapperConfig.CreateMapper();
             builder.Services.AddSingleton(mapper);
@@ -243,8 +233,7 @@ namespace Assignment4Final
                 options =>
                     options.AddPolicy( // TODO:(akotro) Is this correct?
                         "FrontEndPolicy",
-                        policy =>
-                            policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()
+                        policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()
                     )
             ); //.WithHeaders((HeaderNames.ContentType, "application/json")));
 
@@ -275,8 +264,7 @@ namespace Assignment4Final
             // app.UseIdentityServer();
             app.UseAuthorization();
 
-            app.MapControllerRoute(name: "default",
-                pattern: "{controller}/{action=Index}/{id?}");
+            app.MapControllerRoute(name: "default", pattern: "{controller}/{action=Index}/{id?}");
             app.MapRazorPages();
 
             app.MapFallbackToFile("index.html");
@@ -290,7 +278,7 @@ namespace Assignment4Final
             }
 
             // AGkiz - Seeds dummy data to DB
-            DbSeed.Seed(app);
+            DbSeed.Seed(app).Wait();
 
             app.Run();
         }
