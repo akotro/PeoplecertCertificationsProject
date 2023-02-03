@@ -136,14 +136,19 @@ export default function CandidateEdit(props) {
             } else {
                 setCandidate({ ...candidate, [name]: value });
             }
-
         } else {
             setCandidate({
                 ...candidate, address: candidate.address.map((address, index) => {
                     if (index === addressIndex) {
-                        return {
-                            ...address, [name]: value
-                        };
+                        if (name === "country") {
+                            return {
+                                ...address, [name]: countries.find(item => item.id === Number(value))
+                            };
+                        } else {
+                            return {
+                                ...address, [name]: value
+                            };
+                        }
                     }
                     return address;
                 })
