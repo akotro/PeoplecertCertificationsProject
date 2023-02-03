@@ -13,9 +13,5 @@ namespace Assignment4Final.Data.Repositories
         public Task<Candidate?> UpdateCandidate(string id, Candidate candidate);
 
         public Task<Candidate?> UpdateCandidateAsync(Candidate candidate);
-        // public Task<TEntity> AddOrUpdateEntity<TEntity>(
-        //     TEntity entity,
-        //     params Expression<Func<TEntity, object>>[] navigationProperties
-        // ) where TEntity : class;
     }
 }
