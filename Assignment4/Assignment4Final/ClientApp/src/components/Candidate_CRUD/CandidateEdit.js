@@ -13,6 +13,7 @@ export default function CandidateEdit(props) {
     const [genders, setGenders] = useState([]);
     const [languages, setLanguages] = useState([]);
     const [photoIdTypes, setPhotoIdTypes] = useState([]);
+    const [countries, setCountries] = useState([]);
     //console.log(params.id);
     const [candidate, setCandidate] = useState({
         dateOfBirth: null,
@@ -20,10 +21,10 @@ export default function CandidateEdit(props) {
         gender: [],
         language: [],
         photoIdType: [],
-        address: []
+        //address: []
     });
 
-    useEffect(() => {
+    const fetchData = () => {
         axios.get(`https://localhost:7196/api/Candidate/${params.id}`).then((response) => {
             setCandidate(response.data.data);
         }).catch(function (error) {
@@ -48,6 +49,54 @@ export default function CandidateEdit(props) {
             console.log(error);
         });
 
+        axios.get(`https://localhost:7196/api/Countries`).then((response) => {
+            setCountries(response.data.data);
+
+        }).catch(function (error) {
+            console.log(error);
+        });
+
+    }
+
+    //const address = () => {
+    //    const candAdd = candidate.address.map(x=>x)
+    //    console.log(candAdd);
+    //}
+    useEffect(() => {
+        fetchData();
+        //address();
+        //axios.get(`https://localhost:7196/api/Candidate/${params.id}`).then((response) => {
+        //    setCandidate(response.data.data);
+        //}).catch(function (error) {
+        //    console.log(error);
+        //});
+
+        //axios.get(`https://localhost:7196/api/Genders`).then((response) => {
+        //    setGenders(response.data.data);
+        //}).catch(function (error) {
+        //    console.log(error);
+        //});
+
+        //axios.get(`https://localhost:7196/api/Languages`).then((response) => {
+        //    setLanguages(response.data.data);
+        //}).catch(function (error) {
+        //    console.log(error);
+        //});
+
+        //axios.get(`https://localhost:7196/api/PhotoIdTypes`).then((response) => {
+        //    setPhotoIdTypes(response.data.data);
+        //}).catch(function (error) {
+        //    console.log(error);
+        //});
+
+        //axios.get(`https://localhost:7196/api/Countries`).then((response) => {
+        //    setCountries(response.data.data);
+
+        //}).catch(function (error) {
+        //    console.log(error);
+        //});
+
+
     }, []);
 
     const handleSubmit = (event) => {
@@ -64,41 +113,62 @@ export default function CandidateEdit(props) {
         console.log(candidate);
     }
 
-    const handleChange = (event) => {
 
-        const { name, value } = event.target;
+
+    const handleChange = (event, addressIndex) => {
+        console.log(candidate);
+
+
+        const { name, value, type } = event.target;
         console.log(event.target)
         console.log(name);
-        console.log(value);
-        if (name === "gender") {
-            setCandidate({ ...candidate, [name]: genders.find(item => item.id === Number(value)) });
-        } else if (name === "language") {
-            setCandidate({ ...candidate, [name]: languages.find(item => item.id === Number(value)) });
-        } else if (name === "photoIdType") {
-            setCandidate({ ...candidate, [name]: languages.find(item => item.id === Number(value)) });
+        console.log(type);
+        //console.log(value);
+        if (addressIndex === undefined) {
+            if (name === "gender") {
+                setCandidate({ ...candidate, [name]: genders.find(item => item.id === Number(value)) });
+            } else if (name === "language") {
+                setCandidate({ ...candidate, [name]: languages.find(item => item.id === Number(value)) });
+            } else if (name === "photoIdType") {
+                setCandidate({ ...candidate, [name]: photoIdTypes.find(item => item.id === Number(value)) });
+            } else if (type === "date") {
+                setCandidate({ ...candidate, [name]: convertStringToDate(value) });
+            } else {
+                setCandidate({ ...candidate, [name]: value });
+            }
+
         } else {
-            setCandidate({ ...candidate, [name]: value });
+            setCandidate({
+                ...candidate, address: candidate.address.map((address, index) => {
+                    if (index === addressIndex) {
+                        return {
+                            ...address, [name]: value
+                        };
+                    }
+                    return address;
+                })
+            });
         }
 
         console.log(candidate);
     };
-        const convertStringToDate = (dateString) => {
-            //intial format 
-            //2015-07-15
-            const date = new Date(dateString);
-            //Wed Jul 15 2015 00:00:00 GMT-0700 (Pacific Daylight Time)
-            const finalDateString = date.toISOString(date)
-            //2015-07-15T00:00:00.000Z
+    const convertStringToDate = (dateString) => {
+        //intial format 
+        //2015-07-15
+        const date = new Date(dateString);
+        //Wed Jul 15 2015 00:00:00 GMT-0700 (Pacific Daylight Time)
+        const finalDateString = date.toISOString(date)
+        //2015-07-15T00:00:00.000Z
 
-            console.log(finalDateString); // "1930-07-17T00:00:00.000Z"
-            return finalDateString;
+        console.log(finalDateString); // "1930-07-17T00:00:00.000Z"
+        return finalDateString;
     }
 
     const convertDateToString = (date) => {
         //console.log(date);
         let kati = new Date(date);
-        console.log(candidate.dateOfBirth)
-        console.log(kati);
+        //console.log(candidate.dateOfBirth)
+        //console.log(kati);
 
         let formattedDate = kati.toISOString().substr(0, 10);
 
@@ -179,8 +249,6 @@ export default function CandidateEdit(props) {
                     </Row>
                     <hr />
                     <div className="display-6 fs-2" >Contact Details</div>
-                    <div className="display-6 fs-2" >need to add addresses</div>
-
                     <Row>
                         <Col>
                             <Form.Group >
@@ -208,7 +276,74 @@ export default function CandidateEdit(props) {
                             </Form.Group>
                         </Col>
                     </Row>
+                    <div>
+                        {candidate.address &&
+                            candidate.address.map((item, index) => (
+                                <div key={item.id} name={item.id}>
+                                    <Row>
+                                        <details className="display-6 fs-3">
+                                            <summary>
+                                                Address {index + 1}
+                                            </summary>
+                                            <Row>
+                                                <Col>
+                                                    <Form.Group >
+                                                        <Form.Label>address1</Form.Label>
+                                                        <Form.Control type="text" name="address1" value={item.address1} onChange={(event) => handleChange(event, index)} />
+                                                    </Form.Group>
+                                                </Col>
+                                                <Col>
+                                                    <Form.Group >
+                                                        <Form.Label>address2</Form.Label>
+                                                        <Form.Control type="text" name="address2" value={item.address2} onChange={(event) => handleChange(event, index)} />
+                                                    </Form.Group>
+                                                </Col>
+                                                <Col>
+                                                    <Form.Group >
+                                                        <Form.Label>postalCode</Form.Label>
+                                                        <Form.Control type="text" name="postalCode" value={item.postalCode} onChange={(event) => handleChange(event, index)} />
+                                                    </Form.Group>
+                                                </Col>
+                                            </Row>
+                                            <Row>
+                                                <Col>
+                                                    <Form.Group >
+                                                        <Form.Label>city</Form.Label>
+                                                        <Form.Control type="text" name="city" value={item.city} onChange={(event) => handleChange(event, index)} />
+                                                    </Form.Group>
+                                                </Col>
+                                                <Col>
+                                                    <Form.Group >
+                                                        <Form.Label>state</Form.Label>
+                                                        <Form.Control type="text" name="state" value={item.state} onChange={(event) => handleChange(event, index)} />
+                                                    </Form.Group>
+                                                </Col>
+                                                <Col>
+                                                    <Form.Group >
+                                                        <Form.Label>country</Form.Label>
+                                                        <Form.Select as="select" name="country"
+                                                            value={item.country.id}
+                                                            onChange={(event) => handleChange(event, index)}>
+                                                            {countries.map((country, index) =>
+                                                                <option key={index}
+                                                                    value={country.id}
+                                                                >{country.countryOfResidence}</option>
+                                                            )}
+                                                        </Form.Select>
+                                                    </Form.Group>
+                                                </Col>
+                                            </Row>
+                                        </details>
 
+                                    </Row>
+                                </div>
+
+                            ))}
+                    </div>
+
+
+
+                    <hr />
 
                     <div className="display-6 fs-2" >Identification Details</div>
 
@@ -224,10 +359,10 @@ export default function CandidateEdit(props) {
                                 <Form.Label>Photo Issue Date</Form.Label>
                                 <Form.Control type="date"
                                     name="photoIdIssueDate"
-                                value={convertDateToString(candidate.photoIdIssueDate)}
+                                    value={convertDateToString(candidate.photoIdIssueDate)}
                                     onChange={handleChange} />
-                        </Form.Group>
-                       
+                            </Form.Group>
+
                         </Col>
                         <Col>
                             <Form.Group >
@@ -242,13 +377,6 @@ export default function CandidateEdit(props) {
                                     )}
                                 </Form.Select>
 
-                            </Form.Group>
-                        </Col>
-
-                        <Col>
-                            <Form.Group >
-                                <Form.Label>Mobile Number</Form.Label>
-                                <Form.Control type="text" name="mobile" value={candidate.mobile} onChange={handleChange} />
                             </Form.Group>
                         </Col>
                     </Row>

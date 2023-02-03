@@ -9,8 +9,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEnvelope, faTrashCan } from '@fortawesome/free-solid-svg-icons'
+//import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+//import { faEnvelope, faTrashCan } from '@fortawesome/free-solid-svg-icons'
 
 
 class Cert_homepage extends Component {
