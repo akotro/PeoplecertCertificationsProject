@@ -52,11 +52,12 @@ namespace Assignment4Final.Controllers
 
 
 
-        [HttpPost("certificateDto")] //this API is so a candidate can buy from the available certificates
-        public async Task<ActionResult<CandidateExamDto>> Get([FromBody] CertificateDto certificateDto)
+        [HttpPost("CreateCandExam")] //this API is so a candidate can buy from the available certificates
+        public async Task<ActionResult<CandidateExamDto>> Get([FromBody] int certId)
         {
             var userId = _userManager.GetUserId(User);
-            var candExamDto = await  _candExamService.GetCandidateExamByCertificateAsync(certificateDto,userId);
+            //var candExamDto = await  _candExamService.GetCandidateExamByCertificateAsync(certId,userId);
+            var candExamDto = await  _candExamService.GetCandidateExamByCertificateAsync(certId, "0aba6917-8f7c-4f00-a200-58e139fe616e");
             return Ok(candExamDto);
         }
 
@@ -67,7 +68,8 @@ namespace Assignment4Final.Controllers
         public async Task<ActionResult<List<CandidateExamDto>>> GetAll()
         {
 
-            var candidate = await _candExamService.GetCandidateByUserIdAsync(_userManager.GetUserId(User));
+            //var candidate = await _candExamService.GetCandidateByUserIdAsync(_userManager.GetUserId(User));
+            var candidate = await _candExamService.GetCandidateByUserIdAsync("0aba6917-8f7c-4f00-a200-58e139fe616e");
             if (candidate == null)
             {
                 return NotFound(new { description = "Candidate with this userId not found " });
@@ -82,7 +84,8 @@ namespace Assignment4Final.Controllers
         public async Task<ActionResult<List<CandidateExamDto>>> GetAllNotTaken() //Not Debuged all the candidate exams in Seed are Taken . Should i checke if taken by ExamDate?
         {
             
-            var candidate = await _candExamService.GetCandidateByUserIdAsync(_userManager.GetUserId(User));
+            //var candidate = await _candExamService.GetCandidateByUserIdAsync(_userManager.GetUserId(User));
+            var candidate = await _candExamService.GetCandidateByUserIdAsync("0aba6917-8f7c-4f00-a200-58e139fe616e");
             if(candidate == null)
             {
                 return NotFound(new {description ="Candidate with this userId not found "});
@@ -94,9 +97,9 @@ namespace Assignment4Final.Controllers
 
 
         [HttpPut("StartExam")] // this Api is for getting a CandidateExamDto full with the CandidatesAnswers and ExamsQuestions 
-        public async Task<ActionResult<CandidateExamDto>> Get([FromBody] CandidateExamDto candidateExamDto)
+        public async Task<ActionResult<CandidateExamDto>> GetCandExmWithAnswers([FromBody] int candExamId)
         {
-            var candExamDto = await _candExamService.UpdateWithAnswersCandidateExamDtoAsync(candidateExamDto);
+            var candExamDto = await _candExamService.UpdateWithAnswersCandidateExamDtoAsync(candExamId);
 
             return Ok(candExamDto);  
 

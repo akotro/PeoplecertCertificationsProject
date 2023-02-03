@@ -26,7 +26,7 @@ namespace ModelLibrary.Models.DTO.CandidateExam
 
         [JsonProperty(ItemReferenceLoopHandling = ReferenceLoopHandling.Ignore)]
         public virtual ICollection<CandidateExamAnswersDto>?
-        CandidateExamAnswersDtos
+        CandidateExamAnswers
         { get; set; }
     }
 }

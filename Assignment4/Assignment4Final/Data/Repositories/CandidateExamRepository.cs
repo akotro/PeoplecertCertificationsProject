@@ -20,17 +20,19 @@ namespace Assignment4Final.Data.Repositories
                 .FirstOrDefaultAsync();
         }
 
-        public  void Add( ref CandidateExam candidateExam)
+        public async Task<CandidateExam> Add(CandidateExam candidateExam)
         {
+            CandidateExam candidateExamResult = null;
             if(candidateExam.Id != 0)
             {
-                _context.CandidateExams.Update(candidateExam);
-                _context.SaveChanges();
-                return;
+                candidateExamResult = _context.CandidateExams.Update(candidateExam).Entity;
+                await _context.SaveChangesAsync();
+                return candidateExamResult;
 
             }
-              _context.CandidateExams.Add(candidateExam);
-              _context.SaveChanges();
+            candidateExamResult = _context.CandidateExams.Add(candidateExam).Entity;
+            _context.SaveChanges();
+            return candidateExamResult;
         }
 
         public void LoadCertificateOfCandidateExamEntity(ref CandidateExam candidateExam)
