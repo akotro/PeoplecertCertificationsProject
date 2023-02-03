@@ -1,6 +1,6 @@
 ﻿import React, { useEffect, useState } from "react";
 import CandidateEdit from "../Candidate_CRUD/CandidateEdit";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 import { ListGroup, ListGroupItem, Button, Table, Row, Stack } from 'react-bootstrap';
 
@@ -86,6 +86,12 @@ const convertDateToString = (date) => {
 
 return (
     <div>
+        {user === "admin" &&
+            <Link to='/admin/candidate/create'>
+            <Button> create</Button>
+            
+            </Link>
+        }
         <Table striped borderless hover id='list_of_allcands'>
             <thead>
                 <tr>

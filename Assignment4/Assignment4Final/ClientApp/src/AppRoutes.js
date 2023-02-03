@@ -69,6 +69,11 @@ const AppRoutes = [
         element: <CandidateList />
     },
     {
+        path: '/admin/candidate/create',
+        // requireAuth: true,
+        element: <CandidateEdit />
+    },
+    {
         path: '/admin/candidate/:id',
         // requireAuth: true,
         element: <CandidateEdit />

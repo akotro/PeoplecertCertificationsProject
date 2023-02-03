@@ -10,6 +10,7 @@ import axios from 'axios';
 export default function CandidateEdit(props) {
 
     const params = useParams();
+    const router = useNavigate();
     const [genders, setGenders] = useState([]);
     const [languages, setLanguages] = useState([]);
     const [photoIdTypes, setPhotoIdTypes] = useState([]);
@@ -96,19 +97,18 @@ export default function CandidateEdit(props) {
         //    console.log(error);
         //});
 
-
     }, []);
 
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        //axios.put(`https://localhost:7196/api/Candidate/${params.id}`, candidate)
-        //    .then(function (response) {
-        //        console.log(response);
-        //    })
-        //    .catch(function (error) {
-        //        console.log(error);
-        //    });
+        axios.put(`https://localhost:7196/api/Candidate/${params.id}`, candidate)
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
 
         console.log(candidate);
     }
@@ -116,13 +116,13 @@ export default function CandidateEdit(props) {
 
 
     const handleChange = (event, addressIndex) => {
-        console.log(candidate);
+        //console.log(candidate);
 
 
         const { name, value, type } = event.target;
-        console.log(event.target)
-        console.log(name);
-        console.log(type);
+        //console.log(event.target)
+        //console.log(name);
+        //console.log(type);
         //console.log(value);
         if (addressIndex === undefined) {
             if (name === "gender") {
@@ -155,7 +155,7 @@ export default function CandidateEdit(props) {
             });
         }
 
-        console.log(candidate);
+        //console.log(candidate);
     };
     const convertStringToDate = (dateString) => {
         //intial format 
@@ -186,7 +186,7 @@ export default function CandidateEdit(props) {
     //console.log(candidate)
 
     return (
-        <div>edit page
+        <div>
             <p>{params.id}</p>
             <Form onSubmit={handleSubmit} className="lead">
                 <Stack gap={3}>
@@ -284,9 +284,10 @@ export default function CandidateEdit(props) {
                     <div>
                         {candidate.address &&
                             candidate.address.map((item, index) => (
-                                <div key={item.id} name={item.id}>
+                                <div key={item.id} name={item.id} className="my-1">
+
                                     <Row>
-                                        <details className="display-6 fs-3">
+                                        <details className="display-6 fs-4">
                                             <summary>
                                                 Address {index + 1}
                                             </summary>
@@ -342,7 +343,6 @@ export default function CandidateEdit(props) {
 
                                     </Row>
                                 </div>
-
                             ))}
                     </div>
 
@@ -385,12 +385,11 @@ export default function CandidateEdit(props) {
                             </Form.Group>
                         </Col>
                     </Row>
-                    <Button variant="primary" type="submit">
-                        Save
-                    </Button>
+
+                    <Button variant="primary" type="submit">Save</Button>
+                    <Button variant="primary" onClick={() => router(-1)}>Go back</Button>
                 </Stack>
             </Form>
-
         </div>
     )
 }
