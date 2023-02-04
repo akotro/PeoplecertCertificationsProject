@@ -15,6 +15,7 @@ public class TopicsRepository : ITopicsRepository
     public async Task<List<Topic>> GetAllAsync()
     {
         return await _context.Topics
+            .AsSplitQuery()
             .Include(t => t.Certificates)
             .Include(t => t.Questions)
             .ToListAsync();
@@ -23,6 +24,7 @@ public class TopicsRepository : ITopicsRepository
     public async Task<Topic?> GetAsync(int id)
     {
         return await _context.Topics
+            .AsSplitQuery()
             .Include(t => t.Certificates)
             .Include(t => t.Questions)
             .FirstOrDefaultAsync(t => t.Id == id);

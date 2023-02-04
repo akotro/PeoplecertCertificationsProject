@@ -83,7 +83,8 @@ namespace Assignment4Final.Data.Repositories
 
             if (candidate.Language != null)
             {
-                candidate.Language = await _context.Languages.FindAsync(candidate.Language.Id);
+                candidate.Language =
+                    await _context.Languages.FindAsync(candidate.Language.Id);
             }
 
             if (candidate.PhotoIdType != null)
@@ -123,10 +124,10 @@ namespace Assignment4Final.Data.Repositories
                 }
             }
 
-            var candidateEntity = await _context.Candidates.AddAsync(candidate);
+            var candidateEntry = await _context.Candidates.AddAsync(candidate);
             await _context.SaveChangesAsync();
 
-            return candidateEntity.Entity;
+            return candidateEntry.Entity;
         }
 
         public async Task<Candidate?> UpdateCandidate(string id, Candidate candidate)
@@ -182,7 +183,8 @@ namespace Assignment4Final.Data.Repositories
 
                 if (candidate.Gender != null)
                 {
-                    dbCandidate.Gender = await _context.Genders.FindAsync(candidate.Gender.Id);
+                    dbCandidate.Gender =
+                        await _context.Genders.FindAsync(candidate.Gender.Id);
                 }
 
                 if (candidate.Language != null)
@@ -201,18 +203,20 @@ namespace Assignment4Final.Data.Repositories
 
                 if (candidate.Address != null)
                 {
+                    // NOTE:(akotro) Delete addresses
+                    var dbAddressesToDelete = dbCandidate.Address
+                        .Where(a => !candidate.Address.Any(ca => ca.Id == a.Id))
+                        .ToList();
+                    foreach (var address in dbAddressesToDelete)
+                    {
+                        // NOTE:(akotro) This seems to not be required,
+                        // because it is done magically by entity framework
+                        // dbCandidate.Address.Remove(address);
+                        _context.Addresses.Remove(address);
+                    }
+
                     if (candidate.Address.Any())
                     {
-                        // NOTE:(akotro) Delete addresses
-                        var dbAddressesToDelete = dbCandidate.Address
-                            .Where(a => !candidate.Address.Any(ca => ca.Id == a.Id))
-                            .ToList();
-                        foreach (var address in dbAddressesToDelete)
-                        {
-                            // dbCandidate.Address.Remove(address);
-                            _context.Addresses.Remove(address);
-                        }
-
                         foreach (var address in candidate.Address)
                         {
                             var dbAddress = dbCandidate.Address.FirstOrDefault(

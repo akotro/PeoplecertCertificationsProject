@@ -87,7 +87,6 @@ public class QuestionsRepository : IQuestionsRepository
 
             if (questionDto.Options != null)
             {
-                // TODO:(akotro) Should we remove here?
                 var optionsToDelete = question.Options
                     .Where(o => !questionDto.Options.Any(odto => odto.Id == o.Id))
                     .ToList();
@@ -127,10 +126,21 @@ public class QuestionsRepository : IQuestionsRepository
     public async Task<Question?> Delete(int id)
     {
         // var question = await _context.Questions.FindAsync(id);
-        var question = await _context.Questions.Include(question => question.Options).Where(question => question.Id ==id).FirstOrDefaultAsync();
-        
+        var question = await _context.Questions
+            .Include(question => question.Options)
+            .Where(question => question.Id == id)
+            .FirstOrDefaultAsync();
+
         if (question != null)
         {
+            if (question.Options != null)
+            {
+                foreach (var option in question.Options)
+                {
+                    _context.Options.Remove(option);
+                }
+            }
+
             var questionEntry = _context.Questions.Remove(question);
             await _context.SaveChangesAsync();
 
@@ -139,11 +149,11 @@ public class QuestionsRepository : IQuestionsRepository
 
         return null;
     }
+
     public bool QuestionsDbSetExists()
     {
         return _context.Questions != null;
     }
-
 
     public bool QuestionExists(int id)
     {
