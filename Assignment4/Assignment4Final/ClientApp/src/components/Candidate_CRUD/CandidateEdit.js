@@ -15,6 +15,7 @@ export default function CandidateEdit(props) {
     const [languages, setLanguages] = useState([]);
     const [photoIdTypes, setPhotoIdTypes] = useState([]);
     const [countries, setCountries] = useState([]);
+    const [allUsers, setAllusers] = useState([]);
     //console.log(params.id);
     const [candidate, setCandidate] = useState({
         dateOfBirth: null,
@@ -26,11 +27,21 @@ export default function CandidateEdit(props) {
     });
 
     const fetchData = () => {
-        axios.get(`https://localhost:7196/api/Candidate/${params.id}`).then((response) => {
-            setCandidate(response.data.data);
-        }).catch(function (error) {
-            console.log(error);
-        });
+        if (params.id !== undefined) {
+            axios.get(`https://localhost:7196/api/Candidate/${params.id}`).then((response) => {
+                setCandidate(response.data.data);
+            }).catch(function (error) {
+                console.log(error);
+            });
+        } else {
+            axios.get(`https://localhost:7196/api/accounts/listUsers`).then((response) => {
+                setAllusers(response.data);
+            }).catch(function (error) {
+                console.log(error);
+            });
+
+
+        }
 
         axios.get(`https://localhost:7196/api/Genders`).then((response) => {
             setGenders(response.data.data);
@@ -101,16 +112,30 @@ export default function CandidateEdit(props) {
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        console.log(params.id);
+        if (params.id === undefined) {
+            console.log("send post")
+            axios.post(`https://localhost:7196/api/Candidate`, candidate)
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        } else {
+            console.log("send put")
+            axios.put(`https://localhost:7196/api/Candidate/${params.id}`, candidate)
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        }
 
-        axios.put(`https://localhost:7196/api/Candidate/${params.id}`, candidate)
-            .then(function (response) {
-                console.log(response);
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
 
-        console.log(candidate);
+
+        console.log("THIS IS MINE ", candidate);
     }
 
 
@@ -190,6 +215,21 @@ export default function CandidateEdit(props) {
             <p>{params.id}</p>
             <Form onSubmit={handleSubmit} className="lead">
                 <Stack gap={3}>
+
+                    {!params.id && <div>
+                        <Form.Group >
+                            <Form.Label>Bind to Registred user</Form.Label>
+                            <Form.Select as="select" name="appUserId"
+                                value={candidate.appUserId}
+                                onChange={handleChange}>
+                                {allUsers.map((user, index) =>
+                                    <option key={index}
+                                        value={user.id}
+                                    >{user.userName}</option>
+                                )}
+                            </Form.Select>
+                        </Form.Group>
+                    </div>}
                     <div className="display-6 fs-2" >Personal Details</div>
 
                     <Row>
