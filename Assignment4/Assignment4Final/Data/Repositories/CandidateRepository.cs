@@ -4,6 +4,7 @@ using Assignment4Final.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using ModelLibrary.Models.Candidates;
 using ModelLibrary.Models.Certificates;
 using ModelLibrary.Models.Questions;
@@ -202,6 +203,16 @@ namespace Assignment4Final.Data.Repositories
                 {
                     if (candidate.Address.Any())
                     {
+                        // NOTE:(akotro) Delete addresses
+                        var dbAddressesToDelete = dbCandidate.Address
+                            .Where(a => !candidate.Address.Any(ca => ca.Id == a.Id))
+                            .ToList();
+                        foreach (var address in dbAddressesToDelete)
+                        {
+                            // dbCandidate.Address.Remove(address);
+                            _context.Addresses.Remove(address);
+                        }
+
                         foreach (var address in candidate.Address)
                         {
                             var dbAddress = dbCandidate.Address.FirstOrDefault(
@@ -237,9 +248,9 @@ namespace Assignment4Final.Data.Repositories
                         }
                     }
                 }
-            }
 
-            await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
+            }
 
             return dbCandidate;
         }
