@@ -126,7 +126,9 @@ public class QuestionsRepository : IQuestionsRepository
 
     public async Task<Question?> Delete(int id)
     {
-        var question = await _context.Questions.FindAsync(id);
+        // var question = await _context.Questions.FindAsync(id);
+        var question = await _context.Questions.Include(question => question.Options).Where(question => question.Id ==id).FirstOrDefaultAsync();
+        
         if (question != null)
         {
             var questionEntry = _context.Questions.Remove(question);

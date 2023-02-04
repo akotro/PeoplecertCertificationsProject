@@ -40,7 +40,7 @@ public class AccountsController : ControllerBase
     }
 
     [HttpGet("listUsers")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public async Task<ActionResult<List<UserDto>>> GetListUsers()
     {
         var queryable = context.Users.AsQueryable();
