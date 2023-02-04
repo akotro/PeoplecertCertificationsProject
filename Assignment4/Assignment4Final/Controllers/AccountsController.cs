@@ -41,13 +41,9 @@ public class AccountsController : ControllerBase
 
     [HttpGet("listUsers")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
-    public async Task<ActionResult<List<UserDto>>> GetListUsers(
-    /* [FromQuery] PaginationDTO paginationDTO */
-    )
+    public async Task<ActionResult<List<UserDto>>> GetListUsers()
     {
         var queryable = context.Users.AsQueryable();
-        // await HttpContext.InsertParametersPaginationInHeader(queryable);
-        // var users = await queryable.OrderBy(x => x.Email).Paginate(paginationDTO).ToListAsync();
         var users = await queryable.OrderBy(x => x.Email).ToListAsync();
         return mapper.Map<List<UserDto>>(users);
     }
@@ -67,6 +63,60 @@ public class AccountsController : ControllerBase
     {
         var user = await userManager.FindByIdAsync(userId);
         await userManager.RemoveClaimAsync(user, new Claim("role", "admin"));
+        return NoContent();
+    }
+
+    [HttpPost("makeMarker")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
+    public async Task<ActionResult> MakeMarker([FromBody] string userId)
+    {
+        var user = await userManager.FindByIdAsync(userId);
+        await userManager.AddClaimAsync(user, new Claim("role", "marker"));
+        return NoContent();
+    }
+
+    [HttpPost("removeMarker")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
+    public async Task<ActionResult> RemoveMarker([FromBody] string userId)
+    {
+        var user = await userManager.FindByIdAsync(userId);
+        await userManager.RemoveClaimAsync(user, new Claim("role", "marker"));
+        return NoContent();
+    }
+
+    [HttpPost("makeQualityControl")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
+    public async Task<ActionResult> MakeQualityControl([FromBody] string userId)
+    {
+        var user = await userManager.FindByIdAsync(userId);
+        await userManager.AddClaimAsync(user, new Claim("role", "qualitycontrol"));
+        return NoContent();
+    }
+
+    [HttpPost("removeQualityControl")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
+    public async Task<ActionResult> RemoveQualityControl([FromBody] string userId)
+    {
+        var user = await userManager.FindByIdAsync(userId);
+        await userManager.RemoveClaimAsync(user, new Claim("role", "qualitycontrol"));
+        return NoContent();
+    }
+
+    [HttpPost("makeCandidate")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
+    public async Task<ActionResult> MakeCandidate([FromBody] string userId)
+    {
+        var user = await userManager.FindByIdAsync(userId);
+        await userManager.AddClaimAsync(user, new Claim("role", "candidate"));
+        return NoContent();
+    }
+
+    [HttpPost("removeCandidate")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
+    public async Task<ActionResult> RemoveCandidate([FromBody] string userId)
+    {
+        var user = await userManager.FindByIdAsync(userId);
+        await userManager.RemoveClaimAsync(user, new Claim("role", "candidate"));
         return NoContent();
     }
 
