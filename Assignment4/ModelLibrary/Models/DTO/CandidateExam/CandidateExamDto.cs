@@ -25,7 +25,7 @@ namespace ModelLibrary.Models.DTO.CandidateExam
         public bool? IsModerated { get; set; }
 
         [JsonProperty(ItemReferenceLoopHandling = ReferenceLoopHandling.Ignore)]
-        public virtual ICollection<CandidateExamAnswersDto>?
+        public List<CandidateExamAnswersDto>?
         CandidateExamAnswers
         { get; set; }
     }

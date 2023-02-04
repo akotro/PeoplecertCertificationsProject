@@ -10,6 +10,7 @@ function AvailableExams(props) {
 
     const [data, setData] = useState([]);
     const [user, setUser] = useState();
+    let navigate = useNavigate();
 
     useEffect(() => {
         axios.get('https://localhost:7196/api/CandidateExam/notTaken').then((response) => {
@@ -23,7 +24,7 @@ function AvailableExams(props) {
     }, []);
 
     const takeExam = (id) => {
-
+        navigate(`/candidate/Examination/${id}`);
     };
 
     return (
@@ -37,12 +38,12 @@ function AvailableExams(props) {
                         </tr>
                     </thead>
                     <tbody>
-                        {this.state.data.map((CandidateExam, index) => (
+                        {data.map((CandidateExam, index) => (
                             <tr key={index}>
-                                <td>{CandidateExam.Exam.CertificateTitle}</td>
+                                {/*<td>{CandidateExam.Exam.CertificateTitle}</td>*/}
                                 <td>{CandidateExam.Voucher}</td>
                                 <td>
-                                    <Button variant="success" onClick={() => this.takeExam(CandidateExam.id)} >Take Exam</Button>
+                                    <Button variant="success" onClick={() => takeExam(CandidateExam.Id)} >Take Exam</Button>
                                 </td>
                             </tr>
                         ))}
@@ -52,4 +53,4 @@ function AvailableExams(props) {
         );
     };
 
-export default withRouter(AvailableExams);
+export default AvailableExams;

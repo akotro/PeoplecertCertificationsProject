@@ -17,6 +17,7 @@ import CandidateEdit from "./components/Candidate_CRUD/CandidateEdit";
 
 import CandidateHomepage from './components/Candidate_Page/CandidateHomepage';
 import AvailableExams from './components/Candidate_Page/AvailableExams';
+import Examination from './components/Examination/Examination';
 
 const AppRoutes = [
     {
@@ -55,16 +56,16 @@ const AppRoutes = [
         element: <Questions />
     },
     {
-       path: '/admin/Questions/QuestionEdit',
-       // requireAuth: true,
-       element: <QuestionEdit />
+        path: '/admin/Questions/QuestionEdit',
+        // requireAuth: true,
+        element: <QuestionEdit />
     },
     {
         path: '/admin/Questions/QuestionCreate',
         // requireAuth: true,
         element: <QuestionCreate />
     },
-    
+
     // -----------------Candidate-------------------
     {
         path: '/admin/candidate',
@@ -90,6 +91,12 @@ const AppRoutes = [
         path: '/candidate/AvailableExams',
         // requireAuth: true,
         element: <AvailableExams />
+    },
+    // -----------------Candidate-------------------
+    {
+        path: '/candidate/Examination/:id',
+        // requireAuth: true,
+        element: <Examination />
     },
     //this needs to stay as the last path
     {

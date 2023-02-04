@@ -116,7 +116,7 @@ namespace Assignment4Final.Controllers
             var candidateExamUpdated = await _candExamService.UpdatdeWithResults(candidateExam);
             return Ok(_candExamService.GetCandidateExamDto(candidateExamUpdated));
         }
-
+        
         //[HttpPost("QuestionsAndAnswers")]
         //public async Task<ActionResult<CandidateExamQuestionsAndAnswersDto>> GetQuestionsAndAnswers([FromBody] int id) 
         //{
