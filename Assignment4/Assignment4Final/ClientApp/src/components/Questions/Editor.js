@@ -27,8 +27,8 @@ function Editor(props) {
                                                     onChange={(event, editor,element,optionId) => {
 
                                                                                 console.log("Inside Editor component");
+                                                                                
                                                                                 const data = editor.getData();
-                                                                                console.log(data);
                                                                                     element=props.element;
                                                                                     optionId=props.optionId;
                                                                                 props.handleChange(data,element,optionId);
