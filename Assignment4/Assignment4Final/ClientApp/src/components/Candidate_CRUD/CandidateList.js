@@ -1,6 +1,7 @@
-﻿import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState, useContext } from "react";
 import CandidateEdit from "../Candidate_CRUD/CandidateEdit";
 import { useNavigate, Link } from "react-router-dom";
+import {AuthenticationContext} from '../auth/AuthenticationContext'
 
 import { ListGroup, ListGroupItem, Button, Table, Row, Stack } from 'react-bootstrap';
 
@@ -13,6 +14,7 @@ function CandidateList(props) {
     //const [buttons, setButtons] = useState();
     const [user, setUser] = useState();
     let navigate = useNavigate();
+    const con = useContext(AuthenticationContext);
 
     useEffect(() => {
         axios.get('https://localhost:7196/api/Candidate').then((response) => {
