@@ -50,8 +50,6 @@ namespace Assignment4Final.Controllers
         //    return Ok(candidateExamDto);
         //}
 
-
-
         [HttpPost("CreateCandExam")] //this API is so a candidate can buy from the available certificates
         public async Task<ActionResult<CandidateExamDto>> Get([FromBody] int certId)
         {
@@ -60,9 +58,6 @@ namespace Assignment4Final.Controllers
             var candExamDto = await  _candExamService.GetCandidateExamByCertificateAsync(certId, "02458d8c-aba2-4b3d-86de-8f8457570c60");
             return Ok(candExamDto);
         }
-
-
-
 
         [HttpGet] // All the candidateExams the candidate has bought . both taken and not taken 
         public async Task<ActionResult<List<CandidateExamDto>>> GetAll()
@@ -79,7 +74,6 @@ namespace Assignment4Final.Controllers
 
         }
 
-
         [HttpGet("notTaken")] // all the CandidateExams the candidate has bought but not yet taken (picked by cendidateExam.Result == null)
         public async Task<ActionResult<List<CandidateExamDto>>> GetAllNotTaken() //Not Debuged all the candidate exams in Seed are Taken . Should i checke if taken by ExamDate?
         {
@@ -94,7 +88,6 @@ namespace Assignment4Final.Controllers
             return Ok(_candExamService.GetListOfCandidateExamDtosFromListOfCandidateExam(candidatesTakenExams));
 
         }
-
 
         [HttpPut("StartExam")] // this Api is for getting a CandidateExamDto full with the CandidatesAnswers and ExamsQuestions when an Exam is starting
         public async Task<ActionResult<CandidateExamDto>> GetCandExmWithAnswers([FromBody] int candExamId)
@@ -123,14 +116,6 @@ namespace Assignment4Final.Controllers
             var candidateExamUpdated = await _candExamService.UpdatdeWithResults(candidateExam);
             return Ok(_candExamService.GetCandidateExamDto(candidateExamUpdated));
         }
-
-
-
-
-
-
-
-
 
         //[HttpPost("QuestionsAndAnswers")]
         //public async Task<ActionResult<CandidateExamQuestionsAndAnswersDto>> GetQuestionsAndAnswers([FromBody] int id) 

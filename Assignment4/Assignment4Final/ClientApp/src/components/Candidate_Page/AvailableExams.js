@@ -9,22 +9,17 @@ import axios from 'axios';
 function AvailableExams(props) {
 
     const [data, setData] = useState([]);
-    //const [buttons, setButtons] = useState();
     const [user, setUser] = useState();
 
     useEffect(() => {
         axios.get('https://localhost:7196/api/CandidateExam/notTaken').then((response) => {
-            console.log(response);
             setData(response.data);
         }).catch(function (error) {
             console.log(error);
         });
         if (!user) {
             setUser("admin");
-
         }
-
-        //setButtons(makeButtons());
     }, []);
 
     const takeExam = (id) => {
@@ -50,7 +45,6 @@ function AvailableExams(props) {
                                     <Button variant="success" onClick={() => this.takeExam(CandidateExam.id)} >Take Exam</Button>
                                 </td>
                             </tr>
-
                         ))}
                     </tbody>
                 </Table>
