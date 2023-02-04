@@ -59,8 +59,8 @@ namespace Assignment4Final.Data.Seed
                 List<AppUser> fakeAppUsers = new List<AppUser>();
                 PasswordHasher<AppUser> passHash = new PasswordHasher<AppUser>();
 
-                // create 20 GUIDs
-                for (int i = 0; i < 20; i++)
+                // create 25 GUIDs
+                for (int i = 0; i < 25; i++)
                 {
                     fakeGuids.Add(Guid.NewGuid().ToString());
                 }
@@ -69,6 +69,7 @@ namespace Assignment4Final.Data.Seed
                 int adminIndex = 1;
                 int markerIndex = 1;
                 int qualitycontrolIndex = 1;
+                int nothingIndex = 1;
 
                 // Create details for the fake AppUsers
                 for (int i = 0; i < fakeGuids.Count; i++)
@@ -142,7 +143,7 @@ namespace Assignment4Final.Data.Seed
 
                         markerIndex++;
                     }
-                    else // NOTE:(akotro) Make 2 qualitycontrols
+                    else if (i >= 18 && i < 20) // NOTE:(akotro) Make 2 qualitycontrols
                     {
                         fakeAppUsers.Add(
                             new AppUser()
@@ -165,6 +166,29 @@ namespace Assignment4Final.Data.Seed
                         );
 
                         qualitycontrolIndex++;
+                    }
+                    else
+                    {
+                        fakeAppUsers.Add(
+                            new AppUser()
+                            {
+                                Id = fakeGuids[i],
+                                UserName = $"nothing{nothingIndex}@gmail.com",
+                                NormalizedUserName = $"nothing{nothingIndex}@gmail.com",
+                                Email = $"nothing{nothingIndex}@gmail.com",
+                                NormalizedEmail = $"nothing{nothingIndex}@gmail.com",
+                                LockoutEnabled = false,
+                                PhoneNumber = "1234567890",
+                                SecurityStamp = Guid.NewGuid().ToString(),
+                                EmailConfirmed = true,
+                            }
+                        );
+                        fakeAppUsers[i].PasswordHash = passHash.HashPassword(
+                            fakeAppUsers[i],
+                            $"nothing{nothingIndex}!"
+                        );
+
+                        nothingIndex++;
                     }
                 }
 
@@ -356,12 +380,19 @@ namespace Assignment4Final.Data.Seed
                     .RuleFor(u => u.PhotoIdType, f => f.PickRandom(db.PhotoIdTypes.ToList()))
                     .RuleFor(u => u.Language, f => f.PickRandom(db.Languages.ToList()));
 
-                var fakeCandidates = candidateFaker.Generate(db.Users.Count() - 10);
+                var fakeCandidates = candidateFaker.Generate(10);
+
+                List<AppUser> candidateUsers = db.Users
+                    .Where(u => u.Email.StartsWith("candidate"))
+                    .OrderBy(u => u.Email)
+                    .ToList();
+                // var random = new Random();
 
                 // Add an existing User Id to a each Candidate
                 for (int i = 0; i < fakeCandidates.Count; i++)
                 {
-                    fakeCandidates[i].AppUserId = db.Users.ToList()[i].Id;
+                    // int randomIndex = random.Next(0, candidateUsers.Count);
+                    fakeCandidates[i].AppUserId = candidateUsers[i].Id;
                 }
 
                 db.Candidates.AddRange(fakeCandidates);
@@ -377,11 +408,16 @@ namespace Assignment4Final.Data.Seed
                 var markerFaker = new Faker<Marker>();
                 var fakeMarkers = markerFaker.Generate(4);
 
+                var markerUsers = db.Users
+                    .Where(u => u.Email.StartsWith("marker"))
+                    .OrderBy(u => u.Email)
+                    .ToList();
+                // var random = new Random();
+
                 for (int i = 0; i < fakeMarkers.Count; i++)
                 {
-                    fakeMarkers[i].AppUserId = db.Users
-                        .Where(u => u.Email.StartsWith("marker"))
-                        .ToList()[i].Id;
+                    // int randomIndex = random.Next(0, fakeMarkers.Count);
+                    fakeMarkers[i].AppUserId = markerUsers[i].Id;
                 }
 
                 db.Markers.AddRange(fakeMarkers);

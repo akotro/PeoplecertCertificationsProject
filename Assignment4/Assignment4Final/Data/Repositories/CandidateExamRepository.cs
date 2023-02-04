@@ -14,23 +14,25 @@ namespace Assignment4Final.Data.Repositories
             _context = context;
         }
 
-        public async Task<Candidate?> GetCandidateByUserId(string userId)
+        public async Task<Candidate?> GetCandidateByUserIdAsync(string userId)
         {
             return await  _context.Candidates.Where(cand => cand.AppUser.Id == userId)
                 .FirstOrDefaultAsync();
         }
 
-        public  void Add( ref CandidateExam candidateExam)
+        public async Task<CandidateExam> AddAsync(CandidateExam candidateExam)
         {
+            CandidateExam candidateExamResult = null;
             if(candidateExam.Id != 0)
             {
-                _context.CandidateExams.Update(candidateExam);
-                _context.SaveChanges();
-                return;
+                candidateExamResult = _context.CandidateExams.Update(candidateExam).Entity;
+                await _context.SaveChangesAsync();
+                return candidateExamResult;
 
             }
-              _context.CandidateExams.Add(candidateExam);
-              _context.SaveChanges();
+            candidateExamResult = _context.CandidateExams.Add(candidateExam).Entity;
+            _context.SaveChanges();
+            return candidateExamResult;
         }
 
         public void LoadCertificateOfCandidateExamEntity(ref CandidateExam candidateExam)
@@ -47,10 +49,10 @@ namespace Assignment4Final.Data.Repositories
 
         public async Task<List<CandidateExam>> GetAllCandidateExamsOfCandidateAsync(Candidate candidate)
         {
-            return await _context.CandidateExams.Where(candexam => candexam.Candidate == candidate).ToListAsync();
+            return await _context.CandidateExams.Where(candExam => candExam.Candidate == candidate).ToListAsync();
         }
         
-        public async Task<List<CandidateExam>> GetTakenCandidateExamsOfCandidateAsync(Candidate candidate)
+        public async Task<List<CandidateExam>> GetNotTakenCandidateExamsOfCandidateAsync(Candidate candidate)
         {
             return await _context.CandidateExams
                 .Include(candExam => candExam.Candidate)
@@ -58,7 +60,7 @@ namespace Assignment4Final.Data.Repositories
                 .ToListAsync();
         }
 
-        public async Task<CandidateExam?> GetCandidateExamByIdsync(int id)
+        public async Task<CandidateExam?> GetCandidateExamByIdAsync(int id)
         {
             return await _context.CandidateExams.
                 Include(candExam => candExam.CandidateExamAnswers)

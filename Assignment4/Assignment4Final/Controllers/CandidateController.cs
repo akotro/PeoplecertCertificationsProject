@@ -18,7 +18,7 @@ namespace Assignment4Final.Controllers
         private readonly CandidateService _candidateService;
 
         public CandidateController(CandidateService candidateService)
-        {            
+        {
             _candidateService = candidateService;
         }
 
@@ -39,6 +39,7 @@ namespace Assignment4Final.Controllers
                 return NotFound(
                     new BaseResponse<CandidatesDto>
                     {
+                        RequestId = Request.HttpContext.TraceIdentifier,
                         Success = false,
                         Message = $"Candidate: {id} not found."
                     }
@@ -47,6 +48,7 @@ namespace Assignment4Final.Controllers
 
             var response = new BaseResponse<CandidatesDto>
             {
+                RequestId = Request.HttpContext.TraceIdentifier,
                 Success = true,
                 Data = candidate
             };
@@ -64,6 +66,7 @@ namespace Assignment4Final.Controllers
                 return BadRequest(
                     new BaseResponse<CandidatesDto>
                     {
+                        RequestId = Request.HttpContext.TraceIdentifier,
                         Success = false,
                         Message = "Failed to add candidate."
                     }
@@ -72,16 +75,24 @@ namespace Assignment4Final.Controllers
 
             var response = new BaseResponse<CandidatesDto>
             {
+                RequestId = Request.HttpContext.TraceIdentifier,
                 Success = true,
                 Data = addedCandidate
             };
 
-            return CreatedAtAction(nameof(GetCandidateById), new { id = addedCandidate.AppUserId }, response);
+            return CreatedAtAction(
+                nameof(GetCandidateById),
+                new { id = addedCandidate.AppUserId },
+                response
+            );
         }
 
         // PUT api/<CandidateController>/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCandidate(string id, [FromBody] CandidatesDto candidatesDto)
+        public async Task<IActionResult> UpdateCandidate(
+            string id,
+            [FromBody] CandidatesDto candidatesDto
+        )
         {
             var addedCandidate = await _candidateService.UpdateCandidate(id, candidatesDto);
             if (addedCandidate == null)
@@ -89,6 +100,7 @@ namespace Assignment4Final.Controllers
                 return BadRequest(
                     new BaseResponse<CandidatesDto>
                     {
+                        RequestId = Request.HttpContext.TraceIdentifier,
                         Success = false,
                         Message = "Failed to add candidate."
                     }
@@ -97,6 +109,7 @@ namespace Assignment4Final.Controllers
 
             var response = new BaseResponse<CandidatesDto>
             {
+                RequestId = Request.HttpContext.TraceIdentifier,
                 Success = true,
                 Data = addedCandidate
             };
@@ -110,7 +123,7 @@ namespace Assignment4Final.Controllers
         {
             var response = new BaseResponse<CandidatesDto>
             {
-                RequestId = Guid.NewGuid().ToString()
+                RequestId = Request.HttpContext.TraceIdentifier,
             };
 
             var candidateDeleted = await _candidateService.DeleteCandidate(id);
@@ -126,7 +139,6 @@ namespace Assignment4Final.Controllers
             response.Data = candidateDeleted;
 
             return Ok(response);
-            
         }
     }
 }

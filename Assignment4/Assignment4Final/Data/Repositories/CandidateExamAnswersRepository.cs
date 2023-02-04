@@ -49,6 +49,7 @@ public class CandidateExamAnswersRepository : IGenericRepository<CandidateExamAn
 
         if (dbCandidateExamAnswer != null)
         {
+            dbCandidateExamAnswer.QuestionText = candidateExamAnswer.QuestionText;
             dbCandidateExamAnswer.CorrectOption = candidateExamAnswer.CorrectOption;
             dbCandidateExamAnswer.ChosenOption = candidateExamAnswer.ChosenOption;
             dbCandidateExamAnswer.IsCorrect = candidateExamAnswer.IsCorrect;
