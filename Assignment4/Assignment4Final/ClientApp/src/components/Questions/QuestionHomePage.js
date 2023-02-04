@@ -3,13 +3,12 @@ import {React,useState,useEffect} from 'react';
 
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-
+import Delete from './QuestionDelete';
+import QuestionEdit from './QuestionEdit';
 function Questions()
 {
     const[data,setData] = useState([]);
 
-    // let response = axios.get('https://localhost:7196/api/Questions');
-    // var data = [];
 
     useEffect(() => {
         axios.get('https://localhost:7196/api/Questions').then((response) => {  setData(response.data.data);
@@ -60,9 +59,11 @@ function Questions()
                                                 <td>{Replace(item.text)}</td>
                                                 <td>{item.topic === null ? "No topic selected" : item.topic.name}</td>
 
-                                                {/* <td><Link to="/admin/Questions/QuestionEdit"><Button>Details</Button></Link></td> */}
-                                                <td><Link to="/admin/Questions/QuestionEdit"><Button>Edit</Button></Link></td>
-                                                <td><Link to=""><Button variant='dark'>Delete</Button></Link></td>
+                                               
+
+                                                <td><Link> <Button  onClick={(event) => QuestionEdit(event)} name={index}>Edit</Button></Link> </td>
+
+                                                <td><Link to=""><Button variant='dark' onClick={(event) => Delete(event)} name={index}>Delete</Button></Link></td>
                                             </tr>
                                             
                                             ))}
