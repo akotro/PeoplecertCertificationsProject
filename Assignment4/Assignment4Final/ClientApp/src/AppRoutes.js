@@ -16,6 +16,7 @@ import CandidateList from './components/Candidate_CRUD/CandidateList'
 import CandidateEdit from "./components/Candidate_CRUD/CandidateEdit";
 
 import CandidateHomepage from './components/Candidate_Page/CandidateHomepage';
+import AvailableExams from './components/Candidate_Page/AvailableExams';
 
 const AppRoutes = [
     {
@@ -76,6 +77,11 @@ const AppRoutes = [
         path: '/candidate',
         // requireAuth: true,
         element: <CandidateHomepage />
+    },
+    {
+        path: '/candidate/AvailableExams',
+        // requireAuth: true,
+        element: <AvailableExams />
     },
     //this needs to stay as the last path
     {

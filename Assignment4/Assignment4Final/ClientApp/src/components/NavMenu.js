@@ -53,9 +53,11 @@ export class NavMenu extends Component {
                             </NavItem>
                             <NavDropdown title="Candidate">
                                 <NavDropdown.Item>
-                                    <NavLink tag={Link} className="text-dark" to="/candidate">Candaidate Homepage</NavLink>
+                                    <NavLink tag={Link} className="text-dark" to="/candidate">Candidate Homepage</NavLink>
                                 </NavDropdown.Item>
-                              
+                                <NavDropdown.Item>
+                                    <NavLink tag={Link} className="text-dark" to="/candidate/AvailableExams">Available Exams</NavLink>
+                                </NavDropdown.Item>
                             </NavDropdown>
                             <LoginMenu>
                             </LoginMenu>
