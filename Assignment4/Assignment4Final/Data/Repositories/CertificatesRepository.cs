@@ -37,6 +37,7 @@ public class CertificatesRepository : ICertificatesRepository
 
     public async Task<Certificate?> AddAsync(Certificate certificate)
     {
+        // TODO:(akotro) Does this need to be changed here??
         await FillNavigationProperties(certificate);
 
         var certificateEntry = await _context.Certificates.AddAsync(certificate);
@@ -57,10 +58,52 @@ public class CertificatesRepository : ICertificatesRepository
             dbCertificate.MaxMark = certificate.MaxMark;
             dbCertificate.Category = certificate.Category;
             dbCertificate.Active = certificate.Active;
-            dbCertificate.Topics = certificate.Topics;
-            dbCertificate.Exams = certificate.Exams;
+            dbCertificate.Price = certificate.Price;
 
-            await FillNavigationProperties(dbCertificate);
+            if (certificate.Topics != null)
+            {
+                var dbTopicsToDelete = dbCertificate.Topics
+                    .Where(t => !certificate.Topics.Any(ct => ct.Id == t.Id))
+                    .ToList();
+                foreach (var topic in dbTopicsToDelete)
+                {
+                    // TODO:(akotro) Do we want to actually delete the topics themselves,
+                    // or just from the certificate?
+                    _context.Topics.Remove(topic);
+                }
+
+                if (certificate.Topics.Any())
+                {
+                    foreach (var topic in certificate.Topics)
+                    {
+                        // var dbTopic = dbCertificate.Topics.FirstOrDefault(t => t.Id == topic.Id);
+                        var dbTopic = await _context.Topics.FirstOrDefaultAsync(
+                            t => t.Id == topic.Id
+                        );
+                        if (dbTopic != null)
+                        {
+                            if (dbCertificate.Topics.Any(t => t.Id == dbTopic.Id))
+                            {
+                                // NOTE:(akotro) If certificate already has this topic, update it
+                                dbTopic.Name = topic.Name;
+                                dbTopic.MaxMarks = topic.MaxMarks;
+                            }
+                            else
+                            {
+                                // NOTE:(akotro) If certificate does not already have the topic, add it
+                                dbCertificate.Topics.Add(dbTopic);
+                            }
+                        }
+                        else
+                        {
+                            // NOTE:(akotro) If the topic does not exist, create it
+                            dbCertificate.Topics.Add(
+                                new Topic { Name = topic.Name, MaxMarks = topic.MaxMarks }
+                            );
+                        }
+                    }
+                }
+            }
 
             await _context.SaveChangesAsync();
         }
@@ -77,6 +120,7 @@ public class CertificatesRepository : ICertificatesRepository
 
         if (certificate != null)
         {
+            // TODO:(akotro) Do we want to actually delete the topics and exams as well?
             if (certificate.Exams != null)
             {
                 certificate.Exams
