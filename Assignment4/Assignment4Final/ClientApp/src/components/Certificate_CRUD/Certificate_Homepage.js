@@ -140,8 +140,6 @@ class Cert_homepage extends Component {
                 <div className='d-flex'>
                     {this.EditButton(certId)}
                     <Button variant="dark" className="mx-1" onClick={() => this.handleDelete(certId)}>
-                        {/*<FontAwesomeIcon icon={['fa', 'trash-can']} />*/}
-                        {/*<FontAwesomeIcon icon="fa-solid fa-trash-can" />*/}
                         Delete
                     </Button>
                 </div>
