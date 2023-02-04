@@ -21,20 +21,28 @@ function Editor(props) {
                                                     editor={EditorPlus}
                                                     data={props.text}
                                                     onReady={editor => {/* You can store the "editor" and use when it is needed. */}}
+                                                            event = {props.event}
+                                                    name={props.name}    
+                                                    // optionId={props.optionId}
 
-                                                    element={props.element}    
-                                                    optionId={props.optionId}
-                                                    onChange={(event, editor,element,optionId) => {
-
-                                                                                console.log("Inside Editor component");
-                                                                                
+                                                    onChange={(event, editor,name) => 
+                                                                        {
+                                                                                // console.log(event);
+                                                                                // console.log("Inside Editor component");
                                                                                 const data = editor.getData();
-                                                                                    element=props.element;
-                                                                                    optionId=props.optionId;
-                                                                                props.handleChange(data,element,optionId);
+                                                                                // console.log(data);
+
+                                                                                name=props.name;
+                                                                                // console.log(name);
+                                                                                
+                                                                                // optionId=props.optionId;
+                                                                                // console.log(optionId);
+                                                                                    
+                                                                                props.handleChange(event,name,data);
                                                                                 
                                                                                             }
                                                                         }
+                                                                        required
 
                                                     // config={{
                                                     //   simpleUpload: {

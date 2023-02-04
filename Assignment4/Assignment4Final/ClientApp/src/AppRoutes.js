@@ -9,8 +9,8 @@ import Cert_homepage from './components/Certificate_CRUD/Certificate_Homepage'
 import NotFound from './components/Common/NotFound';
 
 import Questions from './components/Questions/QuestionHomePage';
-import Edit from './components/Questions/QuestionEdit';
-import Create from './components/Questions/QuestionCreate';
+import QuestionEdit from './components/Questions/QuestionEdit';
+import QuestionCreate from './components/Questions/QuestionCreate';
 
 import CandidateList from './components/Candidate_CRUD/CandidateList'
 import CandidateEdit from "./components/Candidate_CRUD/CandidateEdit";
@@ -48,21 +48,24 @@ const AppRoutes = [
         // requireAuth: true,
         element: <EditCertificateForm />
     },
+    //-----------------Questions-------------------
     {
         path: '/admin/Questions/QuestionHomePage',
         // requireAuth: true,
         element: <Questions />
     },
-    //{
-    //    path: '/admin/Questions/QuestionEdit',
-    //    // requireAuth: true,
-    //    element: <Edit />
-    //},
+    {
+       path: '/admin/Questions/QuestionEdit',
+       // requireAuth: true,
+       element: <QuestionEdit />
+    },
     {
         path: '/admin/Questions/QuestionCreate',
         // requireAuth: true,
-        element: <Create />
+        element: <QuestionCreate />
     },
+    
+    // -----------------Candidate-------------------
     {
         path: '/admin/candidate',
         // requireAuth: true,
