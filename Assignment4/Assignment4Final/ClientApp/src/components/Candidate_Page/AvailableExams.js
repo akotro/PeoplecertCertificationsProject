@@ -34,14 +34,12 @@ class AvailableExams extends Component {
                 console.error(err);
             });
 
-        console.log(this.state.data)
     }
 
     takeExam = (id) => {
 
     };
 
-    render() {
         return (
             <div className='container-fluid'>
                 <Table striped borderless hover>
@@ -68,7 +66,5 @@ class AvailableExams extends Component {
             </div>
         );
     };
-
-}
 
 export default withRouter(AvailableExams);
