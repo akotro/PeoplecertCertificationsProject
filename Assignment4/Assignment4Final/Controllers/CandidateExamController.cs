@@ -57,7 +57,7 @@ namespace Assignment4Final.Controllers
         {
             var userId = _userManager.GetUserId(User);
             //var candExamDto = await  _candExamService.GetCandidateExamByCertificateAsync(certId,userId);
-            var candExamDto = await  _candExamService.GetCandidateExamByCertificateAsync(certId, "0aba6917-8f7c-4f00-a200-58e139fe616e");
+            var candExamDto = await  _candExamService.GetCandidateExamByCertificateAsync(certId, "02458d8c-aba2-4b3d-86de-8f8457570c60");
             return Ok(candExamDto);
         }
 
@@ -69,7 +69,7 @@ namespace Assignment4Final.Controllers
         {
 
             //var candidate = await _candExamService.GetCandidateByUserIdAsync(_userManager.GetUserId(User));
-            var candidate = await _candExamService.GetCandidateByUserIdAsync("0aba6917-8f7c-4f00-a200-58e139fe616e");
+            var candidate = await _candExamService.GetCandidateByUserIdAsync("02458d8c-aba2-4b3d-86de-8f8457570c60");
             if (candidate == null)
             {
                 return NotFound(new { description = "Candidate with this userId not found " });
@@ -85,7 +85,7 @@ namespace Assignment4Final.Controllers
         {
             
             //var candidate = await _candExamService.GetCandidateByUserIdAsync(_userManager.GetUserId(User));
-            var candidate = await _candExamService.GetCandidateByUserIdAsync("0aba6917-8f7c-4f00-a200-58e139fe616e");
+            var candidate = await _candExamService.GetCandidateByUserIdAsync("02458d8c-aba2-4b3d-86de-8f8457570c60");
             if(candidate == null)
             {
                 return NotFound(new {description ="Candidate with this userId not found "});

@@ -1,4 +1,4 @@
-﻿import React, { Component, useState } from 'react';
+﻿import React, { useEffect, useState } from "react";
 import { ListGroup, ListGroupItem, Button, Table, Row, Stack } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { withRouter } from './../Common/with-router';
@@ -6,41 +6,32 @@ import { BrowserRouter, Route, useParams } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-class AvailableExams extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            data: []
+function AvailableExams(props) {
+
+    const [data, setData] = useState([]);
+    //const [buttons, setButtons] = useState();
+    const [user, setUser] = useState();
+
+    useEffect(() => {
+        axios.get('https://localhost:7196/api/CandidateExam/notTaken').then((response) => {
+            console.log(response);
+            setData(response.data);
+        }).catch(function (error) {
+            console.log(error);
+        });
+        if (!user) {
+            setUser("admin");
+
         }
-    }
 
-    componentDidMount() {
-        axios.get('https://localhost:7196/api/CandidateExam/notTaken')
-            .then(res => {
-                if (this.props.user) {
-                    // if the user is a candidate, show only active products
-                    if (this.props.user.usertype === "candidate") {
-                            this.setState({ data: res.data.data }
-                        );
-                    } else if ((this.props.user.usertype === "placeholder")) {
-                        //show data for placeholder
-                    }
-                } else {
-                    //if none of the above, show all products
-                    this.setState({ data: res.data.data })
-                }
-            })
-            .catch(err => {
-                console.error(err);
-            });
+        //setButtons(makeButtons());
+    }, []);
 
-    }
-
-    takeExam = (id) => {
+    const takeExam = (id) => {
 
     };
 
-        return (
+    return (
             <div className='container-fluid'>
                 <Table striped borderless hover>
                     <thead>
