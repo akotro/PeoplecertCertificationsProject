@@ -56,6 +56,7 @@ namespace Assignment4Final.Data.Repositories
         {
             return await _context.CandidateExams
                 .Include(candExam => candExam.Candidate)
+                .Include(candExam => candExam.Exam)
                 .Where(candExam => (candExam.Candidate == candidate && candExam.Result == null))
                 .ToListAsync();
         }
