@@ -111,9 +111,7 @@ return (
                         <td>{candidate.lastName}</td>
                         <td>{candidate.email}</td>
                         <td>{convertDateToString(candidate.dateOfBirth)}</td>
-                        <td>
-                            {makeButtons(candidate.appUserId)}
-                        </td>
+                        <td>{makeButtons(candidate.appUserId)}</td>
                     </tr>
                 )}
             </tbody>
