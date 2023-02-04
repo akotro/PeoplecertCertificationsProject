@@ -1,6 +1,6 @@
 ﻿import React, { useEffect, useState } from "react";
 
-import { ListGroup, ListGroupItem, Button, Table, Row, Col, Stack, Form } from 'react-bootstrap';
+import { ListGroup, ListGroupItem, Button, Table, Row, Col, Stack, Form, CloseButton } from 'react-bootstrap';
 
 import { useNavigate, useParams } from "react-router-dom";
 import DatePicker from "react-datepicker";
@@ -72,36 +72,32 @@ export default function CandidateEdit(props) {
 
     }
 
-    //const address = () => {
-    //    const candAdd = candidate.address.map(x=>x)
-    //    console.log(candAdd);
-    //}
-    useEffect(() => {
+      useEffect(() => {
         fetchData();
     }, []);
 
     const handleSubmit = (event) => {
         event.preventDefault();
         console.log(params.id);
-        //if (params.id === undefined) {
-        //    console.log("send post")
-        //    axios.post(`https://localhost:7196/api/Candidate`, candidate)
-        //        .then(function (response) {
-        //            console.log(response);
-        //        })
-        //        .catch(function (error) {
-        //            console.log(error);
-        //        });
-        //} else {
-        //    console.log("send put")
-        //    axios.put(`https://localhost:7196/api/Candidate/${params.id}`, candidate)
-        //        .then(function (response) {
-        //            console.log(response);
-        //        })
-        //        .catch(function (error) {
-        //            console.log(error);
-        //        });
-        //}
+        if (params.id === undefined) {
+            console.log("send post")
+            axios.post(`https://localhost:7196/api/Candidate`, candidate)
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        } else {
+            console.log("send put")
+            axios.put(`https://localhost:7196/api/Candidate/${params.id}`, candidate)
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        }
 
 
 
@@ -165,22 +161,12 @@ export default function CandidateEdit(props) {
     const addAddress = () => {
         setCandidate({
             ...candidate, address: [...candidate.address,
-            { id: "", address1: "", address2: "", city: "", state: "", country: [] }
+                { id: 0, address1: "", address2: "", city: "", state: "", country: {} }
             ]
         })
     }
 
     const removeAddress = (removeIndex) => {
-        //setCandidate({
-        //    ...candidate, address: [...candidate.address.map((address, index) => {
-        //        if (index === removeIndex) {
-        //            return {
-        //                ...candidate.address.filter(item => item.id !== removeIndex)
-        //                }
-        //        }
-        //    })
-        //    ]
-        //})
 
         const updatedAddress = [...candidate.address];
         updatedAddress.splice(removeIndex, 1);
@@ -343,19 +329,22 @@ export default function CandidateEdit(props) {
                             </Form.Group>
                         </Col>
                     </Row>
-                    <div>
+                        <div>
+                            <Stack gap={3 }>
                         {candidate.address &&
                             candidate.address.map((item, index) => (
-                                <div key={index} name={item.id} className="my-1">
+                                <div key={index} name={item.id} className="my-1 ">
 
                                     <Row>
                                         <details className="display-6 fs-4">
                                             <summary>
                                                 Address {index + 1}
-                                                <Button onClick={() => removeAddress(index)}>
-                                                    remove
-                                                </Button>
                                             </summary>
+                                            <div className="card card-body ">
+                                                <div className="justify-content-end">
+                                                    <CloseButton onClick={() => removeAddress(index)} />
+                                                </div>
+
                                             <Row>
                                                 <Col>
                                                     <Form.Group >
@@ -393,8 +382,9 @@ export default function CandidateEdit(props) {
                                                     <Form.Group >
                                                         <Form.Label>country</Form.Label>
                                                         <Form.Select as="select" name="country"
-                                                            value={item.country.id}
-                                                            onChange={(event) => handleChange(event, index)}>
+                                                                value={item.country.id}
+                                                                onChange={(event) => handleChange(event, index)} required>
+                                                                <option value="" hidden >Please choose your Country... </option>
 
                                                             {countries.map((country, index) =>
                                                                 <option key={index}
@@ -405,12 +395,14 @@ export default function CandidateEdit(props) {
                                                     </Form.Group>
                                                 </Col>
                                             </Row>
+                                            </div>
                                         </details>
 
                                     </Row>
                                 </div>
                             ))}
-                        <Button onClick={addAddress}>add address</Button>
+                                <Button onClick={addAddress}>add address</Button>
+                            </Stack>
                     </div>
 
 
