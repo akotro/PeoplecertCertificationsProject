@@ -15,7 +15,6 @@ import Create from './components/Questions/QuestionCreate';
 import CandidateList from './components/Candidate_CRUD/CandidateList'
 import CandidateEdit from "./components/Candidate_CRUD/CandidateEdit";
 
-
 import CandidateHomepage from './components/Candidate_Page/CandidateHomepage';
 
 const AppRoutes = [
