@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { Collapse, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
-import { NavDropdown, Nav } from 'react-bootstrap';
+import { NavDropdown, Nav, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { LoginMenu } from './api-authorization/LoginMenu';
 import './NavMenu.css';
+import { logout } from './auth/handleJWT';
+import { useNavigate } from 'react-router-dom';
 
 //import { TiHome } from "react-icons/ti";
 
@@ -54,6 +56,9 @@ export class NavMenu extends Component {
                             <NavItem>
                                 <NavLink tag={Link} className="text-dark" to="/admin/candidate">CandidatesCrud</NavLink>
                             </NavItem>
+                            <NavItem>
+                            <Button onClick={()=> logout(useNavigate)}>Log me out</Button>
+                            </NavItem>
                             <NavDropdown title="Candidate">
                                 <NavDropdown.Item>
                                     <NavLink tag={Link} className="text-dark" to="/candidate">Candidate Homepage</NavLink>
@@ -62,8 +67,8 @@ export class NavMenu extends Component {
                                     <NavLink tag={Link} className="text-dark" to="/candidate/AvailableExams">Available Exams</NavLink>
                                 </NavDropdown.Item>
                             </NavDropdown>
-                            <LoginMenu>
-                            </LoginMenu>
+                            {/* <LoginMenu>
+                            </LoginMenu> */}
                         </ul>
                     </Collapse>
                 </Navbar>

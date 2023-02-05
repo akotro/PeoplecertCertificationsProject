@@ -39,6 +39,7 @@ const AppRoutes = [
     {
         path: '/admin/certificate',
         needsAdmin: true,
+        needsQc: true,
         element: <Cert_homepage />
     },
     {

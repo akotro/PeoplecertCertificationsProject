@@ -21,26 +21,26 @@ function App() {
   }, [])
 
 
-  function isAdmin() {
-    return claims.findIndex(
-      claim => claim.name === 'role' &&
-        claim.value === 'admin')
-      > -1;
+  function isRole(roles) {
+
+      return roles.some(
+      role => claims.find(claim => claim.name === 'role' && claim.value === role));
   }
+
   return (
     <AuthenticationContext.Provider value={{ claims, update: setClaims }} >
       <Layout>
         <Routes>
 
           {AppRoutes.map((route, index) => {
-            const { element, needsAdmin, ...rest } = route;
+            const { element, needsAdmin, needsQc,needsCand,needsMarker, ...rest } = route;
+
             return <Route key={index} {...rest}
-            element={needsAdmin ? (
-              claims.find(claim => claim.name === 'role' &&
-        claim.value === 'admin') ? 
-                element : 
-                <NotAuth />
-            ) : element} />;
+              element={needsAdmin || needsQc || needsCand || needsMarker? 
+              isRole(["admin", "qualitycontrol", "candidate", "marker"]) ?
+                element :
+                <NotAuth /> :
+                element} />;
           })}
         </Routes>
 
