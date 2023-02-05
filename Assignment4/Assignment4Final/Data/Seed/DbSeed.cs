@@ -138,7 +138,7 @@ namespace Assignment4Final.Data.Seed
                         );
                         fakeAppUsers[i].PasswordHash = passHash.HashPassword(
                             fakeAppUsers[i],
-                            $"marker{markerIndex}!"
+                            $"Marker{markerIndex}!"
                         );
 
                         markerIndex++;
@@ -162,7 +162,7 @@ namespace Assignment4Final.Data.Seed
                         );
                         fakeAppUsers[i].PasswordHash = passHash.HashPassword(
                             fakeAppUsers[i],
-                            $"qualitycontrol{qualitycontrolIndex}!"
+                            $"Qualitycontrol{qualitycontrolIndex}!"
                         );
 
                         qualitycontrolIndex++;
@@ -185,7 +185,7 @@ namespace Assignment4Final.Data.Seed
                         );
                         fakeAppUsers[i].PasswordHash = passHash.HashPassword(
                             fakeAppUsers[i],
-                            $"nothing{nothingIndex}!"
+                            $"Nothing{nothingIndex}!"
                         );
 
                         nothingIndex++;
