@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from 'axios';
 
@@ -33,7 +33,6 @@ export default function Examination(props) {
         var doc = parser.parseFromString(temp, 'text/html');
 
         return doc.body.innerText;
-
     }
 
     const handleOptionChange = (event, questionIndex) => {
