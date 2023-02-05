@@ -33,7 +33,7 @@ function App() {
         <Routes>
 
           {AppRoutes.map((route, index) => {
-            const { element, needsAdmin, needsQc,needsCand,needsMarker, ...rest } = route;
+            const { element, needsAdmin, needsQc, needsCand, needsMarker, ...rest } = route;
 
             return <Route key={index} {...rest}
               element={needsAdmin || needsQc || needsCand || needsMarker? 
@@ -50,22 +50,3 @@ function App() {
 }
 export default App;
 
-{/* const { element, needsAdmin, ...rest } = route;
-            console.log(isAdmin())
-            if (route.needsAdmin ===true && isAdmin()===false) {
-              console.log("not an dminpage")
-              navigate('/NotAuth')
-              return null
-              return <Navigate to="/NotAuth" />;
-            } else {
-              return <Route key={index} {...rest} element={ element} />;
-            }
-            return <Route key={index} {...rest} element={ element} />;
-          })} */}
-
-{/* const { element, isAdmin, ...rest } = route;
-            return <Route key={index} {...rest}>
-            {route.isAdmin && !isAdmin() ? <>no access</> : element }
-
-            </Route>; */}
-{/* })} */ }

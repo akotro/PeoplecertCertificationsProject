@@ -14,11 +14,12 @@ function CandidateList(props) {
     //const [buttons, setButtons] = useState();
     const [user, setUser] = useState();
     let navigate = useNavigate();
-    const con = useContext(AuthenticationContext);
+    const {update, claims}  = useContext(AuthenticationContext);
 
     useEffect(() => {
-       console.log(con.claims.findIndex(claim => claim.name === 'role' && claim.value === 'candidate'))
-       console.log(con.claims.findIndex(claim => claim.name === 'role' && claim.value === 'admin'))
+       console.log(claims.findIndex(claim => claim.name === 'role' && claim.value === 'candidate'))
+       console.log(update)
+       console.log(claims)
 
     
         axios.get('https://localhost:7196/api/Candidate').then((response) => {

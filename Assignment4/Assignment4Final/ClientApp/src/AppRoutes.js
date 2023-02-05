@@ -21,6 +21,7 @@ import AvailableExams from './components/Candidate_Page/AvailableExams';
 import Examination from './components/Examination/Examination';
 
 import Login from './components/auth/Login'
+import Register from './components/auth/Register'
 
 const AppRoutes = [
     {
@@ -28,28 +29,28 @@ const AppRoutes = [
         element: <Home />
     },
     {
-        path: '/counter',
-        element: <Counter />
+        path: '/login',
+        element: <Login />
     },
     {
-        path: '/fetch-data',
-        // requireAuth: true,
-        element: <FetchData />
+        path: '/register',
+        element: <Register />
     },
     {
-        path: '/admin/certificate',
+        path: '/certificate',
         needsAdmin: true,
         needsQc: true,
+        needsCand: true,
         element: <Cert_homepage />
     },
     {
-        path: '/admin/certificate/create',
+        path: '/certificate/create',
         needsAdmin: true,
         element: <CreateCertificateForm />
     },
 
     {
-        path: '/admin/certificate/edit/:id',
+        path: '/certificate/edit/:id',
         // requireAuth: trueneedsAdmin: true,
         needsAdmin: true,
         element: <EditCertificateForm />
@@ -106,10 +107,7 @@ const AppRoutes = [
         // requireAuth: true,
         element: <Examination />
     },
-    {
-        path: '/login',
-        element: <Login />
-    },
+
     //this needs to stay as the last path
     {
         path: '/notauth',

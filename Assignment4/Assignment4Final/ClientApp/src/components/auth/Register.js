@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useContext} from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { AuthenticationContext } from '../auth/AuthenticationContext'
+import {AuthenticationContext} from '../auth/AuthenticationContext'
 import { getClaims, saveToken } from './handleJWT'
 
 
@@ -9,33 +9,34 @@ import { ListGroup, ListGroupItem, Button, Table, Row, Col, Stack, Form, CloseBu
 import axios from 'axios';
 
 export default function Login() {
-    const navigate = useNavigate();
 
+    const navigate = useNavigate();
     const [errors, setErrors] = useState([]);
     const { update } = useContext(AuthenticationContext);
-    const [credentials, setCredentials] = useState([]);
+    const [credentials, setCredentials]= useState([]);
 
-    const login = (event) => {
+    const register = (event) => {
         event.preventDefault();
         console.log(credentials)
         console.log(update)
-
+        
         setErrors([]);
-        axios.post(`https://localhost:7196/api/accounts/login`, credentials).then(
+        axios.post(`https://localhost:7196/api/accounts/create`, credentials).then(
             res => {
                 saveToken(res.data);
                 update(getClaims());
                 navigate("/");
-
             }
         ).catch(function (error) {
+            setErrors(error.response.data);
+
             console.log(error);
         });
         // history.push('/');
     }
 
-    const handleChange = (event) => {
-        const { name, value, type } = event.target;
+    const handleChangeRegister = (event) => {
+        const { name, value } = event.target;
 
         setCredentials({ ...credentials, [name]: value });
 
@@ -47,24 +48,22 @@ export default function Login() {
     return (
         <div>
             <h3>Login</h3>
-            <Form onSubmit={login}>
+            <Form onSubmit={register}>
                 <Row>
                     <Col>
                         <Form.Group >
                             <Form.Label>Email</Form.Label>
-                            <Form.Control type="email" name="email" value={credentials.email} onChange={handleChange} />
+                            <Form.Control type="email" name="email" value={credentials.email} onChange={handleChangeRegister} />
                         </Form.Group>
                     </Col>
-                </Row>
-                <Row>
                     <Col>
                         <Form.Group >
                             <Form.Label>Password</Form.Label>
-                            <Form.Control type="password" name="password" value={credentials.password} onChange={handleChange} />
+                            <Form.Control type="password" name="password" value={credentials.password} onChange={handleChangeRegister} />
                         </Form.Group>
                     </Col>
                 </Row>
-                <Button variant="primary" type="submit">login</Button>
+                <Button variant="primary" type="submit">Register</Button>
 
             </Form>
         </div>
