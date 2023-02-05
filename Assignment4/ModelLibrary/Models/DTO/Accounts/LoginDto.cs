@@ -4,7 +4,7 @@ namespace ModelLibrary.Models.DTO.Accounts;
 
 public class LoginDto
 {
-    public string? Username { get; set; }
+    // public string? Username { get; set; }
 
     [Required]
     [EmailAddress]
