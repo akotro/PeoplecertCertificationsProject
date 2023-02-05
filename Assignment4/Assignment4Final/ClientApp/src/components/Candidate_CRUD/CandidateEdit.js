@@ -1,6 +1,7 @@
-﻿import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState, useContext } from "react";
 
 import { ListGroup, ListGroupItem, Button, Table, Row, Col, Stack, Form, CloseButton } from 'react-bootstrap';
+import { AuthenticationContext } from '../auth/AuthenticationContext'
 
 import { useNavigate, useParams } from "react-router-dom";
 import DatePicker from "react-datepicker";
@@ -16,6 +17,9 @@ export default function CandidateEdit(props) {
     const [photoIdTypes, setPhotoIdTypes] = useState([]);
     const [countries, setCountries] = useState([]);
     const [allUsers, setAllusers] = useState([]);
+
+    const { update, claims } = useContext(AuthenticationContext);
+    const  [role, setRole]  = useState(claims.find(claim => claim.name === 'role').value)
 
     const [registerCand, setRegisterCand] = useState([]);
     //console.log(params.id);
@@ -98,8 +102,6 @@ export default function CandidateEdit(props) {
                     console.log(error);
                 });
         }
-
-
 
         console.log("THIS IS MINE ", candidate);
     }
@@ -204,7 +206,7 @@ export default function CandidateEdit(props) {
 
     return (
         <div>
-            <fieldset disabled={false }>
+            <fieldset disabled={role !== "admin" }>
             <Form onSubmit={handleSubmit} className="lead" disabled={ true} >
                 <p>{params.id}</p>
                 <Stack gap={3}>
