@@ -11,24 +11,27 @@ import axios from 'axios';
 
 
 
-function ExamQuestionList(){
+function ExamQuestionList() {
 
 
     const location = useLocation()
     const Exam = location.state.data;
-    const Questions = Exam.Quenstions;
-    function Replace(temp)
-    {
-      var parser = new DOMParser();
+    const questions = Exam.questions;
+    const [data, setData] = useState([Exam.questions])
 
-      var doc = parser.parseFromString(temp,'text/html');
+    console.log(Exam);
+    console.log('its here')
+    console.log(questions);
+    function Replace(temp) {
+        var parser = new DOMParser();
 
-      return doc.body.innerText;
+        var doc = parser.parseFromString(temp, 'text/html');
+
+        return doc.body.innerText;
 
     }
-    console.log(Data)
 
-    return(
+    return (
         <div>
             <Table>
                 <thead>
@@ -39,18 +42,29 @@ function ExamQuestionList(){
                     </tr>
                 </thead>
                 <tbody>
-                    {data.map((Questions,index) => 
-                    <tr key = {index}>
-                        <td>{Replace(Questions.text)}</td>
-                        <td>Questions.topic.name</td>
-                        <td>Questions.DifficultyLevel</td>
+                    {data.map((question, index) => {
+                        <div key ={index}>
+                            { question.map((koukou, index) => {
+                            <tr key={index}>
+                                <td>{koukou.text}</td>
+                               <td>{index}</td>
+                                <td>{koukou.topic.id}</td>
+                            </tr>
 
-                    </tr>
-                    )}
+                        })
+                        }
+
+                        </div>
+                       
+                    })}
+
+
+
+
                 </tbody>
             </Table>
         </div>
-       
+
     )
 
 
