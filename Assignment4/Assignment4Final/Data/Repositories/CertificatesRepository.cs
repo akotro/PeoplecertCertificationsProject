@@ -67,8 +67,7 @@ public class CertificatesRepository : ICertificatesRepository
                     .ToList();
                 foreach (var topic in dbTopicsToDelete)
                 {
-                    // TODO:(akotro) Do we want to actually delete the topics themselves,
-                    // or just from the certificate?
+                    // NOTE:(akotro) Do not actually delete Topic, just remove from candidate
                     // _context.Topics.Remove(topic);
                     dbCertificate.Topics.Remove(topic);
                 }
