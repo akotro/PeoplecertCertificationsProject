@@ -89,8 +89,8 @@ namespace Assignment4Final.Controllers
 
         }
 
-        [HttpPut("StartExam")] // this Api is for getting a CandidateExamDto full with the CandidatesAnswers and ExamsQuestions when an Exam is starting
-        public async Task<ActionResult<CandidateExamDto>> GetCandExmWithAnswers([FromBody] int candExamId)
+        [HttpPut("StartExam/{candExamId}")] // this Api is for getting a CandidateExamDto full with the CandidatesAnswers and ExamsQuestions when an Exam is starting
+        public async Task<ActionResult<CandidateExamDto>> GetCandExmWithAnswers(int candExamId)
         {
             var candidateExam = await _candExamService.GetCandidateExamByIdAsync(candExamId);
             
