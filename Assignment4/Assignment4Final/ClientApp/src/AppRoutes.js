@@ -1,12 +1,11 @@
 import ApiAuthorzationRoutes from './components/api-authorization/ApiAuthorizationRoutes';
-import { Counter } from "./components/Counter";
-import { FetchData } from "./components/FetchData";
-import { Home } from "./components/Home";
+import Home from "./components/Home";
 
 import CreateCertificateForm from './components/Certificate_CRUD/Certificate_Create'
 import EditCertificateForm from './components/Certificate_CRUD/Certificate_Edit'
 import Cert_homepage from './components/Certificate_CRUD/Certificate_Homepage'
 import NotFound from './components/Common/NotFound';
+import NotAuth from './components/auth/NotAuth';
 
 import Questions from './components/Questions/QuestionHomePage';
 import QuestionEdit from './components/Questions/QuestionEdit';
@@ -19,67 +18,74 @@ import CandidateHomepage from './components/Candidate_Page/CandidateHomepage';
 import AvailableExams from './components/Candidate_Page/AvailableExams';
 import Examination from './components/Examination/Examination';
 
+import Login from './components/auth/Login'
+import Register from './components/auth/Register'
+
 const AppRoutes = [
     {
         index: true,
         element: <Home />
     },
     {
-        path: '/counter',
-        element: <Counter />
+        path: '/login',
+        element: <Login />
     },
     {
-        path: '/fetch-data',
-        requireAuth: true,
-        element: <FetchData />
+        path: '/register',
+        element: <Register />
     },
     {
-        path: '/admin/certificate',
-        //requireAuth: true,
+        path: '/certificate',
+        needsAdmin: true,
+        needsQc: true,
+        needsCand: true,
         element: <Cert_homepage />
     },
     {
-        path: '/admin/certificate/create',
-        // requireAuth: true,
+        path: '/certificate/create',
+        needsAdmin: true,
         element: <CreateCertificateForm />
     },
 
     {
-        path: '/admin/certificate/edit/:id',
-        // requireAuth: true,
+        path: '/certificate/edit/:id',
+        needsAdmin: true,
         element: <EditCertificateForm />
     },
     //-----------------Questions-------------------
     {
-        path: '/admin/Questions/QuestionHomePage',
-        // requireAuth: true,
+        path: '/Questions/QuestionHomePage',
+        needsAdmin: true,
+        needsQc: true,
         element: <Questions />
     },
     {
-        path: '/admin/Questions/QuestionEdit',
-        // requireAuth: true,
+        path: '/Questions/QuestionEdit',
+        needsAdmin: true,
         element: <QuestionEdit />
     },
     {
-        path: '/admin/Questions/QuestionCreate',
-        // requireAuth: true,
+        path: '/Questions/QuestionCreate',
+        needsAdmin: true,
         element: <QuestionCreate />
     },
 
     // -----------------Candidate-------------------
     {
-        path: '/admin/candidate',
-        // requireAuth: true,
+        path: '/candidate',
+        needsAdmin: true,
+        needsQc: true,
+
         element: <CandidateList />
     },
     {
-        path: '/admin/candidate/create',
-        // requireAuth: true,
+        path: '/candidate/create',
+        needsAdmin: true,
         element: <CandidateEdit />
     },
     {
-        path: '/admin/candidate/:id',
-        // requireAuth: true,
+        path: '/candidate/:id',
+        needsAdmin: true,
         element: <CandidateEdit />
     },
     {
@@ -89,21 +95,27 @@ const AppRoutes = [
     },
     {
         path: '/candidate/AvailableExams',
-        // requireAuth: true,
+        needsCand: true,
+
         element: <AvailableExams />
     },
     // -----------------Candidate-------------------
     {
         path: '/candidate/Examination/:id',
-        // requireAuth: true,
+        needsCand: true,
         element: <Examination />
     },
+
     //this needs to stay as the last path
+    {
+        path: '/notauth',
+        element: <NotAuth />
+    },
     {
         path: '*',
         element: <NotFound />
     },
-    ...ApiAuthorzationRoutes
+    // ...ApiAuthorzationRoutes
 ];
 
 export default AppRoutes;
