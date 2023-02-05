@@ -168,9 +168,14 @@ public class AccountsController : ControllerBase
 
     private async Task<AuthenticationResponseDto> BuildToken(LoginDto userCredentials)
     {
-        var claims = new List<Claim>() { new Claim("email", userCredentials.Email) };
-
         var user = await userManager.FindByNameAsync(userCredentials.Email);
+
+        var claims = new List<Claim>()
+        {
+            new Claim("email", userCredentials.Email),
+            new Claim("userId", user.Id)
+        };
+
         var claimsDB = await userManager.GetClaimsAsync(user);
 
         claims.AddRange(claimsDB);
