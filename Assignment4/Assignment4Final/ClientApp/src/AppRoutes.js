@@ -18,6 +18,8 @@ import CandidateEdit from "./components/Candidate_CRUD/CandidateEdit";
 import CandidateHomepage from './components/Candidate_Page/CandidateHomepage';
 import AvailableExams from './components/Candidate_Page/AvailableExams';
 import Examination from './components/Examination/Examination';
+import ExamList from './components/Exam_CRUD/ExamList';
+import ExamQuestionList from './components/Exam_CRUD/ExamQuestionList';
 
 const AppRoutes = [
     {
@@ -98,6 +100,17 @@ const AppRoutes = [
         // requireAuth: true,
         element: <Examination />
     },
+    {
+        path: '/ExamsList',
+        // requireAuth: true,
+        element: <ExamList/>
+    },
+    {
+        path: '/ExamQuestionList',
+        // requireAuth: true,
+        element: <ExamQuestionList/>
+    },
+
     //this needs to stay as the last path
     {
         path: '*',
