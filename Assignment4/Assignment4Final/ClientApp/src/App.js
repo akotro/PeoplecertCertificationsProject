@@ -5,6 +5,9 @@ import AuthorizeRoute from './components/api-authorization/AuthorizeRoute';
 import { Layout } from './components/Layout';
 import './custom.css';
 
+import NotAuth from './components/auth/NotAuth';
+
+
 import { getClaims } from './components/auth/handleJWT'
 import { AuthenticationContext } from './components/auth/AuthenticationContext';
 
@@ -28,11 +31,16 @@ function App() {
     <AuthenticationContext.Provider value={{ claims, update: setClaims }} >
       <Layout>
         <Routes>
-   {AppRoutes.map((route, index) => {
-            const { element, requireAuth, ...rest } = route;
+
+          {AppRoutes.map((route, index) => {
+            const { element, needsAdmin, ...rest } = route;
             return <Route key={index} {...rest}
-              element={requireAuth ? <AuthorizeRoute {...rest}
-                element={element} /> : element} />;
+            element={needsAdmin ? (
+              claims.find(claim => claim.name === 'role' &&
+        claim.value === 'admin') ? 
+                element : 
+                <NotAuth />
+            ) : element} />;
           })}
         </Routes>
 

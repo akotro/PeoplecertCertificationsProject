@@ -1,9 +1,12 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState, useContext } from "react";
+import {AuthenticationContext} from '../components/auth/AuthenticationContext'
 
-export class Home extends Component {
-  static displayName = Home.name;
 
-  render() {
+function Home() {
+
+  const con = useContext(AuthenticationContext);
+
+
     return (
       <div>
         <h1>Hello, world!</h1>
@@ -22,5 +25,7 @@ export class Home extends Component {
         <p>The <code>ClientApp</code> subdirectory is a standard React application based on the <code>create-react-app</code> template. If you open a command prompt in that directory, you can run <code>npm</code> commands such as <code>npm test</code> or <code>npm install</code>.</p>
       </div>
     );
-  }
 }
+
+export default Home;
+

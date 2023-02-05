@@ -1,7 +1,7 @@
 import ApiAuthorzationRoutes from './components/api-authorization/ApiAuthorizationRoutes';
 import { Counter } from "./components/Counter";
 import { FetchData } from "./components/FetchData";
-import { Home } from "./components/Home";
+import Home from "./components/Home";
 
 import CreateCertificateForm from './components/Certificate_CRUD/Certificate_Create'
 import EditCertificateForm from './components/Certificate_CRUD/Certificate_Edit'
