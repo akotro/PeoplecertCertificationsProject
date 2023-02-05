@@ -80,7 +80,8 @@ const AppRoutes = [
     },
     {
         path: '/candidate/create',
-        needsAdmin: true,
+        // needsAdmin: true,
+        // needsCand:true,
         element: <CandidateEdit />
     },
     {

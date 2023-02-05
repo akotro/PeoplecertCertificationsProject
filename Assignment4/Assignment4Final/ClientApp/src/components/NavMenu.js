@@ -62,6 +62,50 @@ function NavMenu() {
                             />
 
                             <Authorized
+                                role="candidate"
+                                authorized={<>
+                                    <NavItem>
+                                        <NavLink tag={Link} className="text-dark" to="/certificate">Certificates</NavLink>
+                                    </NavItem>
+                                    <NavItem>
+                                        <NavLink tag={Link} className="text-dark" to="/Questions/QuestionHomePage">Questions</NavLink>
+                                    </NavItem>
+                                    <NavItem>
+                                        <NavLink tag={Link} className="text-dark" to="/candidate">Candidates</NavLink>
+                                    </NavItem>
+                                </>}
+                            />
+
+                            <Authorized
+                                role="qualitycontrol"
+                                authorized={<>
+                                    <NavItem>
+                                        <NavLink tag={Link} className="text-dark" to="/certificate">Certificates</NavLink>
+                                    </NavItem>
+                                    <NavItem>
+                                        <NavLink tag={Link} className="text-dark" to="/Questions/QuestionHomePage">Questions</NavLink>
+                                    </NavItem>
+                                    <NavItem>
+                                        <NavLink tag={Link} className="text-dark" to="/candidate">Candidates</NavLink>
+                                    </NavItem>
+                                </>}
+                            />
+                            <Authorized
+                                role="marker"
+                                authorized={<>
+                                    <NavItem>
+                                        <NavLink tag={Link} className="text-dark" to="/certificate">marker links</NavLink>
+                                    </NavItem>
+                                    <NavItem>
+                                        <NavLink tag={Link} className="text-dark" to="/Questions/QuestionHomePage">i need to make </NavLink>
+                                    </NavItem>
+                                    <NavItem>
+                                        <NavLink tag={Link} className="text-dark" to="/candidate">Candidates</NavLink>
+                                    </NavItem>
+                                </>}
+                            />
+
+                            <Authorized
                                 authorized={<>
                                     <span className="nav-link">Hello, {getUserEmail()}</span>
                                     <Button
