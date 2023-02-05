@@ -69,7 +69,8 @@ public class CertificatesRepository : ICertificatesRepository
                 {
                     // TODO:(akotro) Do we want to actually delete the topics themselves,
                     // or just from the certificate?
-                    _context.Topics.Remove(topic);
+                    // _context.Topics.Remove(topic);
+                    dbCertificate.Topics.Remove(topic);
                 }
 
                 if (certificate.Topics.Any())
