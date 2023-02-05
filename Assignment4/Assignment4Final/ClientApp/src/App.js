@@ -6,17 +6,16 @@ import { Layout } from './components/Layout';
 import './custom.css';
 
 import { getClaims } from './components/auth/handleJWT'
-import AuthenticationContextProvider from './components/auth/AuthenticationContext';
+import {AuthenticationContext} from './components/auth/AuthenticationContext';
+
 
 function App() {
   //static displayName = App.name;
   const [claims, setClaims] = useState(["o"]);
 
-  // useEffect(() => {
-  //   setClaims(getClaims())
-  // }, [])
-
-  // setClaims(["kaskdj"]);
+  useEffect(() => {
+    setClaims(getClaims())
+  }, [])
 
 
   function isAdmin() {
@@ -26,7 +25,7 @@ function App() {
       > -1;
   }
   return (
-    <AuthenticationContextProvider value={{ claims, update: setClaims }}>
+    <AuthenticationContext.Provider value={{claims, setClaims}} >
       <Layout>
         <Routes>
           {AppRoutes.map((route, index) => {
@@ -37,7 +36,7 @@ function App() {
           })}
         </Routes>
       </Layout>
-    </AuthenticationContextProvider>
+    </AuthenticationContext.Provider>
   );
 }
 export default App;

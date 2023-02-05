@@ -1,21 +1,29 @@
-import React, { createContext, Component, useState } from 'react';
+import React, { createContext, Component, useState, useEffect } from 'react';
+import { getClaims } from './handleJWT'
 
-//gpt
-const ContextTemplate = {
-    claims: ["a"],
-    update: () => { }
-}
 
-export const AuthenticationContext = createContext(ContextTemplate);
 
-function AuthenticationContextProvider({ children }){
+export const AuthenticationContext = React.createContext();
 
-    const [context] = useState(ContextTemplate)
-    return (
-        <AuthenticationContext.Provider value={context}>
-            {children}
-        </AuthenticationContext.Provider>
-    );
-}
+// export function AuthenticationContextProvider({ children }) {
+    
+// //     const [claims, setClaims] = useState(["e"]);
+// //     const update = () => {}
 
-export default AuthenticationContextProvider;
+// //     useEffect(() => {
+// //         // console.log(props.value)
+// //         console.log(children)
+// //   //   setClaims(getClaims())
+
+// //         setClaims(["a"])
+// //     }, [])
+// //     // value={{claims, setClaims}}
+
+// //     const [props] = useState();
+//     return (
+//         <AuthenticationContext.Provider  >
+//             {children}
+//         </AuthenticationContext.Provider>
+//     );
+// }
+
