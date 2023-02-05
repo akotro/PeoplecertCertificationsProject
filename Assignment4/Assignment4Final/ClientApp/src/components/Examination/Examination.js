@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from 'axios';
 
@@ -35,7 +35,19 @@ export default function Examination(props) {
         return doc.body.innerText;
     }
 
+    const saveCandidateExam = async () => {
+        try {
+            const response = await axios.put(`https://localhost:7196/api/CandidateExam/EndExam/${candExamId}`, {
+                candidateExam,
+            });
+            console.log(response.data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     const handleOptionChange = (event, questionIndex) => {
+        // Note(vmavraganis): Code used to keep the selected option of the user for each question
         const chosenOption = event.target.value;
         const updatedCandidateExamAnswers = candidateExam.candidateExamAnswers.map((answer, index) => {
             if (index === questionIndex) {
@@ -95,6 +107,8 @@ export default function Examination(props) {
                 &nbsp;
                 {currentPage < totalPages && <button onClick={() => setCurrentPage(currentPage + 1)}>Next</button>}
             </div>
+            <hr></hr>
+            <button onClick={saveCandidateExam}>See Results</button>
         </div>
     );
 };
