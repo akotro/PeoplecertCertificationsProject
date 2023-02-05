@@ -26,12 +26,10 @@ export default function Login() {
                 saveToken(res.data);
                 update(getClaims());
                 navigate("/");
-
             }
         ).catch(function (error) {
             console.log(error);
         });
-        // history.push('/');
     }
 
     const handleChange = (event) => {

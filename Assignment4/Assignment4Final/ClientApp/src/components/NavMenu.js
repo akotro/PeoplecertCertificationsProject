@@ -1,7 +1,7 @@
-import React, { Component, useState, useContext } from 'react';
+import React, { Component, useState, useContext, useEffect } from 'react';
 import { Collapse, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
 import { NavDropdown, Nav, Button } from 'react-bootstrap';
-import {AuthenticationContext} from "./auth/AuthenticationContext";
+import { AuthenticationContext } from "./auth/AuthenticationContext";
 import Authorized from './auth/Authorized';
 
 import { Link } from 'react-router-dom';
@@ -15,21 +15,25 @@ import { useNavigate } from 'react-router-dom';
 function NavMenu() {
     // static displayName = NavMenu.name;
     const { update, claims } = useContext(AuthenticationContext);
+    const [claim, setClaim] = useState(claims.filter(x => x.name === "role")[0]?.value);
 
     const getUserEmail = () => {
         return claims.filter(x => x.name === "email")[0]?.value;
     }
 
-    // this.toggleNavbar = this.toggleNavbar.bind(this);
+
 
     const [collapsed, setCollapsed] = useState(true);
 
     const toggleNavbar = () => {
         setCollapsed(!collapsed);
-        // this.setState({
-        //     collapsed: !this.state.collapsed
-        // });
     }
+
+
+    const navForRole = (claims) => {
+        // edw elega na kanei to check kanei return to component
+    }
+
 
     return (
         <header>
@@ -40,22 +44,23 @@ function NavMenu() {
 
                 <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!collapsed} navbar>
                     <ul className="navbar-nav flex-grow">
-                        <Authorized
-                            role="admin"
-                            authorized={<>
-                                <NavItem>
-                                    <NavLink tag={Link} className="text-dark" to="/certificate">Certificates</NavLink>
-                                </NavItem>
-                                <NavItem>
-                                    <NavLink tag={Link} className="text-dark" to="/Questions/QuestionHomePage">Questions</NavLink>
-                                </NavItem>
-                                <NavItem>
-                                    <NavLink tag={Link} className="text-dark" to="/candidate">CandidatesCrud</NavLink>
-                                </NavItem>
-                            </>}
-                        />
 
                         <div className="d-flex">
+                            <Authorized
+                                role="admin"
+                                authorized={<>
+                                    <NavItem>
+                                        <NavLink tag={Link} className="text-dark" to="/certificate">Certificates</NavLink>
+                                    </NavItem>
+                                    <NavItem>
+                                        <NavLink tag={Link} className="text-dark" to="/Questions/QuestionHomePage">Questions</NavLink>
+                                    </NavItem>
+                                    <NavItem>
+                                        <NavLink tag={Link} className="text-dark" to="/candidate">CandidatesCrud</NavLink>
+                                    </NavItem>
+                                </>}
+                            />
+
                             <Authorized
                                 authorized={<>
                                     <span className="nav-link">Hello, {getUserEmail()}</span>

@@ -1,6 +1,4 @@
 import ApiAuthorzationRoutes from './components/api-authorization/ApiAuthorizationRoutes';
-import { Counter } from "./components/Counter";
-import { FetchData } from "./components/FetchData";
 import Home from "./components/Home";
 
 import CreateCertificateForm from './components/Certificate_CRUD/Certificate_Create'
@@ -51,44 +49,43 @@ const AppRoutes = [
 
     {
         path: '/certificate/edit/:id',
-        // requireAuth: trueneedsAdmin: true,
         needsAdmin: true,
         element: <EditCertificateForm />
     },
     //-----------------Questions-------------------
     {
-        path: '/admin/Questions/QuestionHomePage',
-        // requireAuth: true,
+        path: '/Questions/QuestionHomePage',
+        needsAdmin: true,
+        needsQc: true,
         element: <Questions />
     },
     {
-        path: '/admin/Questions/QuestionEdit',
-        // requireAuth: true,
+        path: '/Questions/QuestionEdit',
+        needsAdmin: true,
         element: <QuestionEdit />
     },
     {
-        path: '/admin/Questions/QuestionCreate',
-        // requireAuth: true,
+        path: '/Questions/QuestionCreate',
+        needsAdmin: true,
         element: <QuestionCreate />
     },
 
     // -----------------Candidate-------------------
     {
-        path: '/admin/candidate',
+        path: '/candidate',
         needsAdmin: true,
-        // requireAuth: true,
+        needsQc: true,
+
         element: <CandidateList />
     },
     {
-        path: '/admin/candidate/create',
+        path: '/candidate/create',
         needsAdmin: true,
-        // requireAuth: true,
         element: <CandidateEdit />
     },
     {
-        path: '/admin/candidate/:id',
+        path: '/candidate/:id',
         needsAdmin: true,
-        // requireAuth: true,
         element: <CandidateEdit />
     },
     {
@@ -98,13 +95,14 @@ const AppRoutes = [
     },
     {
         path: '/candidate/AvailableExams',
-        // requireAuth: true,
+        needsCand: true,
+
         element: <AvailableExams />
     },
     // -----------------Candidate-------------------
     {
         path: '/candidate/Examination/:id',
-        // requireAuth: true,
+        needsCand: true,
         element: <Examination />
     },
 
@@ -117,7 +115,7 @@ const AppRoutes = [
         path: '*',
         element: <NotFound />
     },
-    ...ApiAuthorzationRoutes
+    // ...ApiAuthorzationRoutes
 ];
 
 export default AppRoutes;

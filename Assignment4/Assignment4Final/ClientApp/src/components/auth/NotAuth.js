@@ -2,7 +2,7 @@ import { Component } from "react";
 
 function NotAuth(){
     return (
-        <h1>you can not see this !</h1>
+        <h1>You are not logged in with the correct user Role !</h1>
         )
 
 }
