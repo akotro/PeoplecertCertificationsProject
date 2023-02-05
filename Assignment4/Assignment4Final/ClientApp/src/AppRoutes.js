@@ -7,6 +7,7 @@ import CreateCertificateForm from './components/Certificate_CRUD/Certificate_Cre
 import EditCertificateForm from './components/Certificate_CRUD/Certificate_Edit'
 import Cert_homepage from './components/Certificate_CRUD/Certificate_Homepage'
 import NotFound from './components/Common/NotFound';
+import NotAuth from './components/auth/NotAuth';
 
 import Questions from './components/Questions/QuestionHomePage';
 import QuestionEdit from './components/Questions/QuestionEdit';
@@ -19,6 +20,8 @@ import CandidateHomepage from './components/Candidate_Page/CandidateHomepage';
 import AvailableExams from './components/Candidate_Page/AvailableExams';
 import Examination from './components/Examination/Examination';
 
+import Login from './components/auth/Login'
+
 const AppRoutes = [
     {
         index: true,
@@ -30,23 +33,24 @@ const AppRoutes = [
     },
     {
         path: '/fetch-data',
-        requireAuth: true,
+        // requireAuth: true,
         element: <FetchData />
     },
     {
         path: '/admin/certificate',
-        //requireAuth: true,
+        needsAdmin: true,
         element: <Cert_homepage />
     },
     {
         path: '/admin/certificate/create',
-        // requireAuth: true,
+        needsAdmin: true,
         element: <CreateCertificateForm />
     },
 
     {
         path: '/admin/certificate/edit/:id',
-        // requireAuth: true,
+        // requireAuth: trueneedsAdmin: true,
+        needsAdmin: true,
         element: <EditCertificateForm />
     },
     //-----------------Questions-------------------
@@ -69,16 +73,19 @@ const AppRoutes = [
     // -----------------Candidate-------------------
     {
         path: '/admin/candidate',
+        needsAdmin: true,
         // requireAuth: true,
         element: <CandidateList />
     },
     {
         path: '/admin/candidate/create',
+        needsAdmin: true,
         // requireAuth: true,
         element: <CandidateEdit />
     },
     {
         path: '/admin/candidate/:id',
+        needsAdmin: true,
         // requireAuth: true,
         element: <CandidateEdit />
     },
@@ -98,7 +105,15 @@ const AppRoutes = [
         // requireAuth: true,
         element: <Examination />
     },
+    {
+        path: '/login',
+        element: <Login />
+    },
     //this needs to stay as the last path
+    {
+        path: '/notauth',
+        element: <NotAuth />
+    },
     {
         path: '*',
         element: <NotFound />

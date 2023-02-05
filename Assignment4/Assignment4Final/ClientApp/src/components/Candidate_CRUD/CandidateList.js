@@ -17,6 +17,10 @@ function CandidateList(props) {
     const con = useContext(AuthenticationContext);
 
     useEffect(() => {
+       console.log(con.claims.findIndex(claim => claim.name === 'role' && claim.value === 'candidate'))
+       console.log(con.claims.findIndex(claim => claim.name === 'role' && claim.value === 'admin'))
+
+    
         axios.get('https://localhost:7196/api/Candidate').then((response) => {
             setData(response.data);
             //console.log(data)

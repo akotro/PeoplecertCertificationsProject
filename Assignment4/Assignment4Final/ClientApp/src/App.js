@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import React, { useEffect, useState, } from 'react';
+import { Route, Routes, Navigate, useNavigate, Router } from 'react-router-dom';
 import AppRoutes from './AppRoutes';
 import AuthorizeRoute from './components/api-authorization/AuthorizeRoute';
 import { Layout } from './components/Layout';
 import './custom.css';
 
 import { getClaims } from './components/auth/handleJWT'
-import {AuthenticationContext} from './components/auth/AuthenticationContext';
+import { AuthenticationContext } from './components/auth/AuthenticationContext';
 
 
 function App() {
@@ -25,18 +25,39 @@ function App() {
       > -1;
   }
   return (
-    <AuthenticationContext.Provider value={{claims, setClaims}} >
+    <AuthenticationContext.Provider value={{ claims, update: setClaims }} >
       <Layout>
         <Routes>
-          {AppRoutes.map((route, index) => {
+   {AppRoutes.map((route, index) => {
             const { element, requireAuth, ...rest } = route;
             return <Route key={index} {...rest}
               element={requireAuth ? <AuthorizeRoute {...rest}
                 element={element} /> : element} />;
           })}
         </Routes>
+
       </Layout>
     </AuthenticationContext.Provider>
   );
 }
 export default App;
+
+{/* const { element, needsAdmin, ...rest } = route;
+            console.log(isAdmin())
+            if (route.needsAdmin ===true && isAdmin()===false) {
+              console.log("not an dminpage")
+              navigate('/NotAuth')
+              return null
+              return <Navigate to="/NotAuth" />;
+            } else {
+              return <Route key={index} {...rest} element={ element} />;
+            }
+            return <Route key={index} {...rest} element={ element} />;
+          })} */}
+
+{/* const { element, isAdmin, ...rest } = route;
+            return <Route key={index} {...rest}>
+            {route.isAdmin && !isAdmin() ? <>no access</> : element }
+
+            </Route>; */}
+{/* })} */ }
