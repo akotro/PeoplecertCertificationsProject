@@ -4,13 +4,14 @@ import { Button } from 'react-bootstrap';
 import { AuthenticationContext } from "./auth/AuthenticationContext";
 import Authorized from './auth/Authorized';
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './NavMenu.css';
 import { logout } from './auth/handleJWT';
 
 //import { TiHome } from "react-icons/ti";
 
 function NavMenu() {
+    const navigate = useNavigate();
     const { update, claims } = useContext(AuthenticationContext);
     const [claim, setClaim] = useState(claims.filter(x => x.name === "role")[0]?.value);
 
@@ -85,6 +86,7 @@ function NavMenu() {
                                     <span className="nav-link">Hello, {getUserEmail()}</span>
                                     <Button
                                         onClick={() => {
+                                            navigate('/')
                                             logout();
                                             update([]);
                                         }}
