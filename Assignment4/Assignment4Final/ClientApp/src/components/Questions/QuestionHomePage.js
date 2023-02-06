@@ -12,7 +12,9 @@ function Questions()
 
 
     useEffect(() => {
-        axios.get('https://localhost:7196/api/Questions').then((response) => {  setData(response.data.data);
+        axios.get('https://localhost:7196/api/questions').then((response) => {  setData(response.data.data);
+        }).catch((error) => {
+            console.log(error);
         });
       }, []);
    
@@ -33,7 +35,28 @@ function Questions()
 
       }
       //--------------------------------------------------
+      //--------------------------------------------------HANDLE DELETE
+     const  handleDelete = (id) => {
+        // Asks user if they are sure
+        const confirmDelete = window.confirm("Are you sure you want to delete this certificate?");
+        if (confirmDelete) {
+            //send axios call with the request to delete using Id
+            axios.delete(`https://localhost:7196/api/Questions/${id}`)
+                .then(response => 
+                    {
+                                    setData(data.filter(item => item.id !== id));
+                                    
+                    }
+                )
+                .catch(function (error) {
+                    console.log(error);
+                });
 
+                
+                }
+        }
+  
+//-----------------------------------------------------------
     return (
 
         <Container fluid="md">
@@ -42,18 +65,15 @@ function Questions()
                 <Table hover striped >
                                 <thead>
                                     <tr>
-
-                                    <th scope='Col'>Id</th>
-                                    <th scope='col'>MainText</th>
-                                    <th scope='col'>Topic</th>
-                                    <th scope='col'></th>
-                                    <th scope='col'></th>
-
+                                        <th scope='Col'>Id</th>
+                                        <th scope='col'>MainText</th>
+                                        <th scope='col'>Topic</th>
+                                        <th scope='col'></th>
+                                        <th scope='col'></th>
                                     </tr>
                                 </thead>
 
                                 <tbody>
-                        
                                         {data.map((item,index) => (
                                             <tr key={item.id}>
                                                 <td>{item.id != null && item.id}</td>
@@ -62,9 +82,9 @@ function Questions()
 
                                                
 
-                                                {/*<td><Link> <Button  onClick={(event) => QuestionEdit(event)} name={index}>Edit</Button></Link> </td>*/}
+                                                {/* <td><Link to='/Questions/QuestionEdit'> <Button  onClick={(event) => QuestionEdit(event)} name={index}>Edit</Button></Link> </td>
 
-                                                {/*<td><Link to=""><Button variant='dark' onClick={(event) => Delete(event)} name={index}>Delete</Button></Link></td>*/}
+                                                <td><Button variant='dark' onClick={() => handleDelete(item.id)} name={index}>Delete</Button></td> */}
                                             </tr>
                                             
                                             ))}
