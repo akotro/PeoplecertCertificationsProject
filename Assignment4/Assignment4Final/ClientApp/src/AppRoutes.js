@@ -22,6 +22,7 @@ import ExamQuestionList from './components/Exam_CRUD/ExamQuestionList';
 
 import Login from './components/auth/Login'
 import Register from './components/auth/Register'
+import AddQuestionToExam from './components/Exam_CRUD/AddQuestionToExam';
 
 const AppRoutes = [
     {
@@ -118,12 +119,16 @@ const AppRoutes = [
         // requireAuth: true,
         element: <ExamQuestionList/>
     },
-
+    {
+        path: '/AddQuestionToExam',
+        element: <AddQuestionToExam />
+    },
     //this needs to stay as the last path
     {
         path: '/notauth',
         element: <NotAuth />
     },
+    
     {
         path: '*',
         element: <NotFound />

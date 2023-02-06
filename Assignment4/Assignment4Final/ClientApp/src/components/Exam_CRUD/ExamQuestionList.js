@@ -1,28 +1,60 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import CandidateEdit from "../Candidate_CRUD/CandidateEdit";
 import { useNavigate, Link } from "react-router-dom";
-import { useLocation } from 'react-router-dom'
+import { AuthenticationContext } from '../auth/AuthenticationContext'
+
 import { ListGroup, ListGroupItem, Button, Table, Row, Stack } from 'react-bootstrap';
 
 import axios from 'axios';
-
-
-
-
-
+import { useLocation } from 'react-router-dom'
 
 function ExamQuestionList() {
 
 
-    const location = useLocation()
-    const Exam = location.state.data;
-    const questions = Exam.questions;
-    const [data, setData] = useState([Exam.questions])
+    const location = useLocation();
+    let navigate = useNavigate();
+    const Data = location.state.data;
     
-    console.log('exam object')
-    console.log(Exam);
-    console.log('questions array')
-    console.log(questions);
+    const [questions, setQuestions] = useState([]);
+    const [exam, setExam] = useState([]);
+    
+    
+    
+    
+    useEffect(() => {
+        setQuestions(Data.questions)
+        setExam(Data)
+        
+    },[]);
+
+    const handleAdd = (exam) => {
+        
+        navigate('/AddQuestionToExam',{state : { data : exam }})
+    } 
+
+    const handleRemove = (examR,questR) =>{
+        console.log('inside remove')
+         let filtered =examR.questions.filter(question => question.id !== questR.id );
+         examR.questions = filtered;
+         axios.put(`https://localhost:7196/api/Exam/${examR.id}`,examR)
+         setExam(examR)
+         setQuestions(examR.questions)
+         console.log(filtered);
+         console.log(exam,"exam")
+         console.log(questions);
+    }
+
+    const makeButtons = (exam,question) =>{
+        return(
+            <div>
+                <Button onClick= { () => handleRemove(exam,question)}>Remove</Button>
+                
+            </div>
+        )
+    }
+
+
+
     function Replace(temp) {
         var parser = new DOMParser();
 
@@ -32,38 +64,31 @@ function ExamQuestionList() {
 
     }
 
+
+
     return (
-        <div>
-            <Table>
-                <thead>
-                    <tr>
-                        <th>Text</th>
-                        <th>Topic</th>
-                        <th>DifficultyLevel</th>
+    <div>
+        <Table>
+            <Button onClick = { () =>handleAdd(exam) }>Add Question</Button>
+            <p>Number Of Questions : {questions.length}</p>
+            <thead>
+                <tr>
+                    <th>Number</th>
+                    <th>text</th>
+                </tr>
+            </thead>
+            <tbody>
+                {questions.map((quest,index) =>
+                    
+                    <tr key={index}>
+                        <td>{Replace(quest.text)}</td>
+                        <td>{makeButtons(exam,quest)}</td>
                     </tr>
-                </thead>
-                <tbody>
-                    {data.map((question, index) => {
-                        {console.log('first map question',question)}
-                        <div key ={index}>
-                            { question.map((koukou, index) => {
-                                {console.log('second map',koukou)}
-                            <tr key={index}>
-                                <td>{koukou.text}</td>
-                               <td>{index}</td>
-                                <td>{koukou.topic.id}</td>
-                            </tr>
-                        })
-                        }
-                        </div>
-                    })}
-                </tbody>
-            </Table>
-        </div>
-
+                   
+                )}
+            </tbody>
+        </Table>
+    </div>
     )
-
-
-
 }
 export default ExamQuestionList;

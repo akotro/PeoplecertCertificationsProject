@@ -31,6 +31,7 @@ public class CertificatesRepository : ICertificatesRepository
         return await _context.Certificates
             .AsSplitQuery()
             .Include(q => q.Topics)
+            .ThenInclude(topic => topic.Questions)
             .Include(q => q.Exams)
             .FirstOrDefaultAsync(q => q.Id == id);
     }
