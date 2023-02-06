@@ -2,7 +2,6 @@ import ApiAuthorzationRoutes from './components/api-authorization/ApiAuthorizati
 import Home from "./components/Home";
 
 import CertificateForm from './components/Certificate_CRUD/CertificateForm'
-import EditCertificateForm from './components/Certificate_CRUD/CertificateForm'
 import CertificateList from './components/Certificate_CRUD/CertificateList'
 import NotFound from './components/Common/NotFound';
 import NotAuth from './components/auth/NotAuth';

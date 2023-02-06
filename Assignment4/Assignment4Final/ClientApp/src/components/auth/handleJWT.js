@@ -35,6 +35,18 @@ export function getClaims(){
     return response;
 }
 
+export function getUserId(token) {
+    const dataToken = JSON.parse(atob(token.split('.')[1]));
+    const claims = [];
+    for (const property in dataToken) {
+        claims.push({ name: property, value: dataToken[property] });
+    }
+    if (claims.length > 0) {
+        return claims.find(claim => claim.name === 'userId').value
+    }
+    return ""
+}
+
 export function logout(navigate) {
     localStorage.removeItem(tokenKey);
     localStorage.removeItem(expirationKey);
