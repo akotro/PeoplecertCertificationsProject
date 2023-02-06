@@ -32,22 +32,22 @@ function ExamQuestionList() {
         navigate('/AddQuestionToExam',{state : { data : exam }})
     } 
 
-    const handleRemove = (examR,questR) =>{
+    const handleRemove = (questR) =>{
         console.log('inside remove')
-         let filtered =examR.questions.filter(question => question.id !== questR.id );
-         examR.questions = filtered;
-         axios.put(`https://localhost:7196/api/Exam/${examR.id}`,examR)
-         setExam(examR)
-         setQuestions(examR.questions)
-         console.log(filtered);
-         console.log(exam,"exam")
-         console.log(questions);
+        //  let filtered =examR.questions.filter(question => question.id !== questR.id );
+        console.log('before',exam)
+        exam.questions= exam.questions.filter( q => q.id !== questR.id )
+        console.log(exam)
+        //  examR.questions = filtered;
+         axios.put(`https://localhost:7196/api/Exam/${exam.id}`,exam).then(setExam(exam))
+         
+         setQuestions(exam.questions)
     }
 
     const makeButtons = (exam,question) =>{
         return(
             <div>
-                <Button onClick= { () => handleRemove(exam,question)}>Remove</Button>
+                <Button onClick= { () => handleRemove(question)}>Remove</Button>
                 
             </div>
         )
