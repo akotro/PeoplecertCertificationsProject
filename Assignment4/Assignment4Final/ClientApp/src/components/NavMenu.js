@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { Collapse, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
 import { Button } from 'react-bootstrap';
 import { AuthenticationContext } from "./auth/AuthenticationContext";
-import Authorized from './auth/Authorized';
+import Authorized from "./auth/Authorized";
 
 import { Link, useNavigate } from 'react-router-dom';
 import './NavMenu.css';
@@ -15,15 +15,15 @@ function NavMenu() {
     const { update, claims } = useContext(AuthenticationContext);
     const [claim, setClaim] = useState(claims.filter(x => x.name === "role")[0]?.value);
 
-    const getUserEmail = () => {
-        return claims.filter(x => x.name === "email")[0]?.value;
-    }
+  const getUserEmail = () => {
+    return claims.filter((x) => x.name === "email")[0]?.value;
+  };
 
     const [collapsed, setCollapsed] = useState(true);
 
-    const toggleNavbar = () => {
-        setCollapsed(!collapsed);
-    }
+  const toggleNavbar = () => {
+    setCollapsed(!collapsed);
+  };
 
     return (
         <header>

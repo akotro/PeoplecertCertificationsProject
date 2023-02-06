@@ -8,7 +8,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import Register from "../auth/Register";
 import "react-datepicker/dist/react-datepicker.css";
-import axios from 'axios';
+import axios from "axios";
 
 export default function CandidateEdit(props) {
 
@@ -37,47 +37,63 @@ export default function CandidateEdit(props) {
         address: []
     });
 
-    const fetchData = () => {
-        if (params.id !== undefined) {
-            axios.get(`https://localhost:7196/api/Candidate/${params.id}`).then((response) => {
-                setCandidate(response.data.data);
-            }).catch(function (error) {
-                console.log(error);
-            });
-        } else {
-            axios.get(`https://localhost:7196/api/accounts/listUsers`).then((response) => {
-                setAllusers(response.data);
-            }).catch(function (error) {
-                console.log(error);
-            });
-
-
-        }
-
-        axios.get(`https://localhost:7196/api/Genders`).then((response) => {
-            setGenders(response.data.data);
-        }).catch(function (error) {
-            console.log(error);
+  const fetchData = () => {
+    if (params.id !== undefined) {
+      axios
+        .get(`https://localhost:7196/api/Candidate/${params.id}`)
+        .then((response) => {
+          setCandidate(response.data.data);
+        })
+        .catch(function (error) {
+          console.log(error);
         });
-
-        axios.get(`https://localhost:7196/api/Languages`).then((response) => {
-            setLanguages(response.data.data);
-        }).catch(function (error) {
-            console.log(error);
+    } else {
+      axios
+        .get(`https://localhost:7196/api/accounts/listUsers`)
+        .then((response) => {
+          setAllusers(response.data);
+        })
+        .catch(function (error) {
+          console.log(error);
         });
+    }
 
-        axios.get(`https://localhost:7196/api/PhotoIdTypes`).then((response) => {
-            setPhotoIdTypes(response.data.data);
-        }).catch(function (error) {
-            console.log(error);
-        });
+    axios
+      .get(`https://localhost:7196/api/Genders`)
+      .then((response) => {
+        setGenders(response.data.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
 
-        axios.get(`https://localhost:7196/api/Countries`).then((response) => {
-            setCountries(response.data.data);
+    axios
+      .get(`https://localhost:7196/api/Languages`)
+      .then((response) => {
+        setLanguages(response.data.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
 
-        }).catch(function (error) {
-            console.log(error);
-        });
+    axios
+      .get(`https://localhost:7196/api/PhotoIdTypes`)
+      .then((response) => {
+        setPhotoIdTypes(response.data.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+    axios
+      .get(`https://localhost:7196/api/Countries`)
+      .then((response) => {
+        setCountries(response.data.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
 
     }
 
@@ -194,42 +210,42 @@ export default function CandidateEdit(props) {
         }
     };
 
-    const addAddress = () => {
-        setCandidate({
-            ...candidate, address: [...candidate.address,
-            { id: 0, address1: "", address2: "", city: "", state: "", country: {} }
-            ]
-        })
-    }
+  const addAddress = () => {
+    setCandidate({
+      ...candidate,
+      address: [
+        ...candidate.address,
+        { id: 0, address1: "", address2: "", city: "", state: "", country: {} },
+      ],
+    });
+  };
 
-    const removeAddress = (removeIndex) => {
+  const removeAddress = (removeIndex) => {
+    const updatedAddress = [...candidate.address];
+    updatedAddress.splice(removeIndex, 1);
+    console.log(updatedAddress);
+    setCandidate({ ...candidate, address: updatedAddress });
+  };
+  const convertStringToDate = (dateString) => {
+    //intial format
+    //2015-07-15
+    const date = new Date(dateString);
+    //Wed Jul 15 2015 00:00:00 GMT-0700 (Pacific Daylight Time)
+    const finalDateString = date.toISOString(date);
+    //2015-07-15T00:00:00.000Z
 
-        const updatedAddress = [...candidate.address];
-        updatedAddress.splice(removeIndex, 1);
-        console.log(updatedAddress)
-        setCandidate({ ...candidate, address: updatedAddress });
+    console.log(finalDateString); // "1930-07-17T00:00:00.000Z"
+    return finalDateString;
+  };
 
-    }
-    const convertStringToDate = (dateString) => {
-        //intial format 
-        //2015-07-15
-        const date = new Date(dateString);
-        //Wed Jul 15 2015 00:00:00 GMT-0700 (Pacific Daylight Time)
-        const finalDateString = date.toISOString(date)
-        //2015-07-15T00:00:00.000Z
+  const convertDateToString = (date) => {
+    //console.log(date);
+    let kati = new Date(date);
 
-        console.log(finalDateString); // "1930-07-17T00:00:00.000Z"
-        return finalDateString;
-    }
+    let formattedDate = kati.toISOString().substr(0, 10);
 
-    const convertDateToString = (date) => {
-        //console.log(date);
-        let kati = new Date(date);
-
-        let formattedDate = kati.toISOString().substr(0, 10);
-
-        return formattedDate;
-    }
+    return formattedDate;
+  };
 
     return (
         <div>
