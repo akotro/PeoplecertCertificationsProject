@@ -17,7 +17,7 @@ export default function Examination(props) {
     useEffect(() => {
         axios.put(`https://localhost:7196/api/CandidateExam/StartExam/${candExamId}`).then((response) => {
             setCandidateExam(response.data);
-            console.log(response.data);
+            // console.log(response.data);
         }).catch(function (error) {
             console.log(error);
         });
@@ -49,8 +49,8 @@ export default function Examination(props) {
     const handleOptionChange = (event, questionIndex) => {
         // Note(vmavraganis): Code used to keep the selected option of the user for each question (and update if its the correct or not)
         const chosenOption = event.target.value;
-        console.log(questionIndex);
-        console.log(candidateExam.candidateExamAnswers);
+        // console.log(questionIndex);
+        // console.log(candidateExam.candidateExamAnswers);
         var examAnswersIndex = 0;
         const updatedCandidateExamAnswers = candidateExam.candidateExamAnswers.map((answer, index) => {
             if (index === questionIndex) {
@@ -94,7 +94,7 @@ export default function Examination(props) {
 
                     <ol>
                         {question.options.map((option, index) => (
-                            <li key={index}>{Replace(option.text)}</li>
+                            <li key={option.text}>{Replace(option.text)}</li>
                         ))}
                     </ol>
 

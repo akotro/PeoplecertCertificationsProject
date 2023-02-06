@@ -85,6 +85,7 @@ namespace Assignment4Final.Controllers
                 return NotFound(new {description ="Candidate with this userId not found "});
             }
             var candidatesTakenExams = await _candExamService.GetNotTakenCandidateExamsOfCandidateAsync(candidate);
+            var testing = _candExamService.GetListOfCandidateExamDtosFromListOfCandidateExam(candidatesTakenExams);
             return Ok(_candExamService.GetListOfCandidateExamDtosFromListOfCandidateExam(candidatesTakenExams));
 
         }
