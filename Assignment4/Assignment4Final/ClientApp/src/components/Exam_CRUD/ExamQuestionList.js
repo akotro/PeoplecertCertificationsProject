@@ -18,9 +18,10 @@ function ExamQuestionList() {
     const Exam = location.state.data;
     const questions = Exam.questions;
     const [data, setData] = useState([Exam.questions])
-
+    
+    console.log('exam object')
     console.log(Exam);
-    console.log('its here')
+    console.log('questions array')
     console.log(questions);
     function Replace(temp) {
         var parser = new DOMParser();
@@ -43,24 +44,19 @@ function ExamQuestionList() {
                 </thead>
                 <tbody>
                     {data.map((question, index) => {
+                        {console.log('first map question',question)}
                         <div key ={index}>
                             { question.map((koukou, index) => {
+                                {console.log('second map',koukou)}
                             <tr key={index}>
                                 <td>{koukou.text}</td>
                                <td>{index}</td>
                                 <td>{koukou.topic.id}</td>
                             </tr>
-
                         })
                         }
-
                         </div>
-                       
                     })}
-
-
-
-
                 </tbody>
             </Table>
         </div>
