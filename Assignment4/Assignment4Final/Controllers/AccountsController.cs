@@ -50,72 +50,72 @@ public class AccountsController : ControllerBase
 
     [HttpPost("makeAdmin")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
-    public async Task<ActionResult> MakeAdmin([FromBody] string userId)
+    public async Task<ActionResult> MakeAdmin([FromBody] string email)
     {
-        var user = await userManager.FindByIdAsync(userId);
+        var user = await userManager.FindByEmailAsync(email);
         await userManager.AddClaimAsync(user, new Claim("role", "admin"));
         return NoContent();
     }
 
     [HttpPost("removeAdmin")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
-    public async Task<ActionResult> RemoveAdmin([FromBody] string userId)
+    public async Task<ActionResult> RemoveAdmin([FromBody] string email)
     {
-        var user = await userManager.FindByIdAsync(userId);
+        var user = await userManager.FindByEmailAsync(email);
         await userManager.RemoveClaimAsync(user, new Claim("role", "admin"));
         return NoContent();
     }
 
     [HttpPost("makeMarker")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
-    public async Task<ActionResult> MakeMarker([FromBody] string userId)
+    public async Task<ActionResult> MakeMarker([FromBody] string email)
     {
-        var user = await userManager.FindByIdAsync(userId);
+        var user = await userManager.FindByEmailAsync(email);
         await userManager.AddClaimAsync(user, new Claim("role", "marker"));
         return NoContent();
     }
 
     [HttpPost("removeMarker")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
-    public async Task<ActionResult> RemoveMarker([FromBody] string userId)
+    public async Task<ActionResult> RemoveMarker([FromBody] string email)
     {
-        var user = await userManager.FindByIdAsync(userId);
+        var user = await userManager.FindByEmailAsync(email);
         await userManager.RemoveClaimAsync(user, new Claim("role", "marker"));
         return NoContent();
     }
 
     [HttpPost("makeQualityControl")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
-    public async Task<ActionResult> MakeQualityControl([FromBody] string userId)
+    public async Task<ActionResult> MakeQualityControl([FromBody] string email)
     {
-        var user = await userManager.FindByIdAsync(userId);
+        var user = await userManager.FindByEmailAsync(email);
         await userManager.AddClaimAsync(user, new Claim("role", "qualitycontrol"));
         return NoContent();
     }
 
     [HttpPost("removeQualityControl")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
-    public async Task<ActionResult> RemoveQualityControl([FromBody] string userId)
+    public async Task<ActionResult> RemoveQualityControl([FromBody] string email)
     {
-        var user = await userManager.FindByIdAsync(userId);
+        var user = await userManager.FindByEmailAsync(email);
         await userManager.RemoveClaimAsync(user, new Claim("role", "qualitycontrol"));
         return NoContent();
     }
 
     [HttpPost("makeCandidate")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
-    public async Task<ActionResult> MakeCandidate([FromBody] string userId)
+    public async Task<ActionResult> MakeCandidate([FromBody] string email)
     {
-        var user = await userManager.FindByIdAsync(userId);
+        var user = await userManager.FindByEmailAsync(email);
         await userManager.AddClaimAsync(user, new Claim("role", "candidate"));
         return NoContent();
     }
 
     [HttpPost("removeCandidate")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
-    public async Task<ActionResult> RemoveCandidate([FromBody] string userId)
+    public async Task<ActionResult> RemoveCandidate([FromBody] string email)
     {
-        var user = await userManager.FindByIdAsync(userId);
+        var user = await userManager.FindByEmailAsync(email);
         await userManager.RemoveClaimAsync(user, new Claim("role", "candidate"));
         return NoContent();
     }
@@ -168,9 +168,14 @@ public class AccountsController : ControllerBase
 
     private async Task<AuthenticationResponseDto> BuildToken(LoginDto userCredentials)
     {
-        var claims = new List<Claim>() { new Claim("email", userCredentials.Email) };
-
         var user = await userManager.FindByNameAsync(userCredentials.Email);
+
+        var claims = new List<Claim>()
+        {
+            new Claim("email", userCredentials.Email),
+            new Claim("userId", user.Id)
+        };
+
         var claimsDB = await userManager.GetClaimsAsync(user);
 
         claims.AddRange(claimsDB);
@@ -190,6 +195,7 @@ public class AccountsController : ControllerBase
 
         return new AuthenticationResponseDto()
         {
+            Email = user.Email,
             Token = new JwtSecurityTokenHandler().WriteToken(token),
             Expiration = expiration
         };

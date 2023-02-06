@@ -63,7 +63,10 @@ namespace Assignment4Final
             // builder.Services.AddAuthentication().AddIdentityServerJwt();
 
             builder.Services
-                .AddIdentity<AppUser, IdentityRole>()
+                .AddIdentity<AppUser, IdentityRole>(
+                    // NOTE:(akotro) Users must have unique emails so that we can get the user by their email
+                    opt => opt.User.RequireUniqueEmail = true
+                )
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 

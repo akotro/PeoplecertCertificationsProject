@@ -12,6 +12,8 @@ public class CertificateDto
     public int? MaxMark { get; set; }
     public string? Category { get; set; }
     public bool? Active { get; set; }
+
+    [JsonProperty(ItemReferenceLoopHandling = ReferenceLoopHandling.Ignore)]
     public List<TopicDto>? Topics { get; set; }
 
     [JsonProperty(ItemReferenceLoopHandling = ReferenceLoopHandling.Ignore)]

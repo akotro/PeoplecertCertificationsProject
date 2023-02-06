@@ -1,6 +1,7 @@
-﻿import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState, useContext } from "react";
 import CandidateEdit from "../Candidate_CRUD/CandidateEdit";
 import { useNavigate, Link } from "react-router-dom";
+import { AuthenticationContext } from '../auth/AuthenticationContext'
 
 import { ListGroup, ListGroupItem, Button, Table, Row, Stack } from 'react-bootstrap';
 
@@ -13,8 +14,17 @@ function CandidateList(props) {
     //const [buttons, setButtons] = useState();
     const [user, setUser] = useState();
     let navigate = useNavigate();
+    const { update, claims } = useContext(AuthenticationContext);
+    const [role, setRole] = useState(claims.find(claim => claim.name === 'role').value)
 
     useEffect(() => {
+        console.log(claims.findIndex(claim => claim.name === 'role' && claim.value === 'candidate'))
+        console.log(claims.findIndex(claim => claim.name === 'role' && claim.value === 'admin'))
+        console.log(update)
+        console.log(claims)
+        console.log(role)
+
+
         axios.get('https://localhost:7196/api/Candidate').then((response) => {
             setData(response.data);
             //console.log(data)
@@ -48,76 +58,76 @@ function CandidateList(props) {
     const handleEdit = (candId) => {
         //console.log("edit for id  = ", candId);
 
-        navigate(`/admin/candidate/${candId}`);
+        navigate(`/candidate/${candId}`);
 
 
     }
 
-const handleDetails = (candId) => {
-    console.log("details for id  = ", candId);
+    const handleDetails = (candId) => {
+        console.log("details for id  = ", candId);
+        navigate(`/candidate/${candId}`);
 
 
 
-}
+    }
 
-const makeButtons = (candId) => {
-    if (user) {
-        if (user === "admin") {
+    const makeButtons = (candId) => {
+        if (role === "admin") {
             return (
                 <div>
                     <Button onClick={() => handleDelete(candId)}>Delete</Button>
                     <Button onClick={() => handleEdit(candId)}>Edit</Button>
                 </div>
             );
-        } else if (user === "qc") {
-            return <Button onClick={() => handleDetails(candId)}>no action</Button>;
+        } else if (role === "qualitycontrol") {
+            return <Button onClick={() => handleEdit(candId)}>Details</Button>
+
         } else {
             return <div> no buttons for you</div>
         }
     }
-}
 
-const convertDateToString = (date) => {
-    date = new Date(date);
-    const formattedDate = date.toLocaleDateString()
-    //console.log(formattedDate);
-    return formattedDate;
-}
+    const convertDateToString = (date) => {
+        date = new Date(date);
+        const formattedDate = date.toLocaleDateString()
+        //console.log(formattedDate);
+        return formattedDate;
+    }
 
-return (
-    <div>
-        {user === "admin" &&
-            <Link to='/admin/candidate/create'>
-            <Button> create</Button>
-            
-            </Link>
-        }
-        <Table striped borderless hover id='list_of_allcands'>
-            <thead>
-                <tr>
-                    <th>Candidate Number</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Email</th>
-                    <th>Date of Birth</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {data.map((candidate, index) =>
-                    <tr key={index}>
-                        <td>{candidate.candidateNumber}</td>
-                        <td>{candidate.firstName}</td>
-                        <td>{candidate.lastName}</td>
-                        <td>{candidate.email}</td>
-                        <td>{convertDateToString(candidate.dateOfBirth)}</td>
-                        <td>{makeButtons(candidate.appUserId)}</td>
+    return (
+        <div>
+            {user === "admin" &&
+                <Link to='/admin/candidate/create'>
+                    <Button> create</Button>
+
+                </Link>
+            }
+            <Table striped borderless hover id='list_of_allcands'>
+                <thead>
+                    <tr>
+                        <th>Candidate Number</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                        <th>Date of Birth</th>
+                        <th>Actions</th>
                     </tr>
-                )}
-            </tbody>
-        </Table>
-    </div>
-);
+                </thead>
+                <tbody>
+                    {data.map((candidate, index) =>
+                        <tr key={index}>
+                            <td>{candidate.candidateNumber}</td>
+                            <td>{candidate.firstName}</td>
+                            <td>{candidate.lastName}</td>
+                            <td>{candidate.email}</td>
+                            <td>{convertDateToString(candidate.dateOfBirth)}</td>
+                            <td>{makeButtons(candidate.appUserId)}</td>
+                        </tr>
+                    )}
+                </tbody>
+            </Table>
+        </div>
+    );
 
 }
 
