@@ -12,7 +12,7 @@ import { AuthenticationContext } from "./components/auth/AuthenticationContext";
 
 function App() {
   //static displayName = App.name;
-  const [claims, setClaims] = useState(["o"]);
+  const [claims, setClaims] = useState([]);
 
   useEffect(() => {
     setClaims(getClaims());

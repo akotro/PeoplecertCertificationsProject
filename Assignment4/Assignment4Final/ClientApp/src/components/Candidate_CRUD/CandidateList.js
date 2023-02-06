@@ -24,51 +24,31 @@ function CandidateList(props) {
         console.log(claims)
         console.log(role)
 
-
         axios.get('https://localhost:7196/api/Candidate').then((response) => {
             setData(response.data);
-            //console.log(data)
+            console.log(response.data)
+            console.log("hey")
         }).catch(function (error) {
             console.log(error);
         });
-        // if (!user) {
-        //     setUser("admin");
-
-        // }
-
-        //setButtons(makeButtons());
     }, []);
 
     const handleDelete = (candId) => {
         console.log("delete for id  = ", candId)
-
         const confirmDelete = window.confirm("Are you sure you want to delete this certificate?");
-
-
-        axios.delete(`https://localhost:7196/api/Candidate/${candId}`).then(response => {
-            console.log(response)
-            setData(prevData => prevData.filter(item => item.appUserId !== candId));
-        }).catch(response => {
-            console.log(response)
-        });
-
-
+        if (confirmDelete) {
+            axios.delete(`https://localhost:7196/api/Candidate/${candId}`).then(response => {
+                console.log(response)
+                setData(prevData => prevData.filter(item => item.appUserId !== candId));
+            }).catch(response => {
+                console.log(response)
+            });
+        }
     }
 
     const handleEdit = (candId) => {
         //console.log("edit for id  = ", candId);
-
         navigate(`/candidate/${candId}`);
-
-
-    }
-
-    const handleDetails = (candId) => {
-        console.log("details for id  = ", candId);
-        navigate(`/candidate/${candId}`);
-
-
-
     }
 
     const makeButtons = (candId) => {

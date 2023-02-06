@@ -1,12 +1,9 @@
-import React, { useEffect, useState, useContext } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, {  useState, useContext } from "react";
+import { useNavigate,  } from "react-router-dom";
 import {AuthenticationContext} from '../auth/AuthenticationContext'
 import { getClaims, saveToken } from './handleJWT'
 
-import CandidateEdit from "../Candidate_CRUD/CandidateEdit";
-
-
-import { ListGroup, ListGroupItem, Button, Table, Row, Col, Stack, Form, CloseButton } from 'react-bootstrap';
+import { Button,  Row, Col,  Form, } from 'react-bootstrap';
 
 import axios from 'axios';
 
@@ -29,7 +26,6 @@ export default function Register() {
             }
         ).catch(function (error) {
             setErrors(error.response.data);
-
             console.log(error);
         });
     }
@@ -61,9 +57,7 @@ export default function Register() {
                     </Col>
                 </Row>
                 <Button variant="primary" type="submit">Register</Button>
-                {/* <CandidateEdit /> */}
             </Form>
         </div>
-
     );
 }
