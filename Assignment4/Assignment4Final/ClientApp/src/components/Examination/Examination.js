@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from 'axios';
 
@@ -46,7 +46,7 @@ export default function Examination(props) {
     };
 
     const handleOptionChange = (event, questionIndex) => {
-        // Note(vmavraganis): Code used to keep the selected option of the user for each question
+        // Note(vmavraganis): Code used to keep the selected option of the user for each question (and update if its the correct or not)
         const chosenOption = event.target.value;
         const updatedCandidateExamAnswers = candidateExam.candidateExamAnswers.map((answer, index) => {
             if (index === questionIndex) {
@@ -107,7 +107,9 @@ export default function Examination(props) {
                 {currentPage < totalPages && <button onClick={() => setCurrentPage(currentPage + 1)}>Next</button>}
             </div>
             <hr></hr>
+
             <button onClick={saveCandidateExam}>See Results</button>
+
         </div>
     );
 };
