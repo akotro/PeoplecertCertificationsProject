@@ -1,9 +1,9 @@
 import ApiAuthorzationRoutes from './components/api-authorization/ApiAuthorizationRoutes';
 import Home from "./components/Home";
 
-import CreateCertificateForm from './components/Certificate_CRUD/Certificate_Create'
-import EditCertificateForm from './components/Certificate_CRUD/Certificate_Edit'
-import Cert_homepage from './components/Certificate_CRUD/Certificate_Homepage'
+import CertificateForm from './components/Certificate_CRUD/CertificateForm'
+import EditCertificateForm from './components/Certificate_CRUD/CertificateForm'
+import CertificateList from './components/Certificate_CRUD/CertificateList'
 import NotFound from './components/Common/NotFound';
 import NotAuth from './components/auth/NotAuth';
 
@@ -41,33 +41,32 @@ const AppRoutes = [
         needsAdmin: true,
         needsQc: true,
         needsCand: true,
-        element: <Cert_homepage />
+        element: <CertificateList />
     },
     {
         path: '/certificate/create',
         needsAdmin: true,
-        element: <CreateCertificateForm />
+        element: <CertificateForm />
     },
-
     {
         path: '/certificate/edit/:id',
         needsAdmin: true,
-        element: <EditCertificateForm />
+        element: <CertificateForm />
     },
     //-----------------Questions-------------------
     {
-        path: '/Questions/QuestionHomePage',
+        path: '/questions',
         needsAdmin: true,
         needsQc: true,
         element: <Questions />
     },
     {
-        path: '/Questions/QuestionEdit',
+        path: '/questions/edit/:id',
         needsAdmin: true,
         element: <QuestionEdit />
     },
     {
-        path: '/Questions/QuestionCreate',
+        path: '/questions/create',
         needsAdmin: true,
         element: <QuestionCreate />
     },
@@ -90,11 +89,6 @@ const AppRoutes = [
         path: '/candidate/:id',
         needsAdmin: true,
         element: <CandidateEdit />
-    },
-    {
-        path: '/candidate',
-        // requireAuth: true,
-        element: <CandidateHomepage />
     },
     {
         path: '/candidate/AvailableExams',

@@ -12,7 +12,7 @@ import axios from 'axios';
 export default function CandidateEdit(props) {
 
     const params = useParams();
-    const router = useNavigate();
+    const navigate = useNavigate();
     const [genders, setGenders] = useState([]);
     const [languages, setLanguages] = useState([]);
     const [photoIdTypes, setPhotoIdTypes] = useState([]);
@@ -76,7 +76,9 @@ export default function CandidateEdit(props) {
     }
 
     const getId = () => {
-        return claims.find(claim => claim.name === 'userId').value
+        if (claims.name) {
+            return claims.find(claim => claim.name === 'userId').value
+        }
     }
     const ifRoleThenSetit = () => {
         if (claims.name) {
@@ -97,8 +99,8 @@ export default function CandidateEdit(props) {
     }, []);
 
     useEffect(() => {
-        if( claims && getId) {
-        setCandidate((prevState) => ({ ...prevState, appUserId: getId() }));
+        if (claims && getId) {
+            setCandidate((prevState) => ({ ...prevState, appUserId: getId() }));
 
         }
         console.log(candidate)
@@ -234,11 +236,8 @@ export default function CandidateEdit(props) {
     return (
         <div>
             <fieldset disabled={role ? (role.value === "qualitycontrol") : false}>
-
                 <Form onSubmit={handleSubmit} className="lead" >
-                    <p>{params.id}</p>
                     <Stack gap={3}>
-
                         {!params.id && <div>
                             need to add register part
 
@@ -364,7 +363,6 @@ export default function CandidateEdit(props) {
                                 {candidate.address &&
                                     candidate.address.map((item, index) => (
                                         <div key={index} name={item.id} className="my-1 ">
-
                                             <Row>
                                                 <details className="display-6 fs-4">
                                                     <summary>
@@ -374,7 +372,6 @@ export default function CandidateEdit(props) {
                                                         <div className="justify-content-end">
                                                             <CloseButton onClick={() => removeAddress(index)} />
                                                         </div>
-
                                                         <Row>
                                                             <Col>
                                                                 <Form.Group >
@@ -431,16 +428,15 @@ export default function CandidateEdit(props) {
                                             </Row>
                                         </div>
                                     ))}
-                                <Button onClick={addAddress}>add address</Button>
+                                {role.value !== "qualitycontrol" &&
+                                    <Button onClick={addAddress} className='d-grid gap-2 col-6 mx-auto py-2 my-2' >add address</Button>
+                                }
                             </Stack>
                         </div>
-
-
 
                         <hr />
 
                         <div className="display-6 fs-2" >Identification Details</div>
-
                         <Row>
                             <Col>
                                 <Form.Group >
@@ -466,24 +462,23 @@ export default function CandidateEdit(props) {
                                         onChange={handleChange}
                                         required>
                                         <option value="" hidden >Please choose your ID type... </option>
-
                                         {photoIdTypes.map((pId, index) =>
                                             <option key={index}
                                                 value={pId.id}
                                             >{pId.idType}</option>
                                         )}
                                     </Form.Select>
-
                                 </Form.Group>
                             </Col>
                         </Row>
-
-                        <Button variant="primary" type="submit">Save</Button>
-                        <Button variant="primary" onClick={() => router(-1)}>Go back</Button>
+                        {role.value !== "qualitycontrol" &&
+                            <Button variant="primary" type="submit">
+                                Save
+                            </Button>}
                     </Stack>
-
                 </Form>
             </fieldset>
+            <Button variant='dark' className='d-grid gap-2 col-12 mx-auto py-2 my-2' onClick={() => navigate(-1)}>Go back</Button>
         </div>
     )
 }
