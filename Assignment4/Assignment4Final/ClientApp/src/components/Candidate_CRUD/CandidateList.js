@@ -31,10 +31,10 @@ function CandidateList(props) {
         }).catch(function (error) {
             console.log(error);
         });
-        if (!user) {
-            setUser("admin");
+        // if (!user) {
+        //     setUser("admin");
 
-        }
+        // }
 
         //setButtons(makeButtons());
     }, []);
@@ -74,9 +74,10 @@ function CandidateList(props) {
     const makeButtons = (candId) => {
         if (role === "admin") {
             return (
-                <div>
-                    <Button onClick={() => handleDelete(candId)}>Delete</Button>
+                <div className='d-flex gap-2'>
+
                     <Button onClick={() => handleEdit(candId)}>Edit</Button>
+                    <Button variant="dark" onClick={() => handleDelete(candId)}>Delete</Button>
                 </div>
             );
         } else if (role === "qualitycontrol") {
@@ -96,14 +97,14 @@ function CandidateList(props) {
 
     return (
         <div>
-            {user === "admin" &&
-                <Link to='/admin/candidate/create'>
-                    <Button> create</Button>
-
-                </Link>
-            }
-            <Table striped borderless hover id='list_of_allcands'>
-                <thead>
+            {role === "admin" ?
+                <Button variant='dark'
+                    className='d-grid gap-2 col-6 mx-auto py-2 my-2'
+                    onClick={() => navigate('/candidate/create')}
+                > Add a Candidate </Button>
+                : null}
+            <Table striped hover borderless className="text-center" id='list_of_allcands'>
+                <thead >
                     <tr>
                         <th>Candidate Number</th>
                         <th>First Name</th>
@@ -113,7 +114,7 @@ function CandidateList(props) {
                         <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody >
                     {data.map((candidate, index) =>
                         <tr key={index}>
                             <td>{candidate.candidateNumber}</td>
@@ -121,7 +122,7 @@ function CandidateList(props) {
                             <td>{candidate.lastName}</td>
                             <td>{candidate.email}</td>
                             <td>{convertDateToString(candidate.dateOfBirth)}</td>
-                            <td>{makeButtons(candidate.appUserId)}</td>
+                            <td className="d-flex justify-content-center">{makeButtons(candidate.appUserId)}</td>
                         </tr>
                     )}
                 </tbody>
