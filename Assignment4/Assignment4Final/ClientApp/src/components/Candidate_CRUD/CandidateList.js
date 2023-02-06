@@ -15,11 +15,14 @@ function CandidateList(props) {
     const [user, setUser] = useState();
     let navigate = useNavigate();
     const { update, claims } = useContext(AuthenticationContext);
+    const [role, setRole] = useState(claims.find(claim => claim.name === 'role').value)
 
     useEffect(() => {
         console.log(claims.findIndex(claim => claim.name === 'role' && claim.value === 'candidate'))
+        console.log(claims.findIndex(claim => claim.name === 'role' && claim.value === 'admin'))
         console.log(update)
         console.log(claims)
+        console.log(role)
 
 
         axios.get('https://localhost:7196/api/Candidate').then((response) => {
@@ -55,32 +58,32 @@ function CandidateList(props) {
     const handleEdit = (candId) => {
         //console.log("edit for id  = ", candId);
 
-        navigate(`/admin/candidate/${candId}`);
+        navigate(`/candidate/${candId}`);
 
 
     }
 
     const handleDetails = (candId) => {
         console.log("details for id  = ", candId);
+        navigate(`/candidate/${candId}`);
 
 
 
     }
 
     const makeButtons = (candId) => {
-        if (user) {
-            if (user === "admin") {
-                return (
-                    <div>
-                        <Button onClick={() => handleDelete(candId)}>Delete</Button>
-                        <Button onClick={() => handleEdit(candId)}>Edit</Button>
-                    </div>
-                );
-            } else if (user === "qc") {
-                return <Button onClick={() => handleDetails(candId)}>no action</Button>;
-            } else {
-                return <div> no buttons for you</div>
-            }
+        if (role === "admin") {
+            return (
+                <div>
+                    <Button onClick={() => handleDelete(candId)}>Delete</Button>
+                    <Button onClick={() => handleEdit(candId)}>Edit</Button>
+                </div>
+            );
+        } else if (role === "qualitycontrol") {
+            return <Button onClick={() => handleEdit(candId)}>Details</Button>
+
+        } else {
+            return <div> no buttons for you</div>
         }
     }
 
