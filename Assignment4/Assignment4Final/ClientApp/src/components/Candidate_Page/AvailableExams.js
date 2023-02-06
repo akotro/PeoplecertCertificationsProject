@@ -24,6 +24,7 @@ function AvailableExams(props) {
     }, []);
 
     const takeExam = (id) => {
+        console.log('Id of candidateExam:' + id);
         navigate(`/candidate/Examination/${1020}`);
     };
 

@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from 'axios';
 
 export default function Examination(props) {
 
     const params = useParams();
-    // const [candidateExam, setCandidateExam] = useState({ exam: { questions: [] } })
+    const [candidateExam, setCandidateExam] = useState({ exam: { questions: [] } })
     const [user, setUser] = useState();
     const candExamId = params.id;
 
-    const [candidateExam, setCandidateExam] = useState({
-        exam: { questions: [] },
-        CandidateExamAnswers: { ChoosenOptions: [] },
-    });
+    // const [candidateExam, setCandidateExam] = useState({
+    //     exam: { questions: [] },
+    //     CandidateExamAnswers: { ChoosenOptions: [] },
+    // });
 
     useEffect(() => {
         axios.put(`https://localhost:7196/api/CandidateExam/StartExam/${candExamId}`).then((response) => {
@@ -34,27 +34,43 @@ export default function Examination(props) {
         return doc.body.innerText;
     }
 
-    const saveCandidateExam = async () => {
-        try {
-            const response = await axios.put(`https://localhost:7196/api/CandidateExam/EndExam/${candExamId}`, {
-                candidateExam,
-            });
+    const saveCandidateExam = () => {
+        axios.put(`https://localhost:7196/api/CandidateExam/EndExam/${candExamId}`, {
+            candidateExam,
+        })
+        .then(response => {
             console.log(response.data);
-        } catch (error) {
+        })
+        .catch(error => {
             console.error(error);
+        });
     }
 
     const handleOptionChange = (event, questionIndex) => {
         // Note(vmavraganis): Code used to keep the selected option of the user for each question (and update if its the correct or not)
         const chosenOption = event.target.value;
+        console.log(questionIndex);
+        console.log(candidateExam.candidateExamAnswers);
+        var examAnswersIndex = 0;
         const updatedCandidateExamAnswers = candidateExam.candidateExamAnswers.map((answer, index) => {
             if (index === questionIndex) {
+                examAnswersIndex = index;
                 return { ...answer, chosenOption };
             }
             return answer;
         });
         setCandidateExam({ ...candidateExam, candidateExamAnswers: updatedCandidateExamAnswers });
+
+        updateCandidateExamAnswer(updatedCandidateExamAnswers[examAnswersIndex].id, updatedCandidateExamAnswers[examAnswersIndex]);
     };
+
+    const updateCandidateExamAnswer = (id, candidateExamAnswerDto) => {
+        console.log(candidateExamAnswerDto);
+        axios.put(`https://localhost:7196/api/CandidateExamAnswers/${id}`, candidateExamAnswerDto)
+            .catch(error => {
+                console.error(error);
+            });
+    }
 
     // Note(vmavraganis): Code used to slice the array of questions and make them 1 per page (with each question having an array of their options)
     const [currentPage, setCurrentPage] = useState(1);
@@ -78,14 +94,14 @@ export default function Examination(props) {
 
                     <ol>
                         {question.options.map((option, index) => (
-                            <li key={option.text}>{Replace(option.text)}</li>
+                            <li key={index}>{Replace(option.text)}</li>
                         ))}
                     </ol>
 
                     <select
                         id="option"
-                        value={candidateExam?.candidateExamAnswers[indexOfFirstQuestion]?.chosenOption || ""}
-                        onChange={(event) => handleOptionChange(event, indexOfFirstQuestion)}
+                        value={candidateExam?.candidateExamAnswers[indexOfFirstQuestion + index]?.chosenOption || ""}
+                        onChange={(event) => handleOptionChange(event, indexOfFirstQuestion + index)}
                     >
                         <option value="" disabled>Choose option</option>
                         {question.options.map((option, index) => (
