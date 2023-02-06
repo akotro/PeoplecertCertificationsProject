@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from 'axios';
 
@@ -13,7 +13,6 @@ export default function Examination(props) {
         exam: { questions: [] },
         CandidateExamAnswers: { ChoosenOptions: [] },
     });
-    const [selectedOption, setSelectedOption] = useState();
 
     useEffect(() => {
         axios.put(`https://localhost:7196/api/CandidateExam/StartExam/${candExamId}`).then((response) => {
