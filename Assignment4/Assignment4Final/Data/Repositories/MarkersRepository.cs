@@ -21,6 +21,9 @@ public class MarkersRepository : IGenericRepository<Marker>
             .ThenInclude(ce => ce.CandidateExamAnswers)
             .Include(m => m.CandidateExams)
             .ThenInclude(ce => ce.Exam)
+            .ThenInclude(e => e.Certificate)
+            .Include(m => m.CandidateExams)
+            .ThenInclude(ce => ce.Exam)
             .ThenInclude(e => e.Questions)
             .ThenInclude(q => q.Options)
             .ToListAsync();
@@ -33,6 +36,9 @@ public class MarkersRepository : IGenericRepository<Marker>
             .Include(m => m.AppUser)
             .Include(m => m.CandidateExams)
             .ThenInclude(ce => ce.CandidateExamAnswers)
+            .Include(m => m.CandidateExams)
+            .ThenInclude(ce => ce.Exam)
+            .ThenInclude(e => e.Certificate)
             .Include(m => m.CandidateExams)
             .ThenInclude(ce => ce.Exam)
             .ThenInclude(e => e.Questions)
@@ -59,7 +65,7 @@ public class MarkersRepository : IGenericRepository<Marker>
             if (marker.CandidateExams != null)
             {
                 var dbCandidateExamsToDelete = dbMarker.CandidateExams
-                    .Where(t => !marker.CandidateExams.Any(ct => ct.Id == t.Id))
+                    .Where(c => !marker.CandidateExams.Any(ce => ce.Id == c.Id))
                     .ToList();
                 foreach (var candExam in dbCandidateExamsToDelete)
                 {
@@ -73,17 +79,33 @@ public class MarkersRepository : IGenericRepository<Marker>
                     foreach (var candExam in marker.CandidateExams)
                     {
                         var dbCandidateExam = await _context.CandidateExams.FirstOrDefaultAsync(
-                            t => t.Id == candExam.Id
+                            ce => ce.Id == candExam.Id
                         );
                         if (dbCandidateExam != null)
                         {
-                            if (dbMarker.CandidateExams.Any(t => t.Id == dbCandidateExam.Id))
+                            if (dbMarker.CandidateExams.Any(ce => ce.Id == dbCandidateExam.Id))
                             {
                                 // NOTE:(akotro) If marker already has this candExam, update it
                                 dbCandidateExam.Result = candExam.Result;
                                 dbCandidateExam.CandidateScore = candExam.CandidateScore;
+                                dbCandidateExam.PercentScore = candExam.PercentScore;
                                 dbCandidateExam.IsModerated = candExam.IsModerated;
                                 dbCandidateExam.MarkingDate = candExam.MarkingDate;
+
+                                if (candExam.CandidateExamAnswers?.Any() == true)
+                                {
+                                    foreach (var answer in candExam.CandidateExamAnswers)
+                                    {
+                                        var dbAnswer =
+                                            await _context.CandidateExamAnswers.FirstOrDefaultAsync(
+                                                a => a.Id == answer.Id
+                                            );
+                                        if (dbAnswer != null)
+                                        {
+                                            dbAnswer.IsCorrectModerated = answer.IsCorrectModerated;
+                                        }
+                                    }
+                                }
                             }
                             else
                             {
