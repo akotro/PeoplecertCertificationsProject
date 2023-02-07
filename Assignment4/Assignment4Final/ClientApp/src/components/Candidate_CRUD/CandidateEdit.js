@@ -95,7 +95,7 @@ export default function CandidateEdit(props) {
       });
   };
 
-    }
+    
 
     const getId = () => {
         if (claims.length > 0) {
