@@ -1,32 +1,31 @@
 import React from "react";
 
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import EditorPlus from 'ckeditor5-classic-plus'; 
+import {CKEditor} from "@ckeditor/ckeditor5-react";
+import Editor from 'ckeditor5-custom-build/build/ckeditor';
 
+// import { SimpleUploadAdapter } from "@ckeditor/ckeditor5-upload";
  
 
 
-function Editor(props) {
+function MyEditor(props) {
 
 
 console.log("Before editor");
 
     return (
         <div>
-                                                            {/* <CKEditor
-                                                                editor={EditorPlus}
-                                                                data={props.data}
-                                                                onChange={(event, editor) => {
-                                                                    const data = editor.getData();
-                                                                    props.onChange(data);
-                                                                }}
-                                                            /> */}
+                                                      
    
 
                                 <CKEditor
-                                                    editor={EditorPlus}
+                                                    editor={Editor}
                                                     // data={props.text}
-                                                    onReady={editor => {/* You can store the "editor" and use when it is needed. */}}
+                                                    onReady={editor =>
+                                                       {
+                                                        /* You canc store the "editor" and use when it is needed. */
+                                                        console.log("Editor is ready to use!");
+                                                      }}
+
                                                             event = {props.event}
                                                     name={props.name}    
                                                     // optionId={props.optionId}
@@ -54,7 +53,7 @@ console.log("Before editor");
                                                       simpleUpload: {
                                                         // The URL that the images are uploaded to.
                                                         uploadUrl: "https://localhost:7196/api/Upload",
-                                                        
+                                                        // plugins: [ SimpleUploadAdapter,  ],
                                                         // Enable the XMLHttpRequest.withCredentials property if required.
                                                         // withCredentials: true,
                                                 
@@ -73,7 +72,7 @@ console.log("Before editor");
 }   
 
 
-export default Editor;
+export default MyEditor;
 
 
 

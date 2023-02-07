@@ -6,7 +6,7 @@ import { React, useState, useEffect } from "react";
 
 import axios from "axios";
 
-import Editor from "./Editor";
+import MyEditor from "./Editor";
 
 function QuestionCreate() {
   //------------------------------------------------Question state
@@ -227,7 +227,7 @@ function QuestionCreate() {
           <Col md={7}>
             <FormGroup required>
               <Form.Label>Questions Text</Form.Label>
-              <Editor handleChange={handleChange} name={"QuestionText"} />
+              <MyEditor handleChange={handleChange} name={"QuestionText"} />
             </FormGroup>
           </Col>
           {/* DROPDOWN TOPICS */}
@@ -287,7 +287,7 @@ function QuestionCreate() {
             <FormGroup>
               <Form.Label>First Option</Form.Label>
               {/* Editor */}
-              <Editor handleChange={handleChange} name={"Option0"} />
+              <MyEditor handleChange={handleChange} name={"Option0"} />
             </FormGroup>
           </Col>
 
@@ -307,7 +307,7 @@ function QuestionCreate() {
             <FormGroup>
               <Form.Label>Second Option</Form.Label>
               {/* Editor */}
-              <Editor handleChange={handleChange} name={"Option1"} />
+              <MyEditor handleChange={handleChange} name={"Option1"} />
             </FormGroup>
           </Col>
           <Col>
@@ -326,7 +326,7 @@ function QuestionCreate() {
             <FormGroup>
               <Form.Label>Third Option</Form.Label>
               {/* Editor */}
-              <Editor handleChange={handleChange} name={"Option2"} />
+              <MyEditor handleChange={handleChange} name={"Option2"} />
             </FormGroup>
           </Col>
           <Col>
@@ -345,7 +345,7 @@ function QuestionCreate() {
             <FormGroup>
               <Form.Label>Fourth Option</Form.Label>
               {/* Editor */}
-              <Editor handleChange={handleChange} name={"Option3"} />
+              <MyEditor handleChange={handleChange} name={"Option3"} />
             </FormGroup>
           </Col>
           <Col>
