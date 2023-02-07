@@ -10,6 +10,7 @@ public class FileController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> UploadFile([FromForm] IFormFile file)
     {
+        // TODO:(akotro) Check if file already exists and if yes return the old one
         if (file == null || file.Length == 0)
             return BadRequest("No file received");
 
@@ -21,10 +22,6 @@ public class FileController : ControllerBase
         string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
         string filePath = Path.Combine(folderPath, fileName);
 
-        // using (var stream = new FileStream(filePath, FileMode.Create))
-        //   {
-        //       await Request.Body.CopyToAsync(stream);
-        //   }
         using (var fileStream = new FileStream(filePath, FileMode.Create))
         {
             await file.CopyToAsync(fileStream);
