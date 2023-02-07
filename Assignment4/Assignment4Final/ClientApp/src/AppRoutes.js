@@ -126,29 +126,7 @@ const AppRoutes = [
         path: '*',
         element: <NotFound />
     },
-    // ...ApiAuthorzationRoutes
-    element: <AvailableExams />,
-  },
-  // -----------------Candidate-------------------
-  {
-    path: "/candidate/Examination/:id",
-    needsCand: true,
-    element: <Examination />,
-  },
-  {
-    path: "/ExamsList",
-    // requireAuth: true,
-    element: <ExamList />,
-  },
-  {
-    path: "/ExamQuestionList",
-    // requireAuth: true,
-    element: <ExamQuestionList />,
-  },
-  {
-    path: "*",
-    element: <NotFound />,
-  },
+   
 ];
 
 export default AppRoutes;
