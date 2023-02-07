@@ -8,9 +8,9 @@ namespace Assignment4Final.Controllers;
 public class FileController : ControllerBase
 {
     [HttpPost]
-    public async Task<IActionResult> UploadFile(IFormFile file)
+    public async Task<IActionResult> UploadFile(IFormFile upload)
     {
-        if (file == null || file.Length == 0)
+        if (upload == null || upload.Length == 0)
             return BadRequest("No file received");
 
         string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "Uploads");
@@ -18,15 +18,24 @@ public class FileController : ControllerBase
         if (!Directory.Exists(folderPath))
             Directory.CreateDirectory(folderPath);
 
-        string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+        string fileName = Guid.NewGuid().ToString() + Path.GetExtension(upload.FileName);
         string filePath = Path.Combine(folderPath, fileName);
 
+        // using (var stream = new FileStream(filePath, FileMode.Create))
+        //   {
+        //       await Request.Body.CopyToAsync(stream);
+        //   }
         using (var fileStream = new FileStream(filePath, FileMode.Create))
         {
-            await file.CopyToAsync(fileStream);
+            await upload.CopyToAsync(fileStream);
         }
 
-        var uploadedFile = new FileDto { FileName = fileName, FilePath = filePath };
+        var uploadedFile = new FileDto
+        {
+            FileName = fileName,
+            FilePath = filePath,
+            Url = $"https://localhost:7196/api/File/image/{fileName}"
+        };
 
         // TODO:(akotro) Save FileDto to database here
 
