@@ -1,82 +1,37 @@
 import React from "react";
 
-import {CKEditor} from "@ckeditor/ckeditor5-react";
-import Editor from 'ckeditor5-custom-build/build/ckeditor';
-
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 // import { SimpleUploadAdapter } from "@ckeditor/ckeditor5-upload";
- 
-
+import SimpleUploadAdapter from '@ckeditor/ckeditor5-upload/src/adapters/simpleuploadadapter';
 
 function MyEditor(props) {
-
-
-console.log("Before editor");
+    console.log("Before editor");
 
     return (
         <div>
-                                                      
-   
-
-                                <CKEditor
-                                                    editor={Editor}
-                                                    // data={props.text}
-                                                    onReady={editor =>
-                                                       {
-                                                        /* You canc store the "editor" and use when it is needed. */
-                                                        console.log("Editor is ready to use!");
-                                                      }}
-
-                                                            event = {props.event}
-                                                    name={props.name}    
-                                                    // optionId={props.optionId}
-
-                                                    onChange={(event, editor,name) => 
-                                                                        {
-                                                                                // console.log(event);
-                                                                                console.log("Inside Editor component");
-                                                                                const data = editor.getData();
-                                                                                // console.log(data);
-
-                                                                                name=props.name;
-                                                                                // console.log(name);
-                                                                                
-                                                                                // optionId=props.optionId;
-                                                                                // console.log(optionId);
-                                                                                    
-                                                                                props.handleChange(event,name,data);
-                                                                                
-                                                                                            }
-                                                                        }
-                                                                        required
-
-                                                    config={{
-                                                      simpleUpload: {
-                                                        // The URL that the images are uploaded to.
-                                                        uploadUrl: "https://localhost:7196/api/Upload",
-                                                        // plugins: [ SimpleUploadAdapter,  ],
-                                                        // Enable the XMLHttpRequest.withCredentials property if required.
-                                                        // withCredentials: true,
-                                                
-                                                        // Headers sent along with the XMLHttpRequest to the upload server.
-                                                        // headers: {
-                                                        //   "X-CSRF-TOKEN": "CSFR-Token",
-                                                        //   Authorization: "Bearer <JSON Web Token>"
-                                                        // }
-                                                      }
-                                                    }}
-                                      />
-</div>
-                                      );
-
-
-}   
-
+            <CKEditor
+                editor={ClassicEditor}
+                config={{
+                    // plugins: [ Paragraph, Bold, Italic, Essentials ],
+                    // toolbar: [ 'bold', 'italic' ],
+                    plugins: [SimpleUploadAdapter],
+                    simpleUpload: {
+                        // The URL that the images are uploaded to.
+                        uploadUrl: "https://localhost:7196/api/File",
+                    },
+                }}
+                data="<p>Hello from the first editor working with the context!</p>"
+                onReady={(editor) => {
+                    // You can store the "editor" and use when it is needed.
+                    console.log("Editor1 is ready to use!", editor);
+                }}
+            />
+        </div>
+    );
+}
 
 export default MyEditor;
-
-
-
-
 
 // editor={EditorPlus}
 // data={question.text}
@@ -92,7 +47,7 @@ export default MyEditor;
 // //   simpleUpload: {
 // //     // The URL that the images are uploaded to.
 // //     uploadUrl: "https://localhost:44473/admin/Questions/QuestionCreate",
-    
+
 // //     // Enable the XMLHttpRequest.withCredentials property if required.
 // //     withCredentials: true,
 

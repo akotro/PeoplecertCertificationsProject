@@ -3,14 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^36.0.1",
     "@ckeditor/ckeditor5-react": "^5.0.6",
+    "@ckeditor/ckeditor5-upload": "^36.0.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.2.6",
     "babel-plugin-macros": "^3.1.0",
     "bootstrap": "^5.2.3",
-    "ckeditor5-custom-build": "file:ckeditor",
     "http-proxy-middleware": "^2.0.6",
     "jquery": "^3.6.0",
     "merge": "^2.1.1",
@@ -86,6 +87,6 @@
     ]
   },
   "prettier": {
-    "tabWidth": 2
+    "tabWidth": 4
   }
 }
