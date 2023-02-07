@@ -230,3 +230,9 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
+
+# Ignore .vscode Folder
+.vscode/
+
+# Ignore Uploads Folder
+Uploads/

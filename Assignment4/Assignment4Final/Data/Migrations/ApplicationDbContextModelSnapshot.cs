@@ -646,6 +646,9 @@ namespace Assignment4Final.Data.Migrations
                     b.Property<string>("MarkerAppUserId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<DateTime?>("MarkerAssignedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime?>("MarkingDate")
                         .HasColumnType("datetime2");
 

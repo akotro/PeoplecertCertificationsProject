@@ -52,7 +52,15 @@ public class CandidateExamAnswersRepository : IGenericRepository<CandidateExamAn
             dbCandidateExamAnswer.QuestionText = candidateExamAnswer.QuestionText;
             dbCandidateExamAnswer.CorrectOption = candidateExamAnswer.CorrectOption;
             dbCandidateExamAnswer.ChosenOption = candidateExamAnswer.ChosenOption;
-            dbCandidateExamAnswer.IsCorrect = candidateExamAnswer.IsCorrect;
+
+            if (String.Equals(dbCandidateExamAnswer.ChosenOption, dbCandidateExamAnswer.CorrectOption))
+            {
+                dbCandidateExamAnswer.IsCorrect = true;
+            } else
+            {
+                dbCandidateExamAnswer.IsCorrect = false;
+            }
+
             dbCandidateExamAnswer.IsCorrectModerated = candidateExamAnswer.IsCorrectModerated;
             dbCandidateExamAnswer.CandidateExam = candidateExamAnswer.CandidateExam;
 

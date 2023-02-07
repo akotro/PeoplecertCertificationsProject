@@ -1,7 +1,7 @@
 ﻿import React, { useState, useEffect } from 'react';
 import axios from 'axios'
 import { Button } from 'react-bootstrap'
-import Cert_homepage from '../Certificate_CRUD/Certificate_Homepage'
+import CertificateList from '../Certificate_CRUD/CertificateList'
 
 
 const CandidateHomepage = () => {
@@ -26,7 +26,7 @@ const CandidateHomepage = () => {
     return (
         <div>
             <div>
-                <Cert_homepage user={{ usertype:"candidate", userId:"someId" }} />
+                <CertificateList />
             </div>
         </div>
     )

@@ -156,7 +156,7 @@ namespace Assignment4Final.Services
 
             candidateExam.CandidateScore = score;
             candidateExam.PercentScore = (score/candidateExam.MaxScore)*100; // max score shoud be on exam not candidateExam 
-            candidateExam.Result = candidateExam.CandidateScore > candidateExam.Exam.Certificate.PassingMark ? true : false ;
+            candidateExam.Result = candidateExam.CandidateScore >= candidateExam.Exam.Certificate.PassingMark ? true : false ;
             return await _candidateExamRepository.AddAsync(candidateExam);
         }
 

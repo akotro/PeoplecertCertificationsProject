@@ -5,6 +5,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import Delete from './QuestionDelete';
 import QuestionEdit from './QuestionEdit';
+
 function Questions()
 {
     const[data,setData] = useState([]);
@@ -81,9 +82,10 @@ function Questions()
 
                                                
 
-                                                <td><Link to='/Questions/QuestionEdit'> <Button  onClick={(event) => QuestionEdit(event)} name={index}>Edit</Button></Link> </td>
+                                               {/*<td><Link> <Button  onClick={(event) => QuestionEdit(event)} name={index}>Edit</Button></Link> </td>*/}
 
-                                                <td><Button variant='dark' onClick={() => handleDelete(item.id)} name={index}>Delete</Button></td>
+                                                {/*<td><Link to=""><Button variant='dark' onClick={(event) => Delete(event)} name={index}>Delete</Button></Link></td>*/}
+
                                             </tr>
                                             
                                             ))}
