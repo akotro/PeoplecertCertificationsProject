@@ -38,7 +38,7 @@ function Questions()
       //--------------------------------------------------HANDLE DELETE
      const  handleDelete = (id) => {
         // Asks user if they are sure
-        const confirmDelete = window.confirm("Are you sure you want to delete this certificate?");
+        const confirmDelete = window.confirm("Are you sure you want to delete this this question?");
         if (confirmDelete) {
             //send axios call with the request to delete using Id
             axios.delete(`https://localhost:7196/api/Questions/${id}`)
@@ -60,7 +60,7 @@ function Questions()
     return (
 
         <Container fluid="md">
-            <Link to="/Questions/QuestionCreate"><Button variant='dark'>Create new Question</Button></Link> 
+            <Link to="/questions/create"><Button variant='dark'>Create new Question</Button></Link> 
             <div>
                 <Table hover striped >
                                 <thead>
@@ -82,9 +82,9 @@ function Questions()
 
                                                
 
-                                               {/*<td><Link> <Button  onClick={(event) => QuestionEdit(event)} name={index}>Edit</Button></Link> </td>*/}
+                                               <td> <Button  onClick={(event) => QuestionEdit(event)} name={index}>Edit</Button> </td>
 
-                                                {/*<td><Link to=""><Button variant='dark' onClick={(event) => Delete(event)} name={index}>Delete</Button></Link></td>*/}
+                                                 <td><Button variant='dark' onClick={(event) => Delete(event)} name={index}>Delete</Button> </td>
 
                                             </tr>
                                             
