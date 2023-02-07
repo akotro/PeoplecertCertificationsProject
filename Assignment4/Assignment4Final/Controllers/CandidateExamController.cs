@@ -85,12 +85,13 @@ namespace Assignment4Final.Controllers
                 return NotFound(new {description ="Candidate with this userId not found "});
             }
             var candidatesTakenExams = await _candExamService.GetNotTakenCandidateExamsOfCandidateAsync(candidate);
+            var testing = _candExamService.GetListOfCandidateExamDtosFromListOfCandidateExam(candidatesTakenExams);
             return Ok(_candExamService.GetListOfCandidateExamDtosFromListOfCandidateExam(candidatesTakenExams));
 
         }
 
-        [HttpPut("StartExam")] // this Api is for getting a CandidateExamDto full with the CandidatesAnswers and ExamsQuestions when an Exam is starting
-        public async Task<ActionResult<CandidateExamDto>> GetCandExmWithAnswers([FromBody] int candExamId)
+        [HttpPut("StartExam/{candExamId}")] // this Api is for getting a CandidateExamDto full with the CandidatesAnswers and ExamsQuestions when an Exam is starting
+        public async Task<ActionResult<CandidateExamDto>> GetCandExmWithAnswers(int candExamId)
         {
             var candidateExam = await _candExamService.GetCandidateExamByIdAsync(candExamId);
             

@@ -480,6 +480,7 @@ namespace Assignment4Final.Data.Migrations
                     AssessmentCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Voucher = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsModerated = table.Column<bool>(type: "bit", nullable: true),
+                    MarkerAssignedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     MarkingDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     MarkerAppUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     CandidateAppUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),

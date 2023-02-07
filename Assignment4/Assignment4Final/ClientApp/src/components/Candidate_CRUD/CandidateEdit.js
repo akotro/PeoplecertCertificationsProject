@@ -2,25 +2,31 @@
 
 import { ListGroup, ListGroupItem, Button, Table, Row, Col, Stack, Form, CloseButton } from 'react-bootstrap';
 import { AuthenticationContext } from '../auth/AuthenticationContext'
+import { getUserId } from '../auth/handleJWT'
 
 import { useNavigate, useParams } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import Register from "../auth/Register";
 import "react-datepicker/dist/react-datepicker.css";
-import axios from 'axios';
+import axios from "axios";
 
 export default function CandidateEdit(props) {
 
     const params = useParams();
-    const router = useNavigate();
+    const navigate = useNavigate();
+
     const [genders, setGenders] = useState([]);
     const [languages, setLanguages] = useState([]);
     const [photoIdTypes, setPhotoIdTypes] = useState([]);
     const [countries, setCountries] = useState([]);
     const [allUsers, setAllusers] = useState([]);
+    const [message, setMesage] = useState();
+    const [registerButton, setRegisterButton] = useState(false)
 
     const { update, claims } = useContext(AuthenticationContext);
-    const [role, setRole] = useState(claims.find(claim => claim.name === 'role'))
+    const [role, setRole] = useState({})
+
+    const [registerCand, setRegisterCand] = useState({});
 
     const [candidate, setCandidate] = useState({
         dateOfBirth: null,
@@ -31,130 +37,142 @@ export default function CandidateEdit(props) {
         address: []
     });
 
-    const fetchData = () => {
-        if (params.id !== undefined) {
-            axios.get(`https://localhost:7196/api/Candidate/${params.id}`).then((response) => {
-                setCandidate(response.data.data);
-            }).catch(function (error) {
-                console.log(error);
-            });
-        } else {
-            axios.get(`https://localhost:7196/api/accounts/listUsers`).then((response) => {
-                setAllusers(response.data);
-            }).catch(function (error) {
-                console.log(error);
-            });
-
-
-        }
-
-        axios.get(`https://localhost:7196/api/Genders`).then((response) => {
-            setGenders(response.data.data);
-        }).catch(function (error) {
-            console.log(error);
+  const fetchData = () => {
+    if (params.id !== undefined) {
+      axios
+        .get(`https://localhost:7196/api/Candidate/${params.id}`)
+        .then((response) => {
+          setCandidate(response.data.data);
+        })
+        .catch(function (error) {
+          console.log(error);
         });
-
-        axios.get(`https://localhost:7196/api/Languages`).then((response) => {
-            setLanguages(response.data.data);
-        }).catch(function (error) {
-            console.log(error);
+    } else {
+      axios
+        .get(`https://localhost:7196/api/accounts/listUsers`)
+        .then((response) => {
+          setAllusers(response.data);
+        })
+        .catch(function (error) {
+          console.log(error);
         });
-
-        axios.get(`https://localhost:7196/api/PhotoIdTypes`).then((response) => {
-            setPhotoIdTypes(response.data.data);
-        }).catch(function (error) {
-            console.log(error);
-        });
-
-        axios.get(`https://localhost:7196/api/Countries`).then((response) => {
-            setCountries(response.data.data);
-
-        }).catch(function (error) {
-            console.log(error);
-        });
-
     }
+
+    axios
+      .get(`https://localhost:7196/api/Genders`)
+      .then((response) => {
+        setGenders(response.data.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+    axios
+      .get(`https://localhost:7196/api/Languages`)
+      .then((response) => {
+        setLanguages(response.data.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+    axios
+      .get(`https://localhost:7196/api/PhotoIdTypes`)
+      .then((response) => {
+        setPhotoIdTypes(response.data.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+    axios
+      .get(`https://localhost:7196/api/Countries`)
+      .then((response) => {
+        setCountries(response.data.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+    
 
     const getId = () => {
-        return claims.find(claim => claim.name === 'userId').value
-    }
-    const ifRoleThenSetit = () => {
-        if (claims.name) {
-            ifRoleThenSetit(claims.find(claim => claim.name === 'role').value)
+        if (claims.length > 0) {
+            return claims.find(claim => claim.name === 'userId').value
         }
-
     }
 
     useEffect(() => {
-        // setCandidate({...candidate, appUserId: getId()})
         fetchData();
-        // setRole(claims.find(claim => claim.name === 'role').value)
-        ifRoleThenSetit();
-        if (role === "qualitycontrol") {
-            console.log("the role is :".role)
+        if (claims.length > 0) {
+            // is a user with a role already then set that role 
+            if (claims.find(claim => claim.name === 'role')) {
+                setRole(claims.find(claim => claim.name === 'role').value)
+                // else set "NoRole" as the role 
+            } else {
+                setRole("noRole");
+            };
+            console.log(role)
         }
-        console.log(role)
-    }, []);
+    }, [claims]);
 
-    useEffect(() => {
-        if( claims && getId) {
-        setCandidate((prevState) => ({ ...prevState, appUserId: getId() }));
-
-        }
-        console.log(candidate)
-    }, candidate);
-
-    const handleSubmit = (event) => {
+    const handleRegisterSubmit = (event) => {
         event.preventDefault();
-        // const Id = getId();
-        // console.log(appUserId)
 
-        // setCandidate({...candidate, appUserId: Id})
-        if (params.id === undefined) {
-            console.log("send post")
-            axios.post(`https://localhost:7196/api/Candidate`, candidate)
-                .then(function (response) {
-                    console.log(candidate)
-                    console.log(response);
-                })
-                .catch(function (error) {
-                    console.log(candidate)
+        axios.post(`https://localhost:7196/api/accounts/create`, registerCand).then(res => {
+            const Id = getUserId(res.data.token)
+            setCandidate((prev) => ({ ...prev, appUserId: Id }))
+            alert("Register successful !! ")
+            setRegisterButton(true)
+        }).catch(function (error) {
+            alert("Register failed, please try again ")
+        });
+    }
 
-                    console.log(error);
-                });
-        } else {
-            console.log("send put")
-            axios.put(`https://localhost:7196/api/Candidate/${params.id}`, candidate)
-                .then(function (response) {
-                    console.log(response);
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-        }
-
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+            if (params.id === undefined) {
+                await axios.post(`https://localhost:7196/api/Candidate`, candidate)
+                    .then(function (response) {
+                        console.log(candidate)
+                        console.log(response);
+                    })
+                    .catch(function (error) {
+                        console.log(candidate)
+                        console.log(error);
+                    });
+            } else {
+                await axios.put(`https://localhost:7196/api/Candidate/${params.id}`, candidate)
+                    .then(function (response) {
+                        console.log(response);
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
+            }
+        
+        navigate('/candidate')
         // console.log("THIS IS MINE ", candidate);
     }
 
-    // const handleChangeRegister = (event) => {
-    //     const { name, value, type } = event.target;
+    const handleChangeRegister = (event) => {
+        const { name, value, type } = event.target;
 
-    //     console.log(name);
-    //     console.log(type);
-    //     console.log(value);
-    //     setRegisterCand({ ...registerCand, [name]: value });
+        console.log(name);
+        console.log(type);
+        console.log(value);
+        setRegisterCand({ ...registerCand, [name]: value });
 
-    //     console.log(registerCand);
-
-
-    // }
-
+        console.log(registerCand);
+    }
 
     const handleChange = (event, addressIndex) => {
-        console.log(getId());
-
-
-
+        if (!candidate.appUserId) {
+            let id = getId();
+            candidate.appUserId = id;
+            setCandidate({ candidate })
+        }
         const { name, value, type } = event.target;
         //console.log(event.target)
         //console.log(name);
@@ -192,80 +210,73 @@ export default function CandidateEdit(props) {
         }
     };
 
-    const addAddress = () => {
-        setCandidate({
-            ...candidate, address: [...candidate.address,
-            { id: 0, address1: "", address2: "", city: "", state: "", country: {} }
-            ]
-        })
-    }
+  const addAddress = () => {
+    setCandidate({
+      ...candidate,
+      address: [
+        ...candidate.address,
+        { id: 0, address1: "", address2: "", city: "", state: "", country: {} },
+      ],
+    });
+  };
 
-    const removeAddress = (removeIndex) => {
+  const removeAddress = (removeIndex) => {
+    const updatedAddress = [...candidate.address];
+    updatedAddress.splice(removeIndex, 1);
+    console.log(updatedAddress);
+    setCandidate({ ...candidate, address: updatedAddress });
+  };
+  const convertStringToDate = (dateString) => {
+    //intial format
+    //2015-07-15
+    const date = new Date(dateString);
+    //Wed Jul 15 2015 00:00:00 GMT-0700 (Pacific Daylight Time)
+    const finalDateString = date.toISOString(date);
+    //2015-07-15T00:00:00.000Z
 
-        const updatedAddress = [...candidate.address];
-        updatedAddress.splice(removeIndex, 1);
-        console.log(updatedAddress)
-        setCandidate({ ...candidate, address: updatedAddress });
+    console.log(finalDateString); // "1930-07-17T00:00:00.000Z"
+    return finalDateString;
+  };
 
-    }
-    const convertStringToDate = (dateString) => {
-        //intial format 
-        //2015-07-15
-        const date = new Date(dateString);
-        //Wed Jul 15 2015 00:00:00 GMT-0700 (Pacific Daylight Time)
-        const finalDateString = date.toISOString(date)
-        //2015-07-15T00:00:00.000Z
+  const convertDateToString = (date) => {
+    //console.log(date);
+    let kati = new Date(date);
 
-        console.log(finalDateString); // "1930-07-17T00:00:00.000Z"
-        return finalDateString;
-    }
+    let formattedDate = kati.toISOString().substr(0, 10);
 
-    const convertDateToString = (date) => {
-        //console.log(date);
-        let kati = new Date(date);
-
-        let formattedDate = kati.toISOString().substr(0, 10);
-
-        return formattedDate;
-    }
-
-    //console.log(candidate)
+    return formattedDate;
+  };
 
     return (
         <div>
             <fieldset disabled={role ? (role.value === "qualitycontrol") : false}>
-
+                {!params.id &&
+                    (role === "admin") ?
+                    <div>
+                        <Form onSubmit={handleRegisterSubmit}>
+                            <Row>
+                                <Col>
+                                    <Form.Group >
+                                        <Form.Label>Email</Form.Label>
+                                        <Form.Control type="email" name="email" value={registerCand.email} onChange={handleChangeRegister} />
+                                    </Form.Group>
+                                </Col>
+                                <Col>
+                                    <Form.Group >
+                                        <Form.Label>Password</Form.Label>
+                                        <Form.Control type="password" name="password" value={registerCand.password} onChange={handleChangeRegister} />
+                                    </Form.Group>
+                                </Col>
+                            </Row>
+                            <Button className='d-grid gap-2 col-6 mx-auto py-2 my-2' variant="primary" type="submit" disabled={registerButton}>
+                                Register User
+                            </Button>
+                        </Form>
+                    </div> : null
+                }
                 <Form onSubmit={handleSubmit} className="lead" >
-                    <p>{params.id}</p>
                     <Stack gap={3}>
-
-                        {!params.id && <div>
-                            need to add register part
-
-                            {/*<Row>*/}
-                            {/*    <Col>*/}
-                            {/*        <Form.Group >*/}
-                            {/*            <Form.Label>Username</Form.Label>*/}
-                            {/*            <Form.Control type="text" name="username" value={registerCand.username} onChange={handleChangeRegister} />*/}
-                            {/*        </Form.Group>*/}
-                            {/*    </Col>*/}
-                            {/*    <Col>*/}
-                            {/*        <Form.Group >*/}
-                            {/*            <Form.Label>Email</Form.Label>*/}
-                            {/*            <Form.Control type="email" name="email" value={registerCand.email} onChange={handleChangeRegister} />*/}
-                            {/*        </Form.Group>*/}
-                            {/*    </Col>*/}
-                            {/*    <Col>*/}
-                            {/*        <Form.Group >*/}
-                            {/*            <Form.Label>Password</Form.Label>*/}
-                            {/*            <Form.Control type="password" name="password" value={registerCand.password} onChange={handleChangeRegister} />*/}
-                            {/*        </Form.Group>*/}
-                            {/*    </Col>*/}
-                            {/*</Row>*/}
-
-                        </div>}
                         <div className="display-6 fs-2" >Personal Details</div>
-
                         <Row>
                             <Col>
                                 <Form.Group >
@@ -320,7 +331,6 @@ export default function CandidateEdit(props) {
                                         value={candidate.language.id}
                                         onChange={handleChange}>
                                         <option value="" hidden >Please choose your native Language... </option>
-
                                         {languages.map((lan, index) =>
                                             <option key={index}
                                                 value={lan.id}
@@ -351,7 +361,6 @@ export default function CandidateEdit(props) {
                                     <Form.Control type="text" name="landline" value={candidate.landline} onChange={handleChange} />
                                 </Form.Group>
                             </Col>
-
                             <Col>
                                 <Form.Group >
                                     <Form.Label>Mobile Number</Form.Label>
@@ -364,7 +373,6 @@ export default function CandidateEdit(props) {
                                 {candidate.address &&
                                     candidate.address.map((item, index) => (
                                         <div key={index} name={item.id} className="my-1 ">
-
                                             <Row>
                                                 <details className="display-6 fs-4">
                                                     <summary>
@@ -374,7 +382,6 @@ export default function CandidateEdit(props) {
                                                         <div className="justify-content-end">
                                                             <CloseButton onClick={() => removeAddress(index)} />
                                                         </div>
-
                                                         <Row>
                                                             <Col>
                                                                 <Form.Group >
@@ -415,7 +422,6 @@ export default function CandidateEdit(props) {
                                                                         value={item.country.id}
                                                                         onChange={(event) => handleChange(event, index)} required>
                                                                         <option value="" hidden >Please choose your Country... </option>
-
                                                                         {countries.map((country, index) =>
                                                                             <option key={index}
                                                                                 value={country.id}
@@ -427,20 +433,16 @@ export default function CandidateEdit(props) {
                                                         </Row>
                                                     </div>
                                                 </details>
-
                                             </Row>
                                         </div>
                                     ))}
-                                <Button onClick={addAddress}>add address</Button>
+                                {role.value !== "qualitycontrol" &&
+                                    <Button onClick={addAddress} className='d-grid gap-2 col-6 mx-auto py-2 my-2' >add address</Button>
+                                }
                             </Stack>
                         </div>
-
-
-
                         <hr />
-
                         <div className="display-6 fs-2" >Identification Details</div>
-
                         <Row>
                             <Col>
                                 <Form.Group >
@@ -456,7 +458,6 @@ export default function CandidateEdit(props) {
                                         value={convertDateToString(candidate.photoIdIssueDate)}
                                         onChange={handleChange} required />
                                 </Form.Group>
-
                             </Col>
                             <Col>
                                 <Form.Group >
@@ -466,26 +467,23 @@ export default function CandidateEdit(props) {
                                         onChange={handleChange}
                                         required>
                                         <option value="" hidden >Please choose your ID type... </option>
-
                                         {photoIdTypes.map((pId, index) =>
                                             <option key={index}
                                                 value={pId.id}
                                             >{pId.idType}</option>
                                         )}
                                     </Form.Select>
-
                                 </Form.Group>
                             </Col>
                         </Row>
-
-                        <Button variant="primary" type="submit">Save</Button>
-                        <Button variant="primary" onClick={() => router(-1)}>Go back</Button>
+                        {role.value === "qualitycontrol" ? null :
+                            <Button variant="primary" type="submit" >
+                                Save
+                            </Button>}
                     </Stack>
-
                 </Form>
             </fieldset>
+            <Button variant='dark' className='d-grid gap-2 col-12 mx-auto py-2 my-2' onClick={() => navigate(-1)}>Go back</Button>
         </div>
     )
 }
-
-//

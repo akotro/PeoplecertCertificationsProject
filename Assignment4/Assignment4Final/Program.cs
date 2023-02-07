@@ -40,7 +40,7 @@ namespace Assignment4Final
 
             // Add services to the container.
             var connectionString =
-                builder.Configuration.GetConnectionString("localdb")
+                builder.Configuration.GetConnectionString("Iasonas")
                 ?? throw new InvalidOperationException(
                     "Connection string 'DefaultConnection' not found."
                 );
@@ -195,6 +195,9 @@ namespace Assignment4Final
                 CandidateExamAnswersRepository
             >();
             builder.Services.AddScoped<CandidateExamAnswersService>();
+
+            builder.Services.AddScoped<IGenericRepository<Marker>, MarkersRepository>();
+            builder.Services.AddScoped<MarkersService>();
             // ---------------------------------------------------------------------------------------
 
             // TODO:(akotro) This should be extracted into a helper class
@@ -229,6 +232,8 @@ namespace Assignment4Final
 
                 mc.CreateMap<CandidateExam, CandidateExamDto>().ReverseMap();
                 mc.CreateMap<CandidateExamAnswers, CandidateExamAnswersDto>().ReverseMap();
+
+                mc.CreateMap<Marker, MarkerDto>().ReverseMap();
             });
             IMapper mapper = mapperConfig.CreateMapper();
             builder.Services.AddSingleton(mapper);

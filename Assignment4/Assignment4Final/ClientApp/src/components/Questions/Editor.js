@@ -1,26 +1,31 @@
 import React from "react";
 
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import EditorPlus from 'ckeditor5-classic-plus'; 
+import {CKEditor} from "@ckeditor/ckeditor5-react";
+import Editor from 'ckeditor5-custom-build/build/ckeditor';
+
+// import { SimpleUploadAdapter } from "@ckeditor/ckeditor5-upload";
+ 
 
 
-function Editor(props) {
+function MyEditor(props) {
+
+
+console.log("Before editor");
+
     return (
         <div>
-                                                            {/* <CKEditor
-                                                                editor={EditorPlus}
-                                                                data={props.data}
-                                                                onChange={(event, editor) => {
-                                                                    const data = editor.getData();
-                                                                    props.onChange(data);
-                                                                }}
-                                                            /> */}
+                                                      
    
 
                                 <CKEditor
-                                                    editor={EditorPlus}
-                                                    data={props.text}
-                                                    onReady={editor => {/* You can store the "editor" and use when it is needed. */}}
+                                                    editor={Editor}
+                                                    // data={props.text}
+                                                    onReady={editor =>
+                                                       {
+                                                        /* You canc store the "editor" and use when it is needed. */
+                                                        console.log("Editor is ready to use!");
+                                                      }}
+
                                                             event = {props.event}
                                                     name={props.name}    
                                                     // optionId={props.optionId}
@@ -28,7 +33,7 @@ function Editor(props) {
                                                     onChange={(event, editor,name) => 
                                                                         {
                                                                                 // console.log(event);
-                                                                                // console.log("Inside Editor component");
+                                                                                console.log("Inside Editor component");
                                                                                 const data = editor.getData();
                                                                                 // console.log(data);
 
@@ -44,21 +49,21 @@ function Editor(props) {
                                                                         }
                                                                         required
 
-                                                    // config={{
-                                                    //   simpleUpload: {
-                                                    //     // The URL that the images are uploaded to.
-                                                    //     uploadUrl: "https://localhost:44473/admin/Questions/QuestionCreate",
-                                                        
-                                                    //     // Enable the XMLHttpRequest.withCredentials property if required.
-                                                    //     withCredentials: true,
+                                                    config={{
+                                                      simpleUpload: {
+                                                        // The URL that the images are uploaded to.
+                                                        uploadUrl: "https://localhost:7196/api/Upload",
+                                                        // plugins: [ SimpleUploadAdapter,  ],
+                                                        // Enable the XMLHttpRequest.withCredentials property if required.
+                                                        // withCredentials: true,
                                                 
-                                                    //     // Headers sent along with the XMLHttpRequest to the upload server.
-                                                    //     headers: {
-                                                    //       "X-CSRF-TOKEN": "CSFR-Token",
-                                                    //       Authorization: "Bearer <JSON Web Token>"
-                                                    //     }
-                                                    //   }
-                                                    // }}
+                                                        // Headers sent along with the XMLHttpRequest to the upload server.
+                                                        // headers: {
+                                                        //   "X-CSRF-TOKEN": "CSFR-Token",
+                                                        //   Authorization: "Bearer <JSON Web Token>"
+                                                        // }
+                                                      }
+                                                    }}
                                       />
 </div>
                                       );
@@ -67,7 +72,7 @@ function Editor(props) {
 }   
 
 
-export default Editor;
+export default MyEditor;
 
 
 
