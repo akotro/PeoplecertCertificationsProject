@@ -513,7 +513,7 @@ namespace Assignment4Final.Data.Seed
             #endregion
 
 
-            #region // Seeding CAndiadateExam table
+            #region // Seeding CandidateExam table
 
             if (!db.CandidateExams.Any())
             {
@@ -547,7 +547,15 @@ namespace Assignment4Final.Data.Seed
                         c => c.ReportDate,
                         f => f.Date.Between(new DateTime(2022, 6, 10, 0, 0, 0), DateTime.Now)
                     )
-                    .RuleFor(c => c.Marker, f => f.PickRandom(db.Markers.ToList()));
+                    .RuleFor(c => c.Marker, f => f.PickRandom(db.Markers.ToList()))
+                    .RuleFor(
+                        c => c.MarkerAssignedDate,
+                        f => f.Date.Between(new DateTime(2022, 6, 10, 0, 0, 0), DateTime.Now)
+                    );
+                // .RuleFor(
+                //     c => c.MarkingDate,
+                //     f => f.Date.Between(new DateTime(2022, 6, 10, 0, 0, 0), DateTime.Now)
+                // );
                 var fakecandiExams = candiExamFaker.Generate(10);
 
                 db.CandidateExams.AddRange(fakecandiExams);

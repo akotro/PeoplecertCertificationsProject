@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Assignment4Final.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230203111109_InitialCreate")]
+    [Migration("20230207094449_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -647,6 +647,9 @@ namespace Assignment4Final.Data.Migrations
 
                     b.Property<string>("MarkerAppUserId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("MarkerAssignedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("MarkingDate")
                         .HasColumnType("datetime2");
