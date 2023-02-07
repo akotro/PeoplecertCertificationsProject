@@ -15,12 +15,12 @@ public class CandidateExam
     public string? Voucher { get; set; }
     public bool? IsModerated { get; set; }
 
+    public DateTime? MarkerAssignedDate { get; set; }
     public DateTime? MarkingDate { get; set; }
 
     public virtual Marker? Marker { get; set; }
     public virtual Candidate? Candidate { get; set; }
     public virtual Exam? Exam { get; set; }
 
-    public virtual ICollection<CandidateExamAnswers>?
-        CandidateExamAnswers { get; set; } // NOTE:(akotro) Reverse Navigation
+    public virtual ICollection<CandidateExamAnswers>? CandidateExamAnswers { get; set; } // NOTE:(akotro) Reverse Navigation
 }

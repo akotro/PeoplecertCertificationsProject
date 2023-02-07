@@ -24,9 +24,13 @@ namespace ModelLibrary.Models.DTO.CandidateExam
         public string? Voucher { get; set; }
         public bool? IsModerated { get; set; }
 
+        public DateTime? MarkerAssignedDate { get; set; }
+        public DateTime? MarkingDate { get; set; }
+
+        [JsonProperty(ReferenceLoopHandling = ReferenceLoopHandling.Ignore)]
+        public MarkerDto? Marker { get; set; }
+
         [JsonProperty(ItemReferenceLoopHandling = ReferenceLoopHandling.Ignore)]
-        public List<CandidateExamAnswersDto>?
-        CandidateExamAnswers
-        { get; set; }
+        public List<CandidateExamAnswersDto>? CandidateExamAnswers { get; set; }
     }
 }
