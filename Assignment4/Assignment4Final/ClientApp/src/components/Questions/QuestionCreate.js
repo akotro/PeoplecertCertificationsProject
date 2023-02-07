@@ -1,11 +1,10 @@
-import {Button,Col,Row,FloatingLabel,Stack,Table,FormGroup,Badge,Dropdown,FormCheck,radio,checkbox,Feedback} from "react-bootstrap";
+import {Button,Col,Row,Stack,FormGroup,Dropdown,FormCheck,radio,checkbox,Feedback,} from "react-bootstrap";
 import { Form } from "react-bootstrap";
-import Multiselect from "multiselect-react-dropdown";
+// import Multiselect from "multiselect-react-dropdown";
 import { React, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 
 import axios from "axios";
-
 
 import Editor from "./Editor";
 
@@ -47,131 +46,113 @@ function QuestionCreate() {
   const [difficultyLevels, setLevels] = useState([]);
   //------------------------------------------------HANDLE CHANGE------------------------------------------------>>>>>>
 
-  const handleChange = (event, name,data,optionId) => 
-  {
-            
-        //------------------------------------------------
-            if (name === "QuestionText") 
-            {
-              setQuestion((previousQuestion) => {
-                return { ...previousQuestion, text: data };
-              });
-            }
-        //------------------------------------------------
-            else if (name === "Option0") 
-            {
-                //--------------------->>>>>>
-                      setOptions(
-                        options.map((option) => {
-                          if (option.id === 0) {
-                            return { ...option, text: data };
-                          }
-                          return option;
-                        })
-                );
-            } 
-            else if (name === "Option1") 
-            {
-              //--------------------->>>>>>
-              setOptions(
-                options.map((option) => {
-                  if (option.id === 1) {
-                    return { ...option, text: data };
-                  }
-                  return option;
-                })
-              );
-            }
-            else if (name === "Option2")
-              {
-              //--------------------->>>>>>
-              setOptions(
-                options.map((option) => {
-                  if (option.id === 2) {
-                    return { ...option, text: data };
-                  }
-                  return option;
-                })
-              );
-            } 
-            else if (name === "Option3") 
-            {
-              setOptions(
-                options.map((option) => {
-                  if (option.id === 3) {
-                    return { ...option, text: data };
-                  }
-                  return option;
-                })
-              );
-            }
-        //------------------------------------------------
-            else if (event.target.name === "checkbox0") 
-            {
-              console.log("in checkbox0");
-              console.log(event);
-               
-                        setOptions(
-                          options.map((option) => {
-                                        if (option.id === 0) {
-                                          console.log("in");
-                                          
-                                          return { ...option, correct: event.target.checked };
-                                                // console.log(event.target.checked);
+  const handleChange = (event, name, data, optionId) => {
+    //------------------------------------------------
+    if (name === "QuestionText") {
+      setQuestion((previousQuestion) => {
+        return { ...previousQuestion, text: data };
+      });
+    }
+    //------------------------------------------------
+    else if (name === "Option0") {
+      //--------------------->>>>>>
+      setOptions(
+        options.map((option) => {
+          if (option.id === 0) {
+            return { ...option, text: data };
+          }
+          return option;
+        })
+      );
+    } else if (name === "Option1") {
+      //--------------------->>>>>>
+      setOptions(
+        options.map((option) => {
+          if (option.id === 1) {
+            return { ...option, text: data };
+          }
+          return option;
+        })
+      );
+    } else if (name === "Option2") {
+      //--------------------->>>>>>
+      setOptions(
+        options.map((option) => {
+          if (option.id === 2) {
+            return { ...option, text: data };
+          }
+          return option;
+        })
+      );
+    } else if (name === "Option3") {
+      setOptions(
+        options.map((option) => {
+          if (option.id === 3) {
+            return { ...option, text: data };
+          }
+          return option;
+        })
+      );
+    }
+    //------------------------------------------------
+    else if (event.target.name === "checkbox0") {
+      console.log("in checkbox0");
+      console.log(event);
 
-                                        }
-                            return option;
-                          })
-                        );
-            }
-            else if (event.target.name === "checkbox1") 
-            {
-              console.log("in checkbox1");
-               
-                        setOptions(
-                          options.map((option) => {
-                                        if (option.id === 1) {
-                                          return { ...option, correct: event.target.checked };
-                                                // console.log(event.target.checked);
-                                                // console.log("in");
-                                        }
-                            return option;
-                          })
-                        );
-            }
-            else if (event.target.name === "checkbox2") 
-            {
-              console.log("in checkbox2");
-               
-                        setOptions(
-                          options.map((option) => {
-                                        if (option.id === 2) {
-                                          return { ...option, correct: event.target.checked };
-                                                // console.log(event.target.checked);
-                                                // console.log("in");
-                                        }
-                            return option;
-                          })
-                        );
-            }
-            else if (event.target.name === "checkbox3") 
-            {
-              console.log("in checkbox3");
-               
-                        setOptions(
-                          options.map((option) => {
-                                        if (option.id === 3) {
-                                          return { ...option, correct: event.target.checked };
-                                                // console.log(event.target.checked);
-                                                // console.log("in");
-                                        }
-                            return option;
-                          })
-                        );
-            }
-            console.log(options);
+      setOptions(
+        options.map((option) => {
+          if (option.id === 0) {
+            console.log("in");
+
+            return { ...option, correct: event.target.checked };
+            // console.log(event.target.checked);
+          }
+          return option;
+        })
+      );
+    } else if (event.target.name === "checkbox1") {
+      console.log("in checkbox1");
+
+      setOptions(
+        options.map((option) => {
+          if (option.id === 1) {
+            return { ...option, correct: event.target.checked };
+            // console.log(event.target.checked);
+            // console.log("in");
+          }
+          return option;
+        })
+      );
+    } else if (event.target.name === "checkbox2") {
+      console.log("in checkbox2");
+
+      setOptions(
+        options.map((option) => {
+          if (option.id === 2) {
+            return { ...option, correct: event.target.checked };
+            // console.log(event.target.checked);
+            // console.log("in");
+          }
+          return option;
+        })
+      );
+    } else if (event.target.name === "checkbox3") {
+      console.log("in checkbox3");
+
+      setOptions(
+        options.map((option) => {
+          if (option.id === 3) {
+            return { ...option, correct: event.target.checked };
+            // console.log(event.target.checked);
+            // console.log("in");
+          }
+          return option;
+        })
+      );
+    }
+    console.log(options);
   };
-        
+
   //------------------------------------------------HANDLE SUBMIT
   function handleSubmit(event) {
     event.preventDefault();
@@ -180,9 +161,8 @@ function QuestionCreate() {
     const newOnSubmitQuestion = { ...question, options: [...options] };
 
     setQuestion(newOnSubmitQuestion);
-    console.log("1...2....3.....Boom");
+
     console.log(newOnSubmitQuestion);
-    console.log("1...2....3.....Boom");
 
     axios
       .post("https://localhost:7196/api/Questions", newOnSubmitQuestion)
@@ -199,24 +179,19 @@ function QuestionCreate() {
   // };
   //------------------------------------------------ON SELECT (DROPDOWN)
   const onSelect = (selected, event) => {
-                    var onSelectQuestion = {};
-                    event.persist();
-                    // console.log(event.nativeEvent.srcElement.attributes[1].nodeValue);
-                    const condition = event.nativeEvent.srcElement.attributes[1].nodeValue;
+    var onSelectQuestion = {};
+    event.persist();
+    // console.log(event.nativeEvent.srcElement.attributes[1].nodeValue);
+    const condition = event.nativeEvent.srcElement.attributes[1].nodeValue;
 
-                  if (condition === "topic")
-                   {
-                    console.log("is a topic");
-                        onSelectQuestion = { ...question, topicId: selected };
-                  }
-                  else if(condition === "level")
-                  {
-                    console.log("is not a level");
-                  onSelectQuestion = { ...question, difficultyLevelId: selected };
-
-                  }
-                    setQuestion(onSelectQuestion);
-                    
+    if (condition === "topic") {
+      console.log("is a topic");
+      onSelectQuestion = { ...question, topicId: selected };
+    } else if (condition === "level") {
+      console.log("is not a level");
+      onSelectQuestion = { ...question, difficultyLevelId: selected };
+    }
+    setQuestion(onSelectQuestion);
   };
   //------------------------------------------------//GET ALL TOPICS AND DIFFICULTY LEVELS
   useEffect(() => {
@@ -243,35 +218,40 @@ function QuestionCreate() {
   //------------------------------------------------
   //------------------------------------------------ RETURN
   return (
-    <Form noValidate validated={true}   onSubmit={handleSubmit}> {/* ||FORM------------------------------------------------->>>>>>> */}
+    <Form noValidate validated={true} onSubmit={handleSubmit}>
+      {" "}
+      {/* ||FORM------------------------------------------------->>>>>>> */}
       <Stack gap={5}>
         <Row>
           {/* Questions text */}
-          
-          <Col md={7} >
-                    <FormGroup required> 
-                      <Form.Label>Questions Text</Form.Label>
-                      <Editor handleChange={handleChange} name={"QuestionText"} />
-                    </FormGroup>
-          </Col> 
+          <Col md={7}>
+            <FormGroup required>
+              <Form.Label>Questions Text</Form.Label>
+              <Editor handleChange={handleChange} name={"QuestionText"} />
+            </FormGroup>
+          </Col>
           {/* DROPDOWN TOPICS */}
           <Col md={3}>
             <Form.Group>
               <Form.Label></Form.Label>
-                          <Dropdown autoClose={"outside"} onSelect={onSelect} required>
-                                  <Dropdown.Toggle variant="primary" id="dropdown-basic">
-                                    Question's Topic
-                                  </Dropdown.Toggle>
+              <Dropdown autoClose={"outside"} onSelect={onSelect} required>
+                <Dropdown.Toggle variant="primary" id="dropdown-basic">
+                  Question's Topic
+                </Dropdown.Toggle>
 
-                                      <Dropdown.Menu>
-                                      
-                                              {allTopics.map((topic, index) => (
-                                                <Dropdown.Item  key={index} value={topic.id} eventKey={topic.id} species={"topic"} >
-                                                  {topic.name}
-                                                </Dropdown.Item>
-                                              ))}
-                                      </Dropdown.Menu>
-                          </Dropdown>
+                <Dropdown.Menu>
+                  {allTopics.map((topic, index) => (
+                    <Dropdown.Item
+                      key={index}
+                      value={topic.id}
+                      eventKey={topic.id}
+                      species={"topic"}
+                    >
+                      {topic.name}
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown>
             </Form.Group>
           </Col>{" "}
           {/*  DROPDOWN Difficulty levels */}
@@ -299,60 +279,85 @@ function QuestionCreate() {
             </Form.Group>
           </Col>
         </Row>
-              {/*   //OPTIONS// */}
-                <Row>{/* 1st Option */}
-                              <Col md={7}>
-                                <FormGroup>
-                                  <Form.Label>First Option</Form.Label>
-                                  {/* Editor */}
-                                  <Editor handleChange={handleChange} name={"Option0"} />
-                                </FormGroup>
-                              </Col>
 
-                              <Col>
-                              <Form.Check type={'checkbox'} id={"1stOptionCorrect"} label={"Is Correct"} 
-                              onChange={(event,name) => handleChange(event,name)} name="checkbox0" /> 
-                              </Col>
-                </Row>
-                <Row>{/* 2nd Option */}
-                            <Col md={7}>
-                              <FormGroup>
-                                <Form.Label>Second Option</Form.Label>
-                                {/* Editor */}
-                                <Editor handleChange={handleChange} name={"Option1"} />
-                              </FormGroup>
-                            </Col>
-                            <Col>
-                                        <Form.Check type={'checkbox'} id={"2ndOptionCorrect"} label={"Is Correct"} 
-                                        onChange={(event,name) => handleChange(event,name)} name="checkbox1" /> 
-                              </Col>
-                </Row>
-                <Row>{/* 3d Option */}
-                              <Col md={7}>
-                                <FormGroup>
-                                  <Form.Label>Third Option</Form.Label>
-                                  {/* Editor */}
-                                  <Editor handleChange={handleChange} name={"Option2"} />
-                                </FormGroup>
-                              </Col>
-                              <Col>
-                                                    <Form.Check type={'checkbox'} id={"3dOptionCorrect"} label={"Is Correct"} 
-                                                    onChange={(event,name) => handleChange(event,name)} name="checkbox2" /> 
-                              </Col>
-                </Row>
-                <Row>{/* 4th Option  (id=3)*/}
-                        <Col md={7}>
-                          <FormGroup>
-                            <Form.Label>Fourth Option</Form.Label>
-                            {/* Editor */}
-                            <Editor handleChange={handleChange} name={"Option3"} />
-                          </FormGroup>
-                        </Col>
-                        <Col>
-                                                          <Form.Check type={'checkbox'} id={"4thOptionCorrect"} label={"Is Correct"} 
-                                                          onChange={(event,name) => handleChange(event,name)} name="checkbox3" /> 
-                        </Col>
-                </Row>
+        {/*   //OPTIONS// */}
+        <Row>
+          {/* 1st Option */}
+          <Col md={7}>
+            <FormGroup>
+              <Form.Label>First Option</Form.Label>
+              {/* Editor */}
+              <Editor handleChange={handleChange} name={"Option0"} />
+            </FormGroup>
+          </Col>
+
+          <Col>
+            <Form.Check
+              type={"checkbox"}
+              id={"1stOptionCorrect"}
+              label={"Is Correct"}
+              onChange={(event, name) => handleChange(event, name)}
+              name="checkbox0"
+            />
+          </Col>
+        </Row>
+        <Row>
+          {/* 2nd Option */}
+          <Col md={7}>
+            <FormGroup>
+              <Form.Label>Second Option</Form.Label>
+              {/* Editor */}
+              <Editor handleChange={handleChange} name={"Option1"} />
+            </FormGroup>
+          </Col>
+          <Col>
+            <Form.Check
+              type={"checkbox"}
+              id={"2ndOptionCorrect"}
+              label={"Is Correct"}
+              onChange={(event, name) => handleChange(event, name)}
+              name="checkbox1"
+            />
+          </Col>
+        </Row>
+        <Row>
+          {/* 3d Option */}
+          <Col md={7}>
+            <FormGroup>
+              <Form.Label>Third Option</Form.Label>
+              {/* Editor */}
+              <Editor handleChange={handleChange} name={"Option2"} />
+            </FormGroup>
+          </Col>
+          <Col>
+            <Form.Check
+              type={"checkbox"}
+              id={"3dOptionCorrect"}
+              label={"Is Correct"}
+              onChange={(event, name) => handleChange(event, name)}
+              name="checkbox2"
+            />
+          </Col>
+        </Row>
+        <Row>
+          {/* 4th Option  (id=3)*/}
+          <Col md={7}>
+            <FormGroup>
+              <Form.Label>Fourth Option</Form.Label>
+              {/* Editor */}
+              <Editor handleChange={handleChange} name={"Option3"} />
+            </FormGroup>
+          </Col>
+          <Col>
+            <Form.Check
+              type={"checkbox"}
+              id={"4thOptionCorrect"}
+              label={"Is Correct"}
+              onChange={(event, name) => handleChange(event, name)}
+              name="checkbox3"
+            />
+          </Col>
+        </Row>
 
         <Row>
           <Col md={30}>
@@ -364,13 +369,11 @@ function QuestionCreate() {
       </Stack>
     </Form>
   );
-
-
 }
 export default QuestionCreate;
 
 // {
-  /* <Multiselect
+/* <Multiselect
                 name="topics"
                 options={allTopics} // Options to display in the dropdown
                 onSelect={onSelect} // Function will trigger on select event

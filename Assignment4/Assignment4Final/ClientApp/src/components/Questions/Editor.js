@@ -3,8 +3,14 @@ import React from "react";
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import EditorPlus from 'ckeditor5-classic-plus'; 
 
+ 
+
 
 function Editor(props) {
+
+
+console.log("Before editor");
+
     return (
         <div>
                                                             {/* <CKEditor
@@ -19,7 +25,7 @@ function Editor(props) {
 
                                 <CKEditor
                                                     editor={EditorPlus}
-                                                    data={props.text}
+                                                    // data={props.text}
                                                     onReady={editor => {/* You can store the "editor" and use when it is needed. */}}
                                                             event = {props.event}
                                                     name={props.name}    
@@ -28,7 +34,7 @@ function Editor(props) {
                                                     onChange={(event, editor,name) => 
                                                                         {
                                                                                 // console.log(event);
-                                                                                // console.log("Inside Editor component");
+                                                                                console.log("Inside Editor component");
                                                                                 const data = editor.getData();
                                                                                 // console.log(data);
 
@@ -44,21 +50,21 @@ function Editor(props) {
                                                                         }
                                                                         required
 
-                                                    // config={{
-                                                    //   simpleUpload: {
-                                                    //     // The URL that the images are uploaded to.
-                                                    //     uploadUrl: "https://localhost:44473/admin/Questions/QuestionCreate",
+                                                    config={{
+                                                      simpleUpload: {
+                                                        // The URL that the images are uploaded to.
+                                                        uploadUrl: "https://localhost:7196/api/Upload",
                                                         
-                                                    //     // Enable the XMLHttpRequest.withCredentials property if required.
-                                                    //     withCredentials: true,
+                                                        // Enable the XMLHttpRequest.withCredentials property if required.
+                                                        // withCredentials: true,
                                                 
-                                                    //     // Headers sent along with the XMLHttpRequest to the upload server.
-                                                    //     headers: {
-                                                    //       "X-CSRF-TOKEN": "CSFR-Token",
-                                                    //       Authorization: "Bearer <JSON Web Token>"
-                                                    //     }
-                                                    //   }
-                                                    // }}
+                                                        // Headers sent along with the XMLHttpRequest to the upload server.
+                                                        // headers: {
+                                                        //   "X-CSRF-TOKEN": "CSFR-Token",
+                                                        //   Authorization: "Bearer <JSON Web Token>"
+                                                        // }
+                                                      }
+                                                    }}
                                       />
 </div>
                                       );
