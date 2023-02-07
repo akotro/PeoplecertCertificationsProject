@@ -168,6 +168,7 @@ namespace Assignment4Final
 
             builder.Services.AddScoped<ITopicsRepository, TopicsRepository>();
             builder.Services.AddScoped<TopicsService>();
+            
 
             builder.Services.AddScoped<IDifficultyLevelsRepository, DifficultyLevelsRepository>();
             builder.Services.AddScoped<DifficultyLevelsService>();
