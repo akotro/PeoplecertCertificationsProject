@@ -19,7 +19,9 @@ namespace Assignment4Final.Data.Repositories
                 return await _context.Exams
                     .AsSplitQuery()
                     .Include(exam => exam.Questions)
-                    .ThenInclude(q => q.Topic)
+                    .ThenInclude(q =>  q.Topic)
+                    .Include(exam => exam.Questions)
+                    .ThenInclude(quest=> quest.DifficultyLevel)
                     .Include(exam => exam.Certificate)
                     .ThenInclude(c => c.Topics)
                     .ToListAsync();
