@@ -1,105 +1,91 @@
+// import React from "react";
+// import { CKEditor } from "@ckeditor/ckeditor5-react";
+// import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+// import SimpleUploadAdapter from "@ckeditor/ckeditor5-upload/src/adapters/simpleuploadadapter";
+
+// const MyEditor = (props) => {
+//   const handleEditorReady = (editor) => {
+//     console.log("Editor is ready!", editor);
+//   };
+
+//   const handleChange = (event, editor) => {
+//     console.log("Editor data has changed!", editor.getData());
+//   };
+
+//   return (
+//     <CKEditor
+//       editor={ClassicEditor}
+//       config={{
+//         plugins: [SimpleUploadAdapter],
+//         simpleUpload: {
+//           uploadUrl: "https://localhost:7196/api/File",
+//         },
+//       }}
+//       data={props.initialData}
+//       onReady={handleEditorReady}
+//       onChange={handleChange}
+//     />
+//   );
+// };
+
+// export default MyEditor;
+
 import React from "react";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
-import {CKEditor} from "@ckeditor/ckeditor5-react";
-import Editor from 'ckeditor5-custom-build/build/ckeditor';
+const API_URL = "https://localhost:7196/api";
+const UPLOAD_ENDPOINT = "File";
 
-// import { SimpleUploadAdapter } from "@ckeditor/ckeditor5-upload";
- 
-
-
-function MyEditor(props) {
-
-
-console.log("Before editor");
-
-    return (
-        <div>
-                                                      
-   
-
-                                <CKEditor
-                                                    editor={Editor}
-                                                    // data={props.text}
-                                                    onReady={editor =>
-                                                       {
-                                                        /* You canc store the "editor" and use when it is needed. */
-                                                        console.log("Editor is ready to use!");
-                                                      }}
-
-                                                            event = {props.event}
-                                                    name={props.name}    
-                                                    // optionId={props.optionId}
-
-                                                    onChange={(event, editor,name) => 
-                                                                        {
-                                                                                // console.log(event);
-                                                                                console.log("Inside Editor component");
-                                                                                const data = editor.getData();
-                                                                                // console.log(data);
-
-                                                                                name=props.name;
-                                                                                // console.log(name);
-                                                                                
-                                                                                // optionId=props.optionId;
-                                                                                // console.log(optionId);
-                                                                                    
-                                                                                props.handleChange(event,name,data);
-                                                                                
-                                                                                            }
-                                                                        }
-                                                                        required
-
-                                                    config={{
-                                                      simpleUpload: {
-                                                        // The URL that the images are uploaded to.
-                                                        uploadUrl: "https://localhost:7196/api/Upload",
-                                                        // plugins: [ SimpleUploadAdapter,  ],
-                                                        // Enable the XMLHttpRequest.withCredentials property if required.
-                                                        // withCredentials: true,
-                                                
-                                                        // Headers sent along with the XMLHttpRequest to the upload server.
-                                                        // headers: {
-                                                        //   "X-CSRF-TOKEN": "CSFR-Token",
-                                                        //   Authorization: "Bearer <JSON Web Token>"
-                                                        // }
-                                                      }
-                                                    }}
-                                      />
-</div>
-                                      );
-
-
-}   
-
-
-export default MyEditor;
-
-
-
-
-
-// editor={EditorPlus}
-// data={question.text}
-// onReady={editor => {
-//   // You can store the "editor" and use when it is needed.
-// }}
-
-// onChange={(event, editor) => {
-//   const data = editor.getData();
-//   handleChange(data,event,editor);
-// }}
-// // config={{
-// //   simpleUpload: {
-// //     // The URL that the images are uploaded to.
-// //     uploadUrl: "https://localhost:44473/admin/Questions/QuestionCreate",
-    
-// //     // Enable the XMLHttpRequest.withCredentials property if required.
-// //     withCredentials: true,
-
-// //     // Headers sent along with the XMLHttpRequest to the upload server.
-// //     headers: {
-// //       "X-CSRF-TOKEN": "CSFR-Token",
-// //       Authorization: "Bearer <JSON Web Token>"
-// //     }
-// //   }
-// // }}
+export default function MyEditor({ handleChange, ...props }) {
+  function uploadAdapter(loader) {
+    return {
+      upload: () => {
+        return new Promise((resolve, reject) => {
+          const body = new FormData();
+          loader.file.then((file) => {
+            body.append("files", file);
+            // let headers = new Headers();
+            // headers.append("Origin", "http://localhost:3000");
+            fetch(`${API_URL}/${UPLOAD_ENDPOINT}`, {
+              method: "post",
+              body: body
+              // mode: "no-cors"
+            })
+              .then((res) => res.json())
+              .then((res) => {
+                resolve({
+                  default: `${API_URL}/${UPLOAD_ENDPOINT}/image/${res.filename}`
+                });
+              })
+              .catch((err) => {
+                reject(err);
+              });
+          });
+        });
+      }
+    };
+  }
+  function uploadPlugin(editor) {
+    editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
+      return uploadAdapter(loader);
+    };
+  }
+  return (
+    <div className="App">
+      <CKEditor
+        config={{
+          extraPlugins: [uploadPlugin]
+        }}
+        editor={ClassicEditor}
+        onReady={(editor) => {}}
+        onBlur={(event, editor) => {}}
+        onFocus={(event, editor) => {}}
+        // onChange={(event, editor) => {
+        //   handleChange(editor.getData());
+        // }}
+        {...props}
+      />
+    </div>
+  );
+}

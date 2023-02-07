@@ -8,9 +8,9 @@ namespace Assignment4Final.Controllers;
 public class FileController : ControllerBase
 {
     [HttpPost]
-    public async Task<IActionResult> UploadFile(IFormFile upload)
+    public async Task<IActionResult> UploadFile([FromForm] IFormFile file)
     {
-        if (upload == null || upload.Length == 0)
+        if (file == null || file.Length == 0)
             return BadRequest("No file received");
 
         string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "Uploads");
@@ -18,7 +18,7 @@ public class FileController : ControllerBase
         if (!Directory.Exists(folderPath))
             Directory.CreateDirectory(folderPath);
 
-        string fileName = Guid.NewGuid().ToString() + Path.GetExtension(upload.FileName);
+        string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
         string filePath = Path.Combine(folderPath, fileName);
 
         // using (var stream = new FileStream(filePath, FileMode.Create))
@@ -27,7 +27,7 @@ public class FileController : ControllerBase
         //   }
         using (var fileStream = new FileStream(filePath, FileMode.Create))
         {
-            await upload.CopyToAsync(fileStream);
+            await file.CopyToAsync(fileStream);
         }
 
         var uploadedFile = new FileDto
