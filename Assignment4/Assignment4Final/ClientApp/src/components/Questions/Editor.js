@@ -53,16 +53,16 @@ console.log("Before editor");
                                                     config={{
                                                       simpleUpload: {
                                                         // The URL that the images are uploaded to.
-                                                        uploadUrl: "https://localhost:44473/admin/Questions/QuestionCreate",
+                                                        uploadUrl: "https://localhost:7196/api/Upload",
                                                         
                                                         // Enable the XMLHttpRequest.withCredentials property if required.
-                                                        withCredentials: true,
+                                                        // withCredentials: true,
                                                 
                                                         // Headers sent along with the XMLHttpRequest to the upload server.
-                                                        headers: {
-                                                          "X-CSRF-TOKEN": "CSFR-Token",
-                                                          Authorization: "Bearer <JSON Web Token>"
-                                                        }
+                                                        // headers: {
+                                                        //   "X-CSRF-TOKEN": "CSFR-Token",
+                                                        //   Authorization: "Bearer <JSON Web Token>"
+                                                        // }
                                                       }
                                                     }}
                                       />
