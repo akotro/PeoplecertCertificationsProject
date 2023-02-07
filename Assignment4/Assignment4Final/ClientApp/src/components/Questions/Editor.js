@@ -37,7 +37,8 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 const API_URL = "https://localhost:7196/api";
 const UPLOAD_ENDPOINT = "File";
 
-export default function MyEditor({ handleChange, ...props }) {
+export default function MyEditor({ handleChange, ...props }) 
+{
     function uploadAdapter(loader) {
         return {
             upload: () => {
@@ -73,6 +74,7 @@ export default function MyEditor({ handleChange, ...props }) {
         };
     }
     return (
+
         <div className="App">
             <CKEditor
                 config={{
@@ -82,11 +84,14 @@ export default function MyEditor({ handleChange, ...props }) {
                 onReady={(editor) => {}}
                 onBlur={(event, editor) => {}}
                 onFocus={(event, editor) => {}}
-                // onChange={(event, editor) => {
-                //   handleChange(editor.getData());
-                // }}
+                onChange={(event, editor) => 
+                    {
+
+                  handleChange(event,props.name,editor.getData());
+                }}
                 {...props}
             />
         </div>
+
     );
 }

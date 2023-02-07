@@ -150,7 +150,7 @@ function QuestionCreate() {
         })
       );
     }
-    console.log(options);
+    // console.log(options);
   };
 
   //------------------------------------------------HANDLE SUBMIT
