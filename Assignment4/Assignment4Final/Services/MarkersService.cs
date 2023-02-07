@@ -18,27 +18,73 @@ public class MarkersService
 
     public async Task<List<MarkerDto>> GetAllAsync()
     {
-        var certificates = await _repository.GetAllAsync();
-        return _mapper.Map<List<MarkerDto>>(certificates);
+        var markers = await _repository.GetAllAsync();
+        return _mapper.Map<List<MarkerDto>>(markers);
     }
 
     public async Task<MarkerDto?> GetAsync(string id)
     {
-        var certificate = await _repository.GetAsync(id);
-        return certificate == null ? null : _mapper.Map<MarkerDto>(certificate);
+        var marker = await _repository.GetAsync(id);
+
+        if (marker == null)
+        {
+            return null;
+        }
+
+        var markerDto = _mapper.Map<MarkerDto>(marker);
+
+        // NOTE:(akotro) Fill IsCorrectModerated with values from IsCorrect
+        if (markerDto.CandidateExams?.Any() == true)
+        {
+            foreach (var candExam in markerDto.CandidateExams)
+            {
+                if (candExam.CandidateExamAnswers?.Any(a => a.IsCorrectModerated == null) == true)
+                {
+                    foreach (
+                        var answer in candExam.CandidateExamAnswers.Where(
+                            a => a.IsCorrectModerated == null
+                        )
+                    )
+                    {
+                        answer.IsCorrectModerated = answer.IsCorrect;
+                    }
+                }
+            }
+        }
+
+        return markerDto;
     }
 
-    public async Task<MarkerDto?> AddAsync(MarkerDto certificateDto)
+    public async Task<MarkerDto?> AddAsync(MarkerDto markerDto)
     {
-        var certificate = _mapper.Map<Marker>(certificateDto);
-        var addedMarker = await _repository.AddAsync(certificate);
+        var marker = _mapper.Map<Marker>(markerDto);
+        var addedMarker = await _repository.AddAsync(marker);
         return addedMarker == null ? null : _mapper.Map<MarkerDto>(addedMarker);
     }
 
-    public async Task<MarkerDto?> UpdateAsync(string id, MarkerDto certificateDto)
+    public async Task<MarkerDto?> UpdateAsync(string id, MarkerDto markerDto)
     {
-        var certificate = _mapper.Map<Marker>(certificateDto);
-        var updatedMarker = await _repository.UpdateAsync(id, certificate);
+        // NOTE:(akotro) Calculate new score from moderation only for moderated exams
+        if (markerDto.CandidateExams?.Any() == true)
+        {
+            foreach (var candExam in markerDto.CandidateExams.Where(ce => ce.IsModerated == true))
+            {
+                var score = candExam.CandidateExamAnswers?.Count(
+                    answer => (bool)answer.IsCorrectModerated
+                );
+                candExam.CandidateScore = score;
+                candExam.PercentScore = (score / candExam.MaxScore) * 100;
+                candExam.Result =
+                    candExam.CandidateScore >= candExam.Exam?.Certificate?.PassingMark
+                        ? true
+                        : false;
+                candExam.MarkingDate = DateTime.Now; // NOTE:(akotro) Should this be in UTC?
+            }
+        }
+
+        var marker = _mapper.Map<Marker>(markerDto);
+
+        var updatedMarker = await _repository.UpdateAsync(id, marker);
         return updatedMarker == null ? null : _mapper.Map<MarkerDto>(updatedMarker);
     }
 
