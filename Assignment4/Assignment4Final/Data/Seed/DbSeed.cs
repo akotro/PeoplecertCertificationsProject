@@ -43,13 +43,25 @@ namespace Assignment4Final.Data.Seed
         {
             Randomizer.Seed = new Random(8675309);
 
-            #region // Adding AppUsers(10)
+            #region // Adding AppUsers
 
             // ---------------------------------
             // Login Details Example
 
-            // user: admin0@gmail.com
-            // pass: Admin0!
+            // user: admin1@gmail.com
+            // pass: Admin1!
+
+            // user: candidate1@gmail.com
+            // pass: Candidate1!
+
+            // user: marker1@gmail.com
+            // pass: Marker1!
+
+            // user: qualitycontrol1@gmail.com
+            // pass: Qualitycontrol1!
+
+            // user: nothing1@gmail.com
+            // pass: Nothing1!
             // ---------------------------------
 
             // check if table is empty and only then add users
