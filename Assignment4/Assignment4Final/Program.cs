@@ -40,7 +40,7 @@ namespace Assignment4Final
 
             // Add services to the container.
             var connectionString =
-                builder.Configuration.GetConnectionString("Iasonas")
+                builder.Configuration.GetConnectionString("localdb")
                 ?? throw new InvalidOperationException(
                     "Connection string 'DefaultConnection' not found."
                 );
@@ -48,19 +48,6 @@ namespace Assignment4Final
                 options => options.UseSqlServer(connectionString)
             );
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
-            // builder.Services
-            //     .AddDefaultIdentity<AppUser>(
-            //         options => options.SignIn.RequireConfirmedAccount = false
-            //     )
-            //     .AddRoles<IdentityRole>() // NOTE:(akotro) Required for roles
-            //     .AddEntityFrameworkStores<ApplicationDbContext>();
-
-            // builder.Services
-            //     .AddIdentityServer()
-            //     .AddApiAuthorization<AppUser, ApplicationDbContext>();
-
-            // builder.Services.AddAuthentication().AddIdentityServerJwt();
 
             builder.Services
                 .AddIdentity<AppUser, IdentityRole>(
@@ -195,7 +182,7 @@ namespace Assignment4Final
             >();
             builder.Services.AddScoped<CandidateExamAnswersService>();
 
-            builder.Services.AddScoped<IGenericRepository<Marker>, MarkersRepository>();
+            builder.Services.AddScoped<IMarkersRepository, MarkersRepository>();
             builder.Services.AddScoped<MarkersService>();
             // ---------------------------------------------------------------------------------------
 
