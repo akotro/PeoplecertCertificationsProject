@@ -182,7 +182,7 @@ namespace Assignment4Final
             >();
             builder.Services.AddScoped<CandidateExamAnswersService>();
 
-            builder.Services.AddScoped<IGenericRepository<Marker>, MarkersRepository>();
+            builder.Services.AddScoped<IMarkersRepository, MarkersRepository>();
             builder.Services.AddScoped<MarkersService>();
             // ---------------------------------------------------------------------------------------
 
