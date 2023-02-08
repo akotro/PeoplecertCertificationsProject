@@ -30,7 +30,7 @@ public class FileController : ControllerBase
             var uploadedFile = new FileDto
             {
                 FileName = hash,
-                FilePath = filePath,
+                // FilePath = filePath,
                 Url = $"{baseUrl}/{hash}"
             };
             return Ok(uploadedFile);
@@ -44,7 +44,7 @@ public class FileController : ControllerBase
         var newFile = new FileDto
         {
             FileName = hash,
-            FilePath = filePath,
+            // FilePath = filePath,
             Url = $"{baseUrl}/{hash}"
         };
 

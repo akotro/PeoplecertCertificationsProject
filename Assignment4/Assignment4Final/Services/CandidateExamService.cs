@@ -22,7 +22,6 @@ namespace Assignment4Final.Services
             IMapper mapper,
             ExamService examService,
             ICertificatesRepository certificatesRepository
-
         )
         {
             _candidateExamRepository = candidateExamRepository;
@@ -52,20 +51,25 @@ namespace Assignment4Final.Services
 
 
 
-        public async Task<CandidateExamDto?> GetCandidateExamByCertificateAsync(int certId,string userId)
+        public async Task<CandidateExamDto?> GetCandidateExamByCertificateAsync(
+            int certId,
+            string userId
+        )
         {
             var certificate = await _certificatesRepository.GetAsync(certId); // used this so the entity is loaded
 
             var exam = GetRandomExam(certificate.Exams.ToList());
 
-            var candExam = new CandidateExam { Candidate = await _candidateExamRepository.GetCandidateByUserIdAsync(userId), Exam = exam };
+            var candExam = new CandidateExam
+            {
+                Candidate = await _candidateExamRepository.GetCandidateByUserIdAsync(userId),
+                Exam = exam
+            };
 
-            var candExamUpdated = await _candidateExamRepository.AddAsync(candExam);
+            var candExamUpdated = await _candidateExamRepository.AddOrUpdateAsync(candExam);
 
             return _mapper.Map<CandidateExamDto>(candExamUpdated);
-
         }
-
 
         public Exam GetRandomExam(List<Exam> exams)
         {
@@ -73,13 +77,11 @@ namespace Assignment4Final.Services
             int count = exams.Count();
             var exam = exams[random.Next(0, count)];
             return exam;
-
         }
 
-
-        public async  Task<CandidateExam> AddCandidateExamAsync( CandidateExam candidateExam)
+        public async Task<CandidateExam> AddCandidateExamAsync(CandidateExam candidateExam)
         {
-            return candidateExam = await _candidateExamRepository.AddAsync( candidateExam);
+            return candidateExam = await _candidateExamRepository.AddOrUpdateAsync(candidateExam);
         }
 
         public CandidateExamDto GetCandidateExamDtoFromCandidateExam(CandidateExam candidateExam)
@@ -88,18 +90,25 @@ namespace Assignment4Final.Services
             return _mapper.Map<CandidateExamDto>(candidateExam);
         }
 
-
-        public async Task<List<CandidateExam>> GetAllCandidateExamsOfCandidateAsync(Candidate candidate)
+        public async Task<List<CandidateExam>> GetAllCandidateExamsOfCandidateAsync(
+            Candidate candidate
+        )
         {
             return await _candidateExamRepository.GetAllCandidateExamsOfCandidateAsync(candidate);
         }
 
-        public async Task<List<CandidateExam>> GetNotTakenCandidateExamsOfCandidateAsync(Candidate candidate)
+        public async Task<List<CandidateExam>> GetNotTakenCandidateExamsOfCandidateAsync(
+            Candidate candidate
+        )
         {
-            return await _candidateExamRepository.GetNotTakenCandidateExamsOfCandidateAsync(candidate);
+            return await _candidateExamRepository.GetNotTakenCandidateExamsOfCandidateAsync(
+                candidate
+            );
         }
 
-        public List<CandidateExamDto> GetListOfCandidateExamDtosFromListOfCandidateExam(List<CandidateExam> candidateExams)
+        public List<CandidateExamDto> GetListOfCandidateExamDtosFromListOfCandidateExam(
+            List<CandidateExam> candidateExams
+        )
         {
             return _mapper.Map<List<CandidateExamDto>>(candidateExams);
         }
@@ -109,37 +118,51 @@ namespace Assignment4Final.Services
             return await _candidateExamRepository.GetCandidateExamByIdAsync(id);
         }
 
-
-        public async Task<CandidateExamDto?> UpdateWithAnswersCandidateExamDtoAsync(CandidateExam candidateExam)
+        public async Task<CandidateExamDto?> UpdateWithAnswersCandidateExamDtoAsync(
+            CandidateExam candidateExam
+        )
         {
-            if(candidateExam != null)
+            if (candidateExam != null)
             {
                 var candidateExamUpdated = await CreateCandidateExamAnswersAsync(candidateExam);
                 var mapped = _mapper.Map<CandidateExamDto>(candidateExamUpdated);
                 return mapped;
             }
             return null;
-           
         }
 
-
-
-        public async Task<CandidateExam?> CreateCandidateExamAnswersAsync(CandidateExam candidateExam)
+        public async Task<CandidateExam?> CreateCandidateExamAnswersAsync(
+            CandidateExam candidateExam
+        )
         {
-            if(candidateExam.Exam != null && candidateExam.Exam.Questions!= null && candidateExam.CandidateExamAnswers != null)
+            if (
+                candidateExam.Exam != null
+                && candidateExam.Exam.Questions != null
+                && candidateExam.CandidateExamAnswers != null
+            )
             {
                 candidateExam.ExamDate = DateTime.Now;
                 var questions = candidateExam.Exam.Questions.ToList();
 
-                questions.ForEach(question => candidateExam.CandidateExamAnswers
-                .Add(new CandidateExamAnswers()
-                {
-                    QuestionText = question.Text,
-                    CorrectOption = question.Options != null ?
-                    question.Options.Where(opt => opt.Correct).FirstOrDefault().Text : null,
-
-                }));
-                var candidateExamUpdated = await Task.Run(() => _candidateExamRepository.AddAsync(candidateExam));
+                questions.ForEach(
+                    question =>
+                        candidateExam.CandidateExamAnswers.Add(
+                            new CandidateExamAnswers()
+                            {
+                                QuestionText = question.Text,
+                                CorrectOption =
+                                    question.Options != null
+                                        ? question.Options
+                                            .Where(opt => opt.Correct)
+                                            .FirstOrDefault()
+                                            .Text
+                                        : null,
+                            }
+                        )
+                );
+                var candidateExamUpdated = await Task.Run(
+                    () => _candidateExamRepository.AddOrUpdateAsync(candidateExam)
+                );
                 return candidateExamUpdated;
             }
             return null;
@@ -155,18 +178,12 @@ namespace Assignment4Final.Services
             var score = candidateExam.CandidateExamAnswers.Count(answer => (bool)answer.IsCorrect); // IsCorrect must not be nullable
 
             candidateExam.CandidateScore = score;
-            candidateExam.PercentScore = (score/candidateExam.MaxScore)*100; // max score shoud be on exam not candidateExam 
-            candidateExam.Result = candidateExam.CandidateScore >= candidateExam.Exam.Certificate.PassingMark ? true : false ;
-            return await _candidateExamRepository.AddAsync(candidateExam);
+            candidateExam.PercentScore = (score / candidateExam.MaxScore) * 100; // max score shoud be on exam not candidateExam
+            candidateExam.Result =
+                candidateExam.CandidateScore >= candidateExam.Exam.Certificate.PassingMark
+                    ? true
+                    : false;
+            return await _candidateExamRepository.AddOrUpdateAsync(candidateExam);
         }
-
-
-        
-
-
-
-
-
-        
     }
 }
