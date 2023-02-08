@@ -8,13 +8,6 @@ namespace Assignment4Final.Controllers;
 [ApiController]
 public class FileController : ControllerBase
 {
-    private readonly IWebHostEnvironment _hostingEnvironment;
-
-    public FileController(IWebHostEnvironment hostingEnvironment)
-    {
-        _hostingEnvironment = hostingEnvironment;
-    }
-
     [HttpPost]
     public async Task<IActionResult> UploadFile([FromForm] IFormFile file)
     {
