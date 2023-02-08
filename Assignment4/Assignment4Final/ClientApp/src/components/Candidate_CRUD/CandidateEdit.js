@@ -132,6 +132,7 @@ export default function CandidateEdit(props) {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        //for a user who is not a candidate.
             if (params.id === undefined) {
                 await axios.post(`https://localhost:7196/api/Candidate`, candidate)
                     .then(function (response) {
