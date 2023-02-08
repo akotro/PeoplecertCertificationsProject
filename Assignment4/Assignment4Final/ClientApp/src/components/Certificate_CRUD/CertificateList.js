@@ -72,6 +72,7 @@ function CertificateList(props) {
         const confirmDelete = window.confirm("Are you sure you want to delete this certificate?");
 
         if (confirmDelete) {
+            //TODO check for role before delete
             //send axios call with the request to delete using Id
             axios.delete(`https://localhost:7196/api/Certificates/${id}`)
                 .then(response => {

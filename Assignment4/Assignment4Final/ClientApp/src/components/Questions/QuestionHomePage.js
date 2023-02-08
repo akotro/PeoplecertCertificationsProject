@@ -1,18 +1,9 @@
-import {
-    Form,
-    Button,
-    Col,
-    Row,
-    FloatingLabel,
-    Stack,
-    Table,
-    Container,
-} from "react-bootstrap";
-import { React, useState, useEffect } from "react";
+// import {Form,Button,Col,Row,FloatingLabel,Stack,Table,Container,} from "react-bootstrap";
 
+import {Button,Table,Container} from "react-bootstrap";
+import  React, {useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import Delete from "./QuestionDelete";
 import QuestionEdit from "./QuestionEdit";
 
 function Questions() {
@@ -29,12 +20,7 @@ function Questions() {
             });
     }, []);
 
-    //   console.log("Testing in Questions");
-    //   console.log(data[0]);
-    // resp.data.data[0].options[0].text
-
-    //--------------------------------------------------
-    //filters the text from the raw html
+    //--------------------------------------------------//filters the text from the raw html
     function Replace(temp) {
         return (
             <td
@@ -44,26 +30,28 @@ function Questions() {
             ></td>
         )
     }
-
-    //--------------------------------------------------
     //--------------------------------------------------HANDLE DELETE
-    const handleDelete = (id) => {
+    const  handleDelete = (event) => {
         // Asks user if they are sure
+        const localId = event.target.dataset.id;
         const confirmDelete = window.confirm(
             "Are you sure you want to delete this this question?"
         );
         if (confirmDelete) {
             //send axios call with the request to delete using Id
             axios
-                .delete(`https://localhost:7196/api/Questions/${id}`)
-                .then((response) => {
-                    setData(data.filter((item) => item.id !== id));
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
+            .delete(`https://localhost:7196/api/questions/${localId}`)
+            .then((response) => {
+                // console.log("Delete response");
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
+            const newData = data.filter((item) => { return item.id != localId;},localId);
+            setData( newData);
         }
-    };
+    }
 
     //-----------------------------------------------------------
     return (
@@ -106,8 +94,8 @@ function Questions() {
                                 <td>
                                     <Button
                                         variant="dark"
-                                        onClick={(event) => Delete(event)}
-                                        name={index}
+                                        onClick={ handleDelete}
+                                        data-id={item.id}
                                     >
                                         Delete
                                     </Button>

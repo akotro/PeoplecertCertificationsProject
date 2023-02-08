@@ -94,7 +94,7 @@ const AppRoutes = [
     element: <CandidateEdit />,
   },
   {
-    path: "/candidate/AvailableExams",
+    path: "/candidate/availableexams",
     needsCand: true,
 
     element: <AvailableExams />
