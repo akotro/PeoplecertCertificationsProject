@@ -148,9 +148,7 @@ function CertificateList(props) {
                             {makebuttons(certificate.id)}
                             <td>
                             </td>
-
                         </tr>
-
                     ))}
                 </tbody>
             </Table>

@@ -552,6 +552,7 @@ namespace Assignment4Final.Data.Seed
                         c => c.CandidateExamAnswers,
                         f =>
                         {
+                            //return candiExamAnsFaker.Generate(100);
                             return candiExamAnsFaker.Generate(10);
                         }
                     )
@@ -562,7 +563,7 @@ namespace Assignment4Final.Data.Seed
                     .RuleFor(c => c.Marker, f => f.PickRandom(db.Markers.ToList()))
                     .RuleFor(
                         c => c.MarkerAssignedDate,
-                        f => f.Date.Between(new DateTime(2022, 6, 10, 0, 0, 0), DateTime.Now)
+                        f => f.Date.Between(DateTime.Now, f.Date.Soon(7))
                     );
                 // .RuleFor(
                 //     c => c.MarkingDate,
@@ -581,7 +582,7 @@ namespace Assignment4Final.Data.Seed
         {
             Randomizer.Seed = new Random(8675309);
             var faker = new Faker();
-
+            //adding 10 questions to each Exam
             foreach (var item in db.Exams.Include(c => c.Questions).ToList())
             {
                 if (item.Questions.Count == 0)
@@ -598,6 +599,7 @@ namespace Assignment4Final.Data.Seed
             ;
             db.SaveChanges();
 
+            //adding 4Topics to each Certificate
             foreach (var item in db.Certificates.Include(c => c.Topics).ToList())
             {
                 if (item.Topics.Count == 0)
@@ -617,6 +619,7 @@ namespace Assignment4Final.Data.Seed
 
         public static void SeedCalculatedFields(ApplicationDbContext db)
         {
+            //calculating MaxMark and Passing mark fo each Certificate 
             var passMark = 65;
             foreach (var cert in db.Certificates)
             {
@@ -633,6 +636,29 @@ namespace Assignment4Final.Data.Seed
                 }
             }
 
+            db.SaveChanges();
+
+            foreach (var candExam in db.CandidateExams)
+            {
+                if (candExam.MaxScore == null)
+                {
+                    candExam.MaxScore = candExam.Exam.Certificate.MaxMark;
+                };
+
+                if (candExam.CandidateScore == null)
+                {
+                    candExam.CandidateScore = 0;
+                    foreach (var ans in candExam.CandidateExamAnswers)
+                    {
+                        if ((bool)ans.IsCorrect)
+                        {
+                            candExam.CandidateScore = candExam.CandidateScore + 1;
+                        }
+                    }
+                };
+                candExam.PercentScore = ((decimal)candExam.CandidateScore / (decimal)candExam.MaxScore) * 100;
+                candExam.Result = candExam.PercentScore > 65 ? true : false;
+            }
             db.SaveChanges();
         }
 

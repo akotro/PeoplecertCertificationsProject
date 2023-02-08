@@ -24,6 +24,7 @@ import Register from './components/auth/Register'
 import AddQuestionToExam from './components/Exam_CRUD/AddQuestionToExam';
 
 import MarkerList from "./components/Marker/MarkerList";
+import MarkExam from "./components/Marker/MarkerMarkExam";
 
 const AppRoutes = [
   {
@@ -96,43 +97,50 @@ const AppRoutes = [
     path: "/candidate/AvailableExams",
     needsCand: true,
 
-        element: <AvailableExams />
-    },
-    // -----------------Candidate-------------------
-    {
-        path: '/candidate/Examination/:id',
-        needsCand: true,
-        element: <Examination />
-    },
-    {
-        path: '/ExamsList',
-        // requireAuth: true,
-        element: <ExamList/>
-    },
-    {
-        path: '/marker',
-        // requireAuth: true,
-        element: <MarkerList/>
-    },
-    {
-        path: '/ExamQuestionList',
-        // requireAuth: true,
-        element: <ExamQuestionList/>
-    },
-    {
-        path: '/AddQuestionToExam',
-        element: <AddQuestionToExam />
-    },
-    //this needs to stay as the last path
-    {
-        path: '/notauth',
-        element: <NotAuth />
-    },
-    {
-        path: '*',
-        element: <NotFound />
-    },
-   
+    element: <AvailableExams />
+  },
+  // -----------------Candidate-------------------
+  {
+    path: '/candidate/Examination/:id',
+    needsCand: true,
+    element: <Examination />
+  },
+  {
+    path: '/ExamsList',
+    // requireAuth: true,
+    element: <ExamList />
+  },
+  {
+    path: '/marker',
+    // requireAuth: true,
+    needsMarker:true,
+    element: <MarkerList />
+  },
+  {
+    path: '/marker/markexam',
+    // requireAuth: true,
+    needsMarker:true,
+    element: <MarkExam />
+  },
+  {
+    path: '/ExamQuestionList',
+    // requireAuth: true,
+    element: <ExamQuestionList />
+  },
+  {
+    path: '/AddQuestionToExam',
+    element: <AddQuestionToExam />
+  },
+  //this needs to stay as the last path
+  {
+    path: '/notauth',
+    element: <NotAuth />
+  },
+  {
+    path: '*',
+    element: <NotFound />
+  },
+
 ];
 
 export default AppRoutes;

@@ -63,16 +63,13 @@ function CertificateForm(props) {
 
     //adds the values selected to the list of topics 
     const onSelect = (selectedOptions) => {
-
         data.topics = selectedOptions
         setData({ data })
-
         CalculateMaxMarks(selectedOptions);
     }
 
     //removes the values un-selected from the list of topics 
     const onRemove = (selectedOptions, removedItem) => {
-
         data.topics = selectedOptions.filter(item => item !== removedItem)
         setData({ data })
         CalculateMaxMarks(selectedOptions);
@@ -92,8 +89,6 @@ function CertificateForm(props) {
         } else {
             setData({ ...data, [name]: value })
         }
-
-
     }
 
     const handleSubmit = (event) => {
