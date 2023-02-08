@@ -6,6 +6,7 @@ namespace Assignment4Final.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+//[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
 public class FileController : ControllerBase
 {
     [HttpPost]
@@ -77,6 +78,9 @@ public class FileController : ControllerBase
     }
 
     [HttpGet("image/{fileName}")]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsQualityControl")]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsMarker")]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsCandidate")]
     public IActionResult GetImage(string fileName)
     {
         string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "Uploads");

@@ -1,18 +1,14 @@
 ﻿using Assignment4Final.Services;
-using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing.Matching;
 using ModelLibrary.Models.DTO;
 using ModelLibrary.Models.DTO.Candidates;
-using ModelLibrary.Models.DTO.Certificates;
-using ModelLibrary.Models.DTO.Questions;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Assignment4Final.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public class CandidateController : ControllerBase
     {
         private readonly CandidateService _candidateService;
@@ -24,6 +20,7 @@ namespace Assignment4Final.Controllers
 
         // GET: api/<CandidateController>
         [HttpGet]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsQualityControl")]
         public async Task<IActionResult> GetAllCandidates()
         {
             return Ok(await _candidateService.GetAll());
@@ -31,6 +28,7 @@ namespace Assignment4Final.Controllers
 
         // GET api/<CandidateController>/5
         [HttpGet("{id}")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsQualityControl")]
         public async Task<IActionResult> GetCandidateById(string id)
         {
             var candidate = await _candidateService.GetCandidateById(id);
@@ -58,6 +56,7 @@ namespace Assignment4Final.Controllers
 
         // POST api/<CandidateController>
         [HttpPost]
+        // [Authorize]
         public async Task<IActionResult> CreateCandidate([FromBody] CandidatesDto candidatesDto)
         {
             var addedCandidate = await _candidateService.AddCandidate(candidatesDto);

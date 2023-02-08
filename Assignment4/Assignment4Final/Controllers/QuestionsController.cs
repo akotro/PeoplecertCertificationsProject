@@ -8,6 +8,7 @@ namespace Assignment4Final.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public class QuestionsController : ControllerBase
     {
         private readonly IMapper _mapper;
@@ -21,11 +22,12 @@ namespace Assignment4Final.Controllers
 
         // GET: api/questions
         [HttpGet]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsQualityControl")]
         public async Task<IActionResult> GetAll()
         {
             var response = new BaseResponse<List<QuestionDto>>
             {
-                RequestId = Guid.NewGuid().ToString()
+                RequestId = Request.HttpContext.TraceIdentifier
             };
 
             var questionDtos = _mapper.Map<List<QuestionDto>>(await _questionService.GetAllAsync());
@@ -49,7 +51,7 @@ namespace Assignment4Final.Controllers
         {
             var response = new BaseResponse<QuestionDto>
             {
-                RequestId = Guid.NewGuid().ToString(), // FIX:(akotro) Get this from request?
+                RequestId = Request.HttpContext.TraceIdentifier
             };
 
             if (!_questionService.QuestionsDbSetExists())
@@ -80,7 +82,7 @@ namespace Assignment4Final.Controllers
         {
             var response = new BaseResponse<QuestionDto>
             {
-                RequestId = Guid.NewGuid().ToString(), // FIX:(akotro) Get this from request?
+                RequestId = Request.HttpContext.TraceIdentifier
             };
 
             if (!_questionService.QuestionsDbSetExists())
@@ -121,7 +123,7 @@ namespace Assignment4Final.Controllers
         {
             var response = new BaseResponse<QuestionDto>
             {
-                RequestId = Guid.NewGuid().ToString(), // FIX:(akotro) Get this from request?
+                RequestId = Request.HttpContext.TraceIdentifier
             };
 
             if (!_questionService.QuestionsDbSetExists())
@@ -162,7 +164,7 @@ namespace Assignment4Final.Controllers
         {
             var response = new BaseResponse<QuestionDto>
             {
-                RequestId = Guid.NewGuid().ToString(), // FIX:(akotro) Get this from request?
+                RequestId = Request.HttpContext.TraceIdentifier
             };
 
             if (!_questionService.QuestionsDbSetExists())
