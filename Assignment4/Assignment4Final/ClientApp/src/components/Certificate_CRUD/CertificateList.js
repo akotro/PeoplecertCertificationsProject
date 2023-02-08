@@ -74,6 +74,14 @@ function CertificateList(props) {
         // ).then(console.log).catch(console.log);
 
 
+        // const requestOptions = {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //         'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNhbmRpZGF0ZTJAZ21haWwuY29tIiwidXNlcklkIjoiMjVmOTExNzQtMjc4Mi00YjQwLWI0MjQtODViNjk1Y2U3YjMzIiwicm9sZSI6ImNhbmRpZGF0ZSIsImV4cCI6MTcwNzQzMzg1OX0.9-ar7aI1w00WqfEi97FbfKAB0QJTz3ugDx3jggPAx00'
+        //     }
+        // }
+        // fetch(`https://localhost:7196/api/CandidateExam/CreateCandExam/${id}`, requestOptions)
         axios.post(`https://localhost:7196/api/CandidateExam/CreateCandExam/${id}`)
             .then(res => {
                 console.log(res);
