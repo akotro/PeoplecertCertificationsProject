@@ -21,11 +21,12 @@ namespace Assignment4Final.Controllers
 
         // GET: api/questions
         [HttpGet]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
         public async Task<IActionResult> GetAll()
         {
             var response = new BaseResponse<List<QuestionDto>>
             {
-                RequestId = Guid.NewGuid().ToString()
+                RequestId = Request.HttpContext.TraceIdentifier
             };
 
             var questionDtos = _mapper.Map<List<QuestionDto>>(await _questionService.GetAllAsync());
@@ -45,11 +46,12 @@ namespace Assignment4Final.Controllers
 
         // GET: api/questions/5
         [HttpGet("{id}")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
         public async Task<IActionResult> Get(int id)
         {
             var response = new BaseResponse<QuestionDto>
             {
-                RequestId = Guid.NewGuid().ToString(), // FIX:(akotro) Get this from request?
+                RequestId = Request.HttpContext.TraceIdentifier
             };
 
             if (!_questionService.QuestionsDbSetExists())
@@ -76,11 +78,12 @@ namespace Assignment4Final.Controllers
 
         // POST: api/questions
         [HttpPost]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
         public async Task<IActionResult> Create([FromBody] QuestionDto questionDto)
         {
             var response = new BaseResponse<QuestionDto>
             {
-                RequestId = Guid.NewGuid().ToString(), // FIX:(akotro) Get this from request?
+                RequestId = Request.HttpContext.TraceIdentifier
             };
 
             if (!_questionService.QuestionsDbSetExists())
@@ -117,11 +120,12 @@ namespace Assignment4Final.Controllers
 
         // PUT: api/questions/5
         [HttpPut("{id}")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
         public async Task<IActionResult> Update(int id, [FromBody] QuestionDto questionDto)
         {
             var response = new BaseResponse<QuestionDto>
             {
-                RequestId = Guid.NewGuid().ToString(), // FIX:(akotro) Get this from request?
+                RequestId = Request.HttpContext.TraceIdentifier
             };
 
             if (!_questionService.QuestionsDbSetExists())
@@ -158,11 +162,12 @@ namespace Assignment4Final.Controllers
 
         // DELETE: api/questions/5
         [HttpDelete("{id}")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
         public async Task<IActionResult> Delete(int id)
         {
             var response = new BaseResponse<QuestionDto>
             {
-                RequestId = Guid.NewGuid().ToString(), // FIX:(akotro) Get this from request?
+                RequestId = Request.HttpContext.TraceIdentifier
             };
 
             if (!_questionService.QuestionsDbSetExists())

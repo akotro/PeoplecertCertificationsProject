@@ -31,6 +31,7 @@ public class MarkersController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsMarker")]
     public async Task<IActionResult> Get(string id)
     {
         var marker = await _markersService.GetAsync(id);
@@ -83,6 +84,7 @@ public class MarkersController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsMarker")]
     public async Task<IActionResult> Update(string id, [FromBody] MarkerDto markerDto)
     {
         var updatedMarker = await _markersService.UpdateAsync(id, markerDto);

@@ -1,11 +1,7 @@
 ﻿using Assignment4Final.Services;
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing.Matching;
 using ModelLibrary.Models.DTO;
 using ModelLibrary.Models.DTO.Candidates;
-using ModelLibrary.Models.DTO.Certificates;
-using ModelLibrary.Models.DTO.Questions;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -24,6 +20,8 @@ namespace Assignment4Final.Controllers
 
         // GET: api/<CandidateController>
         [HttpGet]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsQualityControl")]
         public async Task<IActionResult> GetAllCandidates()
         {
             return Ok(await _candidateService.GetAll());
@@ -31,6 +29,7 @@ namespace Assignment4Final.Controllers
 
         // GET api/<CandidateController>/5
         [HttpGet("{id}")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
         public async Task<IActionResult> GetCandidateById(string id)
         {
             var candidate = await _candidateService.GetCandidateById(id);
@@ -58,6 +57,7 @@ namespace Assignment4Final.Controllers
 
         // POST api/<CandidateController>
         [HttpPost]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
         public async Task<IActionResult> CreateCandidate([FromBody] CandidatesDto candidatesDto)
         {
             var addedCandidate = await _candidateService.AddCandidate(candidatesDto);
@@ -89,6 +89,7 @@ namespace Assignment4Final.Controllers
 
         // PUT api/<CandidateController>/5
         [HttpPut("{id}")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
         public async Task<IActionResult> UpdateCandidate(
             string id,
             [FromBody] CandidatesDto candidatesDto
@@ -119,6 +120,7 @@ namespace Assignment4Final.Controllers
 
         // DELETE api/<CandidateController>/5
         [HttpDelete("{id}")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
         public async Task<IActionResult> DeleteCandidate(string id)
         {
             var response = new BaseResponse<CandidatesDto>

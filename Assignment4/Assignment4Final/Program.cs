@@ -49,19 +49,6 @@ namespace Assignment4Final
             );
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            // builder.Services
-            //     .AddDefaultIdentity<AppUser>(
-            //         options => options.SignIn.RequireConfirmedAccount = false
-            //     )
-            //     .AddRoles<IdentityRole>() // NOTE:(akotro) Required for roles
-            //     .AddEntityFrameworkStores<ApplicationDbContext>();
-
-            // builder.Services
-            //     .AddIdentityServer()
-            //     .AddApiAuthorization<AppUser, ApplicationDbContext>();
-
-            // builder.Services.AddAuthentication().AddIdentityServerJwt();
-
             builder.Services
                 .AddIdentity<AppUser, IdentityRole>(
                     // NOTE:(akotro) Users must have unique emails so that we can get the user by their email
