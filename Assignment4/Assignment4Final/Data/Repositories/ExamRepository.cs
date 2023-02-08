@@ -39,6 +39,8 @@ namespace Assignment4Final.Data.Repositories
                 .FirstOrDefaultAsync(e => e.Id == id);
         }
 
+
+
         // TODO:(akotro) Business logic in service to choose random questions?
         public async Task<Exam?> AddAsync(Exam exam)
         {
@@ -95,6 +97,7 @@ namespace Assignment4Final.Data.Repositories
         public async Task<Exam?> DeleteAsync(int id)
         {
             var exam = await GetExamAsync(id);
+
 
             if (exam != null)
             {

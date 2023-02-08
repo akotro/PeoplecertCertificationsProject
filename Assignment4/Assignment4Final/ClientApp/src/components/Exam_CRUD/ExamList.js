@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState ,useContext} from "react";
 import axios from 'axios';
 import { ListGroup, ListGroupItem, Button, Table, Row, Stack } from 'react-bootstrap';
 import { useNavigate, Link } from "react-router-dom";
-function ExamList(props){
+import { AuthenticationContext } from '../auth/AuthenticationContext'
 
+function ExamList(props){
     const [data, setData] = useState([]);
     let navigate = useNavigate();
+    // const { update, claims } = useContext(AuthenticationContext);
+    // const [role, setRole] = useState(claims.find(claim => claim.name === 'role').value)
     // const [user, setUser] = useState();
     // let navigate = useNavigate();
 
@@ -23,6 +26,8 @@ function ExamList(props){
     },[]);
 
     const handleDelete = (examId) =>{
+        console.log(examId)
+        setData(data.filter(exam => exam.id !== examId));
         axios.delete(`https://localhost:7196/api/Exam/${examId}`)
         .then(response => {
             console.log(response)
@@ -34,14 +39,27 @@ function ExamList(props){
     }
 
     const makeButtons = (exam) => {
-        if(true) {      //admin
-            return(
+             //admin
+            // if (role === "admin") {
+            //     return(
+            //         <div>
+            //             <Button onClick={() => handleDelete(exam.id)}>Delete</Button>
+            //             <Button onClick = {() => handleEdit(exam)}>Edit</Button>
+            //         </div>
+            //     )
+            // }
+            // if (role === "qualitycontrol"){
+            //     <Button onClick = {() => handleEdit(exam)}>Details</Button>
+            // }
+            return( // default do we need this??
                 <div>
                     <Button onClick={() => handleDelete(exam.id)}>Delete</Button>
                     <Button onClick = {() => handleEdit(exam)}>Edit</Button>
                 </div>
             )
-        }  
+
+            
+        
     }
 
     const calculateCount = (questionsArray) => {
