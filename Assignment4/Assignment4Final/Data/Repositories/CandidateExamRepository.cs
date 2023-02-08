@@ -20,7 +20,7 @@ namespace Assignment4Final.Data.Repositories
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<CandidateExam> AddAsync(CandidateExam candidateExam)
+        public async Task<CandidateExam> AddOrUpdateAsync(CandidateExam candidateExam)
         {
             CandidateExam candidateExamResult = null;
             if(candidateExam.Id != 0)

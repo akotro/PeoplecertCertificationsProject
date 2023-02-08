@@ -3,7 +3,7 @@ using ModelLibrary.Models.Exams;
 
 namespace Assignment4Final.Data.Repositories;
 
-public class MarkersRepository : IGenericRepository<Marker>
+public class MarkersRepository : IMarkersRepository
 {
     private readonly ApplicationDbContext _context;
 
@@ -64,26 +64,28 @@ public class MarkersRepository : IGenericRepository<Marker>
         {
             if (marker.CandidateExams != null)
             {
-                var dbCandidateExamsToDelete = dbMarker.CandidateExams
-                    .Where(c => !marker.CandidateExams.Any(ce => ce.Id == c.Id))
-                    .ToList();
-                foreach (var candExam in dbCandidateExamsToDelete)
-                {
-                    // NOTE:(akotro) Do not actually delete CandidateExam, just remove from candidate
-                    // _context.CandidateExams.Remove(candExam);
-                    dbMarker.CandidateExams.Remove(candExam);
-                }
+                // var dbCandidateExamsToDelete = dbMarker.CandidateExams
+                //     .Where(c => !marker.CandidateExams.Any(ce => ce.Id == c.Id))
+                //     .ToList();
+                // foreach (var candExam in dbCandidateExamsToDelete)
+                // {
+                //     // NOTE:(akotro) Do not actually delete CandidateExam, just remove from candidate
+                //     // _context.CandidateExams.Remove(candExam);
+                //     dbMarker.CandidateExams.Remove(candExam);
+                // }
 
                 if (marker.CandidateExams.Any())
                 {
                     foreach (var candExam in marker.CandidateExams)
                     {
-                        var dbCandidateExam = await _context.CandidateExams.FirstOrDefaultAsync(
-                            ce => ce.Id == candExam.Id
-                        );
+                        var dbCandidateExam =
+                            await _context.CandidateExams.FirstOrDefaultAsync(
+                                ce => ce.Id == candExam.Id
+                            );
                         if (dbCandidateExam != null)
                         {
-                            if (dbMarker.CandidateExams.Any(ce => ce.Id == dbCandidateExam.Id))
+                            if (dbMarker.CandidateExams.Any(ce =>
+                                    ce.Id == dbCandidateExam.Id))
                             {
                                 // NOTE:(akotro) If marker already has this candExam, update it
                                 dbCandidateExam.Result = candExam.Result;
@@ -97,12 +99,14 @@ public class MarkersRepository : IGenericRepository<Marker>
                                     foreach (var answer in candExam.CandidateExamAnswers)
                                     {
                                         var dbAnswer =
-                                            await _context.CandidateExamAnswers.FirstOrDefaultAsync(
-                                                a => a.Id == answer.Id
-                                            );
+                                            await _context.CandidateExamAnswers
+                                                .FirstOrDefaultAsync(
+                                                    a => a.Id == answer.Id
+                                                );
                                         if (dbAnswer != null)
                                         {
-                                            dbAnswer.IsCorrectModerated = answer.IsCorrectModerated;
+                                            dbAnswer.IsCorrectModerated =
+                                                answer.IsCorrectModerated;
                                         }
                                     }
                                 }
@@ -113,17 +117,6 @@ public class MarkersRepository : IGenericRepository<Marker>
                                 dbMarker.CandidateExams.Add(dbCandidateExam);
                             }
                         }
-                        // else
-                        // {
-                        //     // NOTE:(akotro) If the candExam does not exist, create it
-                        //     dbMarker.CandidateExams.Add(
-                        //         new CandidateExam
-                        //         {
-                        //             Name = candExam.Name,
-                        //             MaxMarks = candExam.MaxMarks
-                        //         }
-                        //     );
-                        // }
                     }
                 }
             }
@@ -147,6 +140,42 @@ public class MarkersRepository : IGenericRepository<Marker>
         }
 
         return null;
+    }
+
+    public async Task<CandidateExam?> MarkCandidateExamAsync(int candExamId,
+        CandidateExam candExam)
+    {
+        var dbCandidateExam = await _context.CandidateExams
+            .Include(ce => ce.CandidateExamAnswers)
+            .FirstOrDefaultAsync(ce => ce.Id == candExam.Id);
+        if (dbCandidateExam != null)
+        {
+            // NOTE:(akotro) If marker already has this candExam, update it
+            dbCandidateExam.Result = candExam.Result;
+            dbCandidateExam.CandidateScore = candExam.CandidateScore;
+            dbCandidateExam.PercentScore = candExam.PercentScore;
+            dbCandidateExam.IsModerated = candExam.IsModerated;
+            dbCandidateExam.MarkingDate = candExam.MarkingDate;
+
+            if (candExam.CandidateExamAnswers?.Any() == true)
+            {
+                foreach (var answer in candExam.CandidateExamAnswers)
+                {
+                    var dbAnswer =
+                        await _context.CandidateExamAnswers.FirstOrDefaultAsync(
+                            a => a.Id == answer.Id
+                        );
+                    if (dbAnswer != null)
+                    {
+                        dbAnswer.IsCorrectModerated = answer.IsCorrectModerated;
+                    }
+                }
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
+        return dbCandidateExam;
     }
 
     public bool EntityExists(string id)

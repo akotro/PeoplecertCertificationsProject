@@ -7,6 +7,7 @@ namespace Assignment4Final.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public class CertificatesController : ControllerBase
     {
         private readonly CertificatesService _certificateService;
@@ -17,6 +18,8 @@ namespace Assignment4Final.Controllers
         }
 
         [HttpGet]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsQualityControl")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsCandidate")]
         public async Task<IActionResult> GetAll()
         {
             var certificates = await _certificateService.GetAllAsync();
@@ -31,6 +34,7 @@ namespace Assignment4Final.Controllers
         }
 
         [HttpGet("{id}")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsQualityControl")]
         public async Task<IActionResult> Get(int id)
         {
             var certificate = await _certificateService.GetAsync(id);

@@ -7,6 +7,7 @@ namespace Assignment4Final.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+//[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
 public class PhotoIdTypesController : ControllerBase
 {
     private readonly PhotoIdTypesService _photoIdTypesService;
@@ -17,6 +18,7 @@ public class PhotoIdTypesController : ControllerBase
     }
 
     [HttpGet]
+    // [Authorize]
     public async Task<IActionResult> GetAll()
     {
         var photoIdTypes = await _photoIdTypesService.GetAllAsync();

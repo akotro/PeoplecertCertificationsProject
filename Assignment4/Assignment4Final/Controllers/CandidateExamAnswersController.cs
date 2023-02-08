@@ -7,6 +7,7 @@ namespace Assignment4Final.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+//[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
 public class CandidateExamAnswersController : ControllerBase
 {
     private readonly CandidateExamAnswersService _candidateExamAnswersService;
@@ -85,6 +86,7 @@ public class CandidateExamAnswersController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsCandidate")]
     public async Task<IActionResult> Update(
         int id,
         [FromBody] CandidateExamAnswersDto candidateExamAnswerDto
