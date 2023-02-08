@@ -54,8 +54,8 @@ namespace Assignment4Final.Controllers
         public async Task<ActionResult<CandidateExamDto>> Get([FromBody] int certId)
         {
             var userId = _userManager.GetUserId(User);
-            //var candExamDto = await  _candExamService.GetCandidateExamByCertificateAsync(certId,userId);
-            var candExamDto = await  _candExamService.GetCandidateExamByCertificateAsync(certId, "02458d8c-aba2-4b3d-86de-8f8457570c60");
+            var candExamDto = await  _candExamService.GetCandidateExamByCertificateAsync(certId,userId);
+            //var candExamDto = await  _candExamService.GetCandidateExamByCertificateAsync(certId, "02458d8c-aba2-4b3d-86de-8f8457570c60");
             return Ok(candExamDto);
         }
 
@@ -63,8 +63,8 @@ namespace Assignment4Final.Controllers
         public async Task<ActionResult<List<CandidateExamDto>>> GetAll()
         {
 
-            //var candidate = await _candExamService.GetCandidateByUserIdAsync(_userManager.GetUserId(User));
-            var candidate = await _candExamService.GetCandidateByUserIdAsync("02458d8c-aba2-4b3d-86de-8f8457570c60");
+            var candidate = await _candExamService.GetCandidateByUserIdAsync(_userManager.GetUserId(User));
+            //var candidate = await _candExamService.GetCandidateByUserIdAsync("02458d8c-aba2-4b3d-86de-8f8457570c60");
             if (candidate == null)
             {
                 return NotFound(new { description = "Candidate with this userId not found " });
@@ -78,14 +78,13 @@ namespace Assignment4Final.Controllers
         public async Task<ActionResult<List<CandidateExamDto>>> GetAllNotTaken() //Not Debuged all the candidate exams in Seed are Taken . Should i checke if taken by ExamDate?
         {
             
-            //var candidate = await _candExamService.GetCandidateByUserIdAsync(_userManager.GetUserId(User));
-            var candidate = await _candExamService.GetCandidateByUserIdAsync("02458d8c-aba2-4b3d-86de-8f8457570c60");
+            var candidate = await _candExamService.GetCandidateByUserIdAsync(_userManager.GetUserId(User));
+            //var candidate = await _candExamService.GetCandidateByUserIdAsync("02458d8c-aba2-4b3d-86de-8f8457570c60");
             if(candidate == null)
             {
                 return NotFound(new {description ="Candidate with this userId not found "});
             }
             var candidatesTakenExams = await _candExamService.GetNotTakenCandidateExamsOfCandidateAsync(candidate);
-            var testing = _candExamService.GetListOfCandidateExamDtosFromListOfCandidateExam(candidatesTakenExams);
             return Ok(_candExamService.GetListOfCandidateExamDtosFromListOfCandidateExam(candidatesTakenExams));
 
         }
