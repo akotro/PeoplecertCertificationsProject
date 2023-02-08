@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Security.Cryptography;
+using Microsoft.AspNetCore.Mvc;
 using ModelLibrary.Models.DTO.Questions;
 
 namespace Assignment4Final.Controllers;
@@ -10,7 +11,6 @@ public class FileController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> UploadFile([FromForm] IFormFile file)
     {
-        // TODO:(akotro) Check if file already exists and if yes return the old one
         if (file == null || file.Length == 0)
             return BadRequest("No file received");
 
@@ -19,28 +19,48 @@ public class FileController : ControllerBase
         if (!Directory.Exists(folderPath))
             Directory.CreateDirectory(folderPath);
 
-        string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-        string filePath = Path.Combine(folderPath, fileName);
+        string hash = ComputeHashWithExtension(file);
+        string filePath = Path.Combine(folderPath, hash);
+
+        string baseUrl = $"{Request.Scheme}://{Request.Host}{Request.PathBase}/api/File/image";
+
+        // NOTE:(akotro) Check if the file already exists
+        if (System.IO.File.Exists(filePath))
+        {
+            var uploadedFile = new FileDto
+            {
+                FileName = hash,
+                FilePath = filePath,
+                Url = $"{baseUrl}/{hash}"
+            };
+            return Ok(uploadedFile);
+        }
 
         using (var fileStream = new FileStream(filePath, FileMode.Create))
         {
             await file.CopyToAsync(fileStream);
         }
 
-        var uploadedFile = new FileDto
+        var newFile = new FileDto
         {
-            FileName = fileName,
+            FileName = hash,
             FilePath = filePath,
-            Url = $"https://localhost:7196/api/File/image/{fileName}"
+            Url = $"{baseUrl}/{hash}"
         };
 
-        // TODO:(akotro) Save FileDto to database here
+        return Ok(newFile);
+    }
 
-        // _context.UploadedFiles.Add(uploadedFile);
-
-        // await _context.SaveChangesAsync();
-
-        return Ok(uploadedFile);
+    private string ComputeHashWithExtension(IFormFile file)
+    {
+        using (var stream = file.OpenReadStream())
+        using (var sha256 = SHA256.Create())
+        {
+            byte[] hashBytes = sha256.ComputeHash(stream);
+            string hash = BitConverter.ToString(hashBytes).Replace("-", "").ToLowerInvariant();
+            string fileExtension = Path.GetExtension(file.FileName);
+            return hash + fileExtension;
+        }
     }
 
     [HttpGet("download/{fileName}")]
