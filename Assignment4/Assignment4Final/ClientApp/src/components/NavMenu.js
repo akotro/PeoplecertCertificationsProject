@@ -79,7 +79,7 @@ function NavMenu() {
                                 role="marker"
                                 authorized={<>
                                     <NavItem>
-                                        <NavLink tag={Link} className="text-dark" to="/">marker links</NavLink>
+                                        <NavLink tag={Link} className="text-dark" to="/marker">Things</NavLink>
                                     </NavItem>
                                 </>}
                             />
