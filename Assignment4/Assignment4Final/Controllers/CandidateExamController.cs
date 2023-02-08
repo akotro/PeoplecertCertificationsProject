@@ -1,4 +1,5 @@
 ﻿using Assignment4Final.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ModelLibrary.Models;
@@ -45,9 +46,10 @@ namespace Assignment4Final.Controllers
         //    return Ok(candidateExamDto);
         //}
 
-        [HttpPost("CreateCandExam")] //this API is so a candidate can buy from the available certificates
+        [HttpPost("CreateCandExam/{certId}")] //this API is so a candidate can buy from the available certificates
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsQualityControl")]
-        public async Task<ActionResult<CandidateExamDto>> Get([FromBody] int certId)
+        //[Authorize]
+        public async Task<ActionResult<CandidateExamDto>> Get(int certId)
         {
             var userId = _userManager.GetUserId(User);
             var candExamDto = await _candExamService.GetCandidateExamByCertificateAsync(
@@ -88,6 +90,7 @@ namespace Assignment4Final.Controllers
         [HttpGet("notTaken")] // all the CandidateExams the candidate has bought but not yet taken (picked by cendidateExam.Result == null)
         public async Task<ActionResult<List<CandidateExamDto>>> GetAllNotTaken() //Not Debuged all the candidate exams in Seed are Taken . Should i checke if taken by ExamDate?
         {
+            var userManager = _userManager.GetUserId(User);
             var candidate = await _candExamService.GetCandidateByUserIdAsync(
                 _userManager.GetUserId(User)
             );

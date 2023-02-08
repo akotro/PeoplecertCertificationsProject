@@ -459,7 +459,6 @@ namespace Assignment4Final.Data.Seed
 
             #endregion
 
-
             #region // Seeding Questions and options table
 
             if (!db.Questions.Any() && db.DifficultyLevels.Any() && db.Topics.Any())
@@ -523,7 +522,6 @@ namespace Assignment4Final.Data.Seed
             //}
 
             #endregion
-
 
             #region // Seeding CandidateExam table
 
