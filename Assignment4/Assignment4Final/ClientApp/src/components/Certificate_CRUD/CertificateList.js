@@ -27,15 +27,15 @@ function CertificateList(props) {
     // --------------------------------
 
     useEffect(() => {
+        console.log(data)
         axios.get('https://localhost:7196/api/Certificates')
-            .then(res => {
+        .then(res => {
                 if (role === "candidate") {
                     // if the user is a candidate, show only active products
-                    setData({ data: res.data.data.filter(item => item.active === true) },
-                        () => { console.log(this.state.data) })
+                    console.log(res.data.data.filter(item => item.active === true))
+                    setData([...res.data.data.filter(item => item.active === true)])
+                    // () => { console.log(data) })
                     console.log(res.data.data)
-                    this.setState(
-                    );
                 } else {
                     //if none of the above, show all products
                     setData(res.data.data)
@@ -45,19 +45,36 @@ function CertificateList(props) {
             .catch(err => {
                 console.error(err);
             });
-
+            
+            console.log(data)
     }, [])
 
     const handleBuy = (id) => {
         //console.log("handle buy")
         const cert = data.filter(item => item.id === id)[0];
-        //console.log(cert);
-        //console.log(cert.exams[0].id);
+        console.log("handle buy ",id);
+        console.log("certexam.id", cert.exams[0].id);
+        let idObj = id;
+        // const examDTO = { id: cert.exams[0].id, cert }
+        // console.log(JSON.stringify(examDTO))
+        // const token = localStorage.getItem("token");
 
-        const examDTO = { id: cert.exams[0].id, cert }
-        console.log(JSON.stringify(examDTO))
+        // const config = {
+        //     headers: { Authorization: `Bearer ${token}` }
+        // };
+        
+        // const bodyParameters = {
+        //    key: "value"
+        // };
+        
+        // Axios.post( 
+        //   'http://localhost:8000/api/v1/get_token_payloads',
+        //   bodyParameters,
+        //   config
+        // ).then(console.log).catch(console.log);
 
-        axios.post(`https://localhost:7196/api/CandidateExam`, examDTO)
+
+        axios.post(`https://localhost:7196/api/CandidateExam/CreateCandExam/${id}`)
             .then(res => {
                 console.log(res);
                 //this.setState({ data: res.data.data });
@@ -128,7 +145,7 @@ function CertificateList(props) {
                 onClick={()=> navigate('/certificate/create')}
                 > Create a new Certificate </Button>
                 : null}
-            <Table striped hover borderless align-middle className="text-center" id='list_of_allcerts'>
+            <Table striped hover borderless className="text-center align-middle" id='list_of_allcerts'>
                 <thead>
                     <tr>
                         <th>Title</th>

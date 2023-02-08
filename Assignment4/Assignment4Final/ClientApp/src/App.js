@@ -9,15 +9,20 @@ import NotAuth from "./components/auth/NotAuth";
 
 import { getClaims } from "./components/auth/handleJWT";
 import { AuthenticationContext } from "./components/auth/AuthenticationContext";
+import configureInterceptor from "./components/auth/axios";
+import axios from "axios";
+
+configureInterceptor();
+
 
 function App() {
   //static displayName = App.name;
   const [claims, setClaims] = useState([]);
-
+  
   useEffect(() => {
     setClaims(getClaims());
   }, []);
-
+  
   function isRole(roles) {
     return roles.some((role) =>
       claims.find((claim) => claim.name === "role" && claim.value === role)
