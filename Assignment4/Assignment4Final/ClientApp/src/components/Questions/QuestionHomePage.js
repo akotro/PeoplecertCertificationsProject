@@ -12,7 +12,6 @@ import { React, useState, useEffect } from "react";
 
 import axios from "axios";
 import { Link } from "react-router-dom";
-import Delete from "./QuestionDelete";
 import QuestionEdit from "./QuestionEdit";
 
 function Questions() {
@@ -47,17 +46,24 @@ function Questions() {
 
     //--------------------------------------------------
     //--------------------------------------------------HANDLE DELETE
-    const handleDelete = (id) => {
+    const handleDelete = async (event) => {
         // Asks user if they are sure
+        console.log(event.target.dataset.id);
+        const localId = event.target.dataset.id;
+
         const confirmDelete = window.confirm(
             "Are you sure you want to delete this this question?"
         );
-        if (confirmDelete) {
+
+        if (confirmDelete) 
+        {
             //send axios call with the request to delete using Id
-            axios
-                .delete(`https://localhost:7196/api/Questions/${id}`)
+            await axios
+                .delete(`https://localhost:7196/api/Questions/${localId}`)
                 .then((response) => {
-                    setData(data.filter((item) => item.id !== id));
+                    console.log("Delete response");
+            setData(data.filter((item) => item.id !== localId));
+                    
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -106,8 +112,8 @@ function Questions() {
                                 <td>
                                     <Button
                                         variant="dark"
-                                        onClick={(event) => Delete(event)}
-                                        name={index}
+                                        onClick={ handleDelete}
+                                        data-id={item.id}
                                     >
                                         Delete
                                     </Button>
