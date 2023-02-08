@@ -7,6 +7,7 @@ namespace Assignment4Final.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+//[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
 public class GendersController : ControllerBase
 {
     private readonly GendersService _gendersService;
@@ -17,6 +18,7 @@ public class GendersController : ControllerBase
     }
 
     [HttpGet]
+    // [Authorize]
     public async Task<IActionResult> GetAll()
     {
         var genders = await _gendersService.GetAllAsync();

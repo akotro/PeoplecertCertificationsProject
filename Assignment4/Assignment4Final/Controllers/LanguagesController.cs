@@ -7,6 +7,7 @@ namespace Assignment4Final.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+//[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
 public class LanguagesController : ControllerBase
 {
     private readonly LanguagesService _languagesService;
@@ -17,6 +18,7 @@ public class LanguagesController : ControllerBase
     }
 
     [HttpGet]
+    // [Authorize]
     public async Task<IActionResult> GetAll()
     {
         var languages = await _languagesService.GetAllAsync();

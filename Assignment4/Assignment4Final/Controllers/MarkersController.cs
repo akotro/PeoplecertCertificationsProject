@@ -7,6 +7,7 @@ namespace Assignment4Final.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+//[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
 public class MarkersController : ControllerBase
 {
     private readonly MarkersService _markersService;
@@ -84,6 +85,7 @@ public class MarkersController : ControllerBase
     }
 
     [HttpPut("mark/{candExamId}")]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsMarker")]
     public async Task<IActionResult> MarkCandidateExam(
         int candExamId,
         [FromBody] CandidateExamDto candExamDto
@@ -113,7 +115,6 @@ public class MarkersController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsMarker")]
     public async Task<IActionResult> Update(string id, [FromBody] MarkerDto markerDto)
     {
         var updatedMarker = await _markersService.UpdateAsync(id, markerDto);

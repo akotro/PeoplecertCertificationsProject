@@ -7,6 +7,7 @@ namespace Assignment4Final.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public class CertificatesController : ControllerBase
     {
         private readonly CertificatesService _certificateService;
@@ -17,8 +18,8 @@ namespace Assignment4Final.Controllers
         }
 
         [HttpGet]
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsQualityControl")]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsCandidate")]
         public async Task<IActionResult> GetAll()
         {
             var certificates = await _certificateService.GetAllAsync();
@@ -33,7 +34,6 @@ namespace Assignment4Final.Controllers
         }
 
         [HttpGet("{id}")]
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsQualityControl")]
         public async Task<IActionResult> Get(int id)
         {
@@ -61,7 +61,6 @@ namespace Assignment4Final.Controllers
         }
 
         [HttpPost]
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
         public async Task<IActionResult> Add([FromBody] CertificateDto certificateDto)
         {
             var addedCertificate = await _certificateService.AddAsync(certificateDto);
@@ -88,7 +87,6 @@ namespace Assignment4Final.Controllers
         }
 
         [HttpPut("{id}")]
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
         public async Task<IActionResult> Update(int id, [FromBody] CertificateDto certificateDto)
         {
             var updatedCertificate = await _certificateService.UpdateAsync(id, certificateDto);
@@ -115,7 +113,6 @@ namespace Assignment4Final.Controllers
         }
 
         [HttpDelete("{id}")]
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
         public async Task<IActionResult> Delete(int id)
         {
             var deletedCertificate = await _certificateService.DeleteAsync(id);

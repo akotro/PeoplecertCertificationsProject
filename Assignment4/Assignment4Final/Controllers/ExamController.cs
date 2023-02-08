@@ -1,16 +1,13 @@
-﻿using Assignment4Final.Data;
-using Assignment4Final.Data.Repositories;
-using Assignment4Final.Services;
-using Microsoft.AspNetCore.Http;
+﻿using Assignment4Final.Services;
 using Microsoft.AspNetCore.Mvc;
 using ModelLibrary.Models.DTO;
 using ModelLibrary.Models.DTO.Exams;
-using ModelLibrary.Models.Exams;
 
 namespace Assignment4Final.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public class ExamController : ControllerBase
     {
         private readonly ExamService _examService;
