@@ -16,11 +16,8 @@ public class FileController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> UploadFile( /* [FromForm] */
-        IFormFile file
-    )
+    public async Task<IActionResult> UploadFile([FromForm] IFormFile file)
     {
-        // FIX:(akotro) Get url programmatically!!
         if (file == null || file.Length == 0)
             return BadRequest("No file received");
 
