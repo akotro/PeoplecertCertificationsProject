@@ -57,7 +57,6 @@ export default function QuestionEdit(event, name)
         //------------------------------------------------//GET QUESTION BY ID
         axios.get(url).then((response) => {
             setQuestion(response.data.data);
-            console.log(question);
             setOptions(response.data.data.options);
         });
     }, [url]);
@@ -67,12 +66,17 @@ export default function QuestionEdit(event, name)
         // console.log(question);
         const newQuestion = { ...question, options: options };
         console.log(newQuestion);
+        setQuestion(newQuestion);
 console.log(" Put!!!");
-        // axios.put('https://localhost:7196/api/Questions/'+questionIndex,newQuestion)
-        // .then((response) => { /*  setQuestion(response.data.data); */ console.log("response.data");
-        // }).catch((err) => {
-        //     console.error("err.response.data");
-        // });
+
+        axios.put('https://localhost:7196/api/Questions/'+questionIndex,newQuestion)
+        .then((response) => {   console.log("Done!!!");
+        }).catch((err) => {
+            console.error(err);
+            console.error(err.response);
+            console.error(err.response.data);
+            console.error(err.response.data.message);
+        });
     };
     //------------------------------------------------HANDLE CHANGE------------------------------------------------>>>>>>------------------------------------   
     // event, name, data, optionId
@@ -114,12 +118,12 @@ console.log(" Put!!!");
     //------------------------------------------------HANDLE SELECT------------------------------------------------>>>>>>
     const onSelect = (selectedList, selectedItem) => 
     {
-            console.log(selectedItem.value);
+            // console.log(selectedItem.value);
 
-        if (selectedItem.species === "topic") 
-        {
+        // if (selectedItem.species === "topic") 
+        // {
             // setQuestion({ ...question, topicId: selectedItem.value });
-        } 
+        // } 
         // else if (selectedItem.species === "difficultyLevel") 
         // {
         //     setQuestion({
@@ -241,49 +245,9 @@ console.log(" Put!!!");
 
 
                         </Form.Check>
-                {/* <Form.Check type={'checkbox'} id={"0"+index}>
-
-                            <Form.Check.Input type={'checkbox'} isValid />
-
-
-                            {/* <Form.Control.Feedback type="invalid">
-                            Succesfully added
-                            </Form.Control.Feedback> 
-
-                        </Form.Check> */}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                         </Col>
                     </Row>
                 ))}
-
-                {/* <Row key={"unique0"}>
-                        <Col md={7}>
-                          <Form.Group>
-                            <Form.Label>Option 0</Form.Label>
-                        
-                        <MyEditor handleChange={handleChange} name={"OptionText0"} text={'option.text'} />
-
-                          </Form.Group>
-                        </Col>
-                        <Col>
-                              <Form.Check type={'checkbox'} id={1} label={"Is Correct"} 
-                              onChange={(event,index) => handleChange(event,index)} name={"checkbox0"} checked={true}/> 
-                              </Col>
-                </Row> */}
-
                 <Row key={"CreateButtonRow"}>
                     {/* <Col md={30}> */}
                     <Button variant="primary" type="submit" value={"Submit"}>
