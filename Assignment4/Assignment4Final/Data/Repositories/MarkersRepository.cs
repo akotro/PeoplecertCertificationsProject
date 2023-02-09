@@ -162,6 +162,28 @@ public class MarkersRepository : IMarkersRepository
         return await _context.CandidateExams.Include(ce => ce.Candidate).ToListAsync();
     }
 
+    public async Task<CandidateExam?> AssignCandidateExamToMarker(
+        int candExamId,
+        CandidateExam candExam
+    )
+    {
+        var dbCandidateExam = await _context.CandidateExams
+            .Include(ce => ce.Marker)
+            // .ThenInclude(m => m.AppUser)
+            .FirstOrDefaultAsync(ce => ce.Id == candExam.Id);
+        if (dbCandidateExam != null)
+        {
+            if (candExam.Marker != null)
+            {
+                dbCandidateExam.Marker = await GetAsync(candExam.Marker.AppUserId);
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
+        return dbCandidateExam;
+    }
+
     public async Task<CandidateExam?> MarkCandidateExamAsync(int candExamId, CandidateExam candExam)
     {
         var dbCandidateExam = await _context.CandidateExams
