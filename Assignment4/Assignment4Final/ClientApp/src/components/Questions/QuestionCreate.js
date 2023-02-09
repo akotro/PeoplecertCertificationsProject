@@ -372,31 +372,4 @@ function QuestionCreate() {
 }
 export default QuestionCreate;
 
-// {
-/* <Multiselect
-                name="topics"
-                options={allTopics} // Options to display in the dropdown
-                onSelect={onSelect} // Function will trigger on select event
-                // onRemove={onRemove} // Function will trigger on remove event
-                displayValue="name" // Property name to display in the dropdown options
-                placeholder="Please select as many Topics as needed for the certificate"
-                hidePlaceholder="true "
-                showCheckbox="true"
-                closeIcon="cancel"
-                showArrow="true"
-                isMulti={true}
-                singleSelect={true} //Only one topic can be selected
-                // defaultValue={this.state.question.topics}
-                // onChange={handleChange}
-              />
 
-              {/* <Form.Select as="select" name="Topics"
-                                                  value={question.topicId}
-                                                  onChange={handleChange}>
-                                                  {allTopics.map((topic, index) =>
-                                                      <option key={index}
-                                                          value={topic.id}
-                                                      >{topic.name}</option>
-                                                  )}
-//                                               </Form.Select> */
-// }
