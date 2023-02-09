@@ -59,20 +59,23 @@ namespace Assignment4Final
 
             builder.Services
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                {
-                    options.TokenValidationParameters = new TokenValidationParameters
+                .AddJwtBearer(
+                    JwtBearerDefaults.AuthenticationScheme,
+                    options =>
                     {
-                        ValidateIssuer = false,
-                        ValidateAudience = false,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.UTF8.GetBytes(Configuration["keyjwt"])
-                        ),
-                        ClockSkew = TimeSpan.Zero
-                    };
-                });
+                        options.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            ValidateIssuer = false,
+                            ValidateAudience = false,
+                            ValidateLifetime = true,
+                            ValidateIssuerSigningKey = true,
+                            IssuerSigningKey = new SymmetricSecurityKey(
+                                Encoding.UTF8.GetBytes(Configuration["keyjwt"])
+                            ),
+                            ClockSkew = TimeSpan.Zero
+                        };
+                    }
+                );
 
             builder.Services.AddAuthorization(options =>
             {
@@ -226,11 +229,16 @@ namespace Assignment4Final
 
             builder.Services.AddCors(
                 options =>
-                    options.AddPolicy( // TODO:(akotro) Is this correct?
+                    options.AddPolicy(
                         "FrontEndPolicy",
-                        policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()
+                        policy =>
+                            policy
+                                .AllowAnyHeader()
+                                .AllowAnyMethod()
+                                .AllowCredentials()
+                                .WithOrigins("https://localhost:44473")
                     )
-            ); //.WithHeaders((HeaderNames.ContentType, "application/json")));
+            );
 
             var app = builder.Build();
 

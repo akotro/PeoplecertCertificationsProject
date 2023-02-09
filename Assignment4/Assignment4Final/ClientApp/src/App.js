@@ -9,7 +9,8 @@ import NotAuth from "./components/auth/NotAuth";
 
 import { getClaims } from "./components/auth/handleJWT";
 import { AuthenticationContext } from "./components/auth/AuthenticationContext";
-import configureInterceptor from "./components/auth/axiosInstance";
+import configureInterceptor from "./components/auth/axios";
+import axios from "axios";
 
 configureInterceptor();
 
