@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { Collapse, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
-import { Button } from 'react-bootstrap';
+import { Button, NavDropdown } from 'react-bootstrap';
 import { AuthenticationContext } from "./auth/AuthenticationContext";
 import Authorized from "./auth/Authorized";
 
@@ -15,15 +15,15 @@ function NavMenu() {
     const { update, claims } = useContext(AuthenticationContext);
     const [claim, setClaim] = useState(claims.filter(x => x.name === "role")[0]?.value);
 
-  const getUserEmail = () => {
-    return claims.filter((x) => x.name === "email")[0]?.value;
-  };
+    const getUserEmail = () => {
+        return claims.filter((x) => x.name === "email")[0]?.value;
+    };
 
     const [collapsed, setCollapsed] = useState(true);
 
-  const toggleNavbar = () => {
-    setCollapsed(!collapsed);
-  };
+    const toggleNavbar = () => {
+        setCollapsed(!collapsed);
+    };
 
     return (
         <header>
@@ -37,6 +37,12 @@ function NavMenu() {
                             <Authorized
                                 role="admin"
                                 authorized={<>
+                                    <NavItem>
+                                        <NavLink tag={Link} className="text-dark" to="/marker">mark an exam</NavLink>
+                                    </NavItem>
+                                    <NavItem>
+                                        <NavLink tag={Link} className="text-dark" to="/assigntomarker">Assign</NavLink>
+                                    </NavItem>
                                     <NavItem>
                                         <NavLink tag={Link} className="text-dark" to="/certificate">Certificates</NavLink>
                                     </NavItem>
@@ -55,28 +61,47 @@ function NavMenu() {
                                     <NavItem>
                                         <NavLink tag={Link} className="text-dark" to="/certificate">Get started!</NavLink>
                                     </NavItem>
+                                    <NavItem>
+                                        <NavLink tag={Link} className="text-dark" to="/candidate/availableexams">Available Exams</NavLink>
+                                    </NavItem>
                                 </>}
                             />
 
                             <Authorized
                                 role="qualitycontrol"
                                 authorized={<>
-                                    <NavItem>
+                                <NavDropdown title="Lists">
+                                    <NavDropdown.Item>
+                                        <NavLink tag={Link} className="text-dark" to="/marker">List of All Exams</NavLink>
+                                    </NavDropdown.Item>
+                                    <NavDropdown.Item>
+                                        <NavLink tag={Link} className="text-dark" to="/marker">List of All Exams</NavLink>
+                                    </NavDropdown.Item>
+                                    <NavDropdown.Item>
                                         <NavLink tag={Link} className="text-dark" to="/certificate">List of All Certificates</NavLink>
-                                    </NavItem>
-                                    <NavItem>
+                                    </NavDropdown.Item>
+                                    <NavDropdown.Item>
                                         <NavLink tag={Link} className="text-dark" to="/questions">List of All Questions</NavLink>
+                                    </NavDropdown.Item>
+                                    <NavDropdown.Item>
+                                        <NavLink tag={Link} className="text-dark" to="/candidate">List of All Candidates</NavLink>
+                                    </NavDropdown.Item>
+                                    <NavItem>
                                     </NavItem>
                                     <NavItem>
-                                        <NavLink tag={Link} className="text-dark" to="/candidate">List of All Candidates</NavLink>
                                     </NavItem>
+                                    <NavItem>
+                                    </NavItem>
+                                    <NavItem>
+                                    </NavItem>
+                                </NavDropdown>
                                 </>}
                             />
                             <Authorized
                                 role="marker"
                                 authorized={<>
                                     <NavItem>
-                                        <NavLink tag={Link} className="text-dark" to="/">marker links</NavLink>
+                                        <NavLink tag={Link} className="text-dark" to="/marker">Things</NavLink>
                                     </NavItem>
                                 </>}
                             />

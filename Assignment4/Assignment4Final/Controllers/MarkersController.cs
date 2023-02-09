@@ -7,6 +7,7 @@ namespace Assignment4Final.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+//[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
 public class MarkersController : ControllerBase
 {
     private readonly MarkersService _markersService;
@@ -31,6 +32,7 @@ public class MarkersController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsMarker")]
     public async Task<IActionResult> Get(string id)
     {
         var marker = await _markersService.GetAsync(id);
@@ -129,6 +131,99 @@ public class MarkersController : ControllerBase
             RequestId = Request.HttpContext.TraceIdentifier,
             Success = true,
             Data = deletedMarker
+        };
+
+        return Ok(response);
+    }
+
+    [HttpGet("getallcandidateexams")]
+    public async Task<IActionResult> GetAllCandidateExams(bool include = false)
+    {
+        List<CandidateExamDto> candExams;
+        BaseResponse<List<CandidateExamDto>> response;
+
+        if (include)
+        {
+            candExams = await _markersService.GetAllCandidateExamsAsync(true);
+            response = new BaseResponse<List<CandidateExamDto>>
+            {
+                RequestId = Request.HttpContext.TraceIdentifier,
+                Success = true,
+                Data = candExams
+            };
+
+            return Ok(response);
+        }
+
+        candExams = await _markersService.GetAllCandidateExamsAsync();
+
+        response = new BaseResponse<List<CandidateExamDto>>
+        {
+            RequestId = Request.HttpContext.TraceIdentifier,
+            Success = true,
+            Data = candExams
+        };
+
+        return Ok(response);
+    }
+
+    [HttpPut("assign/{candExamId}")]
+    public async Task<IActionResult> AssignCandidateExamToMarker(
+        int candExamId,
+        [FromBody] CandidateExamDto candExamDto
+    )
+    {
+        var assignedCandExam = await _markersService.AssignCandidateExamToMarker(
+            candExamId,
+            candExamDto
+        );
+        if (assignedCandExam == null)
+        {
+            return NotFound(
+                new BaseResponse<CandidateExamDto>
+                {
+                    RequestId = Request.HttpContext.TraceIdentifier,
+                    Success = false,
+                    Message = $"CandidateExam with id {candExamId} not found."
+                }
+            );
+        }
+
+        var response = new BaseResponse<CandidateExamDto>
+        {
+            RequestId = Request.HttpContext.TraceIdentifier,
+            Success = true,
+            Data = assignedCandExam
+        };
+
+        return Ok(response);
+    }
+
+    [HttpPut("mark/{candExamId}")]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsMarker")]
+    public async Task<IActionResult> MarkCandidateExam(
+        int candExamId,
+        [FromBody] CandidateExamDto candExamDto
+    )
+    {
+        var markedCandExam = await _markersService.MarkCandidateExam(candExamId, candExamDto);
+        if (markedCandExam == null)
+        {
+            return NotFound(
+                new BaseResponse<CandidateExamDto>
+                {
+                    RequestId = Request.HttpContext.TraceIdentifier,
+                    Success = false,
+                    Message = $"CandidateExam with id {candExamId} not found."
+                }
+            );
+        }
+
+        var response = new BaseResponse<CandidateExamDto>
+        {
+            RequestId = Request.HttpContext.TraceIdentifier,
+            Success = true,
+            Data = markedCandExam
         };
 
         return Ok(response);

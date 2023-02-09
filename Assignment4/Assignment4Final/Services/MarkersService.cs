@@ -7,10 +7,10 @@ namespace Assignment4Final.Services;
 
 public class MarkersService
 {
-    private readonly IGenericRepository<Marker> _repository;
+    private readonly IMarkersRepository _repository;
     private readonly IMapper _mapper;
 
-    public MarkersService(IGenericRepository<Marker> repository, IMapper mapper)
+    public MarkersService(IMarkersRepository repository, IMapper mapper)
     {
         _repository = repository;
         _mapper = mapper;
@@ -64,26 +64,7 @@ public class MarkersService
 
     public async Task<MarkerDto?> UpdateAsync(string id, MarkerDto markerDto)
     {
-        // NOTE:(akotro) Calculate new score from moderation only for moderated exams
-        if (markerDto.CandidateExams?.Any() == true)
-        {
-            foreach (var candExam in markerDto.CandidateExams.Where(ce => ce.IsModerated == true))
-            {
-                var score = candExam.CandidateExamAnswers?.Count(
-                    answer => (bool)answer.IsCorrectModerated
-                );
-                candExam.CandidateScore = score;
-                candExam.PercentScore = (score / candExam.MaxScore) * 100;
-                candExam.Result =
-                    candExam.CandidateScore >= candExam.Exam?.Certificate?.PassingMark
-                        ? true
-                        : false;
-                candExam.MarkingDate = DateTime.Now; // NOTE:(akotro) Should this be in UTC?
-            }
-        }
-
         var marker = _mapper.Map<Marker>(markerDto);
-
         var updatedMarker = await _repository.UpdateAsync(id, marker);
         return updatedMarker == null ? null : _mapper.Map<MarkerDto>(updatedMarker);
     }
@@ -97,5 +78,78 @@ public class MarkersService
     public bool MarkerExists(string id)
     {
         return _repository.EntityExists(id);
+    }
+
+    public async Task<List<CandidateExamDto>> GetAllCandidateExamsAsync(bool include = false)
+    {
+        if (include)
+        {
+            var candExamDtos = _mapper.Map<List<CandidateExamDto>>(
+                await _repository.GetAllCandidateExamsAsync(true)
+            );
+
+            // NOTE:(akotro) Fill IsCorrectModerated with values from IsCorrect
+            if (candExamDtos?.Any() == true)
+            {
+                foreach (var candExam in candExamDtos)
+                {
+                    if (
+                        candExam.CandidateExamAnswers?.Any(a => a.IsCorrectModerated == null)
+                        == true
+                    )
+                    {
+                        foreach (
+                            var answer in candExam.CandidateExamAnswers.Where(
+                                a => a.IsCorrectModerated == null
+                            )
+                        )
+                        {
+                            answer.IsCorrectModerated = answer.IsCorrect;
+                        }
+                    }
+                }
+            }
+
+            return candExamDtos;
+        }
+
+        return _mapper.Map<List<CandidateExamDto>>(await _repository.GetAllCandidateExamsAsync());
+    }
+
+    public async Task<CandidateExamDto?> AssignCandidateExamToMarker(
+        int candExamId,
+        CandidateExamDto candExamDto
+    )
+    {
+        var candExam = _mapper.Map<CandidateExam>(candExamDto);
+        var assignedCandExam = await _repository.AssignCandidateExamToMarker(candExam.Id, candExam);
+        return assignedCandExam == null ? null : _mapper.Map<CandidateExamDto>(assignedCandExam);
+    }
+
+    public async Task<CandidateExamDto?> MarkCandidateExam(
+        int candExamId,
+        CandidateExamDto candExamDto
+    )
+    {
+        // NOTE:(akotro) Recalculate candExam if it has been moderated
+        if (candExamDto?.IsModerated == true)
+        {
+            var score = candExamDto.CandidateExamAnswers?.Count(
+                answer => (bool)answer.IsCorrectModerated
+            );
+            candExamDto.CandidateScore = score;
+            candExamDto.PercentScore = (score / candExamDto.MaxScore) * 100;
+            candExamDto.Result =
+                candExamDto.CandidateScore >= candExamDto.Exam?.Certificate?.PassingMark
+                    ? true
+                    : false;
+            candExamDto.MarkingDate = DateTime.Now; // NOTE:(akotro) Should this be in UTC?
+        }
+
+        var candExam = _mapper.Map<CandidateExam>(candExamDto);
+
+        // TODO:(akotro) Does this also update answers??
+        var updatedCandExam = await _repository.MarkCandidateExamAsync(candExamId, candExam);
+        return updatedCandExam == null ? null : _mapper.Map<CandidateExamDto>(updatedCandExam);
     }
 }

@@ -40,7 +40,7 @@ namespace Assignment4Final
 
             // Add services to the container.
             var connectionString =
-                builder.Configuration.GetConnectionString("Iasonas")
+                builder.Configuration.GetConnectionString("localdb")
                 ?? throw new InvalidOperationException(
                     "Connection string 'DefaultConnection' not found."
                 );
@@ -48,19 +48,6 @@ namespace Assignment4Final
                 options => options.UseSqlServer(connectionString)
             );
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
-            // builder.Services
-            //     .AddDefaultIdentity<AppUser>(
-            //         options => options.SignIn.RequireConfirmedAccount = false
-            //     )
-            //     .AddRoles<IdentityRole>() // NOTE:(akotro) Required for roles
-            //     .AddEntityFrameworkStores<ApplicationDbContext>();
-
-            // builder.Services
-            //     .AddIdentityServer()
-            //     .AddApiAuthorization<AppUser, ApplicationDbContext>();
-
-            // builder.Services.AddAuthentication().AddIdentityServerJwt();
 
             builder.Services
                 .AddIdentity<AppUser, IdentityRole>(
@@ -72,20 +59,23 @@ namespace Assignment4Final
 
             builder.Services
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                {
-                    options.TokenValidationParameters = new TokenValidationParameters
+                .AddJwtBearer(
+                    JwtBearerDefaults.AuthenticationScheme,
+                    options =>
                     {
-                        ValidateIssuer = false,
-                        ValidateAudience = false,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(
-                            Encoding.UTF8.GetBytes(Configuration["keyjwt"])
-                        ),
-                        ClockSkew = TimeSpan.Zero
-                    };
-                });
+                        options.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            ValidateIssuer = false,
+                            ValidateAudience = false,
+                            ValidateLifetime = true,
+                            ValidateIssuerSigningKey = true,
+                            IssuerSigningKey = new SymmetricSecurityKey(
+                                Encoding.UTF8.GetBytes(Configuration["keyjwt"])
+                            ),
+                            ClockSkew = TimeSpan.Zero
+                        };
+                    }
+                );
 
             builder.Services.AddAuthorization(options =>
             {
@@ -195,7 +185,7 @@ namespace Assignment4Final
             >();
             builder.Services.AddScoped<CandidateExamAnswersService>();
 
-            builder.Services.AddScoped<IGenericRepository<Marker>, MarkersRepository>();
+            builder.Services.AddScoped<IMarkersRepository, MarkersRepository>();
             builder.Services.AddScoped<MarkersService>();
             // ---------------------------------------------------------------------------------------
 
@@ -225,7 +215,7 @@ namespace Assignment4Final
                     .ForMember(c => c.Gender, opt => opt.MapFrom(src => src.Gender))
                     .ForMember(c => c.PhotoIdType, opt => opt.MapFrom(src => src.PhotoIdType))
                     .ReverseMap();
-                mc.CreateMap<AppUser, UserDto>();
+                mc.CreateMap<AppUser, UserDto>().ReverseMap();
 
                 mc.CreateMap<Exam, ExamDto>().ReverseMap();
 
@@ -239,11 +229,16 @@ namespace Assignment4Final
 
             builder.Services.AddCors(
                 options =>
-                    options.AddPolicy( // TODO:(akotro) Is this correct?
+                    options.AddPolicy(
                         "FrontEndPolicy",
-                        policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()
+                        policy =>
+                            policy
+                                .AllowAnyHeader()
+                                .AllowAnyMethod()
+                                .AllowCredentials()
+                                .WithOrigins("https://localhost:44473")
                     )
-            ); //.WithHeaders((HeaderNames.ContentType, "application/json")));
+            );
 
             var app = builder.Build();
 

@@ -43,13 +43,25 @@ namespace Assignment4Final.Data.Seed
         {
             Randomizer.Seed = new Random(8675309);
 
-            #region // Adding AppUsers(10)
+            #region // Adding AppUsers
 
             // ---------------------------------
             // Login Details Example
 
-            // user: admin0@gmail.com
-            // pass: Admin0!
+            // user: admin1@gmail.com
+            // pass: Admin1!
+
+            // user: candidate1@gmail.com
+            // pass: Candidate1!
+
+            // user: marker1@gmail.com
+            // pass: Marker1!
+
+            // user: qualitycontrol1@gmail.com
+            // pass: Qualitycontrol1!
+
+            // user: nothing1@gmail.com
+            // pass: Nothing1!
             // ---------------------------------
 
             // check if table is empty and only then add users
@@ -447,7 +459,6 @@ namespace Assignment4Final.Data.Seed
 
             #endregion
 
-
             #region // Seeding Questions and options table
 
             if (!db.Questions.Any() && db.DifficultyLevels.Any() && db.Topics.Any())
@@ -512,7 +523,6 @@ namespace Assignment4Final.Data.Seed
 
             #endregion
 
-
             #region // Seeding CandidateExam table
 
             if (!db.CandidateExams.Any())
@@ -540,6 +550,7 @@ namespace Assignment4Final.Data.Seed
                         c => c.CandidateExamAnswers,
                         f =>
                         {
+                            //return candiExamAnsFaker.Generate(100);
                             return candiExamAnsFaker.Generate(10);
                         }
                     )
@@ -550,8 +561,9 @@ namespace Assignment4Final.Data.Seed
                     .RuleFor(c => c.Marker, f => f.PickRandom(db.Markers.ToList()))
                     .RuleFor(
                         c => c.MarkerAssignedDate,
-                        f => f.Date.Between(new DateTime(2022, 6, 10, 0, 0, 0), DateTime.Now)
-                    );
+                        f => f.Date.Between(DateTime.Now, f.Date.Soon(7))
+                    ).RuleFor(u => u.Voucher, f => f.Random.AlphaNumeric(10));
+
                 // .RuleFor(
                 //     c => c.MarkingDate,
                 //     f => f.Date.Between(new DateTime(2022, 6, 10, 0, 0, 0), DateTime.Now)
@@ -569,7 +581,7 @@ namespace Assignment4Final.Data.Seed
         {
             Randomizer.Seed = new Random(8675309);
             var faker = new Faker();
-
+            //adding 10 questions to each Exam
             foreach (var item in db.Exams.Include(c => c.Questions).ToList())
             {
                 if (item.Questions.Count == 0)
@@ -586,6 +598,7 @@ namespace Assignment4Final.Data.Seed
             ;
             db.SaveChanges();
 
+            //adding 4Topics to each Certificate
             foreach (var item in db.Certificates.Include(c => c.Topics).ToList())
             {
                 if (item.Topics.Count == 0)
@@ -605,6 +618,7 @@ namespace Assignment4Final.Data.Seed
 
         public static void SeedCalculatedFields(ApplicationDbContext db)
         {
+            //calculating MaxMark and Passing mark fo each Certificate 
             var passMark = 65;
             foreach (var cert in db.Certificates)
             {
@@ -621,6 +635,33 @@ namespace Assignment4Final.Data.Seed
                 }
             }
 
+            db.SaveChanges();
+
+            foreach (var candExam in db.CandidateExams)
+            {
+                if (candExam.MaxScore == null)
+                {
+                    candExam.MaxScore = candExam.Exam.Certificate.MaxMark;
+                };
+
+                if (candExam.CandidateScore == null)
+                {
+                    candExam.CandidateScore = 0;
+                    if (candExam.CandidateExamAnswers != null)
+                    {
+                        foreach (var ans in candExam.CandidateExamAnswers)
+                        {
+                            if ((bool)ans.IsCorrect)
+                            {
+                                candExam.CandidateScore = candExam.CandidateScore + 1;
+                            }
+                        }
+
+                    }
+                };
+                candExam.PercentScore = ((decimal)candExam.CandidateScore / (decimal)candExam.MaxScore) * 100;
+                candExam.Result = candExam.PercentScore > 65 ? true : false;
+            }
             db.SaveChanges();
         }
 

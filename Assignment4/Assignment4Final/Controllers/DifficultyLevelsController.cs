@@ -7,6 +7,7 @@ namespace Assignment4Final.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+//[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
 public class DifficultyLevelsController : ControllerBase
 {
     private readonly DifficultyLevelsService _difficultyLevelsService;

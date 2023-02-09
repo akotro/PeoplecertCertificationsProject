@@ -1,5 +1,6 @@
 ﻿import React, { useEffect, useState, useContext } from 'react';
 import { AuthenticationContext } from '../auth/AuthenticationContext'
+import instance from '../auth/axiosInstance';
 
 import { ListGroup, ListGroupItem, Button, Table, Row, Stack } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
@@ -27,15 +28,15 @@ function CertificateList(props) {
     // --------------------------------
 
     useEffect(() => {
+        console.log(data)
         axios.get('https://localhost:7196/api/Certificates')
-            .then(res => {
+        .then(res => {
                 if (role === "candidate") {
                     // if the user is a candidate, show only active products
-                    setData({ data: res.data.data.filter(item => item.active === true) },
-                        () => { console.log(this.state.data) })
+                    console.log(res.data.data.filter(item => item.active === true))
+                    setData([...res.data.data.filter(item => item.active === true)])
+                    // () => { console.log(data) })
                     console.log(res.data.data)
-                    this.setState(
-                    );
                 } else {
                     //if none of the above, show all products
                     setData(res.data.data)
@@ -45,19 +46,44 @@ function CertificateList(props) {
             .catch(err => {
                 console.error(err);
             });
-
+            
+            console.log(data)
     }, [])
 
     const handleBuy = (id) => {
         //console.log("handle buy")
         const cert = data.filter(item => item.id === id)[0];
-        //console.log(cert);
-        //console.log(cert.exams[0].id);
+        console.log("handle buy ",id);
+        console.log("certexam.id", cert.exams[0].id);
+        let idObj = id;
+        // const examDTO = { id: cert.exams[0].id, cert }
+        // console.log(JSON.stringify(examDTO))
+        // const token = localStorage.getItem("token");
 
-        const examDTO = { id: cert.exams[0].id, cert }
-        console.log(JSON.stringify(examDTO))
+        // const config = {
+        //     headers: { Authorization: `Bearer ${token}` }
+        // };
+        
+        // const bodyParameters = {
+        //    key: "value"
+        // };
+        
+        // Axios.post( 
+        //   'http://localhost:8000/api/v1/get_token_payloads',
+        //   bodyParameters,
+        //   config
+        // ).then(console.log).catch(console.log);
 
-        axios.post(`https://localhost:7196/api/CandidateExam`, examDTO)
+
+        // const requestOptions = {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //         'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNhbmRpZGF0ZTJAZ21haWwuY29tIiwidXNlcklkIjoiMjVmOTExNzQtMjc4Mi00YjQwLWI0MjQtODViNjk1Y2U3YjMzIiwicm9sZSI6ImNhbmRpZGF0ZSIsImV4cCI6MTcwNzQzMzg1OX0.9-ar7aI1w00WqfEi97FbfKAB0QJTz3ugDx3jggPAx00'
+        //     }
+        // }
+        // fetch(`https://localhost:7196/api/CandidateExam/CreateCandExam/${id}`, requestOptions)
+        axios.post(`https://localhost:7196/api/CandidateExam/CreateCandExam/${id}`)
             .then(res => {
                 console.log(res);
                 //this.setState({ data: res.data.data });
@@ -72,6 +98,7 @@ function CertificateList(props) {
         const confirmDelete = window.confirm("Are you sure you want to delete this certificate?");
 
         if (confirmDelete) {
+            //TODO check for role before delete
             //send axios call with the request to delete using Id
             axios.delete(`https://localhost:7196/api/Certificates/${id}`)
                 .then(response => {
@@ -127,7 +154,7 @@ function CertificateList(props) {
                 onClick={()=> navigate('/certificate/create')}
                 > Create a new Certificate </Button>
                 : null}
-            <Table striped hover borderless align-middle className="text-center" id='list_of_allcerts'>
+            <Table striped hover borderless className="text-center align-middle" id='list_of_allcerts'>
                 <thead>
                     <tr>
                         <th>Title</th>
@@ -148,9 +175,7 @@ function CertificateList(props) {
                             {makebuttons(certificate.id)}
                             <td>
                             </td>
-
                         </tr>
-
                     ))}
                 </tbody>
             </Table>
