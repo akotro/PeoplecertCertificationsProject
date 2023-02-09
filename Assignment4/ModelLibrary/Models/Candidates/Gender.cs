@@ -8,7 +8,6 @@ namespace ModelLibrary.Models.Candidates
 {
     public enum GenderEnum
     {
-        None,
         Male,
         Female,
         Other
@@ -19,7 +18,6 @@ namespace ModelLibrary.Models.Candidates
         public int Id { get; set; }
         public GenderEnum? GenderType { get; set; }
 
-        public virtual ICollection<Candidate>?
-            Candidates { get; set; } // NOTE:(akotro) Reverse navigation
+        public virtual ICollection<Candidate>? Candidates { get; set; } // NOTE:(akotro) Reverse navigation
     }
 }
