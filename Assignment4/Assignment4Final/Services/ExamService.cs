@@ -52,15 +52,15 @@ namespace Assignment4Final.Services
         {
             var exam = _mapper.Map<Exam>(examDto);
 
-            // TODO:(akotro) Populate exam with random questions through topicsRepository?
-            var topics = await _topicsRepository.GetAllAsync();
-            var random = new Random();
-            exam.Questions = exam.Certificate.Topics
-                .Select(t => topics.First(x => x.Id == t.Id))
-                .SelectMany(t => t.Questions)
-                .OrderBy(x => random.Next())
-                .Take(5)
-                .ToList();
+            // todo:(akotro) populate exam with random questions through topicsrepository?
+            var topics = await _topicsrepository.getallasync();
+            var random = new random();
+            exam.questions = exam.certificate.topics
+                .select(t => topics.first(x => x.id == t.id))
+                .selectmany(t => t.questions)
+                .orderby(x => random.next())
+                .take(5)
+                .tolist();
 
             var addedExam = await _repository.AddAsync(exam);
             return addedExam == null ? null : _mapper.Map<ExamDto>(addedExam);
