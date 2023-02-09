@@ -81,15 +81,19 @@ export default function MyEditor({ handleChange, ...props })
                     extraPlugins: [uploadPlugin],
                 }}
                 editor={ClassicEditor}
+                data = {props.text}
                 onReady={(editor) => {}}
                 onBlur={(event, editor) => {}}
                 onFocus={(event, editor) => {}}
+                
                 onChange={(event, editor) => 
                     {
 
-                  handleChange(event,props.name,editor.getData());
+                  handleChange(event,props.name,editor.getData(),props.index);
                 }}
                 {...props}
+
+                required
             />
         </div>
 
