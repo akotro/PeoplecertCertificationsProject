@@ -58,9 +58,17 @@ function MarkExam(props) {
         )
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = async (canExamId) => {
         setExam({ ...exam, isModerated: true });
         //implement axios put action
+        // /api/Candidate/{id}
+        await axios.put(`https://localhost:7196/api/Markers/mark/${canExamId}`, exam)
+        .then(function (response) {
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
     }
 
     const setFinalScore = () => {
@@ -134,7 +142,7 @@ function MarkExam(props) {
 
             </Table>
             <Stack gap={3}>
-                <Button onClick={handleSubmit}>
+                <Button onClick={()=> handleSubmit(exam.id)}>
                     Save & Submit Marking
                 </Button>
                 <Button variant='dark' className='d-grid col-12 mx-auto mb-2' onClick={() => navigate(-1)}> Go Back </Button>
