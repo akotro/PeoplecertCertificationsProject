@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using ModelLibrary.Models.DTO.Exams;
 using ModelLibrary.Models.Exams;
 using Newtonsoft.Json;
+using ModelLibrary.Models.DTO.Candidates;
 
 namespace ModelLibrary.Models.DTO.CandidateExam
 {
@@ -26,6 +27,9 @@ namespace ModelLibrary.Models.DTO.CandidateExam
 
         public DateTime? MarkerAssignedDate { get; set; }
         public DateTime? MarkingDate { get; set; }
+
+        [JsonProperty(ReferenceLoopHandling = ReferenceLoopHandling.Ignore)]
+        public CandidatesDto? Candidate { get; set; }
 
         [JsonProperty(ReferenceLoopHandling = ReferenceLoopHandling.Ignore)]
         public MarkerDto? Marker { get; set; }

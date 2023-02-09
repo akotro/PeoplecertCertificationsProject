@@ -15,17 +15,17 @@ public class MarkersRepository : IMarkersRepository
     public async Task<List<Marker>> GetAllAsync()
     {
         return await _context.Markers
-            .AsSplitQuery()
+            // .AsSplitQuery()
             .Include(m => m.AppUser)
-            .Include(m => m.CandidateExams)
-            .ThenInclude(ce => ce.CandidateExamAnswers)
-            .Include(m => m.CandidateExams)
-            .ThenInclude(ce => ce.Exam)
-            .ThenInclude(e => e.Certificate)
-            .Include(m => m.CandidateExams)
-            .ThenInclude(ce => ce.Exam)
-            .ThenInclude(e => e.Questions)
-            .ThenInclude(q => q.Options)
+            // .Include(m => m.CandidateExams)
+            // .ThenInclude(ce => ce.CandidateExamAnswers)
+            // .Include(m => m.CandidateExams)
+            // .ThenInclude(ce => ce.Exam)
+            // .ThenInclude(e => e.Certificate)
+            // .Include(m => m.CandidateExams)
+            // .ThenInclude(ce => ce.Exam)
+            // .ThenInclude(e => e.Questions)
+            // .ThenInclude(q => q.Options)
             .ToListAsync();
     }
 
@@ -78,14 +78,12 @@ public class MarkersRepository : IMarkersRepository
                 {
                     foreach (var candExam in marker.CandidateExams)
                     {
-                        var dbCandidateExam =
-                            await _context.CandidateExams.FirstOrDefaultAsync(
-                                ce => ce.Id == candExam.Id
-                            );
+                        var dbCandidateExam = await _context.CandidateExams.FirstOrDefaultAsync(
+                            ce => ce.Id == candExam.Id
+                        );
                         if (dbCandidateExam != null)
                         {
-                            if (dbMarker.CandidateExams.Any(ce =>
-                                    ce.Id == dbCandidateExam.Id))
+                            if (dbMarker.CandidateExams.Any(ce => ce.Id == dbCandidateExam.Id))
                             {
                                 // NOTE:(akotro) If marker already has this candExam, update it
                                 dbCandidateExam.Result = candExam.Result;
@@ -99,14 +97,12 @@ public class MarkersRepository : IMarkersRepository
                                     foreach (var answer in candExam.CandidateExamAnswers)
                                     {
                                         var dbAnswer =
-                                            await _context.CandidateExamAnswers
-                                                .FirstOrDefaultAsync(
-                                                    a => a.Id == answer.Id
-                                                );
+                                            await _context.CandidateExamAnswers.FirstOrDefaultAsync(
+                                                a => a.Id == answer.Id
+                                            );
                                         if (dbAnswer != null)
                                         {
-                                            dbAnswer.IsCorrectModerated =
-                                                answer.IsCorrectModerated;
+                                            dbAnswer.IsCorrectModerated = answer.IsCorrectModerated;
                                         }
                                     }
                                 }
@@ -142,8 +138,31 @@ public class MarkersRepository : IMarkersRepository
         return null;
     }
 
-    public async Task<CandidateExam?> MarkCandidateExamAsync(int candExamId,
-        CandidateExam candExam)
+    public bool EntityExists(string id)
+    {
+        return (_context.Markers?.Any(m => m.AppUserId == id)).GetValueOrDefault();
+    }
+
+    public async Task<List<CandidateExam>> GetAllCandidateExamsAsync(bool include = false)
+    {
+        if (include)
+        {
+            return await _context.CandidateExams
+                .AsSplitQuery()
+                .Include(ce => ce.Candidate)
+                .Include(ce => ce.CandidateExamAnswers)
+                .Include(ce => ce.Exam)
+                .ThenInclude(e => e.Certificate)
+                .Include(ce => ce.Exam)
+                .ThenInclude(e => e.Questions)
+                .ThenInclude(q => q.Options)
+                .ToListAsync();
+        }
+
+        return await _context.CandidateExams.Include(ce => ce.Candidate).ToListAsync();
+    }
+
+    public async Task<CandidateExam?> MarkCandidateExamAsync(int candExamId, CandidateExam candExam)
     {
         var dbCandidateExam = await _context.CandidateExams
             .Include(ce => ce.CandidateExamAnswers)
@@ -161,10 +180,9 @@ public class MarkersRepository : IMarkersRepository
             {
                 foreach (var answer in candExam.CandidateExamAnswers)
                 {
-                    var dbAnswer =
-                        await _context.CandidateExamAnswers.FirstOrDefaultAsync(
-                            a => a.Id == answer.Id
-                        );
+                    var dbAnswer = await _context.CandidateExamAnswers.FirstOrDefaultAsync(
+                        a => a.Id == answer.Id
+                    );
                     if (dbAnswer != null)
                     {
                         dbAnswer.IsCorrectModerated = answer.IsCorrectModerated;
@@ -176,11 +194,6 @@ public class MarkersRepository : IMarkersRepository
         }
 
         return dbCandidateExam;
-    }
-
-    public bool EntityExists(string id)
-    {
-        return (_context.Markers?.Any(m => m.AppUserId == id)).GetValueOrDefault();
     }
 
     private async Task FillNavigationProperties(Marker marker)
