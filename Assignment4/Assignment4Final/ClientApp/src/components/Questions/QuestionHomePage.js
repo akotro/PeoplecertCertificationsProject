@@ -34,9 +34,9 @@ function Questions() {
     const  handleDelete = (event) => {
         // Asks user if they are sure
         const localId = event.target.dataset.id;
-        const confirmDelete = window.confirm(
-            "Are you sure you want to delete this this question?"
-        );
+
+        const confirmDelete = window.confirm("Are you sure you want to delete this this question?");
+
         if (confirmDelete) {
             //send axios call with the request to delete using Id
             axios
@@ -76,21 +76,19 @@ function Questions() {
                             <tr key={item.id}>
                                 <td>{item.id != null && item.id}</td>
                                 {Replace(item.text)}
+                                {/* //--TOPIC--// */}
                                 <td>
                                     {item.topic === null
                                         ? "No topic selected"
                                         : item.topic.name}
                                 </td>
-
+                                    {/* //--EDIT BUTTON--// */}
                                 <td>
-                                    <Button
-                                        onClick={(event) => QuestionEdit(event)}
-                                        name={index}
-                                    >
-                                        Edit
-                                    </Button>
+                                    <Link to={`/questions/edit/${item.id}`}    state={{questionIndex:item.id}}>
+                                            <Button variant="dark">Edit</Button>
+                                    </Link>
                                 </td>
-
+                                    {/* //--DELETE BUTTON--// */}
                                 <td>
                                     <Button
                                         variant="dark"

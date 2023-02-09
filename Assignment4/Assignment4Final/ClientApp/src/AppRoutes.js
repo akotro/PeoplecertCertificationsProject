@@ -40,6 +40,7 @@ const AppRoutes = [
     path: "/register",
     element: <Register />,
   },
+  //-----------------Certificates-------------------
   {
     path: "/certificate",
     needsAdmin: true,
