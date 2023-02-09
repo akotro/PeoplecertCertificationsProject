@@ -33,13 +33,19 @@ function MarkerList(props) {
                 console.log(error);
             });
         } else if (role === "admin") {
-            axios.get(`https://localhost:7196/api/Markers`).then((response) => {
-                // console.log(response.data.data)
+
+            const params = {
+                include: true
+              };
+
+            axios.get(`https://localhost:7196/api/Markers/getallcandidateexams/`, {params}).then((response) => {
+                console.log(response.data.data)
                 // console.log(response.data.data.map(marker => marker.candidateExams).flat().filter(x => x.isModerated === null))
                 // console.log(response.data.data.map(marker => marker.candidateExams).flat().filter(x => x.isModerated === true))
                 // setData(response.data.data);
-                setExams([...response.data.data.map(marker => marker.candidateExams).flat().filter(x => x.isModerated === null)]);
-                setmarkedExams([...response.data.data.map(marker => marker.candidateExams).flat().filter(x => x.isModerated === true)])
+                // .filter(x => x.isModerated === null)]
+                setExams([...response.data.data]);
+                setmarkedExams([...response.data.data.filter(x => x.isModerated === true)])
 
             }).catch(function (error) {
                 console.log(error);
