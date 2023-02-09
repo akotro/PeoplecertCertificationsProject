@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import CandidateEdit from "../Candidate_CRUD/CandidateEdit";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useParams } from "react-router-dom";
 import { AuthenticationContext } from '../auth/AuthenticationContext'
 
 import { ListGroup, ListGroupItem, Button, Table, Row, Stack } from 'react-bootstrap';
@@ -10,26 +10,31 @@ import { useLocation } from 'react-router-dom'
 
 
 function AddQuestionToExam() {
+    const params = useParams();
     const location = useLocation();
     let navigate = useNavigate();
-    const Data = location.state.data;
     const [topics, setTopics] = useState([])
     const [questions, setQuestions] = useState([])
     const [exam, setExam] = useState({
         questions:[]
     })
-    const[rerender,setRerender]= useState(0)
-    let kati =1;
-
     
-    useEffect(() => {
-        setTopics(Data.certificate.topics)
-        setQuestions(Data.certificate.topics.questions)
-        setExam(Data)
-        console.log('topics',topics)
-    }
-    )
 
+    useEffect(() => {
+
+        axios.get(`https://localhost:7196/api/Exam/${params.id}`).then((response) => {
+            setExam(response.data.data)
+            setTopics(response.data.data.certificate.topics)
+            console.log(response.data.data)
+            console.log(response.data.data.certificate.topics)
+            response.data.data.certificate.topics.map((question,index)=>console.log('kati',question))
+          })
+    },[]);
+
+    const assign = ()=>{
+        setTopics(exam.certificate.topics)
+        setQuestions(exam.certificate.topics)
+    }
     function Replace(temp) {
         var parser = new DOMParser();
         var doc = parser.parseFromString(temp, 'text/html');
@@ -39,24 +44,12 @@ function AddQuestionToExam() {
     const handleAdd = (quest) =>{
         
         var examUpdated = exam;
-        console.log('before',exam)
-        // exam.questions.push(quest)
         var asd = exam.questions
         asd.push(quest)
         setExam({...exam,questions : asd})
-
-        // setExam({...exam,questions : [...exam.questions,quest]})
-        // setExam((prev) =>  [...prev, questions : exam.questions])
-        console.log(exam)
         axios.put(`https://localhost:7196/api/Exam/${exam.id}`,exam).then()
         .catch(function (error) {
-        //     console.log(error);
         });
-        
-        
-        
-        // axios.put(`https://localhost:7196/api/Exam/${examR.id}`,examUpdated)
-
     }
 
     const makeButtons = (quest) => {
@@ -67,8 +60,6 @@ function AddQuestionToExam() {
         )
     }
 
-
-
     return (
         <div>
             
@@ -76,8 +67,9 @@ function AddQuestionToExam() {
 
                 <div key={index}>
                     <hr />
+                    {console.log(topic)}
                     <div><h5>Topic Name: {topic.name}</h5></div>
-                    {topic.questions.map((question, number) =>  exam.questions.findIndex(q => q.id === question.id) > -1? null: <div key={number}>
+                    {topic.questions.map((question, number) =>  exam.questions.findIndex(q => q.id === question.id) > -1? null : <div key={number}>
                             <div> Question: { Replace(question.text)}</div>
                             <div>Difficulty: {question.difficultyLevel.difficulty}</div>
                             <div>{makeButtons(question)}</div>
@@ -86,12 +78,7 @@ function AddQuestionToExam() {
                     )}
                 </div>
             )}
-
-
         </div>
     )
-
-
 }
 export default AddQuestionToExam
-// exam.questions.filter(q => q.id !== question.id) !== exam.questions ?   null :

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import CandidateEdit from "../Candidate_CRUD/CandidateEdit";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useParams } from "react-router-dom";
 import { AuthenticationContext } from '../auth/AuthenticationContext'
 
 import { ListGroup, ListGroupItem, Button, Table, Row, Stack } from 'react-bootstrap';
@@ -10,38 +10,42 @@ import { useLocation } from 'react-router-dom'
 
 function ExamQuestionList() {
 
-
+    const params = useParams();
     const location = useLocation();
     let navigate = useNavigate();
-    const Data = location.state.data;
+    // const Data = location.state.data;
     
     const [questions, setQuestions] = useState([]);
-    const [exam, setExam] = useState([]);
-    
-    
-    
-    
+    const [exam, setExam] = useState();
+
+    const [previousLocation, setPreviousLocation] = useState(location);
+
     useEffect(() => {
-        setQuestions(Data.questions)
-        setExam(Data)
-        
+        axios.get(`https://localhost:7196/api/Exam/${params.id}`).then((response) => {
+            console.log(response.data.data)
+            console.log(response.data.data.questions)
+            setExam(response.data.data)
+            console.log(exam)
+            setQuestions(response.data.data.questions)
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
     },[]);
 
-    const handleAdd = (exam) => {
-        
-        navigate('/AddQuestionToExam',{state : { data : exam }})
-    } 
+    
+    const handleAdd =(exam) => {
+        navigate(`/AddQuestionToExam/${exam.id}`)
+    }
 
     const handleRemove = (questR) =>{
-        console.log('inside remove')
-        //  let filtered =examR.questions.filter(question => question.id !== questR.id );
-        console.log('before',exam)
-        exam.questions= exam.questions.filter( q => q.id !== questR.id )
         console.log(exam)
-        //  examR.questions = filtered;
+        exam.questions= exam.questions.filter( q => q.id !== questR.id )
          axios.put(`https://localhost:7196/api/Exam/${exam.id}`,exam).then(setExam(exam))
-         
+         console.log(questions)
          setQuestions(exam.questions)
+         console.log(questions)
+         var kati =exam.questions;
     }
 
     const makeButtons = (exam,question) =>{

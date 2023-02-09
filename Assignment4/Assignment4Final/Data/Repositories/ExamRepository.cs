@@ -36,8 +36,11 @@ namespace Assignment4Final.Data.Repositories
                 .Include(exam => exam.Questions)
                 .Include(exam => exam.Certificate)
                 .ThenInclude(c => c.Topics)
+                .ThenInclude(t =>t.Questions).ThenInclude(q => q.DifficultyLevel)
                 .FirstOrDefaultAsync(e => e.Id == id);
         }
+
+
 
         // TODO:(akotro) Business logic in service to choose random questions?
         public async Task<Exam?> AddAsync(Exam exam)
@@ -95,6 +98,7 @@ namespace Assignment4Final.Data.Repositories
         public async Task<Exam?> DeleteAsync(int id)
         {
             var exam = await GetExamAsync(id);
+
 
             if (exam != null)
             {
