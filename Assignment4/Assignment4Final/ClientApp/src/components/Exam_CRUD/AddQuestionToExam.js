@@ -13,7 +13,6 @@ function AddQuestionToExam() {
     const params = useParams();
     const location = useLocation();
     let navigate = useNavigate();
-    // const Data = location.state.data;
     const [topics, setTopics] = useState([])
     const [questions, setQuestions] = useState([])
     const [exam, setExam] = useState({
@@ -21,15 +20,11 @@ function AddQuestionToExam() {
     })
     
 
-    
     useEffect(() => {
 
         axios.get(`https://localhost:7196/api/Exam/${params.id}`).then((response) => {
             setExam(response.data.data)
-            // setQuestions(response.data.data.questions)
-            // assign();
             setTopics(response.data.data.certificate.topics)
-            setQuestions(response.data.data.certificate.topics.questions)
             console.log(response.data.data)
             console.log(response.data.data.certificate.topics)
             response.data.data.certificate.topics.map((question,index)=>console.log('kati',question))
@@ -49,24 +44,12 @@ function AddQuestionToExam() {
     const handleAdd = (quest) =>{
         
         var examUpdated = exam;
-        // exam.questions.push(quest)
         var asd = exam.questions
         asd.push(quest)
         setExam({...exam,questions : asd})
-
-        
-
-        // setExam({...exam,questions : [...exam.questions,quest]})
-        // setExam((prev) =>  [...prev, questions : exam.questions])
         axios.put(`https://localhost:7196/api/Exam/${exam.id}`,exam).then()
         .catch(function (error) {
-        //     console.log(error);
         });
-        
-        
-        
-        // axios.put(`https://localhost:7196/api/Exam/${examR.id}`,examUpdated)
-
     }
 
     const makeButtons = (quest) => {
@@ -77,8 +60,6 @@ function AddQuestionToExam() {
         )
     }
 
-
-
     return (
         <div>
             
@@ -88,7 +69,7 @@ function AddQuestionToExam() {
                     <hr />
                     {console.log(topic)}
                     <div><h5>Topic Name: {topic.name}</h5></div>
-                    {topic.questions.map((question, number) =>  exam.questions.findIndex(q => q.id === question.id) > -1? null: <div key={number}>
+                    {topic.questions.map((question, number) =>  exam.questions.findIndex(q => q.id === question.id) > -1? null : <div key={number}>
                             <div> Question: { Replace(question.text)}</div>
                             <div>Difficulty: {question.difficultyLevel.difficulty}</div>
                             <div>{makeButtons(question)}</div>
@@ -97,12 +78,7 @@ function AddQuestionToExam() {
                     )}
                 </div>
             )}
-
-
         </div>
     )
-
-
 }
 export default AddQuestionToExam
-// exam.questions.filter(q => q.id !== question.id) !== exam.questions ?   null :

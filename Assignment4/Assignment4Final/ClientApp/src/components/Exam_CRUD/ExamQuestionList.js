@@ -20,28 +20,6 @@ function ExamQuestionList() {
 
     const [previousLocation, setPreviousLocation] = useState(location);
 
-   
-    // useEffect(() => {
-    //   if (previousLocation !== location) {
-    //     console.log('Functional component was updated due to navigation!');
-    //     setPreviousLocation(location);
-    //   }
-    // }, [location, previousLocation]);
-    
-    
-    // window.addEventListener('popstate', function(event) {
-    //     console.log(JSON.parse(this.localStorage.getItem('katii')));
-    //     // exam.questions =JSON.parse(this.localStorage.getItem('katii'))
-    //     setQuestions(exam.questions)
-    //   });
-    
-    const fetchData = () => {
-        
-      }
-    
-  
-
-
     useEffect(() => {
         axios.get(`https://localhost:7196/api/Exam/${params.id}`).then((response) => {
             console.log(response.data.data)
@@ -53,31 +31,16 @@ function ExamQuestionList() {
           .catch(function (error) {
             console.log(error);
           });
-
-        // setQuestions(Data.questions)
-        // setExam(Data)
-
-       
-        
     },[]);
 
-    // useEffect(()=> {
-    //     console.log("reload or arrow keys")
-    // },[location])
-
-    // const handleAdd = (exam) => {
-        
-    //     navigate('/AddQuestionToExam',{state : { data : exam }})
-    // } 
+    
     const handleAdd =(exam) => {
         navigate(`/AddQuestionToExam/${exam.id}`)
     }
 
     const handleRemove = (questR) =>{
         console.log(exam)
-        //  let filtered =examR.questions.filter(question => question.id !== questR.id );
         exam.questions= exam.questions.filter( q => q.id !== questR.id )
-        //  examR.questions = filtered;
          axios.put(`https://localhost:7196/api/Exam/${exam.id}`,exam).then(setExam(exam))
          console.log(questions)
          setQuestions(exam.questions)
