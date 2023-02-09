@@ -153,9 +153,9 @@ namespace Assignment4Final.Controllers
             return Ok(candExamDto);
         }
 
-        [HttpPut("EndExam")] //Api to end the exam procces
+        [HttpPut("EndExam/{candExamId}")] //Api to end the exam procces
         public async Task<ActionResult<CandidateExamDto>> GetCandidateExamWithResults(
-            [FromBody] int candExamId
+            int candExamId
         )
         {
             var candidateExam =
