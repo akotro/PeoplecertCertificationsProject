@@ -94,6 +94,47 @@ public class MarkersService
         return deletedMarker == null ? null : _mapper.Map<MarkerDto>(deletedMarker);
     }
 
+    public bool MarkerExists(string id)
+    {
+        return _repository.EntityExists(id);
+    }
+
+    public async Task<List<CandidateExamDto>> GetAllCandidateExamsAsync(bool include = false)
+    {
+        if (include)
+        {
+            var candExamDtos = _mapper.Map<List<CandidateExamDto>>(
+                await _repository.GetAllCandidateExamsAsync(true)
+            );
+
+            // NOTE:(akotro) Fill IsCorrectModerated with values from IsCorrect
+            if (candExamDtos?.Any() == true)
+            {
+                foreach (var candExam in candExamDtos)
+                {
+                    if (
+                        candExam.CandidateExamAnswers?.Any(a => a.IsCorrectModerated == null)
+                        == true
+                    )
+                    {
+                        foreach (
+                            var answer in candExam.CandidateExamAnswers.Where(
+                                a => a.IsCorrectModerated == null
+                            )
+                        )
+                        {
+                            answer.IsCorrectModerated = answer.IsCorrect;
+                        }
+                    }
+                }
+            }
+
+            return candExamDtos;
+        }
+
+        return _mapper.Map<List<CandidateExamDto>>(await _repository.GetAllCandidateExamsAsync());
+    }
+
     public async Task<CandidateExamDto?> MarkCandidateExam(
         int candExamId,
         CandidateExamDto candExamDto
@@ -119,10 +160,5 @@ public class MarkersService
         // TODO:(akotro) Does this also update answers??
         var updatedCandExam = await _repository.MarkCandidateExamAsync(candExamId, candExam);
         return updatedCandExam == null ? null : _mapper.Map<CandidateExamDto>(updatedCandExam);
-    }
-
-    public bool MarkerExists(string id)
-    {
-        return _repository.EntityExists(id);
     }
 }

@@ -8,7 +8,6 @@ namespace ModelLibrary.Models.Candidates
 {
     public enum PhotoIdTypeEnum
     {
-        None,
         Passport,
         National,
         Millitary,
@@ -20,7 +19,6 @@ namespace ModelLibrary.Models.Candidates
         public int Id { get; set; }
         public PhotoIdTypeEnum? IdType { get; set; }
 
-        public virtual ICollection<Candidate>?
-            Candidates { get; set; } // NOTE:(akotro) Reverse navigation
+        public virtual ICollection<Candidate>? Candidates { get; set; } // NOTE:(akotro) Reverse navigation
     }
 }
