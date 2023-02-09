@@ -34,11 +34,16 @@ function ExamList(props){
         })
     }
 
-    const handleEdit = (exam) => {
-        navigate('/ExamQuestionList',{state : { data : exam }})
+    // const handleEdit = (exam) => {
+    //     navigate('/ExamQuestionList',{state : { data : exam }})
+    // }
+
+    const handleEdit = (examEdit) => {
+        console.log(examEdit)
+        navigate(`/ExamQuestionList/${examEdit.id}`)
     }
 
-    const makeButtons = (exam) => {
+    const makeButtons = (examButtons) => {
              //admin
             // if (role === "admin") {
             //     return(
@@ -53,8 +58,8 @@ function ExamList(props){
             // }
             return( // default do we need this??
                 <div>
-                    <Button onClick={() => handleDelete(exam.id)}>Delete</Button>
-                    <Button onClick = {() => handleEdit(exam)}>Edit</Button>
+                    <Button onClick={() => handleDelete(examButtons.id)}>Delete</Button>
+                    <Button onClick = {() => handleEdit(examButtons)}>Edit</Button>
                 </div>
             )
 

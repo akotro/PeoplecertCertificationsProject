@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import CandidateEdit from "../Candidate_CRUD/CandidateEdit";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useParams } from "react-router-dom";
 import { AuthenticationContext } from '../auth/AuthenticationContext'
 
 import { ListGroup, ListGroupItem, Button, Table, Row, Stack } from 'react-bootstrap';
@@ -10,9 +10,10 @@ import { useLocation } from 'react-router-dom'
 
 
 function AddQuestionToExam() {
+    const params = useParams();
     const location = useLocation();
     let navigate = useNavigate();
-    const Data = location.state.data;
+    // const Data = location.state.data;
     const [topics, setTopics] = useState([])
     const [questions, setQuestions] = useState([])
     const [exam, setExam] = useState({
@@ -22,12 +23,16 @@ function AddQuestionToExam() {
 
     
     useEffect(() => {
-        setTopics(Data.certificate.topics)
-        setQuestions(Data.certificate.topics.questions)
-        setExam(Data)
-        console.log('topics',topics)
-    }
-    )
+
+        axios.get(`https://localhost:7196/api/Exam/${params.id}`).then((response) => {
+            console.log(response.data.data)
+            console.log(response.data.data.questions)
+            setExam(response.data.data)
+            setQuestions(response.data.data.questions)
+            setTopics(exam.certificate.topics)
+            setQuestions(exam.certificate.topics.questions)
+          })
+    },[]);
 
     function Replace(temp) {
         var parser = new DOMParser();
