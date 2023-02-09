@@ -7,8 +7,11 @@ public class PrimaryKeyRequiredAttribute : RequiredAttribute
 {
     protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
     {
-        var httpContext = (HttpContext?)validationContext.GetService(typeof(IHttpContextAccessor));
-        if (httpContext?.Request.Method != "POST" && value == null)
+        var httpContextAccessor = (IHttpContextAccessor?)
+            validationContext.GetService(typeof(IHttpContextAccessor));
+        var httpMethod = httpContextAccessor?.HttpContext?.Request.Method;
+
+        if (httpMethod != "POST" && value == null)
         {
             return new ValidationResult(ErrorMessage);
         }

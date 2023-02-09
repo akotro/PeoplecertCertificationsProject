@@ -12,11 +12,11 @@ namespace ModelLibrary.Models.DTO.Candidates
 {
     public class CandidatesDto
     {
-        [PrimaryKeyRequired]
+        [Required]
         public string AppUserId { get; set; }
 
         [ /* Required,  */
-        StringLength(100)]
+        StringLength(1)]
         public string? FirstName { get; set; }
 
         [StringLength(100)]
