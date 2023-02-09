@@ -459,7 +459,6 @@ namespace Assignment4Final.Data.Seed
 
             #endregion
 
-
             #region // Seeding Questions and options table
 
             if (!db.Questions.Any() && db.DifficultyLevels.Any() && db.Topics.Any())
@@ -523,7 +522,6 @@ namespace Assignment4Final.Data.Seed
             //}
 
             #endregion
-
 
             #region // Seeding CandidateExam table
 
@@ -648,12 +646,16 @@ namespace Assignment4Final.Data.Seed
                 if (candExam.CandidateScore == null)
                 {
                     candExam.CandidateScore = 0;
-                    foreach (var ans in candExam.CandidateExamAnswers)
+                    if (candExam.CandidateExamAnswers != null)
                     {
-                        if ((bool)ans.IsCorrect)
+                        foreach (var ans in candExam.CandidateExamAnswers)
                         {
-                            candExam.CandidateScore = candExam.CandidateScore + 1;
+                            if ((bool)ans.IsCorrect)
+                            {
+                                candExam.CandidateScore = candExam.CandidateScore + 1;
+                            }
                         }
+
                     }
                 };
                 candExam.PercentScore = ((decimal)candExam.CandidateScore / (decimal)candExam.MaxScore) * 100;
