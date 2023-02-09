@@ -167,6 +167,38 @@ public class MarkersController : ControllerBase
         return Ok(response);
     }
 
+    [HttpPut("assign/{candExamId}")]
+    public async Task<IActionResult> AssignCandidateExamToMarker(
+        int candExamId,
+        [FromBody] CandidateExamDto candExamDto
+    )
+    {
+        var assignedCandExam = await _markersService.AssignCandidateExamToMarker(
+            candExamId,
+            candExamDto
+        );
+        if (assignedCandExam == null)
+        {
+            return NotFound(
+                new BaseResponse<CandidateExamDto>
+                {
+                    RequestId = Request.HttpContext.TraceIdentifier,
+                    Success = false,
+                    Message = $"CandidateExam with id {candExamId} not found."
+                }
+            );
+        }
+
+        var response = new BaseResponse<CandidateExamDto>
+        {
+            RequestId = Request.HttpContext.TraceIdentifier,
+            Success = true,
+            Data = assignedCandExam
+        };
+
+        return Ok(response);
+    }
+
     [HttpPut("mark/{candExamId}")]
     //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsMarker")]
     public async Task<IActionResult> MarkCandidateExam(
