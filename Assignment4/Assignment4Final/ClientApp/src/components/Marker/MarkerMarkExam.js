@@ -13,6 +13,7 @@ function MarkExam(props) {
     const initialScore = location.state.data.candidateScore;
 
     const incomingData = location.state.data;
+    const role = location.state.role;
 
     useEffect(() => {
         // initialScore = exam.candidateScore;
@@ -40,7 +41,10 @@ function MarkExam(props) {
                 })
             })
         }
-
+        // if (initialScore !== exam.candidateScore) {
+        // setExam({...exam , candidateScore: exam.candidateExamAnswers.filter(ans=> ans.isCorrectModerated).count()})
+        console.log(exam.candidateExamAnswers.filter(ans => ans.isCorrectModerated === true).length)
+        // }
         // const updatedExam = {...exam, isModerated: true};
         // setFinalScore();
         // exam.isModerated = true;
@@ -58,17 +62,19 @@ function MarkExam(props) {
         )
     }
 
-    const handleSubmit = async (canExamId) => {
-        setExam({ ...exam, isModerated: true });
+    const handleSubmit = (canExamId) => {
+        exam.isModerated = true;
+        setExam(exam);
 
-        await axios.put(`https://localhost:7196/api/Markers/mark/${canExamId}`, exam)
-        .then(function (response) {
-            console.log(response);
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
+        axios.put(`https://localhost:7196/api/Markers/mark/${canExamId}`, exam)
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     }
+
 
     const setFinalScore = () => {
 
@@ -80,32 +86,35 @@ function MarkExam(props) {
 
     return (
         <div>
-            <Row>
-                <Col xs={8}>
-                    <h4>Title: {exam.exam.certificateTitle}</h4>
-                </Col>
-                <Col>
-                    <Row>
-                        <Col>
-                            Initial Score ({(initialScore / exam.maxScore) * 100}%) :
-                        </Col>
-                        <Col>
-                            {initialScore}/{exam.maxScore}
-
-                        </Col>
-                    </Row>
-                    <Row>
-                    <Col>
-
-                            Score After Marking ({(exam.candidateScore / exam.maxScore) * 100}%) :
+            <div>
+                <Row>
+                    <Col xs={8}>
+                        <h4>Title: {exam.exam.certificateTitle}</h4>
                     </Col>
-                        <Col>
-                            {exam.candidateScore}/{exam.maxScore}
-                        </Col>
-
-                    </Row>
-                </Col>
-            </Row>
+                    <Col>
+                        {initialScore !== exam.candidateScore &&
+                            <div>
+                                <Row>
+                                    <Col>
+                                        Initial Score ({(initialScore / exam.maxScore) * 100}%) :
+                                    </Col>
+                                    <Col>
+                                        {initialScore}/{exam.maxScore}
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col>
+                                        Score After Marking ({(exam.candidateScore / exam.maxScore) * 100}%) :
+                                    </Col>
+                                    <Col>
+                                        {exam.candidateScore}/{exam.maxScore}
+                                    </Col>
+                                </Row>
+                            </div>
+                        }
+                    </Col>
+                </Row>
+            </div>
             <Table>
                 <thead>
                     <tr>
@@ -116,7 +125,6 @@ function MarkExam(props) {
                 </thead>
                 <tbody>
                     {exam.candidateExamAnswers.map((que, index) =>
-
                         <tr key={index}>
                             <td xs={1}>
                                 {index + 1}
@@ -150,22 +158,22 @@ function MarkExam(props) {
                                 {que.isCorrectModerated}
                                 <input
                                     type="checkbox"
-                                    // defaultChecked={complete}
                                     name='isCorrectModerated'
                                     label="Is the certificate available for puchase?"
                                     defaultChecked={que.isCorrectModerated}
                                     onChange={(event) => handleChange(event, index)}
+                                    disabled={exam.isModerated === true || role === "qualitycontrol" ? true : false}
                                 />
                             </td>
                         </tr>
                     )}
                 </tbody>
-
             </Table>
             <Stack gap={3}>
-                <Button onClick={()=> handleSubmit(exam.id)}>
-                    Save & Submit Marking
-                </Button>
+                {role !== "qualitycontrol" &&
+                    <Button onClick={() => handleSubmit(exam.id)}>
+                        Save & Submit Marking
+                    </Button>}
                 <Button variant='dark' className='d-grid col-12 mx-auto mb-2' onClick={() => navigate(-1)}> Go Back </Button>
             </Stack>
         </div>

@@ -562,7 +562,8 @@ namespace Assignment4Final.Data.Seed
                     .RuleFor(
                         c => c.MarkerAssignedDate,
                         f => f.Date.Between(DateTime.Now, f.Date.Soon(7))
-                    );
+                    ).RuleFor(u => u.Voucher, f => f.Random.AlphaNumeric(10));
+
                 // .RuleFor(
                 //     c => c.MarkingDate,
                 //     f => f.Date.Between(new DateTime(2022, 6, 10, 0, 0, 0), DateTime.Now)
