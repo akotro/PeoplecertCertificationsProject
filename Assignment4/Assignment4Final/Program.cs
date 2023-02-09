@@ -215,7 +215,7 @@ namespace Assignment4Final
                     .ForMember(c => c.Gender, opt => opt.MapFrom(src => src.Gender))
                     .ForMember(c => c.PhotoIdType, opt => opt.MapFrom(src => src.PhotoIdType))
                     .ReverseMap();
-                mc.CreateMap<AppUser, UserDto>();
+                mc.CreateMap<AppUser, UserDto>().ReverseMap();
 
                 mc.CreateMap<Exam, ExamDto>().ReverseMap();
 

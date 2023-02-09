@@ -64,26 +64,7 @@ public class MarkersService
 
     public async Task<MarkerDto?> UpdateAsync(string id, MarkerDto markerDto)
     {
-        // // NOTE:(akotro) Calculate new score from moderation only for moderated exams
-        // if (markerDto.CandidateExams?.Any() == true)
-        // {
-        //     foreach (var candExam in markerDto.CandidateExams.Where(ce => ce.IsModerated == true))
-        //     {
-        //         var score = candExam.CandidateExamAnswers?.Count(
-        //             answer => (bool)answer.IsCorrectModerated
-        //         );
-        //         candExam.CandidateScore = score;
-        //         candExam.PercentScore = (score / candExam.MaxScore) * 100;
-        //         candExam.Result =
-        //             candExam.CandidateScore >= candExam.Exam?.Certificate?.PassingMark
-        //                 ? true
-        //                 : false;
-        //         candExam.MarkingDate = DateTime.Now; // NOTE:(akotro) Should this be in UTC?
-        //     }
-        // }
-
         var marker = _mapper.Map<Marker>(markerDto);
-
         var updatedMarker = await _repository.UpdateAsync(id, marker);
         return updatedMarker == null ? null : _mapper.Map<MarkerDto>(updatedMarker);
     }
@@ -133,6 +114,16 @@ public class MarkersService
         }
 
         return _mapper.Map<List<CandidateExamDto>>(await _repository.GetAllCandidateExamsAsync());
+    }
+
+    public async Task<CandidateExamDto?> AssignCandidateExamToMarker(
+        int candExamId,
+        CandidateExamDto candExamDto
+    )
+    {
+        var candExam = _mapper.Map<CandidateExam>(candExamDto);
+        var assignedCandExam = await _repository.AssignCandidateExamToMarker(candExam.Id, candExam);
+        return assignedCandExam == null ? null : _mapper.Map<CandidateExamDto>(assignedCandExam);
     }
 
     public async Task<CandidateExamDto?> MarkCandidateExam(

@@ -11,5 +11,6 @@ public interface IMarkersRepository
     Task<Marker?> DeleteAsync(string id);
     bool EntityExists(string id);
     Task<List<CandidateExam>> GetAllCandidateExamsAsync(bool include = false);
+    Task<CandidateExam?> AssignCandidateExamToMarker(int candExamId, CandidateExam candExam);
     Task<CandidateExam?> MarkCandidateExamAsync(int candExamId, CandidateExam candExam);
 }

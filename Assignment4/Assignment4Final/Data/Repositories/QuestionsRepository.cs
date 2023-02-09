@@ -76,14 +76,26 @@ public class QuestionsRepository : IQuestionsRepository
         if (question != null)
         {
             question.Text = questionDto.Text;
-            question.Topic =
-                questionDto.Topic != null
-                    ? _mapper.Map<Topic>(questionDto.Topic)
-                    : await _context.Topics.FindAsync(questionDto.TopicId);
-            question.DifficultyLevel =
-                questionDto.DifficultyLevel != null
-                    ? _mapper.Map<DifficultyLevel>(questionDto.DifficultyLevel)
-                    : await _context.DifficultyLevels.FindAsync(questionDto.DifficultyLevelId);
+            if (questionDto.Topic != null)
+            {
+                question.Topic = await _context.Topics.FindAsync(questionDto.Topic.Id);
+            }
+            else
+            {
+                question.Topic = await _context.Topics.FindAsync(questionDto.TopicId);
+            }
+            if (questionDto.DifficultyLevel != null)
+            {
+                question.DifficultyLevel = await _context.DifficultyLevels.FindAsync(
+                    questionDto.DifficultyLevel.Id
+                );
+            }
+            else
+            {
+                question.DifficultyLevel = await _context.DifficultyLevels.FindAsync(
+                    questionDto.DifficultyLevelId
+                );
+            }
 
             if (questionDto.Options != null)
             {
