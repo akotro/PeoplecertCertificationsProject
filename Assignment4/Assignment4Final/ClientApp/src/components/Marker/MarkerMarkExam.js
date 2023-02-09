@@ -13,6 +13,7 @@ function MarkExam(props) {
     const initialScore = location.state.data.candidateScore;
 
     const incomingData = location.state.data;
+    const role = location.state.role;
 
     useEffect(() => {
         // initialScore = exam.candidateScore;
@@ -41,8 +42,8 @@ function MarkExam(props) {
             })
         }
         // if (initialScore !== exam.candidateScore) {
-            // setExam({...exam , candidateScore: exam.candidateExamAnswers.filter(ans=> ans.isCorrectModerated).count()})
-            console.log(exam.candidateExamAnswers.filter(ans=> ans.isCorrectModerated ===true).length)
+        // setExam({...exam , candidateScore: exam.candidateExamAnswers.filter(ans=> ans.isCorrectModerated).count()})
+        console.log(exam.candidateExamAnswers.filter(ans => ans.isCorrectModerated === true).length)
         // }
         // const updatedExam = {...exam, isModerated: true};
         // setFinalScore();
@@ -50,7 +51,7 @@ function MarkExam(props) {
         console.log(exam)
         // setExam(exam)
     }
-    
+
     function Replace(temp) {
         return (
             <td
@@ -60,11 +61,11 @@ function MarkExam(props) {
             ></td>
         )
     }
-    
+
     const handleSubmit = (canExamId) => {
         exam.isModerated = true;
         setExam(exam);
-        
+
         axios.put(`https://localhost:7196/api/Markers/mark/${canExamId}`, exam)
             .then(function (response) {
                 console.log(response);
@@ -74,7 +75,7 @@ function MarkExam(props) {
             });
     }
 
- 
+
     const setFinalScore = () => {
 
         console.log(exam.candidateScore)
@@ -161,7 +162,7 @@ function MarkExam(props) {
                                     label="Is the certificate available for puchase?"
                                     defaultChecked={que.isCorrectModerated}
                                     onChange={(event) => handleChange(event, index)}
-                                    disabled={exam.isModerated === true ? true : false}
+                                    disabled={exam.isModerated === true || role === "qualitycontrol" ? true : false}
                                 />
                             </td>
                         </tr>
@@ -169,9 +170,10 @@ function MarkExam(props) {
                 </tbody>
             </Table>
             <Stack gap={3}>
-                <Button onClick={() => handleSubmit(exam.id)}>
-                    Save & Submit Marking
-                </Button>
+                {role !== "qualitycontrol" &&
+                    <Button onClick={() => handleSubmit(exam.id)}>
+                        Save & Submit Marking
+                    </Button>}
                 <Button variant='dark' className='d-grid col-12 mx-auto mb-2' onClick={() => navigate(-1)}> Go Back </Button>
             </Stack>
         </div>
