@@ -50,7 +50,7 @@ function MarkExam(props) {
         console.log(exam)
         // setExam(exam)
     }
-
+    
     function Replace(temp) {
         return (
             <td
@@ -60,11 +60,12 @@ function MarkExam(props) {
             ></td>
         )
     }
-
-    const handleSubmit = async (canExamId) => {
-        setExam({ ...exam, isModerated: true });
-
-        await axios.put(`https://localhost:7196/api/Markers/mark/${canExamId}`, exam)
+    
+    const handleSubmit = (canExamId) => {
+        exam.isModerated = true;
+        setExam(exam);
+        
+        axios.put(`https://localhost:7196/api/Markers/mark/${canExamId}`, exam)
             .then(function (response) {
                 console.log(response);
             })
@@ -73,8 +74,7 @@ function MarkExam(props) {
             });
     }
 
-    const editLock = () => { }
-
+ 
     const setFinalScore = () => {
 
         console.log(exam.candidateScore)
@@ -86,7 +86,6 @@ function MarkExam(props) {
     return (
         <div>
             <div>
-
                 <Row>
                     <Col xs={8}>
                         <h4>Title: {exam.exam.certificateTitle}</h4>
@@ -100,12 +99,10 @@ function MarkExam(props) {
                                     </Col>
                                     <Col>
                                         {initialScore}/{exam.maxScore}
-
                                     </Col>
                                 </Row>
                                 <Row>
                                     <Col>
-
                                         Score After Marking ({(exam.candidateScore / exam.maxScore) * 100}%) :
                                     </Col>
                                     <Col>
@@ -127,7 +124,6 @@ function MarkExam(props) {
                 </thead>
                 <tbody>
                     {exam.candidateExamAnswers.map((que, index) =>
-
                         <tr key={index}>
                             <td xs={1}>
                                 {index + 1}
@@ -171,7 +167,6 @@ function MarkExam(props) {
                         </tr>
                     )}
                 </tbody>
-
             </Table>
             <Stack gap={3}>
                 <Button onClick={() => handleSubmit(exam.id)}>

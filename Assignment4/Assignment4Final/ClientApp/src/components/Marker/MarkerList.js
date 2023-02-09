@@ -32,20 +32,28 @@ function MarkerList(props) {
             }).catch(function (error) {
                 console.log(error);
             });
-        }else if (role === "admin"){
+        } else if (role === "admin") {
             axios.get(`https://localhost:7196/api/Markers`).then((response) => {
-                console.log(response.data.data)
-                console.log(response.data.data.map(marker => marker.candidateExams).flat().filter(x => x.isModerated === null))
-                console.log(response.data.data.map(marker => marker.candidateExams).flat().filter(x => x.isModerated === true))
+                // console.log(response.data.data)
+                // console.log(response.data.data.map(marker => marker.candidateExams).flat().filter(x => x.isModerated === null))
+                // console.log(response.data.data.map(marker => marker.candidateExams).flat().filter(x => x.isModerated === true))
                 // setData(response.data.data);
                 setExams([...response.data.data.map(marker => marker.candidateExams).flat().filter(x => x.isModerated === null)]);
                 setmarkedExams([...response.data.data.map(marker => marker.candidateExams).flat().filter(x => x.isModerated === true)])
-             
+
             }).catch(function (error) {
                 console.log(error);
             });
         }
     }, []);
+
+    const makeDate = (AssignDate) => {
+        // let dateTime = "2023-02-10T11:46:07.3120706";
+        let date = new Date(AssignDate);
+        let options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+
+       return date.toLocaleDateString('en-US', options);
+    }
 
     return (
         <div className='container-fluid'>
@@ -55,9 +63,9 @@ function MarkerList(props) {
                     <Table striped borderless hover>
                         <thead>
                             <tr>
-                                <th style={{width:"50%"}}>Title</th>
-                                <th style={{width:"8%"}}>Score</th>
-                                <th style={{width:"20%"}}>Mark Until</th>
+                                <th style={{ width: "50%" }}>Title</th>
+                                <th style={{ width: "8%" }}>Score</th>
+                                <th style={{ width: "22%" }}>Mark Until</th>
                                 <th>Passed?</th>
                             </tr>
                         </thead>
@@ -66,7 +74,9 @@ function MarkerList(props) {
                                 <tr key={index}>
                                     <td>{CandidateExam.exam.certificateTitle}</td>
                                     <td>{CandidateExam.candidateScore}</td>
-                                    <td>{CandidateExam.markerAssignedDate}</td>
+                                    <td>{makeDate(CandidateExam.markerAssignedDate)}
+                                    {/* <Button onClick={()=> makeDate(CandidateExam.markerAssignedDate)}>print date</Button> */}
+                                    </td>
                                     <td>
                                         {CandidateExam.result === true ?
                                             <input class="form-check-input" type="checkbox" checked disabled /> :
@@ -86,34 +96,34 @@ function MarkerList(props) {
             <div>Already marked Exams</div>
             <Table striped borderless hover>
                 <thead>
-    
-                            <tr>
-                                <th style={{width:"50%"}}>Title</th>
-                                <th style={{width:"8%"}}>Score</th>
-                                <th  style={{width:"20%"}}>Marked on</th>
-                                <th>Passed?</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {markedExams.map((CandidateExam, index) => (
-                                <tr key={index}>
-                                    <td >{CandidateExam.exam.certificateTitle}</td>
-                                    <td>{CandidateExam.candidateScore}</td>
-                                    <td>{CandidateExam.markingDate}</td>
-                                    <td>
-                                        {CandidateExam.result === true ?
-                                            <input class="form-check-input" type="checkbox" checked disabled /> :
-                                            <input class="form-check-input" type="checkbox" disabled />
-                                        }
-                                    </td>
-                                    <td>
-                                        <Button onClick={() => navigate(`/marker/markexam`, { state: { data: CandidateExam } })}>View Marking</Button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </Table>
-                </div>
+
+                    <tr>
+                        <th style={{ width: "50%" }}>Title</th>
+                        <th style={{ width: "8%" }}>Score</th>
+                        <th style={{ width: "22%" }}>Marked on</th>
+                        <th>Passed?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {markedExams.map((CandidateExam, index) => (
+                        <tr key={index}>
+                            <td >{CandidateExam.exam.certificateTitle}</td>
+                            <td>{CandidateExam.candidateScore}</td>
+                            <td>{makeDate(CandidateExam.markingDate)}</td>
+                            <td>
+                                {CandidateExam.result === true ?
+                                    <input class="form-check-input" type="checkbox" checked disabled /> :
+                                    <input class="form-check-input" type="checkbox" disabled />
+                                }
+                            </td>
+                            <td>
+                                <Button onClick={() => navigate(`/marker/markexam`, { state: { data: CandidateExam } })}>View Marking</Button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </Table>
+        </div>
         // </div>
     );
 };
