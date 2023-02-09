@@ -1,4 +1,4 @@
-import ApiAuthorzationRoutes from "./components/api-authorization/ApiAuthorizationRoutes";
+// import ApiAuthorzationRoutes from "./components/api-authorization/ApiAuthorizationRoutes";
 import Home from "./components/Home";
 
 import CertificateForm from './components/Certificate_CRUD/CertificateForm'
@@ -13,7 +13,7 @@ import QuestionCreate from "./components/Questions/QuestionCreate";
 import CandidateList from "./components/Candidate_CRUD/CandidateList";
 import CandidateEdit from "./components/Candidate_CRUD/CandidateEdit";
 
-import CandidateHomepage from "./components/Candidate_Page/CandidateHomepage";
+// import CandidateHomepage from "./components/Candidate_Page/CandidateHomepage";
 import AvailableExams from "./components/Candidate_Page/AvailableExams";
 import Examination from "./components/Examination/Examination";
 import ExamList from "./components/Exam_CRUD/ExamList";
@@ -22,6 +22,9 @@ import ExamQuestionList from "./components/Exam_CRUD/ExamQuestionList";
 import Login from './components/auth/Login'
 import Register from './components/auth/Register'
 import AddQuestionToExam from './components/Exam_CRUD/AddQuestionToExam';
+
+import MarkerList from "./components/Marker/MarkerList";
+import MarkExam from "./components/Marker/MarkerMarkExam";
 
 const AppRoutes = [
   {
@@ -94,39 +97,50 @@ const AppRoutes = [
     path: "/candidate/availableexams",
     needsCand: true,
 
-        element: <AvailableExams />
-    },
-    // -----------------Candidate-------------------
-    {
-        path: '/candidate/Examination/:id',
-        needsCand: true,
-        element: <Examination />
-    },
-    {
-        path: '/ExamsList',
-        // requireAuth: true,
-        element: <ExamList/>
-    },
-    {
-        path: '/ExamQuestionList',
-        // requireAuth: true,
-        element: <ExamQuestionList/>
-    },
-    {
-        path: '/AddQuestionToExam',
-        element: <AddQuestionToExam />
-    },
-    //this needs to stay as the last path
-    {
-        path: '/notauth',
-        element: <NotAuth />
-    },
-    
-    {
-        path: '*',
-        element: <NotFound />
-    },
-   
+    element: <AvailableExams />
+  },
+  // -----------------Candidate-------------------
+  {
+    path: '/candidate/Examination/:id',
+    needsCand: true,
+    element: <Examination />
+  },
+  {
+    path: '/ExamsList',
+    // requireAuth: true,
+    element: <ExamList />
+  },
+  {
+    path: '/marker',
+    // requireAuth: true,
+    needsMarker:true,
+    element: <MarkerList />
+  },
+  {
+    path: '/marker/markexam',
+    // requireAuth: true,
+    needsMarker:true,
+    element: <MarkExam />
+  },
+  {
+    path: '/ExamQuestionList',
+    // requireAuth: true,
+    element: <ExamQuestionList />
+  },
+  {
+    path: '/AddQuestionToExam',
+    element: <AddQuestionToExam />
+  },
+  //this needs to stay as the last path
+  {
+    path: '/notauth',
+    element: <NotAuth />
+  },
+  {
+    path: '*',
+    element: <NotFound />
+  },
+
 ];
 
 export default AppRoutes;
