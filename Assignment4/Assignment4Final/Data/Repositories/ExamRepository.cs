@@ -36,6 +36,7 @@ namespace Assignment4Final.Data.Repositories
                 .Include(exam => exam.Questions)
                 .Include(exam => exam.Certificate)
                 .ThenInclude(c => c.Topics)
+                .ThenInclude(t =>t.Questions).ThenInclude(q => q.DifficultyLevel)
                 .FirstOrDefaultAsync(e => e.Id == id);
         }
 

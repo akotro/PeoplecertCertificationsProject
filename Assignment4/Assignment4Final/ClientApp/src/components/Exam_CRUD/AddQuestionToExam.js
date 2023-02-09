@@ -25,15 +25,21 @@ function AddQuestionToExam() {
     useEffect(() => {
 
         axios.get(`https://localhost:7196/api/Exam/${params.id}`).then((response) => {
-            console.log(response.data.data)
-            console.log(response.data.data.questions)
             setExam(response.data.data)
-            setQuestions(response.data.data.questions)
-            setTopics(exam.certificate.topics)
-            setQuestions(exam.certificate.topics.questions)
+            // setQuestions(response.data.data.questions)
+            // assign();
+            setTopics(response.data.data.certificate.topics)
+            setQuestions(response.data.data.certificate.topics.questions)
+            console.log(response.data.data)
+            console.log(response.data.data.certificate.topics)
+            response.data.data.certificate.topics.map((question,index)=>console.log('kati',question))
           })
     },[]);
 
+    const assign = ()=>{
+        setTopics(exam.certificate.topics)
+        setQuestions(exam.certificate.topics)
+    }
     function Replace(temp) {
         var parser = new DOMParser();
         var doc = parser.parseFromString(temp, 'text/html');
@@ -43,7 +49,6 @@ function AddQuestionToExam() {
     const handleAdd = (quest) =>{
         
         var examUpdated = exam;
-        console.log('before',exam)
         // exam.questions.push(quest)
         var asd = exam.questions
         asd.push(quest)
@@ -53,7 +58,6 @@ function AddQuestionToExam() {
 
         // setExam({...exam,questions : [...exam.questions,quest]})
         // setExam((prev) =>  [...prev, questions : exam.questions])
-        console.log(exam)
         axios.put(`https://localhost:7196/api/Exam/${exam.id}`,exam).then()
         .catch(function (error) {
         //     console.log(error);
@@ -82,6 +86,7 @@ function AddQuestionToExam() {
 
                 <div key={index}>
                     <hr />
+                    {console.log(topic)}
                     <div><h5>Topic Name: {topic.name}</h5></div>
                     {topic.questions.map((question, number) =>  exam.questions.findIndex(q => q.id === question.id) > -1? null: <div key={number}>
                             <div> Question: { Replace(question.text)}</div>
