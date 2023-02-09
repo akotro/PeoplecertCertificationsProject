@@ -60,8 +60,7 @@ function MarkExam(props) {
 
     const handleSubmit = async (canExamId) => {
         setExam({ ...exam, isModerated: true });
-        //implement axios put action
-        // /api/Candidate/{id}
+
         await axios.put(`https://localhost:7196/api/Markers/mark/${canExamId}`, exam)
         .then(function (response) {
             console.log(response);
@@ -89,12 +88,21 @@ function MarkExam(props) {
                     <Row>
                         <Col>
                             Initial Score ({(initialScore / exam.maxScore) * 100}%) :
-                            Score After Marking ({(exam.candidateScore / exam.maxScore) * 100}%) :
                         </Col>
                         <Col>
-                            {initialScore}/ {exam.maxScore}
+                            {initialScore}/{exam.maxScore}
+
+                        </Col>
+                    </Row>
+                    <Row>
+                    <Col>
+
+                            Score After Marking ({(exam.candidateScore / exam.maxScore) * 100}%) :
+                    </Col>
+                        <Col>
                             {exam.candidateScore}/{exam.maxScore}
                         </Col>
+
                     </Row>
                 </Col>
             </Row>
@@ -108,6 +116,7 @@ function MarkExam(props) {
                 </thead>
                 <tbody>
                     {exam.candidateExamAnswers.map((que, index) =>
+
                         <tr key={index}>
                             <td xs={1}>
                                 {index + 1}
@@ -123,6 +132,18 @@ function MarkExam(props) {
                                             {Replace(que.chosenOption)}
                                         </li>
                                     </ul>
+                                    {/* <details className="display-6 fs-4">
+                                                    <summary>
+                                                        Click here if you want to see all the options
+                                                    </summary>
+                                                    {que.map((option)=> {
+                                                        <ol>
+                                                            <li>
+
+                                                            </li>
+                                                        </ol>
+                                                    })}
+                                                    </details> */}
                                 </div>
                             </td>
                             <td>

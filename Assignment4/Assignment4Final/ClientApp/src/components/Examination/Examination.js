@@ -35,9 +35,11 @@ export default function Examination(props) {
     }
 
     const saveCandidateExam = () => {
-        axios.put(`https://localhost:7196/api/CandidateExam/EndExam/${candExamId}`, {
-            candidateExam,
-        })
+        axios.put(`https://localhost:7196/api/CandidateExam/EndExam/${candExamId}`, 
+        // {
+        //     candidateExam,
+        // }
+        )
         .then(response => {
             console.log(response.data);
         })
