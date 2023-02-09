@@ -9,6 +9,7 @@ public interface IMarkersRepository
     Task<Marker?> AddAsync(Marker marker);
     Task<Marker?> UpdateAsync(string id, Marker marker);
     Task<Marker?> DeleteAsync(string id);
-    Task<CandidateExam?> MarkCandidateExamAsync(int candExamId, CandidateExam candExam);
     bool EntityExists(string id);
+    Task<List<CandidateExam>> GetAllCandidateExamsAsync(bool include = false);
+    Task<CandidateExam?> MarkCandidateExamAsync(int candExamId, CandidateExam candExam);
 }
