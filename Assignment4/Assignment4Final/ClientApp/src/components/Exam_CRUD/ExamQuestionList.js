@@ -19,7 +19,11 @@ function ExamQuestionList() {
     const [exam, setExam] = useState([]);
     
     
-    
+    window.addEventListener('popstate', function(event) {
+        console.log(JSON.parse(this.localStorage.getItem('katii')));
+        // exam.questions =JSON.parse(this.localStorage.getItem('katii'))
+        setQuestions(exam.questions)
+      });
     
     useEffect(() => {
         setQuestions(Data.questions)
@@ -33,15 +37,15 @@ function ExamQuestionList() {
     } 
 
     const handleRemove = (questR) =>{
-        console.log('inside remove')
         //  let filtered =examR.questions.filter(question => question.id !== questR.id );
-        console.log('before',exam)
         exam.questions= exam.questions.filter( q => q.id !== questR.id )
-        console.log(exam)
         //  examR.questions = filtered;
          axios.put(`https://localhost:7196/api/Exam/${exam.id}`,exam).then(setExam(exam))
-         
+         console.log(questions)
          setQuestions(exam.questions)
+         console.log(questions)
+         var kati =exam.questions;
+         window.localStorage.setItem('katii' , questR)
     }
 
     const makeButtons = (exam,question) =>{

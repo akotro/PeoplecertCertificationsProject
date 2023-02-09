@@ -18,8 +18,7 @@ function AddQuestionToExam() {
     const [exam, setExam] = useState({
         questions:[]
     })
-    const[rerender,setRerender]= useState(0)
-    let kati =1;
+    
 
     
     useEffect(() => {
@@ -44,6 +43,8 @@ function AddQuestionToExam() {
         var asd = exam.questions
         asd.push(quest)
         setExam({...exam,questions : asd})
+
+        
 
         // setExam({...exam,questions : [...exam.questions,quest]})
         // setExam((prev) =>  [...prev, questions : exam.questions])
