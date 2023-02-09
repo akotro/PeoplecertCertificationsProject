@@ -25,6 +25,7 @@ import AddQuestionToExam from './components/Exam_CRUD/AddQuestionToExam';
 
 import MarkerList from "./components/Marker/MarkerList";
 import MarkExam from "./components/Marker/MarkerMarkExam";
+import AssignToMarker from "./components/Admin/AssingToMarker";
 
 const AppRoutes = [
   {
@@ -62,6 +63,11 @@ const AppRoutes = [
     needsAdmin: true,
     needsQc: true,
     element: <Questions />,
+  },
+  {
+    path: "/assigntomarker",
+    needsAdmin: true,
+    element: <AssignToMarker />,
   },
   {
     path: "/questions/edit/:id",

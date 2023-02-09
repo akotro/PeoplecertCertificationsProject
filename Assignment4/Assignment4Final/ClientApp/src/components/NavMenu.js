@@ -38,6 +38,12 @@ function NavMenu() {
                                 role="admin"
                                 authorized={<>
                                     <NavItem>
+                                        <NavLink tag={Link} className="text-dark" to="/marker">mark an exam</NavLink>
+                                    </NavItem>
+                                    <NavItem>
+                                        <NavLink tag={Link} className="text-dark" to="/assigntomarker">Assign</NavLink>
+                                    </NavItem>
+                                    <NavItem>
                                         <NavLink tag={Link} className="text-dark" to="/certificate">Certificates</NavLink>
                                     </NavItem>
                                     <NavItem>

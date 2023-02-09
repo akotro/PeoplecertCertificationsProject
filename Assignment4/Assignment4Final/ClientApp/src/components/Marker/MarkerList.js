@@ -20,17 +20,31 @@ function MarkerList(props) {
 
     useEffect(() => {
 
-
-        axios.get(`https://localhost:7196/api/Markers/${markerId}`).then((response) => {
-            setData(response.data.data);
-            setExams([...response.data.data.candidateExams.filter(x => x.isModerated === null)]);
-            setmarkedExams([...response.data.data.candidateExams.filter(x => x.isModerated === true)])
-            console.log(response.data.data);
-            console.log(response.data.data.candidateExams.filter(x => x.isModerated === true));
-            console.log(response.data.data.candidateExams.filter(x => x.isModerated === null));
-        }).catch(function (error) {
-            console.log(error);
-        });
+        console.log(role)
+        if (role === "marker") {
+            axios.get(`https://localhost:7196/api/Markers/${markerId}`).then((response) => {
+                setData(response.data.data);
+                setExams([...response.data.data.candidateExams.filter(x => x.isModerated === null)]);
+                setmarkedExams([...response.data.data.candidateExams.filter(x => x.isModerated === true)])
+                // console.log(response.data.data);
+                // console.log(response.data.data.candidateExams.filter(x => x.isModerated === true));
+                // console.log(response.data.data.candidateExams.filter(x => x.isModerated === null));
+            }).catch(function (error) {
+                console.log(error);
+            });
+        }else if (role === "admin"){
+            axios.get(`https://localhost:7196/api/Markers`).then((response) => {
+                console.log(response.data.data)
+                console.log(response.data.data.map(marker => marker.candidateExams).flat().filter(x => x.isModerated === null))
+                console.log(response.data.data.map(marker => marker.candidateExams).flat().filter(x => x.isModerated === true))
+                // setData(response.data.data);
+                setExams([...response.data.data.map(marker => marker.candidateExams).flat().filter(x => x.isModerated === null)]);
+                setmarkedExams([...response.data.data.map(marker => marker.candidateExams).flat().filter(x => x.isModerated === true)])
+             
+            }).catch(function (error) {
+                console.log(error);
+            });
+        }
     }, []);
 
     return (
@@ -92,9 +106,9 @@ function MarkerList(props) {
                                             <input class="form-check-input" type="checkbox" disabled />
                                         }
                                     </td>
-                                    {/* <td>
-                                        <Button onClick={() => navigate(`/marker/markexam`, { state: { data: CandidateExam } })}>Mark Exam</Button>
-                                    </td> */}
+                                    <td>
+                                        <Button onClick={() => navigate(`/marker/markexam`, { state: { data: CandidateExam } })}>View Marking</Button>
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
