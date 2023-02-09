@@ -11,6 +11,7 @@ function MarkerList(props) {
     const navigate = useNavigate();
     const [data, setData] = useState([]);
     const [exams, setExams] = useState([]);
+    const [markedExams, setmarkedExams] = useState([]);
     const { update, claims } = useContext(AuthenticationContext);
     // const [role, setRole] = useState(claims.find(claim => claim.name === 'role').value)
     // const [markerId, setMarkerId] = useState(claims.find(claim => claim.name === 'userId').value)
@@ -22,8 +23,11 @@ function MarkerList(props) {
 
         axios.get(`https://localhost:7196/api/Markers/${markerId}`).then((response) => {
             setData(response.data.data);
-            setExams(response.data.data.candidateExams);
+            setExams([...response.data.data.candidateExams.filter(x => x.isModerated === null)]);
+            setmarkedExams([...response.data.data.candidateExams.filter(x => x.isModerated === true)])
             console.log(response.data.data);
+            console.log(response.data.data.candidateExams.filter(x => x.isModerated === true));
+            console.log(response.data.data.candidateExams.filter(x => x.isModerated === null));
         }).catch(function (error) {
             console.log(error);
         });
@@ -31,35 +35,72 @@ function MarkerList(props) {
 
     return (
         <div className='container-fluid'>
+            <div>
+                <div>
+                    <div>Exams to be Marked!</div>
+                    <Table striped borderless hover>
+                        <thead>
+                            <tr>
+                                <th style={{width:"50%"}}>Title</th>
+                                <th style={{width:"8%"}}>Score</th>
+                                <th style={{width:"20%"}}>Mark Until</th>
+                                <th>Passed?</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {exams.map((CandidateExam, index) => (
+                                <tr key={index}>
+                                    <td>{CandidateExam.exam.certificateTitle}</td>
+                                    <td>{CandidateExam.candidateScore}</td>
+                                    <td>{CandidateExam.markerAssignedDate}</td>
+                                    <td>
+                                        {CandidateExam.result === true ?
+                                            <input class="form-check-input" type="checkbox" checked disabled /> :
+                                            <input class="form-check-input" type="checkbox" disabled />
+                                        }
+                                    </td>
+                                    <td>
+                                        <Button onClick={() => navigate(`/marker/markexam`, { state: { data: CandidateExam } })}>Mark Exam</Button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </Table>
+                </div>
+
+            </div>
+            <div>Already marked Exams</div>
             <Table striped borderless hover>
                 <thead>
-                    <tr>
-                        <th>Title</th>
-                        <th>Score</th>
-                        <th>Mark Until</th>
-                        <th>Passed?</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {exams.map((CandidateExam, index) => (
-                            <tr key={index}>
-                                <td>{CandidateExam.exam.certificateTitle}</td>
-                                <td>{CandidateExam.candidateScore}</td>
-                                <td>{CandidateExam.markerAssignedDate}</td>
-                                <td>
-                                {CandidateExam.result ===true ? 
-                                <input class="form-check-input" type="checkbox" checked disabled /> : 
-                                <input class="form-check-input" type="checkbox" disabled />
-                                }
-                                   </td>
-                                <td>
-                                    <Button onClick={() => navigate(`/marker/markexam`,{state : { data : CandidateExam }})}>Mark Exam</Button>
-                                </td>
+    
+                            <tr>
+                                <th style={{width:"50%"}}>Title</th>
+                                <th style={{width:"8%"}}>Score</th>
+                                <th  style={{width:"20%"}}>Marked on</th>
+                                <th>Passed?</th>
                             </tr>
-                        ))}
-                </tbody>
-            </Table>
-        </div>
+                        </thead>
+                        <tbody>
+                            {markedExams.map((CandidateExam, index) => (
+                                <tr key={index}>
+                                    <td >{CandidateExam.exam.certificateTitle}</td>
+                                    <td>{CandidateExam.candidateScore}</td>
+                                    <td>{CandidateExam.markingDate}</td>
+                                    <td>
+                                        {CandidateExam.result === true ?
+                                            <input class="form-check-input" type="checkbox" checked disabled /> :
+                                            <input class="form-check-input" type="checkbox" disabled />
+                                        }
+                                    </td>
+                                    {/* <td>
+                                        <Button onClick={() => navigate(`/marker/markexam`, { state: { data: CandidateExam } })}>Mark Exam</Button>
+                                    </td> */}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </Table>
+                </div>
+        // </div>
     );
 };
 
