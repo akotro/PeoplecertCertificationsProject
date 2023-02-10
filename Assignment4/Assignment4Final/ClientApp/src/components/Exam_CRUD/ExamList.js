@@ -14,8 +14,8 @@ function ExamList(props) {
     const [certId, setCertId] = useState();
     const [createdExam , setCreatedExam] = useState({})
     let navigate = useNavigate();
-    // const { update, claims } = useContext(AuthenticationContext);
-    // const [role, setRole] = useState(claims.find(claim => claim.name === 'role').value)
+    const { update, claims } = useContext(AuthenticationContext);
+    const role = claims.find(claim => claim.name === 'role').value
     // const [user, setUser] = useState();
     // let navigate = useNavigate();
 
@@ -52,13 +52,24 @@ function ExamList(props) {
     }
 
     const makeButtons = (examButtons) => {
+        if(role === "admin"){
+            return ( 
+                <div>
+                    <Button onClick={() => handleDelete(examButtons.id)}>Delete</Button>
+                    <Button onClick={() => handleEdit(examButtons)}>Edit</Button>
+                </div>
+            )
+        }
+        if(role === "qualitycontrol"){
+            return ( 
+                <div>
+                    
+                    <Button onClick={() => handleEdit(examButtons)}>Details</Button>
+                </div>
+            )
 
-        return ( // default do we need this??
-            <div>
-                <Button onClick={() => handleDelete(examButtons.id)}>Delete</Button>
-                <Button onClick={() => handleEdit(examButtons)}>Edit</Button>
-            </div>
-        )
+        }
+        
     }
 
     const calculateCount = (questionsArray) => {
@@ -131,9 +142,11 @@ function ExamList(props) {
 
     return (
         <div>
-            <button onClick={() => createCertificateButton()}>
+            {role === "admin" &&
+            <Button onClick={() => createCertificateButton()}>
                 {showForm ? "Close Form" : "Create New Exam"}
-            </button>
+            </Button>}
+            <Button variant='dark' onClick={() => navigate(-1)}>Go back</Button>
             {showForm && (
                 <Form onSubmit={handleSubmitExam}>
                     <Form.Select as="select" name="certificate"
