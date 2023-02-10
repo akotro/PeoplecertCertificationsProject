@@ -120,7 +120,7 @@ export default function Examination(props) {
             </div>
             <hr></hr>
 
-            <button onClick={saveCandidateExam}>See Results</button>
+            <button onClick={saveCandidateExam}>Submit</button>
 
         </div>
     );
