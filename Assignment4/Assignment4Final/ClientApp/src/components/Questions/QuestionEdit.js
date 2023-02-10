@@ -1,5 +1,5 @@
-import { Form, FormGroup,Dropdown,Button, Col, Row, Badge, Stack   } from 'react-bootstrap';
-
+import { Form, FormGroup,Button, Col, Row, Badge, Stack   } from 'react-bootstrap';
+import { Link } from "react-router-dom";
 import {React,useState,useEffect }from 'react';
 
 import axios from 'axios';
@@ -149,57 +149,97 @@ console.log(" Put!!!");
     return (
         //---||FORM------------------------------------------------->>>>>>>
         <Form noValidate validated={true} onSubmit={handleSubmit}>
+            {/* DROPDOWN TOPICS */}
+                <Form.Group className='mb-2'>
+                                <h2>
+                                    <Badge pill className='w-100' bg="primary">Question's Topic</Badge>
+                                </h2>
+
+                                <Form.Select
+                                    as="select"
+                                    name="TopicSelect"
+                                    defaultValue={question.topicId} //1.triggers the controlled component error
+                                    // onChange={ handleChange  }    //2.stops the controlled component error
+                                    //3. the combination of 3 and 4 triggers again the error
+                                    //  required                                    //more study on This is required
+                                >
+                                    <option value="" hidden>
+                                        Please choose a topic{" "}
+                                    </option>
+                                    {allTopics.map((topic, index) => (
+                                        <option
+                                            key={index}
+                                            onClick={() => {
+                                                onSelect(event, topic, "topic");
+                                            }} //4. this without 3. stops the error
+                                            value={topic.id}
+                                        >
+                                            {topic.name}
+                                        </option>
+                                    ))}
+                                </Form.Select>
+                </Form.Group>
+                        {/* <hr /> */}
+                        <Form.Group>
+                            <Form.Group>
+                            <h2><Badge  pill className='w-50' bg="primary">Question's Difficulty</Badge></h2>
+                            <Form.Select
+                            className='w-50'
+                                as="select"
+                                name="DifficultySelect"
+                                value={question.difficultyLevelId} //1.triggers the controlled component error
+                                // onChange={ handleChange  }    //2.stops the controlled component error
+                                //3. the combination of 3 and 4 triggers again the error
+                                //  required                                    //more study on This is required
+                            >
+                                <option value={0} hidden>
+                                    Please choose a level{" "}
+                                </option>
+                                {difficultyLevels.map((difficultyLevel, index) => (
+                                    <option
+                                        key={index}
+                                        onClick={() => {
+                                            onSelect(event, difficultyLevel, "difficultyLevel");
+                                        }} //4. this without 3. stops the error
+                                        value={difficultyLevel.id}
+                                    >
+                                        {difficultyLevel.difficulty}
+                                    </option>
+                                ))}
+                            </Form.Select>
+                        </Form.Group>
+
+
+
+
+
+
+
+                        </Form.Group>
+                        <hr />
+
             <Stack gap={5}>
                 <Row key={"questionEditorAndDropdowns"}>
                     {/*-------------Questions text */}
                     <Col md={7}>
                         <FormGroup required>
-                            <Form.Label>Questions Text</Form.Label>
-
+                            <Form.Label><h4>Questions Text</h4></Form.Label>
+                           
                             <MyEditor
                                 key={"questionEditor"}
                                 handleChange={handleChange}
                                 name={"QuestionText"}
                                 text={question.text}
                             />
+                            
                         </FormGroup>
                     </Col>
-                    {/* DROPDOWN TOPICS */}
+                    
                     <Col md={3}>
-                        {/* ---------------- - */}
-                        <Form.Group>
-                            <h2>
-                                <Badge bg="primary">Question's Topic</Badge>
-                            </h2>
-
-                            <Form.Select
-                                as="select"
-                                name="TopicSelect"
-                                defaultValue={question.topicId} //1.triggers the controlled component error
-                                // onChange={ handleChange  }    //2.stops the controlled component error
-                                //3. the combination of 3 and 4 triggers again the error
-                                //  required                                    //more study on This is required
-                            >
-                                <option value="" hidden>
-                                    Please choose a topic{" "}
-                                </option>
-                                {allTopics.map((topic, index) => (
-                                    <option
-                                        key={index}
-                                        onClick={() => {
-                                            onSelect(event, topic, "topic");
-                                        }} //4. this without 3. stops the error
-                                        value={topic.id}
-                                    >
-                                        {topic.name}
-                                    </option>
-                                ))}
-                            </Form.Select>
-                        </Form.Group>
-                    </Col>{" "}
+                    </Col> 
                     {/*  DROPDOWN Difficulty levels */}
                     <Col md={2}>
-                        <Form.Group>
+                        {/* <Form.Group>
                             <Form.Group>
                             <h2><Badge bg="primary">Question's Difficulty</Badge></h2>
                             <Form.Select
@@ -233,7 +273,7 @@ console.log(" Put!!!");
 
 
 
-                        </Form.Group>
+                        </Form.Group> */}
                     </Col>
                 </Row>
                 {/*   Question OPTIONS */}
@@ -242,7 +282,7 @@ console.log(" Put!!!");
                     <Row key={"unique" + index}>
                         <Col md={7}>
                             <Form.Group>
-                                <Form.Label>Option {index}</Form.Label>
+                                <Form.Label><h5>Option {index}</h5></Form.Label>
 
                                 <MyEditor
                                     key="index"
@@ -285,11 +325,17 @@ console.log(" Put!!!");
                     </Row>
                 ))}
                 <Row key={"EditButtonRow"}>
-                    {/* <Col md={30}> */}
-                    <Button variant="primary" type="submit" value={"Submit"}>
-                        Update Question
-                    </Button>
-                    {/* </Col> */}
+                     <div className='w-40 mb-3 '>
+                        <Button variant="primary" type="submit" value={"Submit"} >
+                            Update Question
+                        </Button>
+                     </div>
+                    <Badge pill bg='primary'>
+                            <Link to={`/questions/`}>
+                                <Button  variant="primary" className="w-100">Go Back</Button>
+                            </Link>
+                    </Badge>
+                     
                 </Row>
             </Stack>
         </Form>

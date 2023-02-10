@@ -24,6 +24,20 @@ public class AccountsController : ControllerBase
         return await _service.GetListUsers();
     }
 
+    [HttpGet("getUser")]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
+    public async Task<ActionResult<UserDto>> GetUser(string email)
+    {
+        var user = await _service.GetUser(email);
+
+        if (user == null)
+        {
+            return NotFound($"Could not find user with email {email}");
+        }
+
+        return Ok(user);
+    }
+
     [HttpPost("makeAdmin")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public async Task<ActionResult> MakeAdmin(string email)
@@ -89,15 +103,20 @@ public class AccountsController : ControllerBase
     }
 
     [HttpPost("create")]
-    public async Task<ActionResult<AuthenticationResponseDto>> Create(
-        [FromBody] LoginDto userCredentials
-    )
+    public async Task<ActionResult<AuthenticationResponseDto>> Create([FromBody] UserDto user)
     {
-        var authResponse = await _service.Create(userCredentials);
+        var authResponse = await _service.Create(user);
+
+        if (authResponse == null)
+        {
+            return BadRequest("Please provide login credentials");
+        }
+
         if (authResponse.Errors != null)
         {
             return BadRequest(authResponse.Errors);
         }
+
         return Ok(authResponse);
     }
 
@@ -112,6 +131,35 @@ public class AccountsController : ControllerBase
         {
             return BadRequest("Incorrect Login");
         }
+
         return Ok(authResponse);
+    }
+
+    [HttpPut("update")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
+    public async Task<IActionResult> Update(string email, [FromBody] UserDto userDto)
+    {
+        var updateResult = await _service.Update(email, userDto);
+
+        if (!updateResult.Succeeded)
+        {
+            return BadRequest(updateResult.Errors);
+        }
+
+        return NoContent();
+    }
+
+    [HttpDelete("delete")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
+    public async Task<IActionResult> Delete(string email)
+    {
+        var deleteResult = await _service.Delete(email);
+
+        if (!deleteResult.Succeeded)
+        {
+            return BadRequest(deleteResult.Errors);
+        }
+
+        return NoContent();
     }
 }

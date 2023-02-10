@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ModelLibrary.Models;
+using ModelLibrary.Models.DTO.Accounts;
 
 namespace Assignment4Final.Data.Repositories;
 
@@ -30,7 +31,7 @@ public class AccountsRepository : IAccountsRepository
 
     public async Task<AppUser> GetAppUser(string email)
     {
-        return await _userManager.FindByNameAsync(email);
+        return await _userManager.FindByEmailAsync(email);
     }
 
     public async Task<IList<Claim>> GetClaims(AppUser user)
@@ -86,25 +87,92 @@ public class AccountsRepository : IAccountsRepository
         await _userManager.RemoveClaimAsync(user, new Claim("role", "candidate"));
     }
 
-    public async Task<IdentityResult> Create(string email, string password)
+    public async Task<IdentityResult> Create(AppUser user, string password)
     {
-        var user = new AppUser
-        {
-            UserName = email,
-            Email = email,
-            EmailConfirmed = true,
-            LockoutEnabled = false
-        };
         return await _userManager.CreateAsync(user, password);
     }
 
     public async Task<SignInResult> Login(string email, string password)
     {
+        var user = await GetAppUser(email);
         return await _signInManager.PasswordSignInAsync(
-            email,
+            user,
             password,
             isPersistent: false,
             lockoutOnFailure: false
         );
+    }
+
+    public async Task<IdentityResult> Update(string email, AppUser user, LoginDto? credentials)
+    {
+        var dbUser = await GetAppUser(email);
+
+        var identityErrors = new List<IdentityError>();
+
+        if (dbUser != null)
+        {
+            var usernameResult = await _userManager.SetUserNameAsync(dbUser, user.UserName);
+            if (!usernameResult.Succeeded)
+            {
+                identityErrors.AddRange(usernameResult.Errors);
+                return IdentityResult.Failed(identityErrors.ToArray());
+            }
+
+            var emailResult = await _userManager.SetEmailAsync(dbUser, user.Email);
+            if (!emailResult.Succeeded)
+            {
+                identityErrors.AddRange(emailResult.Errors);
+                return IdentityResult.Failed(identityErrors.ToArray());
+            }
+            else
+            {
+                dbUser.EmailConfirmed = true;
+            }
+
+            var phoneNumberResult = await _userManager.SetPhoneNumberAsync(
+                dbUser,
+                user.PhoneNumber
+            );
+            if (!phoneNumberResult.Succeeded)
+            {
+                identityErrors.AddRange(phoneNumberResult.Errors);
+                return IdentityResult.Failed(identityErrors.ToArray());
+            }
+
+            if (credentials != null)
+            {
+                var passwordResult = await _userManager.ChangePasswordAsync(
+                    dbUser,
+                    credentials.Password,
+                    credentials.NewPassword
+                );
+
+                if (!passwordResult.Succeeded)
+                {
+                    identityErrors.AddRange(passwordResult.Errors);
+                    return IdentityResult.Failed(identityErrors.ToArray());
+                }
+                else
+                {
+                    dbUser.LockoutEnabled = false;
+                }
+            }
+
+            return await _userManager.UpdateAsync(dbUser);
+        }
+
+        return IdentityResult.Failed(
+            new IdentityError
+            {
+                Code = "User",
+                Description = $"Could not find User with email {email}"
+            }
+        );
+    }
+
+    public async Task<IdentityResult> Delete(string email)
+    {
+        var user = await GetAppUser(email);
+        return await _userManager.DeleteAsync(user);
     }
 }

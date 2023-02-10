@@ -115,7 +115,8 @@ const AppRoutes = [
   },
   {
     path: '/ExamsList',
-    // requireAuth: true,
+    needsAdmin: true,
+    needsQc: true,
     element: <ExamList />
   },
   //-----------------Marker-------------------
@@ -134,11 +135,14 @@ const AppRoutes = [
   //------------------------------------
   {
     path: '/ExamQuestionList/:id',
-    // requireAuth: true,
+    needsAdmin: true,
+    needsQc: true,
     element: <ExamQuestionList />
   },
   {
     path: '/AddQuestionToExam/:id',
+    needsAdmin: true,
+    needsQc: true,
     element: <AddQuestionToExam />
   },
   {
