@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ListGroup, ListGroupItem, Button, Table, Row, Stack, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { withRouter } from './../Common/with-router';
@@ -43,15 +43,6 @@ function AvailableExams(props) {
 
     }
 
-    const convertDateToString = (date) => {
-        //console.log(date);
-        let kati = new Date(date);
-    
-        let formattedDate = kati.toISOString().substr(0, 10);
-    
-        return formattedDate;
-      };
-
     const makebuttons = (CandExam) => {
 
         if (CandExam.result !== null) {
@@ -66,7 +57,6 @@ function AvailableExams(props) {
             return (
                 <td>
                     <div className='d-flex gap-2'>
-                        <Button onClick={() => takeExam(CandExam.id)}>Take exam now!</Button>
 
                         <Form.Group >
                                     <Form.Control type="date"
@@ -80,8 +70,6 @@ function AvailableExams(props) {
                 </td>
             );
         }
-
-
     };
 
     const takeExam = (id) => {
@@ -117,8 +105,6 @@ function AvailableExams(props) {
                                 <td>{CandidateExam.Voucher}</td>
                                 <td>
                                     {makebuttons(CandidateExam)}
-
-                                    {/* <Button variant="success" onClick={() => takeExam(CandidateExam.id)} >Take Exam</Button> */}
                                 </td>
                             </tr>
                         ))}
