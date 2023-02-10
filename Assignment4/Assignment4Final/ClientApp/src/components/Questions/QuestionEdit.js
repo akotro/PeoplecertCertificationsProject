@@ -223,7 +223,7 @@ console.log(" Put!!!");
                     {/*-------------Questions text */}
                     <Col md={7}>
                         <FormGroup required>
-                            <Form.Label>Questions Text</Form.Label>
+                            <Form.Label><h4>Questions Text</h4></Form.Label>
                            
                             <MyEditor
                                 key={"questionEditor"}
@@ -282,7 +282,7 @@ console.log(" Put!!!");
                     <Row key={"unique" + index}>
                         <Col md={7}>
                             <Form.Group>
-                                <Form.Label>Option {index}</Form.Label>
+                                <Form.Label><h5>Option {index}</h5></Form.Label>
 
                                 <MyEditor
                                     key="index"
