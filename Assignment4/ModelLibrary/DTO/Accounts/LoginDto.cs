@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
 
 namespace ModelLibrary.Models.DTO.Accounts;
 
@@ -12,4 +13,7 @@ public class LoginDto
 
     [Required]
     public string Password { get; set; }
+
+    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+    public bool? IsCandidate { get; set; }
 }
