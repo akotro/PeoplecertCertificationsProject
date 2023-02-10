@@ -22,7 +22,9 @@ export default function QuestionEdit(event, name)
     const [options, setOptions] = useState([{}, {}, {}, {}]);
 
     //------------------------------------------------Topics state
-    const [allTopics, setAllTopics] = useState([]);
+    const [allTopics, setAllTopics] = useState([
+        { id: 0, name: "string", questions: [] },
+    ]);
     //------------------------------------------------Difficulty levels state
     const [difficultyLevels, setLevels] = useState([]);
 
@@ -49,7 +51,7 @@ export default function QuestionEdit(event, name)
             .get(`https://localhost:7196/api/DifficultyLevels`)
             .then((res) => {
                 setLevels(res.data.data);
-                console.log(res.data.data);
+              
             })
             .catch((err) => {
                 console.error(err.response.data);
@@ -59,7 +61,7 @@ export default function QuestionEdit(event, name)
             setQuestion(response.data.data);
             setOptions(response.data.data.options);
         });
-    }, [url]);
+    }, [url]);//------------------------------------------------//GET QUESTION BY ID
     //------------------------------------------------//HANDLE SUBMIT
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -84,7 +86,7 @@ console.log(" Put!!!");
         let newQuestion;
         let newOptions = [];
         const checkBoxKey = name;
-        // console.log("In handleChange");
+        console.log("In handleChange");
         //Condition which  assures that setQuestion is called only by the user's input------------------------->>>>>>
         if (question.text !== "string") 
         {
@@ -113,25 +115,34 @@ console.log(" Put!!!");
                 );
                 console.log(options);
             }
+            else if (name === "TopicSelect") 
+            {
+                console.log("Trying to change the topic");
+                console.log(event);
+                console.log(name);
+                console.log(data);
+                // console.log(data);
+                // setQuestion({ ...question, topicId: data });
+            }
         }
     };
     //------------------------------------------------HANDLE SELECT------------------------------------------------>>>>>>
-    const onSelect = (selectedList, selectedItem) => 
+    const onSelect = (event, selectedItem,species) => 
     {
-            // console.log(selectedItem.value);
-
-        // if (selectedItem.species === "topic") 
-        // {
-            // setQuestion({ ...question, topicId: selectedItem.value });
-        // } 
-        // else if (selectedItem.species === "difficultyLevel") 
-        // {
-        //     setQuestion({
-        //         ...question,
-        //         difficultyLevelId: selectedItem.value,
-        //     });
-        // }
-        // console.log(question);
+        console.log(question.difficultyLevelId);
+        console.log("IN SELECT");
+        if (species === "topic") 
+        {
+           const  newQuestion = { ...question, topicId: selectedItem.id,topic:selectedItem };
+            setQuestion(newQuestion);
+        } 
+        else if ( species === "difficultyLevel") 
+        {
+     
+            const newQuestion = { ...question, difficultyLevelId: selectedItem.id,difficultyLevel:selectedItem };
+        
+            setQuestion(newQuestion);
+        }
     };
     //------------------------------------------------//----------------------->>>>>>>
 
@@ -155,82 +166,73 @@ console.log(" Put!!!");
                     </Col>
                     {/* DROPDOWN TOPICS */}
                     <Col md={3}>
-                        {/* <Form.Group>
-                            <Form.Label></Form.Label>
-                            <Dropdown autoClose={"outside"} onSelect={onSelect} required >
-                                <Dropdown.Toggle
-                                    variant="primary"
-                                    id="dropdown-basic"
-                                >
-                                    Question's Topic
-                                </Dropdown.Toggle>
-                                <Dropdown.Menu>
-                                    {allTopics.map((topic, index) => (
-                                        <Dropdown.Item
-                                            key={index}
-                                            value={topic.id}
-                                            eventKey={topic.id}
-                                            species={"topic"}
-                                        >
-                                            {topic.name}
-                                        </Dropdown.Item>
-                                    ))}
-                                </Dropdown.Menu>
-                            </Dropdown>
+                        {/* ---------------- - */}
+                        <Form.Group>
+                            <h2>
+                                <Badge bg="primary">Question's Topic</Badge>
+                            </h2>
 
-                        </Form.Group> */}
-                                {/* ---------------- ---------------- ---------------- ---------------- ---------------- ---------------- ---------------- ---------------- ---------------- ---------------- ---------------- ---------------- ---------------- ---------------- ---------------- */}
-                        <Form.Group >
-                         
-                        <h2><Badge  bg="primary">Question's Topic</Badge></h2>
-
-                                                                    <Form.Select as="select" name="country"
-                                                                        value={ 9}
-                                                                        onChange={  handleChange } required >
-
-                                                                        <option value="" hidden >Please choose your Country... </option>
-
-                                                                        {allTopics.map((topic, index) =>
-                                                                            <option key={index}
-                                                                                value={topic.id}
-                                                                            >{topic.name}</option>
-                                                                        )}
-                                                                    </Form.Select>
-                                                                
-                            </Form.Group>
-
-
-
-
-
-
-
+                            <Form.Select
+                                as="select"
+                                name="TopicSelect"
+                                defaultValue={question.topicId} //1.triggers the controlled component error
+                                // onChange={ handleChange  }    //2.stops the controlled component error
+                                //3. the combination of 3 and 4 triggers again the error
+                                //  required                                    //more study on This is required
+                            >
+                                <option value="" hidden>
+                                    Please choose a topic{" "}
+                                </option>
+                                {allTopics.map((topic, index) => (
+                                    <option
+                                        key={index}
+                                        onClick={() => {
+                                            onSelect(event, topic, "topic");
+                                        }} //4. this without 3. stops the error
+                                        value={topic.id}
+                                    >
+                                        {topic.name}
+                                    </option>
+                                ))}
+                            </Form.Select>
+                        </Form.Group>
                     </Col>{" "}
                     {/*  DROPDOWN Difficulty levels */}
                     <Col md={2}>
                         <Form.Group>
-                            <Form.Label></Form.Label>
-                            <Dropdown autoClose={"outside"} onSelect={onSelect}>
-                                <Dropdown.Toggle
-                                    variant="primary"
-                                    id="dropdown-basic"
-                                >
-                                    Difficulty
-                                </Dropdown.Toggle>
+                            <Form.Group>
+                            <h2><Badge bg="primary">Question's Difficulty</Badge></h2>
+                            <Form.Select
+                                as="select"
+                                name="DifficultySelect"
+                                value={question.difficultyLevelId} //1.triggers the controlled component error
+                                // onChange={ handleChange  }    //2.stops the controlled component error
+                                //3. the combination of 3 and 4 triggers again the error
+                                //  required                                    //more study on This is required
+                            >
+                                <option value={0} hidden>
+                                    Please choose a level{" "}
+                                </option>
+                                {difficultyLevels.map((difficultyLevel, index) => (
+                                    <option
+                                        key={index}
+                                        onClick={() => {
+                                            onSelect(event, difficultyLevel, "difficultyLevel");
+                                        }} //4. this without 3. stops the error
+                                        value={difficultyLevel.id}
+                                    >
+                                        {difficultyLevel.difficulty}
+                                    </option>
+                                ))}
+                            </Form.Select>
+                        </Form.Group>
 
-                                <Dropdown.Menu>
-                                    {difficultyLevels.map((level, index) => (
-                                        <Dropdown.Item
-                                            key={index}
-                                            value={level.id}
-                                            eventKey={level.id}
-                                            species={"level"}
-                                        >
-                                            {level.difficulty}
-                                        </Dropdown.Item>
-                                    ))}
-                                </Dropdown.Menu>
-                            </Dropdown>
+
+
+
+
+
+
                         </Form.Group>
                     </Col>
                 </Row>
@@ -260,21 +262,32 @@ console.log(" Put!!!");
                                 //    onClick={(event) => handleChange(event)}
                                 // name={"checkbox "}
                             >
-                                <Form.Check.Label><strong>Is Correct</strong></Form.Check.Label>
-                                <Form.Check.Input type={'checkbox'} 
-                                isValid  checked={option.correct} onChange={() => {handleChange(event, "checkbox",option.correct,index)}}
-                                 name='checkbox' id={index.toString()}
-                                 /> 
-
-
-                        </Form.Check>
+                                <Form.Check.Label>
+                                    <strong>Is Correct</strong>
+                                </Form.Check.Label>
+                                <Form.Check.Input
+                                    type={"checkbox"}
+                                    isValid
+                                    checked={option.correct}
+                                    onChange={() => {
+                                        handleChange(
+                                            event,
+                                            "checkbox",
+                                            option.correct,
+                                            index
+                                        );
+                                    }}
+                                    name="checkbox"
+                                    id={index.toString()}
+                                />
+                            </Form.Check>
                         </Col>
                     </Row>
                 ))}
-                <Row key={"CreateButtonRow"}>
+                <Row key={"EditButtonRow"}>
                     {/* <Col md={30}> */}
                     <Button variant="primary" type="submit" value={"Submit"}>
-                        Create Question
+                        Update Question
                     </Button>
                     {/* </Col> */}
                 </Row>
