@@ -1,6 +1,6 @@
-import { Form, FormGroup,Dropdown,Button, Col, Row, FloatingLabel, Stack , Table, FormControl  } from 'react-bootstrap';
+import { Form, FormGroup,Dropdown,Button, Col, Row, Badge, Stack   } from 'react-bootstrap';
 
-import {React,useState,useEffect,Component }from 'react';
+import {React,useState,useEffect }from 'react';
 
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
@@ -155,18 +155,15 @@ console.log(" Put!!!");
                     </Col>
                     {/* DROPDOWN TOPICS */}
                     <Col md={3}>
-                        <Form.Group>
+                        {/* <Form.Group>
                             <Form.Label></Form.Label>
-
-                            <Dropdown autoClose={"outside"} onSelect={onSelect} required
-                            >
+                            <Dropdown autoClose={"outside"} onSelect={onSelect} required >
                                 <Dropdown.Toggle
                                     variant="primary"
                                     id="dropdown-basic"
                                 >
                                     Question's Topic
                                 </Dropdown.Toggle>
-
                                 <Dropdown.Menu>
                                     {allTopics.map((topic, index) => (
                                         <Dropdown.Item
@@ -181,7 +178,33 @@ console.log(" Put!!!");
                                 </Dropdown.Menu>
                             </Dropdown>
 
-                        </Form.Group>
+                        </Form.Group> */}
+                                {/* ---------------- ---------------- ---------------- ---------------- ---------------- ---------------- ---------------- ---------------- ---------------- ---------------- ---------------- ---------------- ---------------- ---------------- ---------------- */}
+                        <Form.Group >
+                         
+                        <h2><Badge  bg="primary">Question's Topic</Badge></h2>
+
+                                                                    <Form.Select as="select" name="country"
+                                                                        value={ 9}
+                                                                        onChange={  handleChange } required >
+
+                                                                        <option value="" hidden >Please choose your Country... </option>
+
+                                                                        {allTopics.map((topic, index) =>
+                                                                            <option key={index}
+                                                                                value={topic.id}
+                                                                            >{topic.name}</option>
+                                                                        )}
+                                                                    </Form.Select>
+                                                                
+                            </Form.Group>
+
+
+
+
+
+
+
                     </Col>{" "}
                     {/*  DROPDOWN Difficulty levels */}
                     <Col md={2}>
