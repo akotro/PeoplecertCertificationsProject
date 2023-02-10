@@ -150,6 +150,7 @@ export default function CandidateEdit(props) {
                     })
                     .catch(function (error) {
                         console.log(error);
+                        console.log(error.response.data.errors.FirstName[0]);        
                     });
             }
         
