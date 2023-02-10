@@ -25,7 +25,7 @@ public class AccountsController : ControllerBase
     }
 
     [HttpGet("getUser")]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public async Task<ActionResult<UserDto>> GetUser(string email)
     {
         var user = await _service.GetUser(email);
@@ -36,6 +36,13 @@ public class AccountsController : ControllerBase
         }
 
         return Ok(user);
+    }
+
+    [HttpGet("getAllClaims")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
+    public ActionResult<List<string>> GetAllClaims()
+    {
+        return _service.GetAllClaims();
     }
 
     [HttpPost("makeAdmin")]

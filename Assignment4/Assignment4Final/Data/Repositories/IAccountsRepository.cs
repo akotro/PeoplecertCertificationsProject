@@ -9,6 +9,7 @@ public interface IAccountsRepository
 {
     Task<List<AppUser>> ListUsers();
     Task<AppUser> GetAppUser(string email);
+    List<string> GetAllClaims();
     Task<IList<Claim>> GetClaims(AppUser user);
     Task MakeAdmin(string email);
     Task RemoveAdmin(string email);

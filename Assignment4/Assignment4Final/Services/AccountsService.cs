@@ -27,6 +27,11 @@ public class AccountsService
         _configuration = configuration;
     }
 
+    public List<string> GetAllClaims()
+    {
+        return _repository.GetAllClaims();
+    }
+
     public async Task<List<UserDto>> GetListUsers()
     {
         return _mapper.Map<List<UserDto>>(await _repository.ListUsers());
