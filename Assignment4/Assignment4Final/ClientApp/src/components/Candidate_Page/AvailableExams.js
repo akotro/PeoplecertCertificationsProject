@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import { ListGroup, ListGroupItem, Button, Table, Row, Stack, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { withRouter } from './../Common/with-router';
 import { BrowserRouter, Route, useParams } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { Modal, DatePicker } from 'antd';
 
 function AvailableExams(props) {
 
@@ -31,17 +32,37 @@ function AvailableExams(props) {
         }
     }, []);
 
-    const handleChange = (event) => {
-        const { name, value, type } = event.target;
+    const [showModal, setShowModal] = useState(false);
+    const [selectedDate, setSelectedDate] = useState(null);
 
-        console.log("name",name);
-        console.log("type", type);
-        console.log("value", value);
-        console.log(exams.examDate)
+    const handleOk = (CandExam) => {
+        setShowModal(false);
+        setSelectedDate(new Date());
 
+        console.log(CandExam);
 
+        const updatedExams = exams.map(exam => {
+            if (exam === CandExam) {
+                exam.examDate = selectedDate;
+                // return { ...exam, examDate: selectedDate };
+            }
+            // return exam;
+        });
+        
+        // const exams2 = {...exams.map(exam => exam.id === CandExam.id ? exam.examDate = selectedDate : null)}
+        // console.log(exams2)
 
-    }
+        console.log(updatedExams);
+        // setExams(updatedExams);
+    };
+
+    const handleCancel = () => {
+        setShowModal(false);
+    };
+
+    const handleDateChange = (dateString) => {
+        setSelectedDate(dateString);
+    };
 
     const makebuttons = (CandExam) => {
 
@@ -57,33 +78,49 @@ function AvailableExams(props) {
             return (
                 <td>
                     <div className='d-flex gap-2'>
+                        <Button onClick={() => takeExam(CandExam)}>Take Exam</Button>
 
-                        <Form.Group >
-                                    <Form.Control type="date"
-                                        name="examDate"
-                                        value={convertDateToString(CandExam.examDate)}
-                                        onChange={handleChange} />
-                                </Form.Group>
-                                
-                        <Button>Book Exam</Button>
+                        <Button onClick={() => setShowModal(true)}>Book Date</Button>
+                        <Modal
+                            title="Select a date"
+                            open={showModal}
+                            onOk={() => handleOk(CandExam)}
+                            onCancel={handleCancel} >
+                            <DatePicker onChange={handleDateChange} />
+                        </Modal>
                     </div>
                 </td>
             );
         }
     };
 
-    const takeExam = (id) => {
-        console.log('Id of candidateExam:' + id);
-        navigate(`/candidate/Examination/${id}`);
+    const takeExam = (CandExam) => {
+        const currentDate = new Date();
+        const examDate = new Date(CandExam.examDate);
+
+        if (examDate.getTime() < currentDate.getTime()) {
+            alert("The exam date has passed.");
+            return;
+        }
+
+        navigate(`/candidate/Examination/${CandExam.id}`);
     };
 
     const makeDate = (examDate) => {
+        if (!examDate) {
+            return "";
+        }
+
         let date = new Date(examDate);
         let options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
 
-        return date.toLocaleDateString('en-US');
+        if (date && date.toString() !== "Invalid Date") {
+            return date.toLocaleDateString('en-US', options);
+        } else {
+            return "";
+        }
     }
-    const newLocal = "success";
+
     return (
         <div className='container-fluid'>
             <div>
@@ -94,6 +131,7 @@ function AvailableExams(props) {
                         <tr>
                             <th>Title</th>
                             <th>Voucher</th>
+                            <th>Exam Date</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -102,6 +140,7 @@ function AvailableExams(props) {
                             <tr key={index}>
                                 <td>{CandidateExam.exam.certificate.title}</td>
                                 <td>{CandidateExam.exam.certificate.title}</td>
+                                <td>{makeDate(CandidateExam.examDate)}</td>
                                 <td>{CandidateExam.Voucher}</td>
                                 <td>
                                     {makebuttons(CandidateExam)}
@@ -130,7 +169,6 @@ function AvailableExams(props) {
                                 <td>{CandidateExam.percentScore}&nbsp;%</td>
                                 <td>
                                     {makebuttons(CandidateExam)}
-                                    {/* <Button variant={newLocal} onClick={() => takeExam(CandidateExam.id)} >Take Exam</Button> */}
                                 </td>
                             </tr>
                         ))}
