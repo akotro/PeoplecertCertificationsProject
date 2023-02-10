@@ -69,7 +69,7 @@ public class CandidateExamAnswersRepository : IGenericRepository<CandidateExamAn
             }
 
             dbCandidateExamAnswer.IsCorrectModerated = candidateExamAnswer.IsCorrectModerated;
-            dbCandidateExamAnswer.CandidateExam = candidateExamAnswer.CandidateExam;
+            // dbCandidateExamAnswer.CandidateExam = candidateExamAnswer.CandidateExam;
 
             await _context.SaveChangesAsync();
         }
