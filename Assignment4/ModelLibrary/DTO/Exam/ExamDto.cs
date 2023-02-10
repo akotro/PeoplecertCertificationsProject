@@ -14,9 +14,12 @@ namespace ModelLibrary.Models.DTO.Exams
     {
         public int Id { get; set; }
         public string? CertificateTitle { get; set; }
+        public int? PassMark { get; set; }
+        public int? MaxMark { get; set; }
 
         [JsonProperty(ReferenceLoopHandling = ReferenceLoopHandling.Ignore)]
         public CertificateDto? Certificate { get; set; }
+
         [JsonProperty(ItemReferenceLoopHandling = ReferenceLoopHandling.Ignore)]
         public List<QuestionDto>? Questions { get; set; }
     }

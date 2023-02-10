@@ -56,8 +56,6 @@ namespace Assignment4Final.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PassingMark = table.Column<int>(type: "int", nullable: true),
-                    MaxMark = table.Column<int>(type: "int", nullable: true),
                     Category = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Active = table.Column<bool>(type: "bit", nullable: true),
                     Price = table.Column<double>(type: "float", nullable: true)
@@ -195,7 +193,6 @@ namespace Assignment4Final.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    MaxMarks = table.Column<int>(type: "int", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -331,6 +328,8 @@ namespace Assignment4Final.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    PassMark = table.Column<int>(type: "int", nullable: false),
+                    MaxMark = table.Column<int>(type: "int", nullable: false),
                     CertificateId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
