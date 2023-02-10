@@ -34,6 +34,11 @@ public class AccountsRepository : IAccountsRepository
         return await _userManager.FindByEmailAsync(email);
     }
 
+    public List<string> GetAllClaims()
+    {
+        return _context.UserClaims.ToList().Select(c => c.ClaimValue).Distinct().ToList();
+    }
+
     public async Task<IList<Claim>> GetClaims(AppUser user)
     {
         return await _userManager.GetClaimsAsync(user);
