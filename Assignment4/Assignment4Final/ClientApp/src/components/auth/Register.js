@@ -16,7 +16,7 @@ export default function Register() {
 
     const register = (event) => {
         event.preventDefault();
-        
+
         setErrors([]);
         axios.post(`https://localhost:7196/api/accounts/create`, credentials).then(
             res => {
@@ -32,7 +32,7 @@ export default function Register() {
 
     const handleChangeRegister = (event) => {
         const { name, value } = event.target;
-        setCredentials({ ...credentials, [name]: value });
+        setCredentials({ ...credentials, [name]: value, isCandidate: true });
     }
 
     return (
