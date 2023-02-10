@@ -565,12 +565,6 @@ namespace Assignment4Final.Data.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("MaxMark")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("PassingMark")
-                        .HasColumnType("int");
-
                     b.Property<double?>("Price")
                         .HasColumnType("float");
 
@@ -605,9 +599,6 @@ namespace Assignment4Final.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int?>("MaxMarks")
-                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -725,6 +716,12 @@ namespace Assignment4Final.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int?>("CertificateId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MaxMark")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PassMark")
                         .HasColumnType("int");
 
                     b.HasKey("Id");

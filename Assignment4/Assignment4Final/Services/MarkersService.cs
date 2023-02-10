@@ -140,9 +140,7 @@ public class MarkersService
             candExamDto.CandidateScore = score;
             candExamDto.PercentScore = (score / candExamDto.MaxScore) * 100;
             candExamDto.Result =
-                candExamDto.CandidateScore >= candExamDto.Exam?.Certificate?.PassingMark
-                    ? true
-                    : false;
+                candExamDto.CandidateScore >= candExamDto.Exam?.PassMark ? true : false;
             candExamDto.MarkingDate = DateTime.Now; // NOTE:(akotro) Should this be in UTC?
         }
 
