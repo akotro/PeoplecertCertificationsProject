@@ -118,6 +118,7 @@ const AppRoutes = [
     // requireAuth: true,
     element: <ExamList />
   },
+  //-----------------Marker-------------------
   {
     path: '/marker',
     // requireAuth: true,
@@ -130,6 +131,7 @@ const AppRoutes = [
     needsMarker:true,
     element: <MarkExam />
   },
+  //------------------------------------
   {
     path: '/ExamQuestionList/:id',
     // requireAuth: true,

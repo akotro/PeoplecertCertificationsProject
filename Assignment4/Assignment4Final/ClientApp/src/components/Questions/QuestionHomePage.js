@@ -4,7 +4,8 @@ import {Button,Table,Container} from "react-bootstrap";
 import  React, {useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import QuestionEdit from "./QuestionEdit";
+import parse from "html-react-parser";
+// import QuestionEdit from "./QuestionEdit";
 
 function Questions() {
     const [data, setData] = useState([]);
@@ -23,11 +24,7 @@ function Questions() {
     //--------------------------------------------------//filters the text from the raw html
     function Replace(temp) {
         return (
-            <td
-            dangerouslySetInnerHTML={{
-                __html: temp,
-            }}
-            ></td>
+            <td>{parse(temp)}</td>
         )
     }
     //--------------------------------------------------HANDLE DELETE
