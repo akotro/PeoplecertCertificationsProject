@@ -178,8 +178,13 @@ namespace Assignment4Final.Services
         {
             var score = candidateExam.CandidateExamAnswers.Count(answer => (bool)answer.IsCorrect); // IsCorrect must not be nullable
 
+            candidateExam.MaxScore = candidateExam.Exam.MaxMark;
+
             candidateExam.CandidateScore = score;
-            candidateExam.PercentScore = (score / candidateExam.MaxScore) * 100; // max score shoud be on exam not candidateExam
+            candidateExam.ReportDate = DateTime.Now;
+
+            decimal precScore = ((decimal)score / (decimal)candidateExam.MaxScore) * (decimal)100;
+            candidateExam.PercentScore = decimal.Round(precScore,2); // max score shoud be on exam not candidateExam
             candidateExam.Result =
                 candidateExam.CandidateScore >= candidateExam.Exam?.PassMark ? true : false;
             return await _candidateExamRepository.AddOrUpdateAsync(candidateExam);
