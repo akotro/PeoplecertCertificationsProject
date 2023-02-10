@@ -55,38 +55,9 @@ function CertificateList(props) {
         const cert = data.filter(item => item.id === id)[0];
         console.log("handle buy ",id);
         console.log("certexam.id", cert.exams[0].id);
-        let idObj = id;
-        // const examDTO = { id: cert.exams[0].id, cert }
-        // console.log(JSON.stringify(examDTO))
-        // const token = localStorage.getItem("token");
-
-        // const config = {
-        //     headers: { Authorization: `Bearer ${token}` }
-        // };
-        
-        // const bodyParameters = {
-        //    key: "value"
-        // };
-        
-        // Axios.post( 
-        //   'http://localhost:8000/api/v1/get_token_payloads',
-        //   bodyParameters,
-        //   config
-        // ).then(console.log).catch(console.log);
-
-
-        // const requestOptions = {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //         'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNhbmRpZGF0ZTJAZ21haWwuY29tIiwidXNlcklkIjoiMjVmOTExNzQtMjc4Mi00YjQwLWI0MjQtODViNjk1Y2U3YjMzIiwicm9sZSI6ImNhbmRpZGF0ZSIsImV4cCI6MTcwNzQzMzg1OX0.9-ar7aI1w00WqfEi97FbfKAB0QJTz3ugDx3jggPAx00'
-        //     }
-        // }
-        // fetch(`https://localhost:7196/api/CandidateExam/CreateCandExam/${id}`, requestOptions)
         axios.post(`https://localhost:7196/api/CandidateExam/CreateCandExam/${id}`)
             .then(res => {
                 console.log(res);
-                //this.setState({ data: res.data.data });
             })
             .catch(err => {
                 console.error(err);

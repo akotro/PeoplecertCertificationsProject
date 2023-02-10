@@ -22,9 +22,6 @@ export default function Examination(props) {
         }).catch(function (error) {
             console.log(error);
         });
-        if (!user) {
-            setUser("admin");
-        }
     }, []);
 
     function Replace(temp) {
