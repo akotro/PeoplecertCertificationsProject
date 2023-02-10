@@ -1,8 +1,9 @@
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import React, { useEffect, useState, useContext } from "react";
 import axios from 'axios';
-import { Col, Row, Stack, Button, Table } from "react-bootstrap";
-
+import parse from 'html-react-parser';
+import { Col, Row, Stack, Button, Table} from "react-bootstrap";
+import {AiOutlineCheck,AiOutlineClose} from "react-icons/ai";
 
 function MarkExam(props) {
 
@@ -51,7 +52,7 @@ function MarkExam(props) {
         console.log(exam)
         // setExam(exam)
     }
-
+//--------------------------------------------------//filters the text from the raw html
     function Replace(temp) {
         return (
             <td
@@ -61,6 +62,13 @@ function MarkExam(props) {
             ></td>
         )
     }
+    
+    function ReplaceV2(temp) {
+        return (
+            <p>{parse(temp)}</p>
+        )
+    }
+ //--------------------------------------------------
 
     const handleSubmit = (canExamId) => {
         exam.isModerated = true;
@@ -130,19 +138,16 @@ function MarkExam(props) {
                 </thead>
                 <tbody>
                     {exam.candidateExamAnswers.map((que, index) => (
-                        
-                            <tr key={index}>
-                                <td xs={1}>{index + 1}</td>
-                                <td>
-                                    {Replace(que.questionText)}
-                                    <div>
-                                        <ul>
-                                            <li>
-                                                {Replace(que.correctOption)}
-                                            </li>
-                                            <li>{Replace(que.chosenOption)}</li>
-                                        </ul>
-                                        {/* <details className="display-6 fs-4">
+                        <tr key={index}>
+                            <td xs={1}>{index + 1}</td>
+                            <td>
+                                {Replace(que.questionText)}
+                                <div>
+                                    <ul>
+                                        <li>{Replace(que.correctOption)}</li>
+                                        <li>{Replace(que.chosenOption)}</li>
+                                    </ul>
+                                    {/* <details className="display-6 fs-4">
                                                             <summary>
                                                                 Click here if you want to see all the options
                                                             </summary>
@@ -154,41 +159,89 @@ function MarkExam(props) {
                                                                 </ol>
                                                             })}
                                                             </details> */}
-{/* //  ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- */}
-                                        <div>
-                                            <hr />
-
-                                            <p>iasonas TEST</p>
-
-                                            <hr />
+                                    {/* //  ------- ------- ------- OPTIONS------- -------  ------- ------- */}
+                                    <div>
+                                        <hr />
+                                        <div
+                                            key={index}
+                                            name={que.id}
+                                            className="my-1 "
+                                        >
+                                            <Row>
+                                                <details className="display-6 fs-4">
+                                                    <summary>Options</summary>
+                                                    <div className="card card-body ">
+                                                        <div className="justify-content-end"></div>
+                                                        <Table>
+                                                            <thead>
+                                                                <th>Id</th>
+                                                                <th>Text</th>
+                                                                <th>
+                                                                    Correct{" "}
+                                                                </th>
+                                                            </thead>
+                                                            <tbody>
+                                                                {que.question.options.map(
+                                                                    (
+                                                                        option,
+                                                                        index
+                                                                    ) => (
+                                                                        <tr
+                                                                            key={
+                                                                                index
+                                                                            }
+                                                                        >
+                                                                            <td>
+                                                                                {
+                                                                                    option.id
+                                                                                }
+                                                                            </td>
+                                                                            <td>
+                                                                                {ReplaceV2(
+                                                                                    option.text
+                                                                                )}
+                                                                            </td>
+                                                                            <td>
+                                                                                {option.correct ? (
+                                                                                    <AiOutlineCheck />
+                                                                                ) : (
+                                                                                    <AiOutlineClose />
+                                                                                )}
+                                                                            </td>
+                                                                        </tr>
+                                                                    )
+                                                                )}
+                                                            </tbody>
+                                                        </Table>
+                                                    </div>
+                                                </details>
+                                            </Row>
                                         </div>
+
+                                        <hr />
                                     </div>
-{/* //  ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- */}
-
-
-                                </td>
-                                <td>
-                                    {que.isCorrectModerated}
-                                    <input
-                                        type="checkbox"
-                                        name="isCorrectModerated"
-                                        label="Is the certificate available for puchase?"
-                                        defaultChecked={que.isCorrectModerated}
-                                        onChange={(event) =>
-                                            handleChange(event, index)
-                                        }
-                                        disabled={
-                                            exam.isModerated === true ||
-                                            role === "qualitycontrol"
-                                                ? true
-                                                : false
-                                        }
-                                    />
-                                </td>
-                            </tr>
-
-                          
-                        
+                                </div>
+                                {/* //  ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- */}
+                            </td>
+                            <td>
+                                {que.isCorrectModerated}
+                                <input
+                                    type="checkbox"
+                                    name="isCorrectModerated"
+                                    label="Is the certificate available for puchase?"
+                                    defaultChecked={que.isCorrectModerated}
+                                    onChange={(event) =>
+                                        handleChange(event, index)
+                                    }
+                                    disabled={
+                                        exam.isModerated === true ||
+                                        role === "qualitycontrol"
+                                            ? true
+                                            : false
+                                    }
+                                />
+                            </td>
+                        </tr>
                     ))}
                 </tbody>
             </Table>
