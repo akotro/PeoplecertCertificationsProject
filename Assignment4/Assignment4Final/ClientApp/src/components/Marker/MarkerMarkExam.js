@@ -1,8 +1,9 @@
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import React, { useEffect, useState, useContext } from "react";
 import axios from 'axios';
-import { Col, Row, Stack, Button, Table } from "react-bootstrap";
-
+import parse from 'html-react-parser';
+import { Col, Row, Stack, Button, Table} from "react-bootstrap";
+import {AiOutlineCheck,AiOutlineClose} from "react-icons/ai";
 
 function MarkExam(props) {
 
@@ -51,7 +52,7 @@ function MarkExam(props) {
         console.log(exam)
         // setExam(exam)
     }
-
+//--------------------------------------------------//filters the text from the raw html
     function Replace(temp) {
         return (
             <td
@@ -61,6 +62,13 @@ function MarkExam(props) {
             ></td>
         )
     }
+    
+    function ReplaceV2(temp) {
+        return (
+            <p>{parse(temp)}</p>
+        )
+    }
+ //--------------------------------------------------
 
     const handleSubmit = (canExamId) => {
         exam.isModerated = true;
@@ -92,11 +100,13 @@ function MarkExam(props) {
                         <h4>Title: {exam.exam.certificateTitle}</h4>
                     </Col>
                     <Col>
-                        {initialScore !== exam.candidateScore &&
+                        {initialScore !== exam.candidateScore && (
                             <div>
                                 <Row>
                                     <Col>
-                                        Initial Score ({(initialScore / exam.maxScore) * 100}%) :
+                                        Initial Score (
+                                        {(initialScore / exam.maxScore) * 100}%)
+                                        :
                                     </Col>
                                     <Col>
                                         {initialScore}/{exam.maxScore}
@@ -104,14 +114,17 @@ function MarkExam(props) {
                                 </Row>
                                 <Row>
                                     <Col>
-                                        Score After Marking ({(exam.candidateScore / exam.maxScore) * 100}%) :
+                                        Score After Marking (
+                                        {(exam.candidateScore / exam.maxScore) *
+                                            100}
+                                        %) :
                                     </Col>
                                     <Col>
                                         {exam.candidateScore}/{exam.maxScore}
                                     </Col>
                                 </Row>
                             </div>
-                        }
+                        )}
                     </Col>
                 </Row>
             </div>
@@ -124,57 +137,128 @@ function MarkExam(props) {
                     </tr>
                 </thead>
                 <tbody>
-                    {exam.candidateExamAnswers.map((que, index) =>
+                    {exam.candidateExamAnswers.map((que, index) => (
                         <tr key={index}>
-                            <td xs={1}>
-                                {index + 1}
-                            </td>
+                            <td xs={1}>{index + 1}</td>
                             <td>
                                 {Replace(que.questionText)}
                                 <div>
                                     <ul>
-                                        <li>
-                                            {Replace(que.correctOption)}
-                                        </li>
-                                        <li>
-                                            {Replace(que.chosenOption)}
-                                        </li>
+                                        <li>{Replace(que.correctOption)}</li>
+                                        <li>{Replace(que.chosenOption)}</li>
                                     </ul>
                                     {/* <details className="display-6 fs-4">
-                                                    <summary>
-                                                        Click here if you want to see all the options
-                                                    </summary>
-                                                    {que.map((option)=> {
-                                                        <ol>
-                                                            <li>
+                                                            <summary>
+                                                                Click here if you want to see all the options
+                                                            </summary>
+                                                            {que.map((option)=> {
+                                                                <ol>
+                                                                    <li>
 
-                                                            </li>
-                                                        </ol>
-                                                    })}
-                                                    </details> */}
+                                                                    </li>
+                                                                </ol>
+                                                            })}
+                                                            </details> */}
+                                    {/* //  ------- ------- ------- OPTIONS------- -------  ------- ------- */}
+                                    <div>
+                                        <hr />
+                                        <div
+                                            key={index}
+                                            name={que.id}
+                                            className="my-1 "
+                                        >
+                                            <Row>
+                                                <details className="display-6 fs-4">
+                                                    <summary>Options</summary>
+                                                    <div className="card card-body ">
+                                                        <div className="justify-content-end"></div>
+                                                        <Table>
+                                                            <thead>
+                                                                <th>Id</th>
+                                                                <th>Text</th>
+                                                                <th>
+                                                                    Correct{" "}
+                                                                </th>
+                                                            </thead>
+                                                            <tbody>
+                                                                {que.question.options.map(
+                                                                    (
+                                                                        option,
+                                                                        index
+                                                                    ) => (
+                                                                        <tr
+                                                                            key={
+                                                                                index
+                                                                            }
+                                                                        >
+                                                                            <td>
+                                                                                {
+                                                                                    option.id
+                                                                                }
+                                                                            </td>
+                                                                            <td>
+                                                                                {ReplaceV2(
+                                                                                    option.text
+                                                                                )}
+                                                                            </td>
+                                                                            <td>
+                                                                                {option.correct ? (
+                                                                                    <AiOutlineCheck />
+                                                                                ) : (
+                                                                                    <AiOutlineClose />
+                                                                                )}
+                                                                            </td>
+                                                                        </tr>
+                                                                    )
+                                                                )}
+                                                            </tbody>
+                                                        </Table>
+                                                    </div>
+                                                </details>
+                                            </Row>
+                                        </div>
+
+                                        <hr />
+                                    </div>
                                 </div>
+                                {/* //  ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- */}
                             </td>
                             <td>
                                 {que.isCorrectModerated}
                                 <input
                                     type="checkbox"
-                                    name='isCorrectModerated'
+                                    name="isCorrectModerated"
                                     label="Is the certificate available for puchase?"
                                     defaultChecked={que.isCorrectModerated}
-                                    onChange={(event) => handleChange(event, index)}
-                                    disabled={exam.isModerated === true || role === "qualitycontrol" ? true : false}
+                                    onChange={(event) =>
+                                        handleChange(event, index)
+                                    }
+                                    disabled={
+                                        exam.isModerated === true ||
+                                        role === "qualitycontrol"
+                                            ? true
+                                            : false
+                                    }
                                 />
                             </td>
                         </tr>
-                    )}
+                    ))}
                 </tbody>
             </Table>
             <Stack gap={3}>
-                {role !== "qualitycontrol" &&
+                {role !== "qualitycontrol" && (
                     <Button onClick={() => handleSubmit(exam.id)}>
                         Save & Submit Marking
-                    </Button>}
-                <Button variant='dark' className='d-grid col-12 mx-auto mb-2' onClick={() => navigate(-1)}> Go Back </Button>
+                    </Button>
+                )}
+                <Button
+                    variant="dark"
+                    className="d-grid col-12 mx-auto mb-2"
+                    onClick={() => navigate(-1)}
+                >
+                    {" "}
+                    Go Back{" "}
+                </Button>
             </Stack>
         </div>
     );

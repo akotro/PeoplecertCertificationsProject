@@ -187,6 +187,9 @@ namespace Assignment4Final
 
             builder.Services.AddScoped<IMarkersRepository, MarkersRepository>();
             builder.Services.AddScoped<MarkersService>();
+
+            builder.Services.AddScoped<IAccountsRepository, AccountsRepository>();
+            builder.Services.AddScoped<AccountsService>();
             // ---------------------------------------------------------------------------------------
 
             // TODO:(akotro) This should be extracted into a helper class
@@ -271,14 +274,6 @@ namespace Assignment4Final
             app.MapRazorPages();
 
             app.MapFallbackToFile("index.html");
-
-            //checks for all the latest migrations
-            //also creates db ifNotExists
-            using (var scope = app.Services.CreateScope())
-            {
-                var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-                db.Database.Migrate();
-            }
 
             // AGkiz - Seeds dummy data to DB
             DbSeed.Seed(app).Wait();

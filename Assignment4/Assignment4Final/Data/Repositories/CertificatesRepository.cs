@@ -55,8 +55,6 @@ public class CertificatesRepository : ICertificatesRepository
         {
             dbCertificate.Title = certificate.Title;
             dbCertificate.Description = certificate.Description;
-            dbCertificate.PassingMark = certificate.PassingMark;
-            dbCertificate.MaxMark = certificate.MaxMark;
             dbCertificate.Category = certificate.Category;
             dbCertificate.Active = certificate.Active;
             dbCertificate.Price = certificate.Price;
@@ -87,7 +85,6 @@ public class CertificatesRepository : ICertificatesRepository
                             {
                                 // NOTE:(akotro) If certificate already has this topic, update it
                                 dbTopic.Name = topic.Name;
-                                dbTopic.MaxMarks = topic.MaxMarks;
                             }
                             else
                             {
@@ -98,9 +95,7 @@ public class CertificatesRepository : ICertificatesRepository
                         else
                         {
                             // NOTE:(akotro) If the topic does not exist, create it
-                            dbCertificate.Topics.Add(
-                                new Topic { Name = topic.Name, MaxMarks = topic.MaxMarks }
-                            );
+                            dbCertificate.Topics.Add(new Topic { Name = topic.Name });
                         }
                     }
                 }

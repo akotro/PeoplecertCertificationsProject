@@ -1,15 +1,7 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using Assignment4Final.Data;
-using AutoMapper;
+﻿using Assignment4Final.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using ModelLibrary.Models;
 using ModelLibrary.Models.DTO.Accounts;
 
 namespace Assignment4Final.Controllers;
@@ -18,105 +10,81 @@ namespace Assignment4Final.Controllers;
 [Route("api/accounts")]
 public class AccountsController : ControllerBase
 {
-    private readonly UserManager<AppUser> userManager;
-    private readonly SignInManager<AppUser> signInManager;
-    private readonly IConfiguration configuration;
-    private readonly ApplicationDbContext context;
-    private readonly IMapper mapper;
+    private readonly AccountsService _service;
 
-    public AccountsController(
-        UserManager<AppUser> userManager,
-        SignInManager<AppUser> signInManager,
-        IConfiguration configuration,
-        ApplicationDbContext context,
-        IMapper mapper
-    )
+    public AccountsController(AccountsService accountsService)
     {
-        this.userManager = userManager;
-        this.signInManager = signInManager;
-        this.configuration = configuration;
-        this.context = context;
-        this.mapper = mapper;
+        _service = accountsService;
     }
 
     [HttpGet("listUsers")]
     //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public async Task<ActionResult<List<UserDto>>> GetListUsers()
     {
-        var queryable = context.Users.AsQueryable();
-        var users = await queryable.OrderBy(x => x.Email).ToListAsync();
-        return mapper.Map<List<UserDto>>(users);
+        return await _service.GetListUsers();
     }
 
     [HttpPost("makeAdmin")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
-    public async Task<ActionResult> MakeAdmin([FromBody] string email)
+    public async Task<ActionResult> MakeAdmin(string email)
     {
-        var user = await userManager.FindByEmailAsync(email);
-        await userManager.AddClaimAsync(user, new Claim("role", "admin"));
+        await _service.MakeAdmin(email);
         return NoContent();
     }
 
     [HttpPost("removeAdmin")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
-    public async Task<ActionResult> RemoveAdmin([FromBody] string email)
+    public async Task<ActionResult> RemoveAdmin(string email)
     {
-        var user = await userManager.FindByEmailAsync(email);
-        await userManager.RemoveClaimAsync(user, new Claim("role", "admin"));
+        await _service.RemoveAdmin(email);
         return NoContent();
     }
 
     [HttpPost("makeMarker")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
-    public async Task<ActionResult> MakeMarker([FromBody] string email)
+    public async Task<ActionResult> MakeMarker(string email)
     {
-        var user = await userManager.FindByEmailAsync(email);
-        await userManager.AddClaimAsync(user, new Claim("role", "marker"));
+        await _service.MakeMarker(email);
         return NoContent();
     }
 
     [HttpPost("removeMarker")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
-    public async Task<ActionResult> RemoveMarker([FromBody] string email)
+    public async Task<ActionResult> RemoveMarker(string email)
     {
-        var user = await userManager.FindByEmailAsync(email);
-        await userManager.RemoveClaimAsync(user, new Claim("role", "marker"));
+        await _service.RemoveMarker(email);
         return NoContent();
     }
 
     [HttpPost("makeQualityControl")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
-    public async Task<ActionResult> MakeQualityControl([FromBody] string email)
+    public async Task<ActionResult> MakeQualityControl(string email)
     {
-        var user = await userManager.FindByEmailAsync(email);
-        await userManager.AddClaimAsync(user, new Claim("role", "qualitycontrol"));
+        await _service.MakeQualityControl(email);
         return NoContent();
     }
 
     [HttpPost("removeQualityControl")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
-    public async Task<ActionResult> RemoveQualityControl([FromBody] string email)
+    public async Task<ActionResult> RemoveQualityControl(string email)
     {
-        var user = await userManager.FindByEmailAsync(email);
-        await userManager.RemoveClaimAsync(user, new Claim("role", "qualitycontrol"));
+        await _service.RemoveQualityControl(email);
         return NoContent();
     }
 
     [HttpPost("makeCandidate")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
-    public async Task<ActionResult> MakeCandidate([FromBody] string email)
+    public async Task<ActionResult> MakeCandidate(string email)
     {
-        var user = await userManager.FindByEmailAsync(email);
-        await userManager.AddClaimAsync(user, new Claim("role", "candidate"));
+        await _service.MakeCandidate(email);
         return NoContent();
     }
 
     [HttpPost("removeCandidate")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
-    public async Task<ActionResult> RemoveCandidate([FromBody] string email)
+    public async Task<ActionResult> RemoveCandidate(string email)
     {
-        var user = await userManager.FindByEmailAsync(email);
-        await userManager.RemoveClaimAsync(user, new Claim("role", "candidate"));
+        await _service.RemoveCandidate(email);
         return NoContent();
     }
 
@@ -125,23 +93,12 @@ public class AccountsController : ControllerBase
         [FromBody] LoginDto userCredentials
     )
     {
-        var user = new AppUser
+        var authResponse = await _service.Create(userCredentials);
+        if (authResponse.Errors != null)
         {
-            UserName = userCredentials.Email,
-            Email = userCredentials.Email,
-            EmailConfirmed = true,
-            LockoutEnabled = false
-        };
-        var result = await userManager.CreateAsync(user, userCredentials.Password);
-
-        if (result.Succeeded)
-        {
-            return await BuildToken(userCredentials);
+            return BadRequest(authResponse.Errors);
         }
-        else
-        {
-            return BadRequest(result.Errors);
-        }
+        return Ok(authResponse);
     }
 
     [HttpPost("login")]
@@ -149,55 +106,12 @@ public class AccountsController : ControllerBase
         [FromBody] LoginDto userCredentials
     )
     {
-        var result = await signInManager.PasswordSignInAsync(
-            userCredentials.Email,
-            userCredentials.Password,
-            isPersistent: false,
-            lockoutOnFailure: false
-        );
+        var authResponse = await _service.Login(userCredentials);
 
-        if (result.Succeeded)
-        {
-            return await BuildToken(userCredentials);
-        }
-        else
+        if (authResponse == null)
         {
             return BadRequest("Incorrect Login");
         }
-    }
-
-    private async Task<AuthenticationResponseDto> BuildToken(LoginDto userCredentials)
-    {
-        var user = await userManager.FindByNameAsync(userCredentials.Email);
-
-        var claims = new List<Claim>()
-        {
-            new Claim("email", userCredentials.Email),
-            new Claim("userId", user.Id)
-        };
-
-        var claimsDB = await userManager.GetClaimsAsync(user);
-
-        claims.AddRange(claimsDB);
-
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["keyjwt"]));
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-        var expiration = DateTime.UtcNow.AddYears(1);
-
-        var token = new JwtSecurityToken(
-            issuer: null,
-            audience: null,
-            claims: claims,
-            expires: expiration,
-            signingCredentials: creds
-        );
-
-        return new AuthenticationResponseDto()
-        {
-            Email = user.Email,
-            Token = new JwtSecurityTokenHandler().WriteToken(token),
-            Expiration = expiration
-        };
+        return Ok(authResponse);
     }
 }

@@ -79,9 +79,10 @@ function CertificateForm(props) {
     const handleChange = (event) => {
         const { name, value, type } = event.target;
 
-        console.log(name);
+        console.log("name",name);
         console.log("type", type);
-        console.log(value);
+        console.log("value", value);
+        
         if (type === 'checkbox') {
             setData({ ...data, [name]: event.target.checked })
         } else if (type === 'number') {

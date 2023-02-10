@@ -56,8 +56,6 @@ namespace Assignment4Final.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PassingMark = table.Column<int>(type: "int", nullable: true),
-                    MaxMark = table.Column<int>(type: "int", nullable: true),
                     Category = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Active = table.Column<bool>(type: "bit", nullable: true),
                     Price = table.Column<double>(type: "float", nullable: true)
@@ -195,7 +193,6 @@ namespace Assignment4Final.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    MaxMarks = table.Column<int>(type: "int", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -331,6 +328,8 @@ namespace Assignment4Final.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    PassMark = table.Column<int>(type: "int", nullable: false),
+                    MaxMark = table.Column<int>(type: "int", nullable: false),
                     CertificateId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -561,6 +560,7 @@ namespace Assignment4Final.Data.Migrations
                     ChosenOption = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsCorrect = table.Column<bool>(type: "bit", nullable: true),
                     IsCorrectModerated = table.Column<bool>(type: "bit", nullable: true),
+                    QuestionId = table.Column<int>(type: "int", nullable: true),
                     CandidateExamId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -570,6 +570,11 @@ namespace Assignment4Final.Data.Migrations
                         name: "FK_CandidateExamAnswers_CandidateExams_CandidateExamId",
                         column: x => x.CandidateExamId,
                         principalTable: "CandidateExams",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_CandidateExamAnswers_Questions_QuestionId",
+                        column: x => x.QuestionId,
+                        principalTable: "Questions",
                         principalColumn: "Id");
                 });
 
@@ -626,6 +631,11 @@ namespace Assignment4Final.Data.Migrations
                 name: "IX_CandidateExamAnswers_CandidateExamId",
                 table: "CandidateExamAnswers",
                 column: "CandidateExamId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CandidateExamAnswers_QuestionId",
+                table: "CandidateExamAnswers",
+                column: "QuestionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CandidateExams_CandidateAppUserId",

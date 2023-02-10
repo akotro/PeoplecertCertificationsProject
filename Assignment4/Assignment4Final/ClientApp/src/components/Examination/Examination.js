@@ -4,6 +4,7 @@ import axios from 'axios';
 
 export default function Examination(props) {
 
+    let navigate = useNavigate();
     const params = useParams();
     const [candidateExam, setCandidateExam] = useState({ exam: { questions: [] } })
     const [user, setUser] = useState();
@@ -21,9 +22,6 @@ export default function Examination(props) {
         }).catch(function (error) {
             console.log(error);
         });
-        if (!user) {
-            setUser("admin");
-        }
     }, []);
 
     function Replace(temp) {
@@ -35,13 +33,10 @@ export default function Examination(props) {
     }
 
     const saveCandidateExam = () => {
-        axios.put(`https://localhost:7196/api/CandidateExam/EndExam/${candExamId}`, 
-        // {
-        //     candidateExam,
-        // }
-        )
-        .then(response => {
-            console.log(response.data);
+        axios.put(`https://localhost:7196/api/CandidateExam/EndExam/${candExamId}`) 
+        .then((response) => {
+            //console.log(response.data);
+            navigate(`/candidate/ExamResults`, { state: { data: response.data }});
         })
         .catch(error => {
             console.error(error);
@@ -52,7 +47,7 @@ export default function Examination(props) {
         // Note(vmavraganis): Code used to keep the selected option of the user for each question (and update if its the correct or not)
         const chosenOption = event.target.value;
         // console.log(questionIndex);
-        // console.log(candidateExam.candidateExamAnswers);
+        //console.log(candidateExam.candidateExamAnswers);
         var examAnswersIndex = 0;
         const updatedCandidateExamAnswers = candidateExam.candidateExamAnswers.map((answer, index) => {
             if (index === questionIndex) {

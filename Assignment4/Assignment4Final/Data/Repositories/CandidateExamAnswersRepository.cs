@@ -24,6 +24,7 @@ public class CandidateExamAnswersRepository : IGenericRepository<CandidateExamAn
     public async Task<CandidateExamAnswers?> GetAsync(int id)
     {
         return await _context.CandidateExamAnswers
+            .Include(a => a.Question)
             .Include(a => a.CandidateExam)
             .ThenInclude(ce => ce.Exam)
             .ThenInclude(e => e.Certificate)
@@ -53,16 +54,22 @@ public class CandidateExamAnswersRepository : IGenericRepository<CandidateExamAn
             dbCandidateExamAnswer.CorrectOption = candidateExamAnswer.CorrectOption;
             dbCandidateExamAnswer.ChosenOption = candidateExamAnswer.ChosenOption;
 
-            if (String.Equals(dbCandidateExamAnswer.ChosenOption, dbCandidateExamAnswer.CorrectOption))
+            if (
+                String.Equals(
+                    dbCandidateExamAnswer.ChosenOption,
+                    dbCandidateExamAnswer.CorrectOption
+                )
+            )
             {
                 dbCandidateExamAnswer.IsCorrect = true;
-            } else
+            }
+            else
             {
                 dbCandidateExamAnswer.IsCorrect = false;
             }
 
             dbCandidateExamAnswer.IsCorrectModerated = candidateExamAnswer.IsCorrectModerated;
-            dbCandidateExamAnswer.CandidateExam = candidateExamAnswer.CandidateExam;
+            // dbCandidateExamAnswer.CandidateExam = candidateExamAnswer.CandidateExam;
 
             await _context.SaveChangesAsync();
         }

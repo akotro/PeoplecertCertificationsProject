@@ -163,7 +163,7 @@ export default function CandidateEdit(props) {
         console.log(name);
         console.log(type);
         console.log(value);
-        setRegisterCand({ ...registerCand, [name]: value });
+        setRegisterCand({ ...registerCand, [name]: value, isCandidate: true });
 
         console.log(registerCand);
     }

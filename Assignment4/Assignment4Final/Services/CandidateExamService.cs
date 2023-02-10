@@ -149,6 +149,7 @@ namespace Assignment4Final.Services
                         candidateExam.CandidateExamAnswers.Add(
                             new CandidateExamAnswers()
                             {
+                                Question = question,
                                 QuestionText = question.Text,
                                 CorrectOption =
                                     question.Options != null
@@ -157,7 +158,6 @@ namespace Assignment4Final.Services
                                             .FirstOrDefault()
                                             .Text
                                         : null,
-                                
                             }
                         )
                 );
@@ -181,9 +181,7 @@ namespace Assignment4Final.Services
             candidateExam.CandidateScore = score;
             candidateExam.PercentScore = (score / candidateExam.MaxScore) * 100; // max score shoud be on exam not candidateExam
             candidateExam.Result =
-                candidateExam.CandidateScore >= candidateExam.Exam.Certificate.PassingMark
-                    ? true
-                    : false;
+                candidateExam.CandidateScore >= candidateExam.Exam?.PassMark ? true : false;
             return await _candidateExamRepository.AddOrUpdateAsync(candidateExam);
         }
     }

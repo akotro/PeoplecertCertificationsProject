@@ -23,10 +23,17 @@ namespace Assignment4Final.Data.Seed
                 try
                 {
                     var db = service.GetRequiredService<ApplicationDbContext>();
+
+                    bool migrated = await Migrate(db);
+
                     SeedStandaloneTables(db);
                     SeedRelatedTables(db);
                     SeedJoiningTables(db);
-                    SeedCalculatedFields(db);
+
+                    if (migrated)
+                    {
+                        SeedCalculatedFields(db);
+                    }
 
                     var userManager = service.GetRequiredService<UserManager<AppUser>>();
                     await SeedRoles(db, userManager);
@@ -37,6 +44,35 @@ namespace Assignment4Final.Data.Seed
                     logger.LogError(ex, "An error occurred creating the DB.");
                 }
             }
+        }
+
+        public static async Task<bool> Migrate(ApplicationDbContext db)
+        {
+            try
+            {
+                Console.WriteLine("Attempting to apply migration...");
+                await db.Database.MigrateAsync();
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("ERROR: Tried to apply migration but failed.");
+                Console.WriteLine("Do you want to continue to drop db and update? (y/n)");
+
+                string input = Console.ReadLine();
+                if (input.Equals("y", StringComparison.OrdinalIgnoreCase))
+                {
+                    Console.WriteLine("Dropping the database and migrating...");
+                    await db.Database.EnsureDeletedAsync();
+                    await db.Database.MigrateAsync();
+                }
+                else if (input.Equals("n", StringComparison.OrdinalIgnoreCase))
+                {
+                    Console.WriteLine("Exiting program...");
+                    Environment.Exit(0);
+                }
+            }
+
+            return true;
         }
 
         public static void SeedStandaloneTables(ApplicationDbContext db)
@@ -313,9 +349,10 @@ namespace Assignment4Final.Data.Seed
 
             if (!db.Topics.Any())
             {
-                var topicFaker = new Faker<Topic>()
-                    .RuleFor(u => u.Name, f => f.Random.Words(3).ToString())
-                    .RuleFor(u => u.MaxMarks, f => f.Random.Number(1, 4) * 10);
+                var topicFaker = new Faker<Topic>().RuleFor(
+                    u => u.Name,
+                    f => f.Random.Words(3).ToString()
+                );
 
                 var fakeTopics = topicFaker.Generate(10);
                 db.Topics.AddRange(fakeTopics);
@@ -484,7 +521,7 @@ namespace Assignment4Final.Data.Seed
                         }
                     );
 
-                var fakeQuestions = questionFaker.Generate(10);
+                var fakeQuestions = questionFaker.Generate(40);
                 db.Questions.AddRange(fakeQuestions);
                 db.SaveChanges();
             }
@@ -529,18 +566,31 @@ namespace Assignment4Final.Data.Seed
             {
                 var candiExamAnsFaker = new Faker<CandidateExamAnswers>()
                     .RuleFor(
-                        c => c.QuestionText,
-                        f => f.PickRandom(db.Questions.ToList()).Text.ToString()
+                        c => c.Question,
+                        f => f.PickRandom(db.Questions.Include(q => q.Options).ToList())
+                    )
+                    .RuleFor(c => c.QuestionText, (f, c) => c.Question.Text)
+                    .RuleFor(
+                        c => c.CorrectOption,
+                        (f, c) => c.Question.Options.FirstOrDefault(o => o.Correct).Text.ToString()
                     )
                     .RuleFor(
                         c => c.ChosenOption,
-                        f => f.PickRandom(db.Options.ToList()).Text.ToString()
+                        (f, c) =>
+                            f.Random.Number(100) < 65
+                                ? c.CorrectOption
+                                : f.PickRandom(
+                                    c.Question.Options
+                                        .Where(o => o.Text != c.CorrectOption)
+                                        .ToList()
+                                )
+                                    .Text.ToString()
                     )
                     .RuleFor(
-                        c => c.CorrectOption,
-                        f => f.PickRandom(db.Options.ToList()).Text.ToString()
-                    )
-                    .RuleFor(c => c.IsCorrect, f => f.Random.Bool());
+                        c => c.IsCorrect,
+                        (f, c) =>
+                            c.Question.Options.FirstOrDefault(o => o.Text == c.ChosenOption).Correct
+                    );
 
                 var candiExamFaker = new Faker<CandidateExam>()
                     .RuleFor(c => c.ExamDate, f => f.Date.Past(2, DateTime.Now))
@@ -562,7 +612,8 @@ namespace Assignment4Final.Data.Seed
                     .RuleFor(
                         c => c.MarkerAssignedDate,
                         f => f.Date.Between(DateTime.Now, f.Date.Soon(7))
-                    ).RuleFor(u => u.Voucher, f => f.Random.AlphaNumeric(10));
+                    )
+                    .RuleFor(u => u.Voucher, f => f.Random.AlphaNumeric(10));
 
                 // .RuleFor(
                 //     c => c.MarkingDate,
@@ -577,39 +628,88 @@ namespace Assignment4Final.Data.Seed
             #endregion
         }
 
+        private static List<Topic> PickRandomTopics(
+            Faker faker,
+            int count,
+            List<Topic> potentialTopics
+        )
+        {
+            var randomTopics = new List<Topic>();
+
+            for (int i = 0; i < count; i++)
+            {
+                bool added = false;
+                while (!added)
+                {
+                    var topic = faker.PickRandom(potentialTopics);
+                    if (!randomTopics.Contains(topic))
+                    {
+                        randomTopics.Add(topic);
+                        added = true;
+                    }
+                }
+            }
+
+            return randomTopics;
+        }
+
+        private static List<Question> PickRandomQuestions(
+            Faker faker,
+            int count,
+            List<Question> potentialQuestions
+        )
+        {
+            var randomQuestions = new HashSet<Question>();
+
+            while (
+                randomQuestions.Count < count && randomQuestions.Count < potentialQuestions.Count
+            )
+            {
+                var question = faker.PickRandom(potentialQuestions);
+                randomQuestions.Add(question);
+            }
+
+            return randomQuestions.ToList();
+        }
+
         public static void SeedJoiningTables(ApplicationDbContext db)
         {
             Randomizer.Seed = new Random(8675309);
             var faker = new Faker();
-            //adding 10 questions to each Exam
-            foreach (var item in db.Exams.Include(c => c.Questions).ToList())
-            {
-                if (item.Questions.Count == 0)
-                {
-                    var examQuestions = new List<Question>();
-                    for (int i = 0; i < 10; i++)
-                    {
-                        examQuestions.Add(faker.PickRandom(db.Questions.ToList()));
-                    }
-
-                    item.Questions = examQuestions;
-                }
-            }
-            ;
-            db.SaveChanges();
 
             //adding 4Topics to each Certificate
             foreach (var item in db.Certificates.Include(c => c.Topics).ToList())
             {
                 if (item.Topics.Count == 0)
                 {
-                    var certTopics = new List<Topic>();
-                    for (int i = 0; i < 4; i++)
-                    {
-                        certTopics.Add(faker.PickRandom(db.Topics.ToList()));
-                    }
+                    item.Topics = PickRandomTopics(faker, 4, db.Topics.ToList());
+                }
+            }
 
-                    item.Topics = certTopics;
+            db.SaveChanges();
+
+            var passPercentage = 60;
+            //adding 10 questions to each Exam
+            foreach (
+                var item in db.Exams
+                    .AsSplitQuery()
+                    .Include(c => c.Questions)
+                    .Include(e => e.Certificate)
+                    .ThenInclude(c => c.Topics)
+                    .ThenInclude(t => t.Questions)
+                    .ToList()
+            )
+            {
+                if (item.Questions.Count == 0)
+                {
+                    var potentialQuestions = new List<Question>();
+                    item.Certificate
+                        ?.Topics?.ToList()
+                        .ForEach(t => potentialQuestions.AddRange(t.Questions));
+
+                    item.Questions = PickRandomQuestions(faker, 10, potentialQuestions);
+                    item.MaxMark = item.Questions.Count;
+                    item.PassMark = Convert.ToInt32(item.MaxMark * (passPercentage / 100.0));
                 }
             }
 
@@ -618,31 +718,31 @@ namespace Assignment4Final.Data.Seed
 
         public static void SeedCalculatedFields(ApplicationDbContext db)
         {
-            //calculating MaxMark and Passing mark fo each Certificate 
-            var passMark = 65;
-            foreach (var cert in db.Certificates)
-            {
-                if (cert.MaxMark == null)
-                {
-                    cert.MaxMark = 0;
-                    var cerTopics = cert.Topics.ToList();
-                    foreach (var topic in cerTopics)
-                    {
-                        cert.MaxMark = cert.MaxMark + topic.MaxMarks;
-                    }
+            //calculating MaxMark and Passing mark for each Certificate
+            // var passMark = 65;
+            // foreach (var cert in db.Certificates)
+            // {
+            //     if (cert.MaxMark == null)
+            //     {
+            //         cert.MaxMark = 0;
+            //         var cerTopics = cert.Topics.ToList();
+            //         foreach (var topic in cerTopics)
+            //         {
+            //             cert.MaxMark = cert.MaxMark + topic.MaxMarks;
+            //         }
 
-                    cert.PassingMark = Convert.ToInt32(cert.MaxMark * (passMark / 100.0));
-                }
-            }
+            //         cert.PassingMark = Convert.ToInt32(cert.MaxMark * (passMark / 100.0));
+            //     }
+            // }
 
-            db.SaveChanges();
+            // db.SaveChanges();
 
-            foreach (var candExam in db.CandidateExams)
+            foreach (var candExam in db.CandidateExams.Include(ce => ce.CandidateExamAnswers))
             {
                 if (candExam.MaxScore == null)
                 {
-                    candExam.MaxScore = candExam.Exam.Certificate.MaxMark;
-                };
+                    candExam.MaxScore = candExam.Exam?.MaxMark;
+                }
 
                 if (candExam.CandidateScore == null)
                 {
@@ -651,16 +751,16 @@ namespace Assignment4Final.Data.Seed
                     {
                         foreach (var ans in candExam.CandidateExamAnswers)
                         {
-                            if ((bool)ans.IsCorrect)
+                            if (ans.IsCorrect != null && (bool)ans.IsCorrect)
                             {
                                 candExam.CandidateScore = candExam.CandidateScore + 1;
                             }
                         }
-
                     }
-                };
-                candExam.PercentScore = ((decimal)candExam.CandidateScore / (decimal)candExam.MaxScore) * 100;
-                candExam.Result = candExam.PercentScore > 65 ? true : false;
+                }
+                candExam.PercentScore =
+                    ((decimal)candExam.CandidateScore / (decimal)candExam.MaxScore) * 100;
+                candExam.Result = candExam.PercentScore >= 60 ? true : false;
             }
             db.SaveChanges();
         }
