@@ -92,11 +92,13 @@ function MarkExam(props) {
                         <h4>Title: {exam.exam.certificateTitle}</h4>
                     </Col>
                     <Col>
-                        {initialScore !== exam.candidateScore &&
+                        {initialScore !== exam.candidateScore && (
                             <div>
                                 <Row>
                                     <Col>
-                                        Initial Score ({(initialScore / exam.maxScore) * 100}%) :
+                                        Initial Score (
+                                        {(initialScore / exam.maxScore) * 100}%)
+                                        :
                                     </Col>
                                     <Col>
                                         {initialScore}/{exam.maxScore}
@@ -104,14 +106,17 @@ function MarkExam(props) {
                                 </Row>
                                 <Row>
                                     <Col>
-                                        Score After Marking ({(exam.candidateScore / exam.maxScore) * 100}%) :
+                                        Score After Marking (
+                                        {(exam.candidateScore / exam.maxScore) *
+                                            100}
+                                        %) :
                                     </Col>
                                     <Col>
                                         {exam.candidateScore}/{exam.maxScore}
                                     </Col>
                                 </Row>
                             </div>
-                        }
+                        )}
                     </Col>
                 </Row>
             </div>
@@ -124,57 +129,83 @@ function MarkExam(props) {
                     </tr>
                 </thead>
                 <tbody>
-                    {exam.candidateExamAnswers.map((que, index) =>
-                        <tr key={index}>
-                            <td xs={1}>
-                                {index + 1}
-                            </td>
-                            <td>
-                                {Replace(que.questionText)}
-                                <div>
-                                    <ul>
-                                        <li>
-                                            {Replace(que.correctOption)}
-                                        </li>
-                                        <li>
-                                            {Replace(que.chosenOption)}
-                                        </li>
-                                    </ul>
-                                    {/* <details className="display-6 fs-4">
-                                                    <summary>
-                                                        Click here if you want to see all the options
-                                                    </summary>
-                                                    {que.map((option)=> {
-                                                        <ol>
-                                                            <li>
+                    {exam.candidateExamAnswers.map((que, index) => (
+                        
+                            <tr key={index}>
+                                <td xs={1}>{index + 1}</td>
+                                <td>
+                                    {Replace(que.questionText)}
+                                    <div>
+                                        <ul>
+                                            <li>
+                                                {Replace(que.correctOption)}
+                                            </li>
+                                            <li>{Replace(que.chosenOption)}</li>
+                                        </ul>
+                                        {/* <details className="display-6 fs-4">
+                                                            <summary>
+                                                                Click here if you want to see all the options
+                                                            </summary>
+                                                            {que.map((option)=> {
+                                                                <ol>
+                                                                    <li>
 
-                                                            </li>
-                                                        </ol>
-                                                    })}
-                                                    </details> */}
-                                </div>
-                            </td>
-                            <td>
-                                {que.isCorrectModerated}
-                                <input
-                                    type="checkbox"
-                                    name='isCorrectModerated'
-                                    label="Is the certificate available for puchase?"
-                                    defaultChecked={que.isCorrectModerated}
-                                    onChange={(event) => handleChange(event, index)}
-                                    disabled={exam.isModerated === true || role === "qualitycontrol" ? true : false}
-                                />
-                            </td>
-                        </tr>
-                    )}
+                                                                    </li>
+                                                                </ol>
+                                                            })}
+                                                            </details> */}
+{/* //  ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- */}
+                                        <div>
+                                            <hr />
+
+                                            <p>iasonas TEST</p>
+
+                                            <hr />
+                                        </div>
+                                    </div>
+{/* //  ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- ------- */}
+
+
+                                </td>
+                                <td>
+                                    {que.isCorrectModerated}
+                                    <input
+                                        type="checkbox"
+                                        name="isCorrectModerated"
+                                        label="Is the certificate available for puchase?"
+                                        defaultChecked={que.isCorrectModerated}
+                                        onChange={(event) =>
+                                            handleChange(event, index)
+                                        }
+                                        disabled={
+                                            exam.isModerated === true ||
+                                            role === "qualitycontrol"
+                                                ? true
+                                                : false
+                                        }
+                                    />
+                                </td>
+                            </tr>
+
+                          
+                        
+                    ))}
                 </tbody>
             </Table>
             <Stack gap={3}>
-                {role !== "qualitycontrol" &&
+                {role !== "qualitycontrol" && (
                     <Button onClick={() => handleSubmit(exam.id)}>
                         Save & Submit Marking
-                    </Button>}
-                <Button variant='dark' className='d-grid col-12 mx-auto mb-2' onClick={() => navigate(-1)}> Go Back </Button>
+                    </Button>
+                )}
+                <Button
+                    variant="dark"
+                    className="d-grid col-12 mx-auto mb-2"
+                    onClick={() => navigate(-1)}
+                >
+                    {" "}
+                    Go Back{" "}
+                </Button>
             </Stack>
         </div>
     );

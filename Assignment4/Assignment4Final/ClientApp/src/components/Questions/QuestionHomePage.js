@@ -4,6 +4,7 @@ import {Button,Table,Container} from "react-bootstrap";
 import  React, {useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+// import parse from "html-react-parser";
 import QuestionEdit from "./QuestionEdit";
 
 function Questions() {
@@ -30,6 +31,16 @@ function Questions() {
             ></td>
         )
     }
+    // function Replace(temp) {
+    //     return (
+    //         <td>{parse(temp)}</td>
+    //     )
+    // }
+
+
+
+
+
     //--------------------------------------------------HANDLE DELETE
     const  handleDelete = (event) => {
         // Asks user if they are sure
