@@ -49,7 +49,10 @@ namespace Assignment4Final.Data.Repositories
 
         public async Task<List<CandidateExam>> GetAllCandidateExamsOfCandidateAsync(Candidate candidate)
         {
-            return await _context.CandidateExams.Where(candExam => candExam.Candidate == candidate).ToListAsync();
+            return await _context.CandidateExams
+                .Include(candExam => candExam.Exam).ThenInclude(exam=> exam.Certificate).Include(canExam => canExam.Candidate)
+                .Where(candExam => candExam.Candidate == candidate)
+                .ToListAsync();
         }
         
         public async Task<List<CandidateExam>> GetNotTakenCandidateExamsOfCandidateAsync(Candidate candidate)
@@ -64,8 +67,10 @@ namespace Assignment4Final.Data.Repositories
 
         public async Task<CandidateExam?> GetCandidateExamByIdAsync(int id)
         {
-            return await _context.CandidateExams.
-                Include(candExam => candExam.CandidateExamAnswers)
+            return await _context.CandidateExams
+                .Include(candExam => candExam.CandidateExamAnswers)
+                .Include(candExam => candExam.Exam)
+                .ThenInclude(cert => cert.Certificate)
                 .Include(candExam => candExam.Exam)
                 .ThenInclude(exam => exam.Questions)
                 .ThenInclude(question => question.Options)
