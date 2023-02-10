@@ -23,6 +23,7 @@ function AddQuestionToExam() {
     useEffect(() => {
 
         axios.get(`https://localhost:7196/api/Exam/${params.id}`).then((response) => {
+            console.log(response)
             setExam(response.data.data)
             setTopics(response.data.data.certificate.topics)
             console.log(response.data.data)

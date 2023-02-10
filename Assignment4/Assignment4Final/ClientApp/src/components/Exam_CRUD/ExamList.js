@@ -3,12 +3,16 @@ import axios from 'axios';
 import { ListGroup, ListGroupItem, Button, Table, Row, Stack, Form } from 'react-bootstrap';
 import { useNavigate, Link } from "react-router-dom";
 import { AuthenticationContext } from '../auth/AuthenticationContext'
+import Multiselect from 'multiselect-react-dropdown';
 
 function ExamList(props) {
     const [exams, setExams] = useState([]);
     const [showForm, setShowForm] = useState(false);
     const [certificates, setCertificates] = useState([]);
-    const [certId, setCertId] = useState('');
+    const [pickedCert, setPickedCert] = useState()
+    const [pickedTopics, setPickedtopics] = useState([])
+    const [certId, setCertId] = useState();
+    const [createdExam , setCreatedExam] = useState({})
     let navigate = useNavigate();
     // const { update, claims } = useContext(AuthenticationContext);
     // const [role, setRole] = useState(claims.find(claim => claim.name === 'role').value)
@@ -25,11 +29,9 @@ function ExamList(props) {
     }, []);
 
 
-    const getCertificates =  async () => {
+    const getCertificates = async () => {
         {
-            console.log('form get')
-            await axios.get(`https://localhost:7196/api/Certificates`).then((response) =>{
-                console.log('its there',response.data.data)
+            await axios.get(`https://localhost:7196/api/Certificates`).then((response) => {
                 setCertificates(response.data.data)
             })
         }
@@ -46,7 +48,6 @@ function ExamList(props) {
 
 
     const handleEdit = (examEdit) => {
-        console.log(examEdit)
         navigate(`/ExamQuestionList/${examEdit.id}`)
     }
 
@@ -64,55 +65,122 @@ function ExamList(props) {
         return (<>{questionsArray.length}</>)
     }
 
+    const changeStates = (cId) => {
+        console.log("id in state", certId)
+        var certiff = certificates.find(certificate => certificate.id == certId)
+        setPickedCert(certiff)
 
-    const handleChange = event => {
-        console.log(event.target.value)
-        setCertId(event.target.value)
+
+    }
+
+    // useEffect(() => {
+    //     console.log('after seet in effect', certId)
+    //     var certiff = certificates.find(certificate => certificate.id == certId)
+    //     setPickedCert(certiff)
+
+    // }, [certId])
+
+    useEffect(() => {
+        console.log('piced cert THISS', certId)
+    }, [pickedCert]
+    )
+
+    const handleChange = function (event) {
+        var id = event.target.value
+        var name = event.target.name
+
+        console.log("------------id", id)
+        console.log("------------name", name)
+        console.log('certId', id)
+        // setCertId(previd => previd = id)
+        // setCreatedExam({...createdExam, [event.target.name] : event.target.value})
+
+        setCreatedExam({...createdExam, [name] : certificates.find(certificate => certificate.id == id)})
+        console.log(createdExam)
     }
 
     const handleSubmitExam = async event => {
         event.preventDefault();
-        console.log('certId',certId)
-        console.log(certificates)
         var certif = certificates.find(certificate => certificate.id == certId)
-        console.log("certif",certif)
-        console.log({certificate : certif})
-        await axios.post(`https://localhost:7196/api/Exam`,{certificate : certif}).then((response) =>{
-                console.log(response)
-                navigate(`/AddQuestionToExam/${response.data.data.id}`)
-            })
-            
+        console.log(createdExam)
+        await axios.post(`https://localhost:7196/api/Exam`, createdExam).then((response) => {
+            console.log(response)
+            navigate(`/AddQuestionToExam/${response.data.data.id}`)
+        })
+    }
+    // const onSelect = (selectedTopics) => {
+    //     createdExam.topics = selectedTopics
+    //     setCreatedExam({...createdExam})
+    // }
+    
 
-        console.log("certif",certif)
-        
+    const onRemove = (selectedTopics, removedTopic) =>{
+        createdExam.topics = selectedTopics.filter(item => item !== removedTopic)
+        setCreatedExam({createdExam})
+
     }
 
+
+
+
+
     const createCertificateButton = async () => {
-        console.log(certificates)
         await getCertificates();
         setShowForm(!showForm)
-        console.log('from button',certificates)
     }
 
     return (
         <div>
             <button onClick={() => createCertificateButton()}>
-                {showForm ? "Close Form":"Create New Exam"}
+                {showForm ? "Close Form" : "Create New Exam"}
             </button>
             {showForm && (
                 <Form onSubmit={handleSubmitExam}>
-                    <p>katiii</p>
+                    <Form.Select as="select" name="certificate"
+                        onChange={handleChange} required>
+                            <option value="" hidden>Please choose a certificate... </option>
+                        {certificates.map((certificate, index) =>
+                            <option key={index} value={certificate.id}>{certificate.title}</option>
+                        )}
+                    </Form.Select>
 
-                    <Form.Select as="select" name="Certificate"
-                    onChange={handleChange} required>
-                    {certificates.map((certificate, index) =>
-                        <option key={index} value={certificate.id}>{certificate.title}</option>
-                    )}
-                </Form.Select>
+
+                    {/* {pickedCert != null && 
+                    <Form.Group>
+                        <Form.Label>Topics</Form.Label>
+                        <Multiselect
+                            name='topics'
+                            options={pickedCert.topics} // Options to display in the dropdown
+                            onSelect={onSelect} // Function will trigger on select event
+                            onRemove={onRemove} // Function will trigger on remove event
+                            selectedValues={createdExam.topics}
+                            displayValue="name" // Property name to display in the dropdown options
+                            placeholder="Please select as many Topics as needed for the certificate"
+                            hidePlaceholder="true"
+                            showCheckbox="true"
+                            closeIcon="cancel"
+                            showArrow="true"
+                            isMulti={true}
+                            value={createdExam.topics}
+                        onChange={handleChange}
+                        />
+                    </Form.Group>
+                    } */}
+
+
+
+
+
+
+
+
+
+
+
                     <button type="submit">"Save Exam & Add Answers"</button>
                 </Form>
             )}
-            
+
 
 
 
@@ -124,14 +192,17 @@ function ExamList(props) {
                 </thead>
 
                 <tbody>
-                    {exams.map((exam, index) =>
-                        <tr key={index}>
-                            <td>{exam.certificate.title}</td>
-                            <td>{calculateCount(exam.questions)}</td>
-                            <td>{makeButtons(exam)}</td>
-                        </tr>
-                    )
-                    }
+                    {exams.map((exam, index) => {
+                        if (exam.certificate != null && exam != null) {
+                            return (
+                                <tr key={index}>
+                                    <td>{exam.certificate.title}</td>
+                                    <td>{calculateCount(exam.questions)}</td>
+                                    <td>{makeButtons(exam)}</td>
+                                </tr>
+                            )
+                        }
+                    })}
                 </tbody>
             </Table>
         </div>

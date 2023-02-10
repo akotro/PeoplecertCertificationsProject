@@ -97,10 +97,8 @@ namespace Assignment4Final.Controllers
             );
         }
 
-        [HttpGet(
-            "notTaken")] // all the CandidateExams the candidate has bought but not yet taken (picked by cendidateExam.Result == null)
-        public async Task<ActionResult<List<CandidateExamDto>>>
-            GetAllNotTaken() //Not Debuged all the candidate exams in Seed are Taken . Should i checke if taken by ExamDate?
+        [HttpGet("notTaken")] // all the CandidateExams the candidate has bought but not yet taken (picked by cendidateExam.Result == null)
+        public async Task<ActionResult<List<CandidateExamDto>>>GetAllNotTaken() //Not Debuged all the candidate exams in Seed are Taken . Should i checke if taken by ExamDate?
         {
             var userManager = _userManager.GetUserId(User);
             var candidate = await _candExamService.GetCandidateByUserIdAsync(

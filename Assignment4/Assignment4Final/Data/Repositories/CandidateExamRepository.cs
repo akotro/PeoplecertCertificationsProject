@@ -49,7 +49,8 @@ namespace Assignment4Final.Data.Repositories
 
         public async Task<List<CandidateExam>> GetAllCandidateExamsOfCandidateAsync(Candidate candidate)
         {
-            return await _context.CandidateExams.Where(candExam => candExam.Candidate == candidate).ToListAsync();
+            return await _context.CandidateExams.Include(candExam => candExam.Exam).ThenInclude(Exam => Exam.Certificate)
+                .Include(cE => cE.Candidate).Where(candExam => candExam.Candidate == candidate).ToListAsync();
         }
         
         public async Task<List<CandidateExam>> GetNotTakenCandidateExamsOfCandidateAsync(Candidate candidate)
