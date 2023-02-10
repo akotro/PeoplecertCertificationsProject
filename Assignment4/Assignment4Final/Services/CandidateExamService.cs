@@ -149,6 +149,7 @@ namespace Assignment4Final.Services
                         candidateExam.CandidateExamAnswers.Add(
                             new CandidateExamAnswers()
                             {
+                                Question = question,
                                 QuestionText = question.Text,
                                 CorrectOption =
                                     question.Options != null
@@ -157,7 +158,6 @@ namespace Assignment4Final.Services
                                             .FirstOrDefault()
                                             .Text
                                         : null,
-                                
                             }
                         )
                 );
