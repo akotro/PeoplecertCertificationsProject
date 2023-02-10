@@ -22,10 +22,10 @@ namespace ModelLibrary.Models.DTO.Candidates
         // [StringLength(100)]
         public string? MiddleName { get; set; }
 
-        // [StringLength(100)]
+        // [Required, StringLength(100)]
         public string? LastName { get; set; }
 
-        // [Range(typeof(DateTime), "1/1/1900", "1/1/2050")]
+        // [Required, Range(typeof(DateTime), "1/1/1900", "1/1/2050")]
         public DateTime? DateOfBirth { get; set; }
 
         // [EmailAddress]
@@ -40,10 +40,10 @@ namespace ModelLibrary.Models.DTO.Candidates
         // [StringLength(50)]
         public string? CandidateNumber { get; set; }
 
-        // [StringLength(50)]
+        // [Required, StringLength(50)]
         public string? PhotoIdNumber { get; set; }
 
-        // [Range(typeof(DateTime), "1/1/1900", "1/1/2050")]
+        // [Required, Range(typeof(DateTime), "1/1/1900", "1/1/2050")]
         public DateTime? PhotoIdIssueDate { get; set; }
 
         public GenderDto? Gender { get; set; }

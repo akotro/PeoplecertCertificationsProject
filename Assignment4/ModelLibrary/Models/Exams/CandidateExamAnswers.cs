@@ -1,4 +1,6 @@
-﻿namespace ModelLibrary.Models.Exams;
+﻿using ModelLibrary.Models.Questions;
+
+namespace ModelLibrary.Models.Exams;
 
 public class CandidateExamAnswers
 {
@@ -9,5 +11,6 @@ public class CandidateExamAnswers
     public bool? IsCorrect { get; set; }
     public bool? IsCorrectModerated { get; set; }
 
+    public Question? Question { get; set; }
     public virtual CandidateExam? CandidateExam { get; set; }
 }

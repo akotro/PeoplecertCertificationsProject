@@ -40,7 +40,7 @@ namespace Assignment4Final
 
             // Add services to the container.
             var connectionString =
-                builder.Configuration.GetConnectionString("localdb")
+                builder.Configuration.GetConnectionString("localhost")
                 ?? throw new InvalidOperationException(
                     "Connection string 'DefaultConnection' not found."
                 );
@@ -271,14 +271,6 @@ namespace Assignment4Final
             app.MapRazorPages();
 
             app.MapFallbackToFile("index.html");
-
-            //checks for all the latest migrations
-            //also creates db ifNotExists
-            using (var scope = app.Services.CreateScope())
-            {
-                var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-                db.Database.Migrate();
-            }
 
             // AGkiz - Seeds dummy data to DB
             DbSeed.Seed(app).Wait();
