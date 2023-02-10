@@ -244,7 +244,7 @@ function QuestionCreate() {
         <Container>
             <Stack gap={3}>
                 <Row>
-                    <Badge bg="primary">
+                    <Badge pill bg="primary">
                         <h4>Question's Topic</h4>
                     </Badge>
                 </Row>
@@ -283,22 +283,22 @@ function QuestionCreate() {
                     <hr /> 
                     <Stack gap={5}>
                         {/*  DROPDOWN Difficulty levels */}
-                        <Row className="w-50">
-                            <Badge bg="primary">
-                                <h4>Question's Difficulty</h4>
-                            </Badge>
-                        </Row>
-                                <Row className="w-50">
+                         <Container className="">
+                                <Row className="w-50 mb-3">
+                                    <Badge pill bg="primary">
+                                        <h4>Question's Difficulty</h4>
+                                    </Badge>
+                                </Row>
+                                <Row className="w-50 mb-0">
                                     <Form.Group>
-                                            <Form.Select
-                                                as="select"
+                                            <Form.Select as="select"
                                                 name="DifficultySelect"
                                                 defaultValue={
                                                     question.difficultyLevelId
-                                                } //1.triggers the controlled component error
+                                                }                                                          //1.triggers the controlled component error
                                                 // onChange={ handleChange  }    //2.stops the controlled component error
-                                                //3. the combination of 3 and 4 triggers again the error
-                                                //  required                                    //more study on This is required
+                                                                                                        //3. the combination of 3 and 4 triggers again the error
+                                                                                                       //more study on This is required
                                             >
                                                 <option value="" hidden>
                                                     Please choose a level{" "}
@@ -322,7 +322,9 @@ function QuestionCreate() {
                                             </Form.Select>
                                     </Form.Group>
                                 </Row>
-                        <hr />
+                         </Container>
+                      
+                        {/* <hr /> */}
                         <Row>
                             {/* Questions text */}
                             <Col md={10}>
@@ -470,9 +472,13 @@ function QuestionCreate() {
                             </Col>
                         </Row>
                         <Row className="d-flex w-100">
+                            <Badge pill >
+
                             <Link to={`/questions/`}>
-                                <Button variant="primary" className="w-100">Go Back</Button>
+                                <Button  variant="primary" className="w-100">Go Back</Button>
                             </Link>
+
+                            </Badge>
                         </Row>
                     </Stack>
                 </Form>
