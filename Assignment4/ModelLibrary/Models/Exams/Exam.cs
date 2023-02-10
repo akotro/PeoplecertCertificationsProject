@@ -7,6 +7,8 @@ namespace ModelLibrary.Models.Exams;
 public class Exam
 {
     public int Id { get; set; }
+    public int PassMark { get; set; }
+    public int MaxMark { get; set; }
 
     public virtual Certificate? Certificate { get; set; }
     public virtual ICollection<Question>? Questions { get; set; }

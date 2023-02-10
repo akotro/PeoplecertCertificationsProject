@@ -5,7 +5,6 @@ namespace ModelLibrary.Models.Certificates;
 public class Topic
 {
     public int Id { get; set; }
-    public int? MaxMarks { get; set; }
     public string? Name { get; set; }
     public virtual ICollection<Certificate>? Certificates { get; set; }
 

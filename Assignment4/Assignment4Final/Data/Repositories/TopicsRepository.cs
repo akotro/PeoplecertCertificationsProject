@@ -47,7 +47,6 @@ public class TopicsRepository : ITopicsRepository
         if (dbTopic != null)
         {
             dbTopic.Name = topic.Name;
-            dbTopic.MaxMarks = topic.MaxMarks;
             dbTopic.Certificates = topic.Certificates;
             dbTopic.Questions = topic.Questions;
 
