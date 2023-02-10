@@ -130,12 +130,12 @@ const AppRoutes = [
     element: <MarkExam />
   },
   {
-    path: '/ExamQuestionList',
+    path: '/ExamQuestionList/:id',
     // requireAuth: true,
     element: <ExamQuestionList />
   },
   {
-    path: '/AddQuestionToExam',
+    path: '/AddQuestionToExam/:id',
     element: <AddQuestionToExam />
   },
   //this needs to stay as the last path
