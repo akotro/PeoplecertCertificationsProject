@@ -187,6 +187,9 @@ namespace Assignment4Final
 
             builder.Services.AddScoped<IMarkersRepository, MarkersRepository>();
             builder.Services.AddScoped<MarkersService>();
+
+            builder.Services.AddScoped<IAccountsRepository, AccountsRepository>();
+            builder.Services.AddScoped<AccountsService>();
             // ---------------------------------------------------------------------------------------
 
             // TODO:(akotro) This should be extracted into a helper class
