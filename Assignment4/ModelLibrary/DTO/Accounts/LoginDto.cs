@@ -15,5 +15,8 @@ public class LoginDto
     public string Password { get; set; }
 
     [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+    public string? NewPassword { get; set; }
+
+    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
     public bool? IsCandidate { get; set; }
 }
