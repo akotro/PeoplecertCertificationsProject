@@ -151,6 +151,8 @@ public class MarkersRepository : IMarkersRepository
                 .AsSplitQuery()
                 .Include(ce => ce.Candidate)
                 .Include(ce => ce.CandidateExamAnswers)
+                .ThenInclude(ce => ce.Question)
+                .ThenInclude(q => q.Options)
                 .Include(ce => ce.Exam)
                 .ThenInclude(e => e.Certificate)
                 .Include(ce => ce.Exam)

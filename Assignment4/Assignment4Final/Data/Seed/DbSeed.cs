@@ -23,6 +23,9 @@ namespace Assignment4Final.Data.Seed
                 try
                 {
                     var db = service.GetRequiredService<ApplicationDbContext>();
+
+                    await Migrate(db);
+
                     SeedStandaloneTables(db);
                     SeedRelatedTables(db);
                     SeedJoiningTables(db);
@@ -35,6 +38,33 @@ namespace Assignment4Final.Data.Seed
                 {
                     var logger = service.GetRequiredService<ILogger<Program>>();
                     logger.LogError(ex, "An error occurred creating the DB.");
+                }
+            }
+        }
+
+        public static async Task Migrate(ApplicationDbContext db)
+        {
+            try
+            {
+                Console.WriteLine("Attempting to apply migration...");
+                await db.Database.MigrateAsync();
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("ERROR: Tried to apply migration but failed.");
+                Console.WriteLine("Do you want to continue to drop db and update? (y/n)");
+
+                string input = Console.ReadLine();
+                if (input.Equals("y", StringComparison.OrdinalIgnoreCase))
+                {
+                    Console.WriteLine("Dropping the database and migrating...");
+                    await db.Database.EnsureDeletedAsync();
+                    await db.Database.MigrateAsync();
+                }
+                else if (input.Equals("n", StringComparison.OrdinalIgnoreCase))
+                {
+                    Console.WriteLine("Exiting program...");
+                    Environment.Exit(0);
                 }
             }
         }
@@ -529,18 +559,23 @@ namespace Assignment4Final.Data.Seed
             {
                 var candiExamAnsFaker = new Faker<CandidateExamAnswers>()
                     .RuleFor(
-                        c => c.QuestionText,
-                        f => f.PickRandom(db.Questions.ToList()).Text.ToString()
+                        c => c.Question,
+                        f => f.PickRandom(db.Questions.Include(q => q.Options).ToList())
                     )
+                    .RuleFor(c => c.QuestionText, (f, c) => c.Question.Text)
                     .RuleFor(
                         c => c.ChosenOption,
-                        f => f.PickRandom(db.Options.ToList()).Text.ToString()
+                        (f, c) => f.PickRandom(c.Question.Options.ToList()).Text.ToString()
                     )
                     .RuleFor(
                         c => c.CorrectOption,
-                        f => f.PickRandom(db.Options.ToList()).Text.ToString()
+                        (f, c) => c.Question.Options.FirstOrDefault(o => o.Correct).Text.ToString()
                     )
-                    .RuleFor(c => c.IsCorrect, f => f.Random.Bool());
+                    .RuleFor(
+                        c => c.IsCorrect,
+                        (f, c) =>
+                            c.Question.Options.FirstOrDefault(o => o.Text == c.ChosenOption).Correct
+                    );
 
                 var candiExamFaker = new Faker<CandidateExam>()
                     .RuleFor(c => c.ExamDate, f => f.Date.Past(2, DateTime.Now))
@@ -562,7 +597,8 @@ namespace Assignment4Final.Data.Seed
                     .RuleFor(
                         c => c.MarkerAssignedDate,
                         f => f.Date.Between(DateTime.Now, f.Date.Soon(7))
-                    ).RuleFor(u => u.Voucher, f => f.Random.AlphaNumeric(10));
+                    )
+                    .RuleFor(u => u.Voucher, f => f.Random.AlphaNumeric(10));
 
                 // .RuleFor(
                 //     c => c.MarkingDate,
@@ -618,7 +654,7 @@ namespace Assignment4Final.Data.Seed
 
         public static void SeedCalculatedFields(ApplicationDbContext db)
         {
-            //calculating MaxMark and Passing mark fo each Certificate 
+            //calculating MaxMark and Passing mark fo each Certificate
             var passMark = 65;
             foreach (var cert in db.Certificates)
             {
@@ -637,12 +673,12 @@ namespace Assignment4Final.Data.Seed
 
             db.SaveChanges();
 
-            foreach (var candExam in db.CandidateExams)
+            foreach (var candExam in db.CandidateExams.Include(ce => ce.CandidateExamAnswers))
             {
                 if (candExam.MaxScore == null)
                 {
                     candExam.MaxScore = candExam.Exam.Certificate.MaxMark;
-                };
+                }
 
                 if (candExam.CandidateScore == null)
                 {
@@ -656,10 +692,11 @@ namespace Assignment4Final.Data.Seed
                                 candExam.CandidateScore = candExam.CandidateScore + 1;
                             }
                         }
-
                     }
-                };
-                candExam.PercentScore = ((decimal)candExam.CandidateScore / (decimal)candExam.MaxScore) * 100;
+                }
+                ;
+                candExam.PercentScore =
+                    ((decimal)candExam.CandidateScore / (decimal)candExam.MaxScore) * 100;
                 candExam.Result = candExam.PercentScore > 65 ? true : false;
             }
             db.SaveChanges();

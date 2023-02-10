@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Assignment4Final.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230209160935_InitialCreate")]
+    [Migration("20230210084951_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -703,12 +703,17 @@ namespace Assignment4Final.Data.Migrations
                     b.Property<bool?>("IsCorrectModerated")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("QuestionId")
+                        .HasColumnType("int");
+
                     b.Property<string>("QuestionText")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CandidateExamId");
+
+                    b.HasIndex("QuestionId");
 
                     b.ToTable("CandidateExamAnswers");
                 });
@@ -941,7 +946,13 @@ namespace Assignment4Final.Data.Migrations
                         .WithMany("CandidateExamAnswers")
                         .HasForeignKey("CandidateExamId");
 
+                    b.HasOne("ModelLibrary.Models.Questions.Question", "Question")
+                        .WithMany()
+                        .HasForeignKey("QuestionId");
+
                     b.Navigation("CandidateExam");
+
+                    b.Navigation("Question");
                 });
 
             modelBuilder.Entity("ModelLibrary.Models.Exams.Exam", b =>

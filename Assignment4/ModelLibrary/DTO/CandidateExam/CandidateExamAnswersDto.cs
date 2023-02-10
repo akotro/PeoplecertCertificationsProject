@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using ModelLibrary.Models.DTO.Questions;
+using Newtonsoft.Json;
 
 namespace ModelLibrary.Models.DTO.CandidateExam;
 
@@ -10,8 +11,10 @@ public class CandidateExamAnswersDto
     public string? ChosenOption { get; set; }
     public bool? IsCorrect { get; set; }
     public bool? IsCorrectModerated { get; set; }
+
+    [JsonProperty(ReferenceLoopHandling = ReferenceLoopHandling.Ignore)]
+    public QuestionDto? Question { get; set; }
+
     [JsonProperty(ReferenceLoopHandling = ReferenceLoopHandling.Ignore)]
     public CandidateExamDto? CandidateExam { get; set; }
-
-    public int? QuestionId { get; set; }
 }

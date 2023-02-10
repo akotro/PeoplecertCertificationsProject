@@ -561,6 +561,7 @@ namespace Assignment4Final.Data.Migrations
                     ChosenOption = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsCorrect = table.Column<bool>(type: "bit", nullable: true),
                     IsCorrectModerated = table.Column<bool>(type: "bit", nullable: true),
+                    QuestionId = table.Column<int>(type: "int", nullable: true),
                     CandidateExamId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -570,6 +571,11 @@ namespace Assignment4Final.Data.Migrations
                         name: "FK_CandidateExamAnswers_CandidateExams_CandidateExamId",
                         column: x => x.CandidateExamId,
                         principalTable: "CandidateExams",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_CandidateExamAnswers_Questions_QuestionId",
+                        column: x => x.QuestionId,
+                        principalTable: "Questions",
                         principalColumn: "Id");
                 });
 
@@ -626,6 +632,11 @@ namespace Assignment4Final.Data.Migrations
                 name: "IX_CandidateExamAnswers_CandidateExamId",
                 table: "CandidateExamAnswers",
                 column: "CandidateExamId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CandidateExamAnswers_QuestionId",
+                table: "CandidateExamAnswers",
+                column: "QuestionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CandidateExams_CandidateAppUserId",
