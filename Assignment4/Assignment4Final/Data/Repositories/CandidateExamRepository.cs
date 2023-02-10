@@ -64,8 +64,10 @@ namespace Assignment4Final.Data.Repositories
 
         public async Task<CandidateExam?> GetCandidateExamByIdAsync(int id)
         {
-            return await _context.CandidateExams.
-                Include(candExam => candExam.CandidateExamAnswers)
+            return await _context.CandidateExams
+                .Include(candExam => candExam.CandidateExamAnswers)
+                .Include(candExam => candExam.Exam)
+                .ThenInclude(cert => cert.Certificate)
                 .Include(candExam => candExam.Exam)
                 .ThenInclude(exam => exam.Questions)
                 .ThenInclude(question => question.Options)

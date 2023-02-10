@@ -26,6 +26,7 @@ import AddQuestionToExam from './components/Exam_CRUD/AddQuestionToExam';
 import MarkerList from "./components/Marker/MarkerList";
 import MarkExam from "./components/Marker/MarkerMarkExam";
 import AssignToMarker from "./components/Admin/AssingToMarker";
+import ExamResults from "./components/Examination/Results";
 
 const AppRoutes = [
   {
@@ -137,6 +138,10 @@ const AppRoutes = [
   {
     path: '/AddQuestionToExam/:id',
     element: <AddQuestionToExam />
+  },
+  {
+    path: '/candidate/ExamResults',
+    element: <ExamResults />
   },
   //this needs to stay as the last path
   {
