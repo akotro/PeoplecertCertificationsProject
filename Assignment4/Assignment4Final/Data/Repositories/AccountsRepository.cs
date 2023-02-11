@@ -272,6 +272,50 @@ public class AccountsRepository : IAccountsRepository
             );
         }
 
+        if (user.Candidate != null)
+        {
+            var candidate = await _context.Candidates
+                .AsSplitQuery()
+                .Include(a => a.Gender)
+                .Include(a => a.Language)
+                .Include(a => a.PhotoIdType)
+                .Include(a => a.Address)
+                .ThenInclude(a => a.Country)
+                .Include(a => a.CandidateExams)
+                .FirstOrDefaultAsync(c => c.AppUserId == user.Candidate.AppUserId);
+            if (candidate != null)
+            {
+                _context.Candidates.Remove(candidate);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        if (user.Marker != null)
+        {
+            var marker = await _context.Markers
+                .Include(m => m.CandidateExams)
+                .FirstOrDefaultAsync(q => q.AppUserId == user.Marker.AppUserId);
+
+            if (marker != null)
+            {
+                // NOTE:(akotro) Check if marker has assigned CandidateExams that have not been moderated
+                if (marker.CandidateExams?.Any(ce => ce.IsModerated != true) == true)
+                {
+                    return IdentityResult.Failed(
+                        new IdentityError
+                        {
+                            Code = "Marker",
+                            Description =
+                                $"Marker with email {email} has assigned candidate exams that have not been moderated."
+                        }
+                    );
+                }
+
+                _context.Markers.Remove(marker);
+                await _context.SaveChangesAsync();
+            }
+        }
+
         return await _userManager.DeleteAsync(user);
     }
 }
