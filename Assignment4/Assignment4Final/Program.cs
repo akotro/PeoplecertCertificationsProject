@@ -22,6 +22,7 @@ using System.Text;
 using System.IdentityModel.Tokens.Jwt;
 using ModelLibrary.Models.DTO.Accounts;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 
 namespace Assignment4Final
 {
@@ -103,6 +104,7 @@ namespace Assignment4Final
                 .AddNewtonsoftJson(options =>
                 {
                     options.SerializerSettings.Converters.Add(new StringEnumConverter());
+                    options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
                 });
 
             // NOTE:(akotro) Add Swagger

@@ -33,8 +33,7 @@ export default function Examination(props) {
     }
 
     const saveCandidateExam = () => {
-        axios.put(`https://localhost:7196/api/CandidateExam/EndExam/${candExamId}`) 
-        .then((response) => {
+        axios.put(`https://localhost:7196/api/CandidateExam/EndExam/${candExamId}`).then((response) => {
             //console.log(response.data);
             navigate(`/candidate/ExamResults`, { state: { data: response.data }});
         })
@@ -120,7 +119,7 @@ export default function Examination(props) {
             </div>
             <hr></hr>
 
-            <button onClick={saveCandidateExam}>See Results</button>
+            <button onClick={saveCandidateExam}>Submit</button>
 
         </div>
     );

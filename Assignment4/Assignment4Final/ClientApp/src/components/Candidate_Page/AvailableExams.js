@@ -1,10 +1,11 @@
 ﻿import React, { useEffect, useState } from "react";
-import { ListGroup, ListGroupItem, Button, Table, Row, Stack, Form } from 'react-bootstrap';
+import { ListGroup, ListGroupItem, Button, Table, Row, Stack, Form, Modal } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { withRouter } from './../Common/with-router';
 import { BrowserRouter, Route, useParams } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { DatePicker, Space } from 'antd';
 
 function AvailableExams(props) {
 
@@ -12,6 +13,7 @@ function AvailableExams(props) {
     const [exams, setExams] = useState([]);
     const [takenExams, setTakenExams] = useState([]);
     const [user, setUser] = useState();
+    const [bookExam, setBookExam] = useState();
     let navigate = useNavigate();
 
     useEffect(() => {
@@ -20,9 +22,9 @@ function AvailableExams(props) {
 
             setExams([...response.data.filter(exam => exam.result === null)])
             setTakenExams([...response.data.filter(exam => exam.result !== null)])
-            console.log(response.data);
-            console.log(...response.data.filter(exam => exam.result === null));
-            console.log(...response.data.filter(exam => exam.result !== null));
+            // console.log(response.data);
+            // console.log(...response.data.filter(exam => exam.result === null));
+            // console.log(...response.data.filter(exam => exam.result !== null));
         }).catch(function (error) {
             console.log(error);
         });
@@ -31,34 +33,58 @@ function AvailableExams(props) {
         }
     }, []);
 
-    const handleChange = (event) => {
-        const { name, value, type } = event.target;
+    const [showModal, setShowModal] = useState(false);
+    const [selectedDate, setSelectedDate] = useState(null);
 
-        console.log("name",name);
-        console.log("type", type);
-        console.log("value", value);
-        console.log(exams.examDate)
-
-
-
+    const saveDate = () => {
+        setShowModal(false);
+        // exams.map(exam=>exam.id === bookExam.id)
+        setExams(exams.map(exam => {
+            if (exam.id === bookExam.id) {
+                return bookExam
+            }
+            return exam;
+        }));
     }
 
-    const convertDateToString = (date) => {
-        //console.log(date);
-        let kati = new Date(date);
-    
-        let formattedDate = kati.toISOString().substr(0, 10);
-    
-        return formattedDate;
-      };
+    const convertStringToDate = (dateString) => {
+        //intial format
+        //2015-07-15
+        const date = new Date(dateString);
+        //Wed Jul 15 2015 00:00:00 GMT-0700 (Pacific Daylight Time)
+        const finalDateString = date.toISOString(date);
+        //2015-07-15T00:00:00.000Z
+
+        // console.log(finalDateString); // "1930-07-17T00:00:00.000Z"
+        return finalDateString;
+    };
+
+    const handleChange = (event) => {
+        // console.log("handlechnage");
+        const { name, value, type } = event.target;
+        // console.log(name);
+        //console.log(type);
+        // console.log(value);
+        setSelectedDate(value);
+        setBookExam({ ...bookExam, [name]: convertStringToDate(value) })
+    }
+    const handleOpen = (CandExamId) => {
+        setShowModal(true);
+        setSelectedDate(new Date());
+        setBookExam({ ...exams.find(exam => exam.id === CandExamId) })
+        // console.log(CandExamId);
+    };
+
+    const handleClose = () => {
+        setShowModal(false);
+    };
 
     const makebuttons = (CandExam) => {
-
         if (CandExam.result !== null) {
             return (
                 <td>
                     <div className='d-flex '>
-                        <Button variant="success" >View Result</Button>
+                        <Button variant="success" onClick={() => showResultsOfExam(CandExam)}>View Result</Button>
                     </div>
                 </td>
             );
@@ -66,39 +92,70 @@ function AvailableExams(props) {
             return (
                 <td>
                     <div className='d-flex gap-2'>
-                        <Button onClick={() => takeExam(CandExam.id)}>Take exam now!</Button>
-
-                        <Form.Group >
-                                    <Form.Control type="date"
-                                        name="examDate"
-                                        value={convertDateToString(CandExam.examDate)}
-                                        onChange={handleChange} />
-                                </Form.Group>
-                                
-                        <Button>Book Exam</Button>
+                        <Button onClick={() => takeExam(CandExam)}>Take Exam</Button>
+                        <Button onClick={() => handleOpen(CandExam.id)}>Book Date</Button>
                     </div>
                 </td>
             );
         }
-
-
     };
 
-    const takeExam = (id) => {
-        console.log('Id of candidateExam:' + id);
-        navigate(`/candidate/Examination/${id}`);
+    const showResultsOfExam = (CandExam) => {
+        // console.log(CandExam)
+        navigate(`/candidate/ExamResults`, {
+            state: {
+                data: CandExam,
+                from: '/candidate/availableexams'
+            }
+        });
+    }
+
+    const takeExam = (CandExam) => {
+        const currentDate = new Date();
+        const examDate = new Date(CandExam.examDate);
+
+        if (examDate.getTime() < currentDate.getTime()) {
+            alert("The exam date has passed.");
+            return;
+        }
+
+        navigate(`/candidate/Examination/${CandExam.id}`);
     };
 
     const makeDate = (examDate) => {
+        if (!examDate) {
+            return "";
+        }
+
         let date = new Date(examDate);
         let options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
 
-        return date.toLocaleDateString('en-US');
+        if (date && date.toString() !== "Invalid Date") {
+            return date.toLocaleDateString('en-US', options);
+        } else {
+            return "";
+        }
     }
-    const newLocal = "success";
+
     return (
         <div className='container-fluid'>
             <div>
+                <Modal show={showModal} onHide={handleClose}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Choose a date for your Exam</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body><Form.Group >
+                        <Form.Label>Date of Birth</Form.Label>
+                        <Form.Control type="date"
+                            name="examDate"
+                            value={selectedDate}
+                            onChange={handleChange} />
+                    </Form.Group></Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={handleClose}>Close</Button>
+                        <Button variant="primary" onClick={() => saveDate()}>Save Changes</Button>
+                    </Modal.Footer>
+                </Modal>
 
                 <h1>available exams</h1>
                 <Table striped borderless hover>
@@ -106,6 +163,7 @@ function AvailableExams(props) {
                         <tr>
                             <th>Title</th>
                             <th>Voucher</th>
+                            <th>Exam Date</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -114,11 +172,11 @@ function AvailableExams(props) {
                             <tr key={index}>
                                 <td>{CandidateExam.exam.certificate.title}</td>
                                 <td>{CandidateExam.exam.certificate.title}</td>
+                                <td>{makeDate(CandidateExam.examDate)}</td>
                                 <td>{CandidateExam.Voucher}</td>
+                                {/* <td>{CandidateExam.id}</td> */}
                                 <td>
                                     {makebuttons(CandidateExam)}
-
-                                    {/* <Button variant="success" onClick={() => takeExam(CandidateExam.id)} >Take Exam</Button> */}
                                 </td>
                             </tr>
                         ))}
@@ -144,7 +202,6 @@ function AvailableExams(props) {
                                 <td>{CandidateExam.percentScore}&nbsp;%</td>
                                 <td>
                                     {makebuttons(CandidateExam)}
-                                    {/* <Button variant={newLocal} onClick={() => takeExam(CandidateExam.id)} >Take Exam</Button> */}
                                 </td>
                             </tr>
                         ))}

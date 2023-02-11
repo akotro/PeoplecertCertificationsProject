@@ -133,26 +133,27 @@ export default function CandidateEdit(props) {
     const handleSubmit = async (event) => {
         event.preventDefault();
         //for a user who is not a candidate.
-        if (params.id === undefined) {
-            await axios.post(`https://localhost:7196/api/Candidate`, candidate)
-                .then(function (response) {
-                    console.log(candidate)
-                    console.log(response);
-                })
-                .catch(function (error) {
-                    console.log(candidate)
-                    console.log(error);
-                });
-        } else {
-            await axios.put(`https://localhost:7196/api/Candidate/${params.id}`, candidate)
-                .then(function (response) {
-                    console.log(response);
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-        }
-
+            if (params.id === undefined) {
+                await axios.post(`https://localhost:7196/api/Candidate`, candidate)
+                    .then(function (response) {
+                        console.log(candidate)
+                        console.log(response);
+                    })
+                    .catch(function (error) {
+                        console.log(candidate)
+                        console.log(error);
+                    });
+            } else {
+                await axios.put(`https://localhost:7196/api/Candidate/${params.id}`, candidate)
+                    .then(function (response) {
+                        console.log(response);
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                        console.log(error.response.data.errors.FirstName[0]);        
+                    });
+            }
+        
         navigate('/candidate')
         // console.log("THIS IS MINE ", candidate);
     }
