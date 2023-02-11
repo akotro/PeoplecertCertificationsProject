@@ -34,17 +34,16 @@ public class AccountsService
 
     public async Task<List<UserDto>> GetListUsers()
     {
-        return _mapper.Map<List<UserDto>>(await _repository.ListUsers());
+        var userDtos = _mapper.Map<List<UserDto>>(await _repository.ListUsers());
+        userDtos.ForEach(u => u.Role = _repository.GetUserRole(u.Email));
+        return userDtos;
     }
 
     public async Task<UserDto> GetUser(string email)
     {
         var user = await _repository.GetAppUser(email);
         var userDto = _mapper.Map<UserDto>(user);
-        userDto.Role = _repository
-            .GetClaims(user)
-            .Result?.FirstOrDefault(c => c.Type == "role")
-            ?.Value;
+        userDto.Role = _repository.GetUserRole(email);
         return userDto;
     }
 
@@ -136,11 +135,7 @@ public class AccountsService
     public async Task<IdentityResult> Update(string email, UserDto userDto)
     {
         var user = _mapper.Map<AppUser>(userDto);
-        var updateResult = await _repository.Update(
-            email,
-            user,
-            userDto.Credentials != null ? userDto.Credentials : null
-        );
+        var updateResult = await _repository.Update(email, user, userDto);
         return updateResult;
     }
 
