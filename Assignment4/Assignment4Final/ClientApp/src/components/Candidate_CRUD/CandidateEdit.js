@@ -37,65 +37,65 @@ export default function CandidateEdit(props) {
         address: []
     });
 
-  const fetchData = () => {
-    if (params.id !== undefined) {
-      axios
-        .get(`https://localhost:7196/api/Candidate/${params.id}`)
-        .then((response) => {
-          setCandidate(response.data.data);
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-    } else {
-      axios
-        .get(`https://localhost:7196/api/accounts/listUsers`)
-        .then((response) => {
-          setAllusers(response.data);
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-    }
+    const fetchData = () => {
+        if (params.id !== undefined) {
+            axios
+                .get(`https://localhost:7196/api/Candidate/${params.id}`)
+                .then((response) => {
+                    setCandidate(response.data.data);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        } else {
+            axios
+                .get(`https://localhost:7196/api/accounts/listUsers`)
+                .then((response) => {
+                    setAllusers(response.data);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        }
 
-    axios
-      .get(`https://localhost:7196/api/Genders`)
-      .then((response) => {
-        setGenders(response.data.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+        axios
+            .get(`https://localhost:7196/api/Genders`)
+            .then((response) => {
+                setGenders(response.data.data);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
 
-    axios
-      .get(`https://localhost:7196/api/Languages`)
-      .then((response) => {
-        setLanguages(response.data.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+        axios
+            .get(`https://localhost:7196/api/Languages`)
+            .then((response) => {
+                setLanguages(response.data.data);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
 
-    axios
-      .get(`https://localhost:7196/api/PhotoIdTypes`)
-      .then((response) => {
-        setPhotoIdTypes(response.data.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+        axios
+            .get(`https://localhost:7196/api/PhotoIdTypes`)
+            .then((response) => {
+                setPhotoIdTypes(response.data.data);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
 
-    axios
-      .get(`https://localhost:7196/api/Countries`)
-      .then((response) => {
-        setCountries(response.data.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
+        axios
+            .get(`https://localhost:7196/api/Countries`)
+            .then((response) => {
+                setCountries(response.data.data);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    };
 
-    
+
 
     const getId = () => {
         if (claims.length > 0) {
@@ -133,26 +133,26 @@ export default function CandidateEdit(props) {
     const handleSubmit = async (event) => {
         event.preventDefault();
         //for a user who is not a candidate.
-            if (params.id === undefined) {
-                await axios.post(`https://localhost:7196/api/Candidate`, candidate)
-                    .then(function (response) {
-                        console.log(candidate)
-                        console.log(response);
-                    })
-                    .catch(function (error) {
-                        console.log(candidate)
-                        console.log(error);
-                    });
-            } else {
-                await axios.put(`https://localhost:7196/api/Candidate/${params.id}`, candidate)
-                    .then(function (response) {
-                        console.log(response);
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    });
-            }
-        
+        if (params.id === undefined) {
+            await axios.post(`https://localhost:7196/api/Candidate`, candidate)
+                .then(function (response) {
+                    console.log(candidate)
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(candidate)
+                    console.log(error);
+                });
+        } else {
+            await axios.put(`https://localhost:7196/api/Candidate/${params.id}`, candidate)
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        }
+
         navigate('/candidate')
         // console.log("THIS IS MINE ", candidate);
     }
@@ -211,42 +211,42 @@ export default function CandidateEdit(props) {
         }
     };
 
-  const addAddress = () => {
-    setCandidate({
-      ...candidate,
-      address: [
-        ...candidate.address,
-        { id: 0, address1: "", address2: "", city: "", state: "", country: {} },
-      ],
-    });
-  };
+    const addAddress = () => {
+        setCandidate({
+            ...candidate,
+            address: [
+                ...candidate.address,
+                { id: 0, address1: "", address2: "", city: "", state: "", country: {} },
+            ],
+        });
+    };
 
-  const removeAddress = (removeIndex) => {
-    const updatedAddress = [...candidate.address];
-    updatedAddress.splice(removeIndex, 1);
-    console.log(updatedAddress);
-    setCandidate({ ...candidate, address: updatedAddress });
-  };
-  const convertStringToDate = (dateString) => {
-    //intial format
-    //2015-07-15
-    const date = new Date(dateString);
-    //Wed Jul 15 2015 00:00:00 GMT-0700 (Pacific Daylight Time)
-    const finalDateString = date.toISOString(date);
-    //2015-07-15T00:00:00.000Z
+    const removeAddress = (removeIndex) => {
+        const updatedAddress = [...candidate.address];
+        updatedAddress.splice(removeIndex, 1);
+        console.log(updatedAddress);
+        setCandidate({ ...candidate, address: updatedAddress });
+    };
+    const convertStringToDate = (dateString) => {
+        //intial format
+        //2015-07-15
+        const date = new Date(dateString);
+        //Wed Jul 15 2015 00:00:00 GMT-0700 (Pacific Daylight Time)
+        const finalDateString = date.toISOString(date);
+        //2015-07-15T00:00:00.000Z
 
-    console.log(finalDateString); // "1930-07-17T00:00:00.000Z"
-    return finalDateString;
-  };
+        console.log(finalDateString); // "1930-07-17T00:00:00.000Z"
+        return finalDateString;
+    };
 
-  const convertDateToString = (date) => {
-    //console.log(date);
-    let kati = new Date(date);
+    const convertDateToString = (date) => {
+        //console.log(date);
+        let kati = new Date(date);
 
-    let formattedDate = kati.toISOString().substr(0, 10);
+        let formattedDate = kati.toISOString().substr(0, 10);
 
-    return formattedDate;
-  };
+        return formattedDate;
+    };
 
     return (
         <div>

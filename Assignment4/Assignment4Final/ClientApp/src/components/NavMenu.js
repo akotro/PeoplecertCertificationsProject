@@ -50,6 +50,9 @@ function NavMenu() {
                                         <NavLink tag={Link} className="text-dark" to="/questions">Questions</NavLink>
                                     </NavItem>
                                     <NavItem>
+                                        <NavLink tag={Link} className="text-dark" to="/users">USERS</NavLink>
+                                    </NavItem>
+                                    <NavItem>
                                         <NavLink tag={Link} className="text-dark" to="/candidate">CandidatesCrud</NavLink>
                                     </NavItem>
                                 </>}
