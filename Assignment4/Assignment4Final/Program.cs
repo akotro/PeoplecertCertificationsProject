@@ -41,7 +41,9 @@ namespace Assignment4Final
 
             // Add services to the container.
             var connectionString =
+
                 builder.Configuration.GetConnectionString("localhost")
+
                 ?? throw new InvalidOperationException(
                     "Connection string 'DefaultConnection' not found."
                 );
