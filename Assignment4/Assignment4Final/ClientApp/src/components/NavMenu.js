@@ -59,6 +59,9 @@ function NavMenu() {
                                         <NavItem>
                                             <NavLink tag={Link} className="text-dark" to="/questions/create">Add Question</NavLink>
                                         </NavItem>
+                                        <NavItem>
+                                            <NavLink tag={Link} className="text-dark" to="/ExamsList">Examinations List</NavLink>
+                                        </NavItem>
                                     </NavDropdown>
 
                                     <NavDropdown title="User Management">
@@ -70,12 +73,6 @@ function NavMenu() {
                                         </NavItem>
                                         <NavItem>
                                             <NavLink tag={Link} className="text-dark" to="/users">Add User</NavLink>
-                                        </NavItem>
-                                    </NavDropdown>
-
-                                    <NavDropdown title="Examination Actions">
-                                        <NavItem>
-                                            <NavLink tag={Link} className="text-dark" to="/ExamsList">Examinations List</NavLink>
                                         </NavItem>
                                     </NavDropdown>
                                 </>}
