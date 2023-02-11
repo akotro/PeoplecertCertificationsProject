@@ -2,8 +2,8 @@ import { useNavigate, Link, useLocation } from "react-router-dom";
 import React, { useEffect, useState, useContext } from "react";
 import axios from 'axios';
 import parse from 'html-react-parser';
-import { Col, Row, Stack, Button, Table} from "react-bootstrap";
-import {AiOutlineCheck,AiOutlineClose} from "react-icons/ai";
+import { Col, Row, Stack, Button, Table } from "react-bootstrap";
+import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai";
 
 function MarkExam(props) {
 
@@ -52,7 +52,7 @@ function MarkExam(props) {
         console.log(exam)
         // setExam(exam)
     }
-//--------------------------------------------------//filters the text from the raw html
+    //--------------------------------------------------//filters the text from the raw html
     function Replace(temp) {
         return (
             <td
@@ -62,13 +62,13 @@ function MarkExam(props) {
             ></td>
         )
     }
-    
+
     function ReplaceV2(temp) {
         return (
             <p>{parse(temp)}</p>
         )
     }
- //--------------------------------------------------
+    //--------------------------------------------------
 
     const handleSubmit = (canExamId) => {
         exam.isModerated = true;
@@ -182,31 +182,19 @@ function MarkExam(props) {
                                                             </thead>
                                                             <tbody>
                                                                 {que.question.options.map(
-                                                                    (
-                                                                        option,
-                                                                        index
-                                                                    ) => (
-                                                                        <tr
-                                                                            key={
-                                                                                index
-                                                                            }
-                                                                        >
+                                                                    (option,
+                                                                        index) => (
+                                                                        <tr key={index}>
                                                                             <td>
-                                                                                {
-                                                                                    option.id
-                                                                                }
+                                                                                {option.id}
                                                                             </td>
-                                                                            <td>
-                                                                                {ReplaceV2(
-                                                                                    option.text
-                                                                                )}
-                                                                            </td>
-                                                                            <td>
-                                                                                {option.correct ? (
-                                                                                    <AiOutlineCheck />
-                                                                                ) : (
-                                                                                    <AiOutlineClose />
-                                                                                )}
+                                                                            <td>{ReplaceV2(
+                                                                                option.text
+                                                                            )}</td>
+                                                                            <td>{option.correct ? (
+                                                                                <AiOutlineCheck />) : (
+                                                                                <AiOutlineClose />
+                                                                            )}
                                                                             </td>
                                                                         </tr>
                                                                     )
@@ -235,7 +223,7 @@ function MarkExam(props) {
                                     }
                                     disabled={
                                         exam.isModerated === true ||
-                                        role === "qualitycontrol"
+                                            role === "qualitycontrol"
                                             ? true
                                             : false
                                     }
