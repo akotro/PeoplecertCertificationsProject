@@ -4,12 +4,12 @@ namespace ModelLibrary.Models.DTO.Questions;
 
 public class OptionDto
 {
-    //[Required]
+    [Required]
     public int Id { get; set; }
 
-    //[Required]
+    [Required]
     public string Text { get; set; }
 
-    //[Required]
+    [Required]
     public bool Correct { get; set; }
 }

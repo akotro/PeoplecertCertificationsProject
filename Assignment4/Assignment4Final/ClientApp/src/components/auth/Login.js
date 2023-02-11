@@ -25,6 +25,7 @@ export default function Login() {
             res => {
                 saveToken(res.data);
                 update(getClaims());
+                setError([]);
                 navigate("/");
             }
         ).catch(function (error) {

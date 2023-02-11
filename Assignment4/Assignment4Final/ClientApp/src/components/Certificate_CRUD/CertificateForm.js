@@ -102,6 +102,7 @@ function CertificateForm(props) {
             axios.put(`https://localhost:7196/api/Certificates/${data.id}`, data)
                 .then(function (response) {
                     console.log(response);
+                    setError([]);
                     navigate("/")
                 })
                 .catch(function (error) {
@@ -112,6 +113,7 @@ function CertificateForm(props) {
             axios.post(`https://localhost:7196/api/Certificates`, data)
                 .then(function (response) {
                     console.log(response);
+                    setError([]);
                     navigate("/")
                 })
                 .catch(function (error) {

@@ -76,7 +76,7 @@ function Questions() {
                                 {Replace(item.text)}
                                 {/* //--TOPIC--// */}
                                 <td>
-                                    {item.topic === null
+                                    {item.topic === undefined || item.topic === null
                                         ? "No topic selected"
                                         : item.topic.name}
                                 </td>

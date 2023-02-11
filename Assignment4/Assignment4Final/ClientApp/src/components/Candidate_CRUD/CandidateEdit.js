@@ -135,6 +135,7 @@ export default function CandidateEdit(props) {
             try {
                 const response = await axios.post(`https://localhost:7196/api/Candidate`, candidate);
                 console.log(response);
+                setError([]);
                 navigate('/candidate');
             } catch (e) {
                 setError(e);

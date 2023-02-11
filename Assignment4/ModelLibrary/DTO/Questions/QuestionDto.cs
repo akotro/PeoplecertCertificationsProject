@@ -6,9 +6,9 @@ namespace ModelLibrary.Models.DTO.Questions;
 
 public class QuestionDto
 {
-    //[Required]
+    [Required]
     public int Id { get; set; }
-    //[Required]
+    [Required]
     public string Text { get; set; }
     public int? TopicId { get; set; }
 
