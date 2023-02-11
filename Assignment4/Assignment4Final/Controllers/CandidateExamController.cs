@@ -163,6 +163,13 @@ namespace Assignment4Final.Controllers
             return Ok(_candExamService.GetCandidateExamDto(candidateExamUpdated));
         }
 
+        [HttpGet("getCandExamById/{candExamId}")] //Api to end the exam procces
+        public async Task<ActionResult<CandidateExamDto>> GetCandidateExamById(int candExamId)
+        {
+            var candidateExam = await _candExamService.GetCandidateExamByIdAsync(candExamId);
+            return Ok(_candExamService.GetCandidateExamDto(candidateExam));
+        }
+
         //[HttpPost("QuestionsAndAnswers")]
         //public async Task<ActionResult<CandidateExamQuestionsAndAnswersDto>> GetQuestionsAndAnswers([FromBody] int id)
         //{
