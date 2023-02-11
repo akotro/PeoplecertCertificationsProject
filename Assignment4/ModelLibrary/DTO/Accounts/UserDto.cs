@@ -12,6 +12,6 @@ public class UserDto
 
     public string? Role { get; set; }
 
-    [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+    // [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
     public LoginDto? Credentials { get; set; }
 }
