@@ -8,7 +8,9 @@ namespace ModelLibrary.Models.DTO.Candidates
 {
     public class CountryDto
     {
+        // [Required]
         public int Id { get; set; }
+        // [StringLength(20)]
         public string? CountryOfResidence { get; set; }
     }
 }

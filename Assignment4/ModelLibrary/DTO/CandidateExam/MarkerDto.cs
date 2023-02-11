@@ -5,6 +5,7 @@ namespace ModelLibrary.Models.DTO.CandidateExam;
 
 public class MarkerDto
 {
+    // [Required]
     public string AppUserId { get; set; }
     public UserDto? AppUser { get; set; }
 

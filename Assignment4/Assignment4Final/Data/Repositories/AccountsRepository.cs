@@ -44,6 +44,13 @@ public class AccountsRepository : IAccountsRepository
         return await _userManager.GetClaimsAsync(user);
     }
 
+    public string? GetUserRole(string email)
+    {
+        return GetClaims(GetAppUser(email).Result).Result
+            ?.FirstOrDefault(c => c.Type == "role")
+            ?.Value;
+    }
+
     public async Task MakeAdmin(string email)
     {
         var user = await _userManager.FindByEmailAsync(email);

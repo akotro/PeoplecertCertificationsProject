@@ -5,6 +5,7 @@ namespace ModelLibrary.Models.DTO.CandidateExam;
 
 public class CandidateExamAnswersDto
 {
+    // [Required]
     public int Id { get; set; }
     public string? QuestionText { get; set; }
     public string? CorrectOption { get; set; }
