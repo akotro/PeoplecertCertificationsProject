@@ -106,14 +106,14 @@ function ExamList(props) {
         // setCertId(previd => previd = id)
         // setCreatedExam({...createdExam, [event.target.name] : event.target.value})
 
-        setCreatedExam({...createdExam, [name] : certificates.find(certificate => certificate.id == id)})
+        setCreatedExam({...createdExam, [name] : certificates.find(certificate => certificate.id == id), id:0})
         console.log(createdExam)
     }
 
     const handleSubmitExam = async event => {
         event.preventDefault();
         var certif = certificates.find(certificate => certificate.id == certId)
-        console.log(createdExam)
+        console.log('LOOK HEREE',createdExam)
         await axios.post(`https://localhost:7196/api/Exam`, createdExam).then((response) => {
             console.log(response)
             navigate(`/AddQuestionToExam/${response.data.data.id}`)
