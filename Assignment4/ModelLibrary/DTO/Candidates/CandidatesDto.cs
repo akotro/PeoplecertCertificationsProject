@@ -16,7 +16,6 @@ namespace ModelLibrary.Models.DTO.Candidates
         // [Required]
         public string AppUserId { get; set; }
 
-        [DisplayName("first name ablaoumpla")]
         [Required,
         StringLength(maximumLength: 2,MinimumLength = 1,ErrorMessage ="yioosdfsd")]
         public string? FirstName { get; set; }
