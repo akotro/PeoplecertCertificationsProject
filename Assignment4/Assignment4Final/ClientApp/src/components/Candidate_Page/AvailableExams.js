@@ -1,11 +1,11 @@
 ﻿import React, { useEffect, useState } from "react";
-import { ListGroup, ListGroupItem, Button, Table, Row, Stack, Form } from 'react-bootstrap';
+import { ListGroup, ListGroupItem, Button, Table, Row, Stack, Form, Modal } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { withRouter } from './../Common/with-router';
 import { BrowserRouter, Route, useParams } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Modal, DatePicker } from 'antd';
+import { DatePicker, Space  } from 'antd';
 
 function AvailableExams(props) {
 
@@ -13,6 +13,7 @@ function AvailableExams(props) {
     const [exams, setExams] = useState([]);
     const [takenExams, setTakenExams] = useState([]);
     const [user, setUser] = useState();
+    const [bookExam, setBookExam] = useState();
     let navigate = useNavigate();
 
     useEffect(() => {
@@ -21,9 +22,9 @@ function AvailableExams(props) {
 
             setExams([...response.data.filter(exam => exam.result === null)])
             setTakenExams([...response.data.filter(exam => exam.result !== null)])
-            console.log(response.data);
-            console.log(...response.data.filter(exam => exam.result === null));
-            console.log(...response.data.filter(exam => exam.result !== null));
+            // console.log(response.data);
+            // console.log(...response.data.filter(exam => exam.result === null));
+            // console.log(...response.data.filter(exam => exam.result !== null));
         }).catch(function (error) {
             console.log(error);
         });
@@ -35,37 +36,51 @@ function AvailableExams(props) {
     const [showModal, setShowModal] = useState(false);
     const [selectedDate, setSelectedDate] = useState(null);
 
-    const handleOk = (CandExam) => {
+    const saveDate = () => {
         setShowModal(false);
-        setSelectedDate(new Date());
-
-        console.log(CandExam);
-
-        const updatedExams = exams.map(exam => {
-            if (exam === CandExam) {
-                exam.examDate = selectedDate;
-                // return { ...exam, examDate: selectedDate };
+        // exams.map(exam=>exam.id === bookExam.id)
+        setExams(exams.map(exam=> {
+            if(exam.id === bookExam.id) {
+                return bookExam
             }
-            // return exam;
-        });
-        
-        // const exams2 = {...exams.map(exam => exam.id === CandExam.id ? exam.examDate = selectedDate : null)}
-        // console.log(exams2)
+            return exam;
+        }));
+    }
 
-        console.log(updatedExams);
-        // setExams(updatedExams);
+    const convertStringToDate = (dateString) => {
+        //intial format
+        //2015-07-15
+        const date = new Date(dateString);
+        //Wed Jul 15 2015 00:00:00 GMT-0700 (Pacific Daylight Time)
+        const finalDateString = date.toISOString(date);
+        //2015-07-15T00:00:00.000Z
+    
+        console.log(finalDateString); // "1930-07-17T00:00:00.000Z"
+        return finalDateString;
+      };
+
+    const handleChange = (event) => {
+        console.log("handlechnage");
+        const { name, value, type } = event.target;
+        console.log(name);
+        //console.log(type);
+        console.log(value);
+        setSelectedDate(value);
+        setBookExam({...bookExam, [name]: convertStringToDate(value)})
+    }
+    const handleOpen = (CandExamId) => {
+        setShowModal(true);
+        setSelectedDate(new Date());
+        setBookExam({...exams.find(exam=>exam.id === CandExamId)})
+        console.log(CandExamId);
+
     };
 
-    const handleCancel = () => {
+    const handleClose = () => {
         setShowModal(false);
-    };
-
-    const handleDateChange = (dateString) => {
-        setSelectedDate(dateString);
     };
 
     const makebuttons = (CandExam) => {
-
         if (CandExam.result !== null) {
             return (
                 <td>
@@ -79,15 +94,7 @@ function AvailableExams(props) {
                 <td>
                     <div className='d-flex gap-2'>
                         <Button onClick={() => takeExam(CandExam)}>Take Exam</Button>
-
-                        <Button onClick={() => setShowModal(true)}>Book Date</Button>
-                        <Modal
-                            title="Select a date"
-                            open={showModal}
-                            onOk={() => handleOk(CandExam)}
-                            onCancel={handleCancel} >
-                            <DatePicker onChange={handleDateChange} />
-                        </Modal>
+                        <Button onClick={() => handleOpen(CandExam.id)}>Book Date</Button>
                     </div>
                 </td>
             );
@@ -124,6 +131,22 @@ function AvailableExams(props) {
     return (
         <div className='container-fluid'>
             <div>
+                <Modal show={showModal} onHide={handleClose}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Choose a date for your Exam</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body><Form.Group >
+                            <Form.Label>Date of Birth</Form.Label>
+                            <Form.Control type="date"
+                                name="examDate"
+                                value={selectedDate}
+                                onChange={handleChange} />
+                        </Form.Group></Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={handleClose}>Close</Button>
+                        <Button variant="primary" onClick={() => saveDate()}>Save Changes</Button>
+                    </Modal.Footer>
+                </Modal>
 
                 <h1>available exams</h1>
                 <Table striped borderless hover>
@@ -142,6 +165,7 @@ function AvailableExams(props) {
                                 <td>{CandidateExam.exam.certificate.title}</td>
                                 <td>{makeDate(CandidateExam.examDate)}</td>
                                 <td>{CandidateExam.Voucher}</td>
+                                <td>{CandidateExam.id}</td>
                                 <td>
                                     {makebuttons(CandidateExam)}
                                 </td>
