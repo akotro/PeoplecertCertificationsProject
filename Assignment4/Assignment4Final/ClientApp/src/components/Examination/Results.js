@@ -29,11 +29,11 @@ export default function Results() {
                         <tr>
                             <td>{incomingData.exam.certificateTitle}</td>
                             <td>{incomingData.examDate}</td>
-                            <td>{incomingData.exam.certificate.maxMark}</td>
-                            <td>{incomingData.exam.certificate.passingMark}</td>
+                            <td>{incomingData.maxScore}</td>
+                            <td>{incomingData.exam.passMark}</td>
                             <td>{incomingData.candidateScore}</td>
-                            <td>{incomingData.percentScore0} %</td>
-                            <td>
+                            <td>{incomingData.percentScore} %</td>
+                            <td style={{ color: incomingData.result ? 'green' : 'red' }}>
                                 {incomingData.result ? "Passed" : "Failed"}
                             </td>
                         </tr>

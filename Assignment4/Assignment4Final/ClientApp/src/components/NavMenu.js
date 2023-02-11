@@ -59,7 +59,7 @@ function NavMenu() {
                                 role="candidate"
                                 authorized={<>
                                     <NavItem>
-                                        <NavLink tag={Link} className="text-dark" to="/certificate">Get started!</NavLink>
+                                        <NavLink tag={Link} className="text-dark" to="/certificate">Buy Certificate</NavLink>
                                     </NavItem>
                                     <NavItem>
                                         <NavLink tag={Link} className="text-dark" to="/candidate/availableexams">Available Exams</NavLink>
