@@ -10,7 +10,7 @@ namespace ModelLibrary.Models.DTO.Candidates
 {
     public class PhotoIdTypeDto
     {
-        // [Required]
+        [Required]
         public int Id { get; set; }
 
         [EnumDataType(typeof(PhotoIdTypeEnum))]

@@ -5,7 +5,7 @@ namespace ModelLibrary.Models.DTO.Certificates;
 
 public class DifficultyLevelDto
 {
-    // [Required]
+    [Required]
     public int Id { get; set; }
 
     [EnumDataType(typeof(DifficultyEnum))]

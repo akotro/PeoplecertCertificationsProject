@@ -8,12 +8,14 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 
 import Multiselect from 'multiselect-react-dropdown';
+import Errors from '../Common/ErrorList'
 
 function CertificateForm(props) {
 
     const params = useParams();
     const navigate = useNavigate();
 
+    const [error, setError] = useState(null);
     const [data, setData] = useState([]);
     const [allTopics, setallTopics] = useState([]);
 
@@ -100,33 +102,31 @@ function CertificateForm(props) {
             axios.put(`https://localhost:7196/api/Certificates/${data.id}`, data)
                 .then(function (response) {
                     console.log(response);
+                    setError([]);
+                    navigate("/")
                 })
                 .catch(function (error) {
                     console.log(error);
+                    setError(error);
                 });
         } else {
             axios.post(`https://localhost:7196/api/Certificates`, data)
                 .then(function (response) {
                     console.log(response);
+                    setError([]);
+                    navigate("/")
                 })
                 .catch(function (error) {
                     console.log(error);
+                    setError(error);
                 });
 
-        }
-
-        navigate("/")
-        //console.log("title = ", data.title ,
-        //    "desc = ", data.description,
-        //    "passmark = ", data.passingMark,
-        //    "maxmark = ", data.maxMark,
-        //    "cat = ", data.category,
-        //    "active = ", data.active,
-        //    "Topics = ", data.topics);
+        }        
     }
 
     return (
         <div>
+            {error && <Errors error={error} />}
             <fieldset disabled={role ? (role === "qualitycontrol") : false}>
 
                 <Form onSubmit={handleSubmit} >

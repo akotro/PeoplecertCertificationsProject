@@ -2,6 +2,7 @@ import React, {  useState, useContext } from "react";
 import { useNavigate,  } from "react-router-dom";
 import {AuthenticationContext} from '../auth/AuthenticationContext'
 import { getClaims, saveToken } from './handleJWT'
+// import Errors from '../Common/ErrorList'
 
 import { Button,  Row, Col,  Form, } from 'react-bootstrap';
 
@@ -10,14 +11,13 @@ import axios from 'axios';
 export default function Register() {
 
     const navigate = useNavigate();
-    const [errors, setErrors] = useState([]);
+    // const [errors, setErrors] = useState(null);
     const { update } = useContext(AuthenticationContext);
     const [credentials, setCredentials]= useState([]);
 
     const register = (event) => {
         event.preventDefault();
 
-        setErrors([]);
         axios.post(`https://localhost:7196/api/accounts/create`, credentials).then(
             res => {
                 saveToken(res.data);
@@ -25,8 +25,8 @@ export default function Register() {
                 navigate("/candidate/create");
             }
         ).catch(function (error) {
-            setErrors(error.response.data);
             console.log(error);
+            // setErrors(error);
         });
     }
 
@@ -37,6 +37,7 @@ export default function Register() {
 
     return (
         <div>
+            {/* {errors && <Errors error={errors} />} */}
             <h3>Register</h3>
             <Form onSubmit={register}>
                 <Row>
