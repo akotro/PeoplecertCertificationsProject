@@ -1,5 +1,3 @@
-
-
 import React, { useEffect, useState, useContext } from "react";
 
 import { ListGroup, ListGroupItem, Button, Table, Row, Col, Stack, Form, CloseButton } from 'react-bootstrap';
@@ -32,15 +30,18 @@ function UserForm() {
   const [roles, setRoles] = useState([]);
 
   const fetchData = () => {
-    axios
-    .get(`https://localhost:7196/api/accounts/getUser/${params.email}`)
-    .then((response) => {
-      setUser(response.data);
-      // console.log(response.data)
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+    if (params.email)
+    {
+      axios
+        .get(`https://localhost:7196/api/accounts/getUser/${params.email}`)
+        .then((response) => {
+          setUser(response.data);
+          // console.log(response.data)
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
     
     axios
     .get(`https://localhost:7196/api/accounts/getAllClaims`)
@@ -74,9 +75,7 @@ function UserForm() {
           ...user,
           credentials: {
             email: user.email,
-            password: password,
-            newPassword: password,
-            isCandidate: null
+            password: password
           }
         });
       }
@@ -88,9 +87,7 @@ function UserForm() {
           ...user,
           credentials: {
             email: user.email,
-            password: confirmPassword,
-            newPassword: confirmPassword,
-            isCandidate: null
+            password: confirmPassword
           }
         });
     }}
@@ -122,13 +119,25 @@ const handleSubmit = (event) => {
     console.log("I will send");
   
 
-    axios.put(`https://localhost:7196/api/accounts/update/${user.email}`, user)
-      .then((response) => {
-        console.log(response);
-      })
-      .catch(function (error) {
-      console.log(error);
-    });    
+    if (params.email)
+    {
+      axios.put(`https://localhost:7196/api/accounts/update/${user.email}`, user)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });    
+    }
+    else {
+      axios.post(`https://localhost:7196/api/accounts/create`, user)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });    
+    }
   }
 };
 

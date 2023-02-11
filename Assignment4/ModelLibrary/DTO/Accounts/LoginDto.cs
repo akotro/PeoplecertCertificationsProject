@@ -13,6 +13,5 @@ public class LoginDto
 
     // [Required]
     public string? Password { get; set; }
-    public string? NewPassword { get; set; }
     public bool? IsCandidate { get; set; }
 }
