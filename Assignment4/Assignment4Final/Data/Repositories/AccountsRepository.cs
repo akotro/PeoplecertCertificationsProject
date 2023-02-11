@@ -133,11 +133,6 @@ public class AccountsRepository : IAccountsRepository
             }
         }
 
-        if (!identityResult.Succeeded)
-        {
-            return identityResult;
-        }
-
         if (!string.IsNullOrWhiteSpace(newRole))
         {
             switch (newRole)

@@ -11,12 +11,8 @@ public class LoginDto
     [EmailAddress]
     public string Email { get; set; }
 
-    [Required]
-    public string Password { get; set; }
-
-    // [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+    // [Required]
+    public string? Password { get; set; }
     public string? NewPassword { get; set; }
-
-    // [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
     public bool? IsCandidate { get; set; }
 }
