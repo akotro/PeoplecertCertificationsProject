@@ -36,7 +36,7 @@ function CertificateList(props) {
                     console.log(res.data.data.filter(item => item.active === true))
                     setData([...res.data.data.filter(item => item.active === true)])
                     // () => { console.log(data) })
-                    console.log(res.data.data)
+                    console.log("res.data.data",res.data.data)
                 } else {
                     //if none of the above, show all products
                     setData(res.data.data)
@@ -47,21 +47,30 @@ function CertificateList(props) {
                 console.error(err);
             });
             
-            console.log(data)
+            
     }, [])
 
     const handleBuy = (id) => {
         //console.log("handle buy")
+        console.log("data in buy",data)
         const cert = data.filter(item => item.id === id)[0];
-        console.log("handle buy ",id);
-        console.log("certexam.id", cert.exams[0].id);
-        axios.post(`https://localhost:7196/api/CandidateExam/CreateCandExam/${id}`)
-            .then(res => {
-                console.log(res);
-            })
-            .catch(err => {
-                console.error(err);
-            });
+        const headers = {"Origin": "https://localhost:44473/"}
+        console.log(id)
+        axios.get(`https://localhost:7196/api/Paypal/${id}`,{headers}).then(response =>{
+            console.log(response.data)
+            // window.open(response.data, "_blank", "height=600,width=800");
+            window.location.href = response.data;
+    })
+        // console.log("handle buy ",id);
+        // console.log("cert in buy",cert)
+        // console.log("certexam.id", cert.exams[0].id);
+        // axios.post(`https://localhost:7196/api/CandidateExam/CreateCandExam/${id}`)
+        //     .then(res => {
+        //         console.log(res);
+        //     })
+        //     .catch(err => {
+        //         console.error(err);
+        //     });
     }
 
     const handleDelete = (id) => {

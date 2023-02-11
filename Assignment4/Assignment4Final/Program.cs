@@ -42,6 +42,7 @@ namespace Assignment4Final
             // Add services to the container.
             var connectionString =
                 builder.Configuration.GetConnectionString("localhost")
+
                 ?? throw new InvalidOperationException(
                     "Connection string 'DefaultConnection' not found."
                 );
@@ -192,6 +193,8 @@ namespace Assignment4Final
 
             builder.Services.AddScoped<IAccountsRepository, AccountsRepository>();
             builder.Services.AddScoped<AccountsService>();
+
+            builder.Services.AddScoped<PaypalService>();
             // ---------------------------------------------------------------------------------------
 
             // TODO:(akotro) This should be extracted into a helper class
