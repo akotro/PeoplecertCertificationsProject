@@ -27,6 +27,8 @@ import MarkerList from "./components/Marker/MarkerList";
 import MarkExam from "./components/Marker/MarkerMarkExam";
 import AssignToMarker from "./components/Admin/AssingToMarker";
 import ExamResults from "./components/Examination/Results";
+import UsersList from "./components/Admin/UsersList";
+import UserForm from "./components/Admin/UserForm";
 
 const AppRoutes = [
   {
@@ -148,6 +150,16 @@ const AppRoutes = [
   {
     path: '/candidate/ExamResults',
     element: <ExamResults />
+  },
+  {
+    path: 'users',
+    needsAdmin: true,
+    element: <UsersList />
+  },
+  {
+    path: 'users/:email',
+    needsAdmin: true,
+    element: <UserForm />
   },
   //this needs to stay as the last path
   {

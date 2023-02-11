@@ -20,8 +20,10 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 
 import MyEditor from "./Editor";
+import Errors from '../Common/ErrorList'
 
 function QuestionCreate() {
+    const [error, setError] = useState(null);
     //------------------------------------------------Question state
     const [question, setQuestion] = useState({
         text: "string",
@@ -182,10 +184,12 @@ function QuestionCreate() {
             .then(function (response) {
                 console.log("Inside response");
                 console.log(response);
+                setError([]);
             })
             .catch(function (error) {
                 console.log("Inside error");
                 console.log(error);
+                setError(error);
             });
     }
     // const handleSubmit = (event) => {
@@ -242,6 +246,7 @@ function QuestionCreate() {
     //------------------------------------------------ RETURN
     return (
         <Container>
+            {error && <Errors error={error} />}
             <Stack gap={3}>
                 <Row>
                     <Badge pill bg="primary">
@@ -259,9 +264,9 @@ function QuestionCreate() {
                                 as="select"
                                 name="TopicSelect"
                                 defaultValue={question.topicId} //1.triggers the controlled component error
-                                // onChange={ handleChange  }    //2.stops the controlled component error
-                                //3. the combination of 3 and 4 triggers again the error
-                                //  required                                    //more study on This is required
+                            // onChange={ handleChange  }    //2.stops the controlled component error
+                            //3. the combination of 3 and 4 triggers again the error
+                            //  required                                    //more study on This is required
                             >
                                 <option value="" hidden>
                                     Please choose a topic{" "}
@@ -280,50 +285,50 @@ function QuestionCreate() {
                             </Form.Select>
                         </Row>
                     </Form.Group>
-                    <hr /> 
+                    <hr />
                     <Stack gap={5}>
                         {/*  DROPDOWN Difficulty levels */}
-                         <Container className="">
-                                <Row className="w-50 mb-3">
-                                    <Badge pill bg="primary">
-                                        <h4>Question's Difficulty</h4>
-                                    </Badge>
-                                </Row>
-                                <Row className="w-50 mb-0">
-                                    <Form.Group>
-                                            <Form.Select as="select"
-                                                name="DifficultySelect"
-                                                defaultValue={
-                                                    question.difficultyLevelId
-                                                }                                                          //1.triggers the controlled component error
-                                                // onChange={ handleChange  }    //2.stops the controlled component error
-                                                                                                        //3. the combination of 3 and 4 triggers again the error
-                                                                                                       //more study on This is required
-                                            >
-                                                <option value="" hidden>
-                                                    Please choose a level{" "}
+                        <Container className="">
+                            <Row className="w-50 mb-3">
+                                <Badge pill bg="primary">
+                                    <h4>Question's Difficulty</h4>
+                                </Badge>
+                            </Row>
+                            <Row className="w-50 mb-0">
+                                <Form.Group>
+                                    <Form.Select as="select"
+                                        name="DifficultySelect"
+                                        defaultValue={
+                                            question.difficultyLevelId
+                                        }                                                          //1.triggers the controlled component error
+                                    // onChange={ handleChange  }    //2.stops the controlled component error
+                                    //3. the combination of 3 and 4 triggers again the error
+                                    //more study on This is required
+                                    >
+                                        <option value="" hidden>
+                                            Please choose a level{" "}
+                                        </option>
+                                        {difficultyLevels.map(
+                                            (level, index) => (
+                                                <option
+                                                    key={index}
+                                                    onClick={() => {
+                                                        onSelect(
+                                                            level,
+                                                            "level"
+                                                        );
+                                                    }} //4. this without 3. stops the error
+                                                // value={}
+                                                >
+                                                    {level.difficulty}
                                                 </option>
-                                                {difficultyLevels.map(
-                                                    (level, index) => (
-                                                        <option
-                                                            key={index}
-                                                            onClick={() => {
-                                                                onSelect(
-                                                                    level,
-                                                                    "level"
-                                                                );
-                                                            }} //4. this without 3. stops the error
-                                                            // value={}
-                                                        >
-                                                            {level.difficulty}
-                                                        </option>
-                                                    )
-                                                )}
-                                            </Form.Select>
-                                    </Form.Group>
-                                </Row>
-                         </Container>
-                      
+                                            )
+                                        )}
+                                    </Form.Select>
+                                </Form.Group>
+                            </Row>
+                        </Container>
+
                         {/* <hr /> */}
                         <Row>
                             {/* Questions text */}
@@ -474,9 +479,9 @@ function QuestionCreate() {
                         <Row className="d-flex w-100">
                             <Badge pill >
 
-                            <Link to={`/questions/`}>
-                                <Button  variant="primary" className="w-100">Go Back</Button>
-                            </Link>
+                                <Link to={`/questions/`}>
+                                    <Button variant="primary" className="w-100">Go Back</Button>
+                                </Link>
 
                             </Badge>
                         </Row>

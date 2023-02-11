@@ -1,11 +1,14 @@
 ﻿using ModelLibrary.Models.DTO.Certificates;
 using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace ModelLibrary.Models.DTO.Questions;
 
 public class QuestionDto
 {
+    [Required]
     public int Id { get; set; }
+    [Required]
     public string Text { get; set; }
     public int? TopicId { get; set; }
 

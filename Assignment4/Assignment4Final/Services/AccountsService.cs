@@ -3,7 +3,9 @@ using System.Security.Claims;
 using System.Text;
 using Assignment4Final.Data.Repositories;
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using ModelLibrary.Models;
 using ModelLibrary.Models.DTO.Accounts;
 
 namespace Assignment4Final.Services;
@@ -25,9 +27,24 @@ public class AccountsService
         _configuration = configuration;
     }
 
+    public List<string> GetAllClaims()
+    {
+        return _repository.GetAllClaims();
+    }
+
     public async Task<List<UserDto>> GetListUsers()
     {
-        return _mapper.Map<List<UserDto>>(await _repository.ListUsers());
+        var userDtos = _mapper.Map<List<UserDto>>(await _repository.ListUsers());
+        userDtos.ForEach(u => u.Role = _repository.GetUserRole(u.Email));
+        return userDtos;
+    }
+
+    public async Task<UserDto> GetUser(string email)
+    {
+        var user = await _repository.GetAppUser(email);
+        var userDto = _mapper.Map<UserDto>(user);
+        userDto.Role = _repository.GetUserRole(email);
+        return userDto;
     }
 
     public async Task MakeAdmin(string email)
@@ -70,23 +87,39 @@ public class AccountsService
         await _repository.RemoveCandidate(email);
     }
 
-    public async Task<AuthenticationResponseDto> Create(LoginDto userCredentials)
+    public async Task<AuthenticationResponseDto?> Create(UserDto userDto)
     {
-        var createResult = await _repository.Create(
-            userCredentials.Email,
-            userCredentials.Password
-        );
-        if (createResult.Succeeded)
+        if (userDto.Credentials != null)
         {
-            if (userCredentials.IsCandidate != null && userCredentials.IsCandidate == true)
+            var user = new AppUser
             {
-                await MakeCandidate(userCredentials.Email);
-            }
+                UserName = userDto.UserName != null ? userDto.UserName : userDto.Credentials.Email,
+                Email = userDto.Credentials.Email,
+                PhoneNumber = userDto.PhoneNumber,
+                EmailConfirmed = true,
+                LockoutEnabled = false
+            };
 
-            return await BuildToken(userCredentials);
+            var createResult = await _repository.Create(user, userDto.Credentials.Password);
+            if (createResult.Succeeded)
+            {
+                if (
+                    userDto.Credentials.IsCandidate != null
+                    && userDto.Credentials.IsCandidate == true
+                )
+                {
+                    await MakeCandidate(userDto.Credentials.Email);
+                }
+
+                return await BuildToken(userDto.Credentials);
+            }
+            else
+            {
+                return new AuthenticationResponseDto { Errors = createResult.Errors };
+            }
         }
 
-        return new AuthenticationResponseDto { Errors = createResult.Errors };
+        return null;
     }
 
     public async Task<AuthenticationResponseDto?> Login(LoginDto userCredentials)
@@ -97,6 +130,19 @@ public class AccountsService
             return await BuildToken(userCredentials);
         }
         return null;
+    }
+
+    public async Task<IdentityResult> Update(string email, UserDto userDto)
+    {
+        var user = _mapper.Map<AppUser>(userDto);
+        var updateResult = await _repository.Update(email, user, userDto);
+        return updateResult;
+    }
+
+    public async Task<IdentityResult> Delete(string email)
+    {
+        var deleteResult = await _repository.Delete(email);
+        return deleteResult;
     }
 
     private async Task<AuthenticationResponseDto> BuildToken(LoginDto userCredentials)
