@@ -46,9 +46,9 @@ namespace ModelLibrary.Models.DTO.Candidates
         // [Required, Range(typeof(DateTime), "1/1/1900", "1/1/2050")]
         public DateTime? PhotoIdIssueDate { get; set; }
 
+        public PhotoIdTypeDto? PhotoIdType { get; set; }
         public GenderDto? Gender { get; set; }
         public LanguageDto? Language { get; set; }
-        public PhotoIdTypeDto? PhotoIdType { get; set; }
         public ICollection<AddressDto>? Address { get; set; }
     }
 }
