@@ -14,6 +14,7 @@ function Questions() {
         axios
             .get("https://localhost:7196/api/questions")
             .then((response) => {
+                console.log(response.data.data)
                 setData(response.data.data);
             })
             .catch((error) => {
@@ -75,7 +76,7 @@ function Questions() {
                                 {Replace(item.text)}
                                 {/* //--TOPIC--// */}
                                 <td>
-                                    {item.topic === null
+                                    {item.topic === undefined || item.topic === null
                                         ? "No topic selected"
                                         : item.topic.name}
                                 </td>
