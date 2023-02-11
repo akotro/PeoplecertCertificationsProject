@@ -1,5 +1,3 @@
-
-
 import React, { useEffect, useState, useContext } from "react";
 
 import { ListGroup, ListGroupItem, Button, Table, Row, Col, Stack, Form, CloseButton } from 'react-bootstrap';
@@ -32,16 +30,18 @@ function UserForm() {
   const [roles, setRoles] = useState([]);
 
   const fetchData = () => {
-    axios
-      .get(`https://localhost:7196/api/accounts/getUser/${params.email}`)
-      .then((response) => {
-        setUser(response.data);
-        // console.log(response.data)
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-
+    if (params.email)
+    {
+      axios
+        .get(`https://localhost:7196/api/accounts/getUser/${params.email}`)
+        .then((response) => {
+          setUser(response.data);
+          // console.log(response.data)
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
     axios
       .get(`https://localhost:7196/api/accounts/getAllClaims`)
       .then((response) => {
@@ -74,9 +74,7 @@ function UserForm() {
           ...user,
           credentials: {
             email: user.email,
-            password: password,
-            newPassword: password,
-            isCandidate: null
+            password: password
           }
         });
       }
@@ -88,9 +86,7 @@ function UserForm() {
           ...user,
           credentials: {
             email: user.email,
-            password: confirmPassword,
-            newPassword: confirmPassword,
-            isCandidate: null
+            password: confirmPassword
           }
         });
       }
@@ -98,18 +94,6 @@ function UserForm() {
     else {
       setUser({ ...user, [name]: value })
     }
-
-    // if (password1.newPassword1 === password2.newPassword2) {
-    //   console.log("equal!")
-    //   setError(null)
-    //   setCredentials({
-    //     ...credentials, email: user.email,
-    //     password: password1,
-    //     newPassword: password1,
-    //     isCandidate: null
-    //   })
-    //   setUser({ ...user, credentials })
-
   }
 
 
@@ -121,17 +105,29 @@ function UserForm() {
       console.log("Passwords do not match");
     } else {
       console.log("I will send");
+    
 
-
-      axios.put(`https://localhost:7196/api/accounts/update/${user.email}`, user)
-        .then((response) => {
-          console.log(response);
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+      if (params.email)
+      {
+        axios.put(`https://localhost:7196/api/accounts/update/${user.email}`, user)
+          .then((response) => {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });    
+      }
+      else {
+        axios.post(`https://localhost:7196/api/accounts/create`, user)
+          .then((response) => {
+            console.log(response);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });    
+      }
     }
-  };
+  }
 
 
   // //for a user who is not a candidate.

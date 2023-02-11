@@ -158,7 +158,12 @@ const AppRoutes = [
     element: <UsersList />
   },
   {
-    path: 'users/:email',
+    path: 'users/edit/:email',
+    needsAdmin: true,
+    element: <UserForm />
+  },
+  {
+    path: 'users/create',
     needsAdmin: true,
     element: <UserForm />
   },

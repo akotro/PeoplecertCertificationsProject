@@ -228,7 +228,7 @@ public class AccountsRepository : IAccountsRepository
                 var passwordResult = await _userManager.ResetPasswordAsync(
                     dbUser,
                     resetToken,
-                    userDto.Credentials.NewPassword
+                    userDto.Credentials.Password
                 );
 
                 if (!passwordResult.Succeeded)
