@@ -2,6 +2,7 @@ import React, {  useState, useContext } from "react";
 import { useNavigate,  } from "react-router-dom";
 import {AuthenticationContext} from '../auth/AuthenticationContext'
 import { getClaims, saveToken } from './handleJWT'
+// import Errors from '../Common/ErrorList'
 
 import { Button,  Row, Col,  Form, } from 'react-bootstrap';
 
@@ -10,7 +11,7 @@ import axios from 'axios';
 export default function Register() {
 
     const navigate = useNavigate();
-    const [errors, setErrors] = useState([]);
+    // const [errors, setErrors] = useState(null);
     const { update } = useContext(AuthenticationContext);
     const [credentials, setCredentials]= useState([]);
 
@@ -25,6 +26,7 @@ export default function Register() {
             }
         ).catch(function (error) {
             console.log(error);
+            // setErrors(error);
         });
     }
 
@@ -35,6 +37,7 @@ export default function Register() {
 
     return (
         <div>
+            {/* {errors && <Errors error={errors} />} */}
             <h3>Register</h3>
             <Form onSubmit={register}>
                 <Row>

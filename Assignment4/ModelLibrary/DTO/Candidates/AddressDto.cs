@@ -10,19 +10,19 @@ namespace ModelLibrary.Models.DTO.Candidates
 {
     public class AddressDto
     {
-        // [Required]
+        [Required]
         public int Id { get; set; }
-        // [Required, StringLength(100)]
+        [Required, StringLength(100)]
         public string? Address1 { get; set; }
-        // [StringLength(100)]
+        [StringLength(100)]
         public string? Address2 { get; set; }
-        // [Required, StringLength(100)]
+        [Required, StringLength(100)]
         public string? City { get; set; }
-        // [Required, StringLength(100)]
+        [Required, StringLength(100)]
         public string? State { get; set; }
         // []
         public string? PostalCode { get; set; }
-        // [Required]
+        [Required]
         public CountryDto? Country { get; set; }
     }
 }

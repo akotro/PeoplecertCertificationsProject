@@ -1,19 +1,20 @@
 ﻿using ModelLibrary.Models.DTO.Exams;
 using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace ModelLibrary.Models.DTO.Certificates;
 
 public class CertificateDto
 {
-    // [Required]
+    [Required]
     public int Id { get; set; }
-    // [Required, StringLength(100)]
+    [Required, StringLength(100)]
     public string? Title { get; set; }
-    // [StringLength(50)]
+    [StringLength(50)]
     public string? Description { get; set; }
-    // [StringLength(50)]
+    [StringLength(50)]
     public string? Category { get; set; }
-    // [Required]
+    [Required]
     public bool? Active { get; set; }
 
     [JsonProperty(ItemReferenceLoopHandling = ReferenceLoopHandling.Ignore)]

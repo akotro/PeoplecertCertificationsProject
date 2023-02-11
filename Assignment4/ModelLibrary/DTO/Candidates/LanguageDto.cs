@@ -9,9 +9,9 @@ namespace ModelLibrary.Models.DTO.Candidates
 {
     public class LanguageDto
     {
-        // [Required]
+        [Required]
         public int Id { get; set; }
-        // [StringLength(20)]
+        [StringLength(20)]
         public string? NativeLanguage { get; set; }
     }
 }

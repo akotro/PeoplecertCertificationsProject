@@ -20,7 +20,7 @@ namespace ModelLibrary.Models.DTO.Candidates
         StringLength(100)]
         public string? FirstName { get; set; }
 
-        [StringLength(1)]
+        [StringLength(100)]
         public string? MiddleName { get; set; }
 
         [Required, StringLength(100)]

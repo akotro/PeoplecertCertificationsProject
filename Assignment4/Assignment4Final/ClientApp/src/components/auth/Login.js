@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext} from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { AuthenticationContext } from '../auth/AuthenticationContext'
 import { getClaims, saveToken } from './handleJWT'
+import Errors from '../Common/ErrorList'
 
 
 import { ListGroup, ListGroupItem, Button, Table, Row, Col, Stack, Form, CloseButton } from 'react-bootstrap';
@@ -11,7 +12,7 @@ import axios from 'axios';
 export default function Login() {
     const navigate = useNavigate();
 
-    const [errors, setErrors] = useState([]);
+    const [error, setError] = useState(null);
     const { update } = useContext(AuthenticationContext);
     const [credentials, setCredentials] = useState([]);
 
@@ -28,6 +29,7 @@ export default function Login() {
             }
         ).catch(function (error) {
             console.log(error);
+            setError(error);
         });
     }
 
@@ -36,11 +38,12 @@ export default function Login() {
 
         setCredentials({ ...credentials, [name]: value });
 
-        console.log(credentials);
+        // console.log(credentials);
     }
 
     return (
         <div>
+            {error && <Errors error={error} />}
             <h3>Login</h3>
             <Form onSubmit={login}>
                 <Row>

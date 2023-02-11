@@ -5,7 +5,6 @@ const Errors = ({ error }) => {
 
     const [show, setShow] = useState(true);
 
-
     return error && error.response && error.response.data && error.response.data.errors ? (
         <>
             <Button variant="danger" onClick={() => setShow(!show)} style={{ marginBottom: '10px' }}>

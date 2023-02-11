@@ -8,12 +8,13 @@ using ModelLibrary.Models.DTO.Exams;
 using ModelLibrary.Models.Exams;
 using Newtonsoft.Json;
 using ModelLibrary.Models.DTO.Candidates;
+using System.ComponentModel.DataAnnotations;
 
 namespace ModelLibrary.Models.DTO.CandidateExam
 {
     public class CandidateExamDto
     {
-        // [Required]
+        [Required]
         public int Id { get; set; }
 
         [JsonProperty(ReferenceLoopHandling = ReferenceLoopHandling.Ignore)]
@@ -22,24 +23,24 @@ namespace ModelLibrary.Models.DTO.CandidateExam
         public int? MaxScore { get; set; }
         public decimal? PercentScore { get; set; }
 
-        // [Range(typeof(DateTime), "1/1/1900", "1/1/2050")]
+        [Range(typeof(DateTime), "1/1/1900", "1/1/2050")]
         public DateTime? ExamDate { get; set; }
 
-        // [Range(typeof(DateTime), "1/1/1900", "1/1/2050")]
+        [Range(typeof(DateTime), "1/1/1900", "1/1/2050")]
         public DateTime? ReportDate { get; set; }
         public int? CandidateScore { get; set; }
 
-        // [StringLength(20)]
+        [StringLength(20)]
         public string? AssessmentCode { get; set; }
 
-        // [StringLength(20)]
+        [StringLength(20)]
         public string? Voucher { get; set; }
         public bool? IsModerated { get; set; }
 
-        // [Range(typeof(DateTime), "1/1/1900", "1/1/2050")]
+        [Range(typeof(DateTime), "1/1/1900", "1/1/2050")]
         public DateTime? MarkerAssignedDate { get; set; }
 
-        // [Range(typeof(DateTime), "1/1/1900", "1/1/2050")]
+        [Range(typeof(DateTime), "1/1/1900", "1/1/2050")]
         public DateTime? MarkingDate { get; set; }
 
         [JsonProperty(ReferenceLoopHandling = ReferenceLoopHandling.Ignore)]

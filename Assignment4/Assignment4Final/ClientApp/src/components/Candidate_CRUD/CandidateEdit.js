@@ -276,7 +276,7 @@ export default function CandidateEdit(props) {
                             <Col>
                                 <Form.Group >
                                     <Form.Label>First Name</Form.Label>
-                                    <Form.Control type="text" name="firstName" value={candidate.firstName} onChange={handleChange} />
+                                    <Form.Control type="text" name="firstName" value={candidate.firstName} onChange={handleChange} required />
                                 </Form.Group>
                             </Col>
                             <Col>
