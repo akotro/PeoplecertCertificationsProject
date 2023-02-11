@@ -1,9 +1,8 @@
-﻿import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 
 import { ListGroup, ListGroupItem, Button, Table, Row, Col, Stack, Form, CloseButton } from 'react-bootstrap';
 import { AuthenticationContext } from '../auth/AuthenticationContext'
 import { getUserId } from '../auth/handleJWT'
-
 import { useNavigate, useParams } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import Register from "../auth/Register";
@@ -95,8 +94,6 @@ export default function CandidateEdit(props) {
       });
   };
 
-    
-
     const getId = () => {
         if (claims.length > 0) {
             return claims.find(claim => claim.name === 'userId').value
@@ -134,15 +131,8 @@ export default function CandidateEdit(props) {
         event.preventDefault();
         //for a user who is not a candidate.
             if (params.id === undefined) {
-                await axios.post(`https://localhost:7196/api/Candidate`, candidate)
-                    .then(function (response) {
-                        console.log(candidate)
-                        console.log(response);
-                    })
-                    .catch(function (error) {
-                        console.log(candidate)
-                        console.log(error);
-                    });
+                const response = await axios.post(`https://localhost:7196/api/Candidate`, candidate);
+                console.log(response);
             } else {
                 await axios.put(`https://localhost:7196/api/Candidate/${params.id}`, candidate)
                     .then(function (response) {
@@ -150,12 +140,8 @@ export default function CandidateEdit(props) {
                     })
                     .catch(function (error) {
                         console.log(error);
-                        console.log(error.response.data.errors.FirstName[0]);        
-                    });
-            }
-        
-        navigate('/candidate')
-        // console.log("THIS IS MINE ", candidate);
+            console.log(error.response.data.errors);
+        }
     }
 
     const handleChangeRegister = (event) => {
