@@ -8,6 +8,7 @@ public class CertificateDto
 {
     [Required]
     public int Id { get; set; }
+    public double? Price { get; set; }
     [Required, StringLength(100)]
     public string? Title { get; set; }
     [StringLength(50)]
