@@ -370,6 +370,7 @@ namespace Assignment4Final.Data.Seed
                     .RuleFor(c => c.Title, f => f.Random.Words(3))
                     .RuleFor(c => c.Description, f => f.Random.Words(10))
                     .RuleFor(c => c.Category, f => f.Random.Words(1))
+                    .RuleFor(c=> c.Price, f=> f.Random.Number(5,10)*20)
                     .RuleFor(c => c.Active, f => f.Random.Bool());
                 var fakeCertificates = certFaker.Generate(5);
                 db.Certificates.AddRange(fakeCertificates);
@@ -475,7 +476,6 @@ namespace Assignment4Final.Data.Seed
 
             #endregion
 
-
             #region // Seeding Addresses table
 
             if (!db.Addresses.Any() && db.Candidates.Any() && db.Countries.Any())
@@ -501,7 +501,7 @@ namespace Assignment4Final.Data.Seed
             if (!db.Questions.Any() && db.DifficultyLevels.Any() && db.Topics.Any())
             {
                 var optionFaker = new Faker<Option>()
-                    .RuleFor(c => c.Text, f => $"<h6>{f.Random.Words(5)} !!! </h6>")
+                    .RuleFor(c => c.Text, f => $"{f.Random.Words(5)} !!!")
                     .RuleFor(c => c.Correct, f => false);
 
                 var questionFaker = new Faker<Question>()
@@ -510,7 +510,7 @@ namespace Assignment4Final.Data.Seed
                         f => f.PickRandom(db.DifficultyLevels.ToList())
                     )
                     .RuleFor(c => c.Topic, f => f.PickRandom(db.Topics.ToList()))
-                    .RuleFor(c => c.Text, f => $"<h4>{f.Random.Words(15)} ??? </h4>")
+                    .RuleFor(c => c.Text, f => $"<strong>{f.Random.Words(15)} ???</strong>")
                     .RuleFor(
                         c => c.Options,
                         f =>

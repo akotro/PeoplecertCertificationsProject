@@ -22,8 +22,11 @@ function AssignToMarker() {
             console.log(error);
         });
         axios.get(`https://localhost:7196/api/Markers/getallcandidateexams/`).then((response) => {
-            setAssignedExams(response.data.data.filter(exam => exam.marker !== null & exam.isModerated === null))
-            setNotAssignedExams(response.data.data.filter(exam => exam.marker === null))
+            setAssignedExams(response.data.data.filter(
+                exam => (exam.marker !== null || exam.marker === undefined)& 
+                (exam.isModerated === null || exam.isModerated=== undefined)
+                ))
+            setNotAssignedExams(response.data.data.filter(exam => exam.marker === null || exam.marker === undefined))
         }).catch(function (error) {
             console.log(error);
         });
