@@ -12,16 +12,16 @@ public interface IAccountsRepository
     List<string> GetAllClaims();
     Task<IList<Claim>> GetClaims(AppUser user);
     string? GetUserRole(string email);
-    Task MakeAdmin(string email);
-    Task RemoveAdmin(string email);
-    Task MakeMarker(string email);
-    Task RemoveMarker(string email);
-    Task MakeQualityControl(string email);
-    Task RemoveQualityControl(string email);
-    Task MakeCandidate(string email);
-    Task RemoveCandidate(string email);
+    Task<IdentityResult> MakeAdmin(string email);
+    Task<IdentityResult> RemoveAdmin(string email);
+    Task<IdentityResult> MakeMarker(string email);
+    Task<IdentityResult> RemoveMarker(string email);
+    Task<IdentityResult> MakeQualityControl(string email);
+    Task<IdentityResult> RemoveQualityControl(string email);
+    Task<IdentityResult> MakeCandidate(string email);
+    Task<IdentityResult> RemoveCandidate(string email);
     Task<IdentityResult> Create(AppUser user, string password);
     Task<SignInResult> Login(string email, string password);
-    Task<IdentityResult> Update(string email, AppUser user, LoginDto? credentials = null);
+    Task<IdentityResult> Update(string email, AppUser user, UserDto userDto);
     Task<IdentityResult> Delete(string email);
 }

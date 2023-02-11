@@ -51,52 +51,112 @@ public class AccountsRepository : IAccountsRepository
             ?.Value;
     }
 
-    public async Task MakeAdmin(string email)
+    public async Task<IdentityResult> MakeAdmin(string email)
     {
         var user = await _userManager.FindByEmailAsync(email);
-        await _userManager.AddClaimAsync(user, new Claim("role", "admin"));
+        return await _userManager.AddClaimAsync(user, new Claim("role", "admin"));
     }
 
-    public async Task RemoveAdmin(string email)
+    public async Task<IdentityResult> RemoveAdmin(string email)
     {
         var user = await _userManager.FindByEmailAsync(email);
-        await _userManager.RemoveClaimAsync(user, new Claim("role", "admin"));
+        return await _userManager.RemoveClaimAsync(user, new Claim("role", "admin"));
     }
 
-    public async Task MakeMarker(string email)
+    public async Task<IdentityResult> MakeMarker(string email)
     {
         var user = await _userManager.FindByEmailAsync(email);
-        await _userManager.AddClaimAsync(user, new Claim("role", "marker"));
+        return await _userManager.AddClaimAsync(user, new Claim("role", "marker"));
     }
 
-    public async Task RemoveMarker(string email)
+    public async Task<IdentityResult> RemoveMarker(string email)
     {
         var user = await _userManager.FindByEmailAsync(email);
-        await _userManager.RemoveClaimAsync(user, new Claim("role", "marker"));
+        return await _userManager.RemoveClaimAsync(user, new Claim("role", "marker"));
     }
 
-    public async Task MakeQualityControl(string email)
+    public async Task<IdentityResult> MakeQualityControl(string email)
     {
         var user = await _userManager.FindByEmailAsync(email);
-        await _userManager.AddClaimAsync(user, new Claim("role", "qualitycontrol"));
+        return await _userManager.AddClaimAsync(user, new Claim("role", "qualitycontrol"));
     }
 
-    public async Task RemoveQualityControl(string email)
+    public async Task<IdentityResult> RemoveQualityControl(string email)
     {
         var user = await _userManager.FindByEmailAsync(email);
-        await _userManager.RemoveClaimAsync(user, new Claim("role", "qualitycontrol"));
+        return await _userManager.RemoveClaimAsync(user, new Claim("role", "qualitycontrol"));
     }
 
-    public async Task MakeCandidate(string email)
+    public async Task<IdentityResult> MakeCandidate(string email)
     {
         var user = await _userManager.FindByEmailAsync(email);
-        await _userManager.AddClaimAsync(user, new Claim("role", "candidate"));
+        return await _userManager.AddClaimAsync(user, new Claim("role", "candidate"));
     }
 
-    public async Task RemoveCandidate(string email)
+    public async Task<IdentityResult> RemoveCandidate(string email)
     {
         var user = await _userManager.FindByEmailAsync(email);
-        await _userManager.RemoveClaimAsync(user, new Claim("role", "candidate"));
+        return await _userManager.RemoveClaimAsync(user, new Claim("role", "candidate"));
+    }
+
+    public async Task<IdentityResult> UpdateRole(string userEmail, string newRole)
+    {
+        string? oldRole = GetUserRole(userEmail);
+
+        var identityResult = new IdentityResult();
+
+        if (!string.IsNullOrWhiteSpace(oldRole))
+        {
+            switch (oldRole)
+            {
+                case "admin":
+                    identityResult = await RemoveAdmin(userEmail);
+                    break;
+                case "marker":
+                    identityResult = await RemoveMarker(userEmail);
+                    break;
+                case "qualitycontrol":
+                    identityResult = await RemoveQualityControl(userEmail);
+                    break;
+                case "candidate":
+                    identityResult = await RemoveCandidate(userEmail);
+                    break;
+                default:
+                    return IdentityResult.Failed(
+                        new IdentityError()
+                        {
+                            Code = "Role",
+                            Description =
+                                $"Failed to remove {oldRole} to user with email {userEmail}"
+                        }
+                    );
+            }
+        }
+
+        if (!string.IsNullOrWhiteSpace(newRole))
+        {
+            switch (newRole)
+            {
+                case "admin":
+                    return await MakeAdmin(userEmail);
+                case "marker":
+                    return await MakeMarker(userEmail);
+                case "qualitycontrol":
+                    return await MakeQualityControl(userEmail);
+                case "candidate":
+                    return await MakeCandidate(userEmail);
+                default:
+                    return IdentityResult.Failed(
+                        new IdentityError()
+                        {
+                            Code = "Role",
+                            Description = $"Failed to add {newRole} to user with email {userEmail}"
+                        }
+                    );
+            }
+        }
+
+        return identityResult;
     }
 
     public async Task<IdentityResult> Create(AppUser user, string password)
@@ -115,7 +175,7 @@ public class AccountsRepository : IAccountsRepository
         );
     }
 
-    public async Task<IdentityResult> Update(string email, AppUser user, LoginDto? credentials)
+    public async Task<IdentityResult> Update(string email, AppUser user, UserDto userDto)
     {
         var dbUser = await GetAppUser(email);
 
@@ -151,12 +211,24 @@ public class AccountsRepository : IAccountsRepository
                 return IdentityResult.Failed(identityErrors.ToArray());
             }
 
-            if (credentials != null)
+            if (userDto.Role != null)
             {
-                var passwordResult = await _userManager.ChangePasswordAsync(
+                var updateRoleResult = await UpdateRole(dbUser.Email, userDto.Role);
+                if (!updateRoleResult.Succeeded)
+                {
+                    identityErrors.AddRange(updateRoleResult.Errors);
+                    return IdentityResult.Failed(identityErrors.ToArray());
+                }
+            }
+
+            if (userDto.Credentials != null)
+            {
+                // NOTE:(akotro): Reset password without oldPassword
+                var resetToken = await _userManager.GeneratePasswordResetTokenAsync(dbUser);
+                var passwordResult = await _userManager.ResetPasswordAsync(
                     dbUser,
-                    credentials.Password,
-                    credentials.NewPassword
+                    resetToken,
+                    userDto.Credentials.NewPassword
                 );
 
                 if (!passwordResult.Succeeded)
@@ -184,7 +256,66 @@ public class AccountsRepository : IAccountsRepository
 
     public async Task<IdentityResult> Delete(string email)
     {
-        var user = await GetAppUser(email);
+        var user = await _context.Users
+            .Include(u => u.Candidate)
+            .Include(u => u.Marker)
+            .FirstOrDefaultAsync(u => u.Email == email);
+
+        if (user == null)
+        {
+            return IdentityResult.Failed(
+                new IdentityError
+                {
+                    Code = "User",
+                    Description = $"Could not find User with email {email}"
+                }
+            );
+        }
+
+        if (user.Candidate != null)
+        {
+            var candidate = await _context.Candidates
+                .AsSplitQuery()
+                .Include(a => a.Gender)
+                .Include(a => a.Language)
+                .Include(a => a.PhotoIdType)
+                .Include(a => a.Address)
+                .ThenInclude(a => a.Country)
+                .Include(a => a.CandidateExams)
+                .FirstOrDefaultAsync(c => c.AppUserId == user.Candidate.AppUserId);
+            if (candidate != null)
+            {
+                _context.Candidates.Remove(candidate);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        if (user.Marker != null)
+        {
+            var marker = await _context.Markers
+                .Include(m => m.CandidateExams)
+                .FirstOrDefaultAsync(q => q.AppUserId == user.Marker.AppUserId);
+
+            if (marker != null)
+            {
+                // NOTE:(akotro) Check if marker has assigned CandidateExams that have not been moderated
+                if (marker.CandidateExams?.Any(ce => ce.IsModerated != true) == true)
+                {
+                    return IdentityResult.Failed(
+                        new IdentityError
+                        {
+                            Code = "Marker",
+                            Description =
+                                $"Marker with email {email} has assigned candidate exams that have not been moderated."
+                        }
+                    );
+                }
+
+                _context.Markers.Remove(marker);
+                await _context.SaveChangesAsync();
+            }
+        }
+
         return await _userManager.DeleteAsync(user);
     }
 }

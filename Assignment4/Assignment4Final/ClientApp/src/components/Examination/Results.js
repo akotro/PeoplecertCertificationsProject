@@ -1,20 +1,49 @@
-import React from "react";
+import React from 'react';
+import ReactDOM from 'react-dom';
 import { useLocation, useNavigate } from "react-router-dom";
-import { Table } from 'react-bootstrap';
+import { Button, Navbar, Table } from 'react-bootstrap';
 import BackButton from '../Common/Back'
+ 
 
-export default function Results() {
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+ 
 
+
+
+
+export default function Results() 
+{
     const location = useLocation();
     const navigate = useNavigate();
-
     const incomingData = location.state.data;
     // console.log(incomingData);
+     // ----------------------------------------------------------------------Create Document Component
+const handleClick = () => 
+{
+    console.log("Clicked");
+//----------------------PDF-------------------------------------------->>>>>>>>>>>
+var doc = new jsPDF();
 
+var element = document.getElementById('jsPdf');
+
+
+
+html2canvas(element).then(function(canvas)
+{
+    var imgData = canvas.toDataURL('image/png',1.0);
+    doc.addImage(imgData, 'PNG', 0, 0);
+    doc.save('sample-file.pdf');
+   
+});
+}
+
+
+// ---------------------------------------------------------------------------------    
     return (
-        <div>
+        <div >
             <h4>Results</h4>
-            <div className='container-fluid'>
+            <div className='container-fluid' id='jsPdf'>
                 <Table>
                     <thead>
                         <tr>
@@ -41,10 +70,40 @@ export default function Results() {
                         </tr>
                     </tbody>
                 </Table>
+            </div>
+                <Button onClick={handleClick}>Download Results</Button>
                 {location.state && location.state.from === '/candidate/availableexams' && (
                     <BackButton />
                 )}
-            </div>
+             
+            
+        
         </div>
     )
+
+
+  
 }
+
+
+  
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
