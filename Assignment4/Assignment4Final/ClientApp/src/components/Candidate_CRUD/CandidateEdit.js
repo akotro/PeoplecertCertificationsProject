@@ -2,7 +2,7 @@
 import { ListGroup, ListGroupItem, Button, Table, Row, Col, Stack, Form, CloseButton, Alert } from 'react-bootstrap';
 import { AuthenticationContext } from '../auth/AuthenticationContext'
 import { getUserId } from '../auth/handleJWT'
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import Register from "../auth/Register";
 import "react-datepicker/dist/react-datepicker.css";
@@ -13,6 +13,9 @@ export default function CandidateEdit(props) {
 
     const params = useParams();
     const navigate = useNavigate();
+    const location = useLocation();
+
+    const Qcrole = location.state?.role;
 
     const [genders, setGenders] = useState([]);
     const [languages, setLanguages] = useState([]);
@@ -247,7 +250,7 @@ export default function CandidateEdit(props) {
     return (
         <div>
             {error && <Errors error={error} />}
-            <fieldset disabled={role ? (role.value === "qualitycontrol") : false}>
+            <fieldset disabled={Qcrole ? (Qcrole === "qualitycontrol") : false}>
                 {!params.id &&
                     (role === "admin") ?
                     <div>

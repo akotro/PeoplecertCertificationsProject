@@ -174,7 +174,7 @@ function MarkExam(props) {
                                                         <div className="justify-content-end"></div>
                                                         <Table>
                                                             <thead>
-                                                                <th>Id</th>
+                                                                <th>#</th>
                                                                 <th>Text</th>
                                                                 <th>
                                                                     Correct{" "}
@@ -186,7 +186,7 @@ function MarkExam(props) {
                                                                         index) => (
                                                                         <tr key={index}>
                                                                             <td>
-                                                                                {option.id}
+                                                                                {index+1}
                                                                             </td>
                                                                             <td>{ReplaceV2(
                                                                                 option.text

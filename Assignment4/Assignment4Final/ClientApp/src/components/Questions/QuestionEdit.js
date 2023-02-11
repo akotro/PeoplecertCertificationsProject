@@ -3,12 +3,14 @@ import { Link } from "react-router-dom";
 import { React, useState, useEffect } from 'react';
 
 import axios from 'axios';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 
 import MyEditor from "./Editor";
 import Errors from '../Common/ErrorList'
 //--------------------------------------------------QUESTION EDIT FUNCTION--------------------------------------------------
 export default function QuestionEdit(event, name) {
+
+    const params = useParams();
     const [error, setError] = useState(null);
     const [data, setData] = useState([]);
     //------------------------------------------------Question state
@@ -30,17 +32,17 @@ export default function QuestionEdit(event, name) {
     const [difficultyLevels, setLevels] = useState([]);
 
     const location = useLocation();
-    const { questionIndex } = location.state;
+    const QuestionId = params.id;
     //Same outcome as above------------------------------------------------
     // const _params = useParams();
     // const params = _params.id;
     //--------------------------------------------------
 
     //------------------------------------------------//GET ALL TOPICS AND DIFFICULTY LEVELS
-    const url = "https://localhost:7196/api/Questions/" + questionIndex;
+    // const url = "https://localhost:7196/api/Questions/" + questionIndex;
+    const url = `https://localhost:7196/api/Questions/${QuestionId}`;
     useEffect(() => {
-        axios
-            .get(`https://localhost:7196/api/Topics`)
+        axios.get(`https://localhost:7196/api/Topics`)
             .then((res) => {
                 setAllTopics(res.data.data);
             })
@@ -48,8 +50,7 @@ export default function QuestionEdit(event, name) {
                 console.error(err.response.data);
             });
 
-        axios
-            .get(`https://localhost:7196/api/DifficultyLevels`)
+        axios.get(`https://localhost:7196/api/DifficultyLevels`)
             .then((res) => {
                 setLevels(res.data.data);
 
@@ -72,7 +73,7 @@ export default function QuestionEdit(event, name) {
         setQuestion(newQuestion);
         console.log(" Put!!!");
 
-        axios.put('https://localhost:7196/api/Questions/' + questionIndex, newQuestion)
+        axios.put(url, newQuestion)
             .then((response) => {
                 console.log("Done!!!");
                 setError([]);
