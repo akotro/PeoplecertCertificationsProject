@@ -62,7 +62,7 @@ namespace Assignment4Final.Controllers
                 //return response;
             
 
-            return Redirect("https://localhost:44473/ExamsList");
+            return Redirect("https://localhost:44473/candidate/availableexams");
 
         }
 
