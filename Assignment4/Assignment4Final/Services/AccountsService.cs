@@ -135,11 +135,7 @@ public class AccountsService
     public async Task<IdentityResult> Update(string email, UserDto userDto)
     {
         var user = _mapper.Map<AppUser>(userDto);
-        var updateResult = await _repository.Update(
-            email,
-            user,
-            userDto.Credentials != null ? userDto.Credentials : null
-        );
+        var updateResult = await _repository.Update(email, user, userDto);
         return updateResult;
     }
 
