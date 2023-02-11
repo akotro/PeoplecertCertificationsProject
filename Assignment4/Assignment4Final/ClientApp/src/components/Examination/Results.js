@@ -1,13 +1,15 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Table } from 'react-bootstrap';
+import BackButton from '../Common/Back'
 
 export default function Results() {
 
     const location = useLocation();
+    const navigate = useNavigate();
 
     const incomingData = location.state.data;
-    console.log(incomingData);
+    // console.log(incomingData);
 
     return (
         <div>
@@ -39,6 +41,9 @@ export default function Results() {
                         </tr>
                     </tbody>
                 </Table>
+                {location.state && location.state.from === '/candidate/availableexams' && (
+                    <BackButton />
+                )}
             </div>
         </div>
     )

@@ -5,7 +5,7 @@ import { withRouter } from './../Common/with-router';
 import { BrowserRouter, Route, useParams } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { DatePicker, Space  } from 'antd';
+import { DatePicker, Space } from 'antd';
 
 function AvailableExams(props) {
 
@@ -39,8 +39,8 @@ function AvailableExams(props) {
     const saveDate = () => {
         setShowModal(false);
         // exams.map(exam=>exam.id === bookExam.id)
-        setExams(exams.map(exam=> {
-            if(exam.id === bookExam.id) {
+        setExams(exams.map(exam => {
+            if (exam.id === bookExam.id) {
                 return bookExam
             }
             return exam;
@@ -54,26 +54,25 @@ function AvailableExams(props) {
         //Wed Jul 15 2015 00:00:00 GMT-0700 (Pacific Daylight Time)
         const finalDateString = date.toISOString(date);
         //2015-07-15T00:00:00.000Z
-    
-        console.log(finalDateString); // "1930-07-17T00:00:00.000Z"
+
+        // console.log(finalDateString); // "1930-07-17T00:00:00.000Z"
         return finalDateString;
-      };
+    };
 
     const handleChange = (event) => {
-        console.log("handlechnage");
+        // console.log("handlechnage");
         const { name, value, type } = event.target;
-        console.log(name);
+        // console.log(name);
         //console.log(type);
-        console.log(value);
+        // console.log(value);
         setSelectedDate(value);
-        setBookExam({...bookExam, [name]: convertStringToDate(value)})
+        setBookExam({ ...bookExam, [name]: convertStringToDate(value) })
     }
     const handleOpen = (CandExamId) => {
         setShowModal(true);
         setSelectedDate(new Date());
-        setBookExam({...exams.find(exam=>exam.id === CandExamId)})
-        console.log(CandExamId);
-
+        setBookExam({ ...exams.find(exam => exam.id === CandExamId) })
+        // console.log(CandExamId);
     };
 
     const handleClose = () => {
@@ -85,7 +84,7 @@ function AvailableExams(props) {
             return (
                 <td>
                     <div className='d-flex '>
-                        <Button variant="success" >View Result</Button>
+                        <Button variant="success" onClick={() => showResultsOfExam(CandExam)}>View Result</Button>
                     </div>
                 </td>
             );
@@ -100,6 +99,16 @@ function AvailableExams(props) {
             );
         }
     };
+
+    const showResultsOfExam = (CandExam) => {
+        // console.log(CandExam)
+        navigate(`/candidate/ExamResults`, {
+            state: {
+                data: CandExam,
+                from: '/candidate/availableexams'
+            }
+        });
+    }
 
     const takeExam = (CandExam) => {
         const currentDate = new Date();
@@ -136,12 +145,12 @@ function AvailableExams(props) {
                         <Modal.Title>Choose a date for your Exam</Modal.Title>
                     </Modal.Header>
                     <Modal.Body><Form.Group >
-                            <Form.Label>Date of Birth</Form.Label>
-                            <Form.Control type="date"
-                                name="examDate"
-                                value={selectedDate}
-                                onChange={handleChange} />
-                        </Form.Group></Modal.Body>
+                        <Form.Label>Date of Birth</Form.Label>
+                        <Form.Control type="date"
+                            name="examDate"
+                            value={selectedDate}
+                            onChange={handleChange} />
+                    </Form.Group></Modal.Body>
                     <Modal.Footer>
                         <Button variant="secondary" onClick={handleClose}>Close</Button>
                         <Button variant="primary" onClick={() => saveDate()}>Save Changes</Button>
@@ -165,7 +174,7 @@ function AvailableExams(props) {
                                 <td>{CandidateExam.exam.certificate.title}</td>
                                 <td>{makeDate(CandidateExam.examDate)}</td>
                                 <td>{CandidateExam.Voucher}</td>
-                                <td>{CandidateExam.id}</td>
+                                {/* <td>{CandidateExam.id}</td> */}
                                 <td>
                                     {makebuttons(CandidateExam)}
                                 </td>
