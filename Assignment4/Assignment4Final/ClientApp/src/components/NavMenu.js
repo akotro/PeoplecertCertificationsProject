@@ -27,7 +27,7 @@ function NavMenu() {
 
     return (
         <header>
-            <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow mb-3"   container light>
+            <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow mb-3" container light>
                 <NavbarBrand tag={Link} to="/">HomePage</NavbarBrand>
                 <NavbarToggler onClick={toggleNavbar} className="mr-2" />
                 <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!collapsed} navbar>
@@ -37,24 +37,47 @@ function NavMenu() {
                             <Authorized
                                 role="admin"
                                 authorized={<>
-                                    <NavItem>
-                                        <NavLink tag={Link} className="text-dark" to="/marker">mark an exam</NavLink>
-                                    </NavItem>
-                                    <NavItem>
-                                        <NavLink tag={Link} className="text-dark" to="/assigntomarker">Assign</NavLink>
-                                    </NavItem>
-                                    <NavItem>
-                                        <NavLink tag={Link} className="text-dark" to="/certificate">Certificates</NavLink>
-                                    </NavItem>
-                                    <NavItem>
-                                        <NavLink tag={Link} className="text-dark" to="/questions">Questions</NavLink>
-                                    </NavItem>
-                                    <NavItem>
-                                        <NavLink tag={Link} className="text-dark" to="/users">USERS</NavLink>
-                                    </NavItem>
-                                    <NavItem>
-                                        <NavLink tag={Link} className="text-dark" to="/candidate">CandidatesCrud</NavLink>
-                                    </NavItem>
+                                    <NavDropdown title="Marker Actions">
+                                        <NavItem>
+                                            <NavLink tag={Link} className="text-dark" to="/marker">Mark an Exam</NavLink>
+                                        </NavItem>
+                                        <NavItem>
+                                            <NavLink tag={Link} className="text-dark" to="/assigntomarker">Assign</NavLink>
+                                        </NavItem>
+                                    </NavDropdown>
+
+                                    <NavDropdown title="Item Banking Actions">
+                                        <NavItem>
+                                            <NavLink tag={Link} className="text-dark" to="/certificate">Certificates List</NavLink>
+                                        </NavItem>
+                                        <NavItem>
+                                            <NavLink tag={Link} className="text-dark" to="/certificate/create">Add Certificate</NavLink>
+                                        </NavItem>
+                                        <NavItem>
+                                            <NavLink tag={Link} className="text-dark" to="/questions">Questions List</NavLink>
+                                        </NavItem>
+                                        <NavItem>
+                                            <NavLink tag={Link} className="text-dark" to="/questions/create">Add Question</NavLink>
+                                        </NavItem>
+                                    </NavDropdown>
+
+                                    <NavDropdown title="User Management">
+                                        <NavItem>
+                                            <NavLink tag={Link} className="text-dark" to="/users">Users List</NavLink>
+                                        </NavItem>
+                                        <NavItem>
+                                            <NavLink tag={Link} className="text-dark" to="/candidate">Candidates List</NavLink>
+                                        </NavItem>
+                                        <NavItem>
+                                            <NavLink tag={Link} className="text-dark" to="/users">Add User</NavLink>
+                                        </NavItem>
+                                    </NavDropdown>
+
+                                    <NavDropdown title="Examination Actions">
+                                        <NavItem>
+                                            <NavLink tag={Link} className="text-dark" to="/ExamsList">Examinations List</NavLink>
+                                        </NavItem>
+                                    </NavDropdown>
                                 </>}
                             />
 
@@ -73,38 +96,27 @@ function NavMenu() {
                             <Authorized
                                 role="qualitycontrol"
                                 authorized={<>
-                                <NavDropdown title="Lists">
-                                    <NavDropdown.Item>
-                                        <NavLink tag={Link} className="text-dark" to="/marker">List of All Exams</NavLink>
-                                    </NavDropdown.Item>
-                                    <NavDropdown.Item>
-                                        <NavLink tag={Link} className="text-dark" to="/marker">List of All Exams</NavLink>
-                                    </NavDropdown.Item>
-                                    <NavDropdown.Item>
-                                        <NavLink tag={Link} className="text-dark" to="/certificate">List of All Certificates</NavLink>
-                                    </NavDropdown.Item>
-                                    <NavDropdown.Item>
-                                        <NavLink tag={Link} className="text-dark" to="/questions">List of All Questions</NavLink>
-                                    </NavDropdown.Item>
-                                    <NavDropdown.Item>
-                                        <NavLink tag={Link} className="text-dark" to="/candidate">List of All Candidates</NavLink>
-                                    </NavDropdown.Item>
-                                    <NavItem>
-                                    </NavItem>
-                                    <NavItem>
-                                    </NavItem>
-                                    <NavItem>
-                                    </NavItem>
-                                    <NavItem>
-                                    </NavItem>
-                                </NavDropdown>
+                                    <NavDropdown title="Lists">
+                                        <NavDropdown.Item>
+                                            <NavLink tag={Link} className="text-dark" to="/marker">Exams List</NavLink>
+                                        </NavDropdown.Item>
+                                        <NavDropdown.Item>
+                                            <NavLink tag={Link} className="text-dark" to="/certificate">Certificates List</NavLink>
+                                        </NavDropdown.Item>
+                                        <NavDropdown.Item>
+                                            <NavLink tag={Link} className="text-dark" to="/questions">Questions List</NavLink>
+                                        </NavDropdown.Item>
+                                        <NavDropdown.Item>
+                                            <NavLink tag={Link} className="text-dark" to="/candidate">Candidates List</NavLink>
+                                        </NavDropdown.Item>
+                                    </NavDropdown>
                                 </>}
                             />
                             <Authorized
                                 role="marker"
                                 authorized={<>
                                     <NavItem>
-                                        <NavLink tag={Link} className="text-dark" to="/marker">Things</NavLink>
+                                        <NavLink tag={Link} className="text-dark" to="/marker">Actions</NavLink>
                                     </NavItem>
                                 </>}
                             />
