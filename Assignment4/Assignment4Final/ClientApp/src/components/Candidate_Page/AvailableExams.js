@@ -157,7 +157,7 @@ function AvailableExams(props) {
                     </Modal.Footer>
                 </Modal>
 
-                <h1>available exams</h1>
+                <h1>Available exams</h1>
                 <Table striped borderless hover>
                     <thead>
                         <tr>
@@ -184,7 +184,7 @@ function AvailableExams(props) {
                 </Table>
             </div>
             <div>
-                <h1>taken exams</h1>
+                <h1>Taken exams</h1>
                 <Table striped borderless hover>
                     <thead>
                         <tr>
