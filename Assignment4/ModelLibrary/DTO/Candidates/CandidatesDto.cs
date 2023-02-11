@@ -3,6 +3,7 @@ using ModelLibrary.Models.Exams;
 using ModelLibrary.Validation;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
@@ -15,11 +16,12 @@ namespace ModelLibrary.Models.DTO.Candidates
         // [Required]
         public string AppUserId { get; set; }
 
-        // [ /* Required,  */
-        // StringLength(1)]
+        [DisplayName("first name ablaoumpla")]
+        [Required,
+        StringLength(maximumLength: 2,MinimumLength = 1,ErrorMessage ="yioosdfsd")]
         public string? FirstName { get; set; }
 
-        // [StringLength(100)]
+        [StringLength(1)]
         public string? MiddleName { get; set; }
 
         // [Required, StringLength(100)]

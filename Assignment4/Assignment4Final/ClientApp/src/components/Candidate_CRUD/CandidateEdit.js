@@ -1,6 +1,5 @@
-import React, { useEffect, useState, useContext } from "react";
-
-import { ListGroup, ListGroupItem, Button, Table, Row, Col, Stack, Form, CloseButton } from 'react-bootstrap';
+﻿import React, { useEffect, useState, useContext } from "react";
+import { ListGroup, ListGroupItem, Button, Table, Row, Col, Stack, Form, CloseButton, Alert } from 'react-bootstrap';
 import { AuthenticationContext } from '../auth/AuthenticationContext'
 import { getUserId } from '../auth/handleJWT'
 import { useNavigate, useParams } from "react-router-dom";
@@ -8,6 +7,7 @@ import DatePicker from "react-datepicker";
 import Register from "../auth/Register";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
+import Errors from '../Common/ErrorList';
 
 export default function CandidateEdit(props) {
 
@@ -21,6 +21,7 @@ export default function CandidateEdit(props) {
     const [allUsers, setAllusers] = useState([]);
     const [message, setMesage] = useState();
     const [registerButton, setRegisterButton] = useState(false)
+    const [error, setError] = useState(null);
 
     const { update, claims } = useContext(AuthenticationContext);
     const [role, setRole] = useState({})
@@ -36,63 +37,63 @@ export default function CandidateEdit(props) {
         address: []
     });
 
-  const fetchData = () => {
-    if (params.id !== undefined) {
-      axios
-        .get(`https://localhost:7196/api/Candidate/${params.id}`)
-        .then((response) => {
-          setCandidate(response.data.data);
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-    } else {
-      axios
-        .get(`https://localhost:7196/api/accounts/listUsers`)
-        .then((response) => {
-          setAllusers(response.data);
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-    }
+    const fetchData = () => {
+        if (params.id !== undefined) {
+            axios
+                .get(`https://localhost:7196/api/Candidate/${params.id}`)
+                .then((response) => {
+                    setCandidate(response.data.data);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        } else {
+            axios
+                .get(`https://localhost:7196/api/accounts/listUsers`)
+                .then((response) => {
+                    setAllusers(response.data);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        }
 
-    axios
-      .get(`https://localhost:7196/api/Genders`)
-      .then((response) => {
-        setGenders(response.data.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+        axios
+            .get(`https://localhost:7196/api/Genders`)
+            .then((response) => {
+                setGenders(response.data.data);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
 
-    axios
-      .get(`https://localhost:7196/api/Languages`)
-      .then((response) => {
-        setLanguages(response.data.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+        axios
+            .get(`https://localhost:7196/api/Languages`)
+            .then((response) => {
+                setLanguages(response.data.data);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
 
-    axios
-      .get(`https://localhost:7196/api/PhotoIdTypes`)
-      .then((response) => {
-        setPhotoIdTypes(response.data.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+        axios
+            .get(`https://localhost:7196/api/PhotoIdTypes`)
+            .then((response) => {
+                setPhotoIdTypes(response.data.data);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
 
-    axios
-      .get(`https://localhost:7196/api/Countries`)
-      .then((response) => {
-        setCountries(response.data.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
+        axios
+            .get(`https://localhost:7196/api/Countries`)
+            .then((response) => {
+                setCountries(response.data.data);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    };
 
     const getId = () => {
         if (claims.length > 0) {
@@ -110,7 +111,7 @@ export default function CandidateEdit(props) {
             } else {
                 setRole("noRole");
             };
-            console.log(role)
+            // console.log(role)
         }
     }, [claims]);
 
@@ -130,26 +131,31 @@ export default function CandidateEdit(props) {
     const handleSubmit = async (event) => {
         event.preventDefault();
         //for a user who is not a candidate.
-            if (params.id === undefined) {
+        if (params.id === undefined) {
+            try {
                 const response = await axios.post(`https://localhost:7196/api/Candidate`, candidate);
                 console.log(response);
-            } else {
-                await axios.put(`https://localhost:7196/api/Candidate/${params.id}`, candidate)
-                    .then(function (response) {
-                        console.log(response);
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-            console.log(error.response.data.errors);
+                navigate('/candidate');
+            } catch (e) {
+                setError(e);
+            }
+        } else {
+            try {
+                const response = await axios.put(`https://localhost:7196/api/Candidate/${params.id}`, candidate);
+                console.log(response);
+                navigate('/candidate');
+            } catch (e) {
+                setError(e);
+            }
         }
     }
 
     const handleChangeRegister = (event) => {
         const { name, value, type } = event.target;
 
-        console.log(name);
-        console.log(type);
-        console.log(value);
+        // console.log(name);
+        // console.log(type);
+        // console.log(value);
         setRegisterCand({ ...registerCand, [name]: value, isCandidate: true });
 
         console.log(registerCand);
@@ -198,45 +204,46 @@ export default function CandidateEdit(props) {
         }
     };
 
-  const addAddress = () => {
-    setCandidate({
-      ...candidate,
-      address: [
-        ...candidate.address,
-        { id: 0, address1: "", address2: "", city: "", state: "", country: {} },
-      ],
-    });
-  };
+    const addAddress = () => {
+        setCandidate({
+            ...candidate,
+            address: [
+                ...candidate.address,
+                { id: 0, address1: "", address2: "", city: "", state: "", country: {} },
+            ],
+        });
+    };
 
-  const removeAddress = (removeIndex) => {
-    const updatedAddress = [...candidate.address];
-    updatedAddress.splice(removeIndex, 1);
-    console.log(updatedAddress);
-    setCandidate({ ...candidate, address: updatedAddress });
-  };
-  const convertStringToDate = (dateString) => {
-    //intial format
-    //2015-07-15
-    const date = new Date(dateString);
-    //Wed Jul 15 2015 00:00:00 GMT-0700 (Pacific Daylight Time)
-    const finalDateString = date.toISOString(date);
-    //2015-07-15T00:00:00.000Z
+    const removeAddress = (removeIndex) => {
+        const updatedAddress = [...candidate.address];
+        updatedAddress.splice(removeIndex, 1);
+        console.log(updatedAddress);
+        setCandidate({ ...candidate, address: updatedAddress });
+    };
+    const convertStringToDate = (dateString) => {
+        //intial format
+        //2015-07-15
+        const date = new Date(dateString);
+        //Wed Jul 15 2015 00:00:00 GMT-0700 (Pacific Daylight Time)
+        const finalDateString = date.toISOString(date);
+        //2015-07-15T00:00:00.000Z
 
-    console.log(finalDateString); // "1930-07-17T00:00:00.000Z"
-    return finalDateString;
-  };
+        console.log(finalDateString); // "1930-07-17T00:00:00.000Z"
+        return finalDateString;
+    };
 
-  const convertDateToString = (date) => {
-    //console.log(date);
-    let kati = new Date(date);
+    const convertDateToString = (date) => {
+        //console.log(date);
+        let kati = new Date(date);
 
-    let formattedDate = kati.toISOString().substr(0, 10);
+        let formattedDate = kati.toISOString().substr(0, 10);
 
-    return formattedDate;
-  };
+        return formattedDate;
+    };
 
     return (
         <div>
+            {error && <Errors error={error} />}
             <fieldset disabled={role ? (role.value === "qualitycontrol") : false}>
                 {!params.id &&
                     (role === "admin") ?
@@ -269,7 +276,7 @@ export default function CandidateEdit(props) {
                             <Col>
                                 <Form.Group >
                                     <Form.Label>First Name</Form.Label>
-                                    <Form.Control type="text" name="firstName" value={candidate.firstName} onChange={handleChange} required />
+                                    <Form.Control type="text" name="firstName" value={candidate.firstName} onChange={handleChange} />
                                 </Form.Group>
                             </Col>
                             <Col>
@@ -281,7 +288,7 @@ export default function CandidateEdit(props) {
                             <Col>
                                 <Form.Group >
                                     <Form.Label>Last Name</Form.Label>
-                                    <Form.Control type="text" name="lastName" value={candidate.lastName} onChange={handleChange} required />
+                                    <Form.Control type="text" name="lastName" value={candidate.lastName} onChange={handleChange} />
                                 </Form.Group>
                             </Col>
                             <Col>
@@ -334,7 +341,7 @@ export default function CandidateEdit(props) {
                             <Col>
                                 <Form.Group >
                                     <Form.Label>Email</Form.Label>
-                                    <Form.Control type="email" name="email" value={candidate.email} onChange={handleChange} required />
+                                    <Form.Control type="email" name="email" value={candidate.email} onChange={handleChange} />
                                 </Form.Group>
                             </Col>
                             <Col>
@@ -352,7 +359,7 @@ export default function CandidateEdit(props) {
                             <Col>
                                 <Form.Group >
                                     <Form.Label>Mobile Number</Form.Label>
-                                    <Form.Control type="text" name="mobile" value={candidate.mobile} onChange={handleChange} required />
+                                    <Form.Control type="text" name="mobile" value={candidate.mobile} onChange={handleChange} />
                                 </Form.Group>
                             </Col>
                         </Row>
@@ -408,7 +415,7 @@ export default function CandidateEdit(props) {
                                                                     <Form.Label>country</Form.Label>
                                                                     <Form.Select as="select" name="country"
                                                                         value={item.country.id}
-                                                                        onChange={(event) => handleChange(event, index)} required>
+                                                                        onChange={(event) => handleChange(event, index)}>
                                                                         <option value="" hidden >Please choose your Country... </option>
                                                                         {countries.map((country, index) =>
                                                                             <option key={index}
@@ -435,7 +442,7 @@ export default function CandidateEdit(props) {
                             <Col>
                                 <Form.Group >
                                     <Form.Label>Photo ID Number</Form.Label>
-                                    <Form.Control type="text" name="photoIdNumber" value={candidate.photoIdNumber} onChange={handleChange} required />
+                                    <Form.Control type="text" name="photoIdNumber" value={candidate.photoIdNumber} onChange={handleChange} />
                                 </Form.Group>
                             </Col>
                             <Col>
@@ -444,7 +451,7 @@ export default function CandidateEdit(props) {
                                     <Form.Control type="date"
                                         name="photoIdIssueDate"
                                         value={convertDateToString(candidate.photoIdIssueDate)}
-                                        onChange={handleChange} required />
+                                        onChange={handleChange} />
                                 </Form.Group>
                             </Col>
                             <Col>
@@ -453,7 +460,7 @@ export default function CandidateEdit(props) {
                                     <Form.Select as="select" name="photoIdType"
                                         value={candidate.photoIdType.id}
                                         onChange={handleChange}
-                                        required>
+                                        >
                                         <option value="" hidden >Please choose your ID type... </option>
                                         {photoIdTypes.map((pId, index) =>
                                             <option key={index}
