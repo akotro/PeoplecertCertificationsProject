@@ -140,8 +140,14 @@ function ExamList(props) {
         setShowForm(!showForm)
     }
 
+    const payPal = () => {
+        const headers = {"Origin": "https://localhost:44473/"}
+        // axios.get(`https://localhost:7196/api/Paypal`,{headers})
+       }
+
     return (
         <div>
+        <Button onClick ={() => payPal()}></Button>
             {role === "admin" &&
             <Button onClick={() => createCertificateButton()}>
                 {showForm ? "Close Form" : "Create New Exam"}
