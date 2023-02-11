@@ -20,7 +20,6 @@ export default function Login() {
         console.log(credentials)
         console.log(update)
 
-        setErrors([]);
         axios.post(`https://localhost:7196/api/accounts/login`, credentials).then(
             res => {
                 saveToken(res.data);
@@ -38,8 +37,6 @@ export default function Login() {
         setCredentials({ ...credentials, [name]: value });
 
         console.log(credentials);
-
-
     }
 
     return (

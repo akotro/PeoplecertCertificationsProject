@@ -17,7 +17,6 @@ export default function Register() {
     const register = (event) => {
         event.preventDefault();
 
-        setErrors([]);
         axios.post(`https://localhost:7196/api/accounts/create`, credentials).then(
             res => {
                 saveToken(res.data);
@@ -25,7 +24,6 @@ export default function Register() {
                 navigate("/candidate/create");
             }
         ).catch(function (error) {
-            setErrors(error.response.data);
             console.log(error);
         });
     }

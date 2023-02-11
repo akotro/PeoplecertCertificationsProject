@@ -113,16 +113,7 @@ function CertificateForm(props) {
                     console.log(error);
                 });
 
-        }
-
-        navigate("/")
-        //console.log("title = ", data.title ,
-        //    "desc = ", data.description,
-        //    "passmark = ", data.passingMark,
-        //    "maxmark = ", data.maxMark,
-        //    "cat = ", data.category,
-        //    "active = ", data.active,
-        //    "Topics = ", data.topics);
+        }        
     }
 
     return (
