@@ -95,6 +95,8 @@ export default function CandidateEdit(props) {
             });
     };
 
+
+
     const getId = () => {
         if (claims.length > 0) {
             return claims.find(claim => claim.name === 'userId').value

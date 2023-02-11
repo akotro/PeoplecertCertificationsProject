@@ -24,7 +24,7 @@ public class AccountsController : ControllerBase
         return await _service.GetListUsers();
     }
 
-    [HttpGet("getUser")]
+    [HttpGet("getUser/{email}")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public async Task<ActionResult<UserDto>> GetUser(string email)
     {
@@ -142,7 +142,7 @@ public class AccountsController : ControllerBase
         return Ok(authResponse);
     }
 
-    [HttpPut("update")]
+    [HttpPut("update/{email}")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public async Task<IActionResult> Update(string email, [FromBody] UserDto userDto)
     {
@@ -156,7 +156,7 @@ public class AccountsController : ControllerBase
         return NoContent();
     }
 
-    [HttpDelete("delete")]
+    [HttpDelete("delete/{email}")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public async Task<IActionResult> Delete(string email)
     {
