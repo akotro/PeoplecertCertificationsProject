@@ -13,38 +13,38 @@ namespace ModelLibrary.Models.DTO.Candidates
 {
     public class CandidatesDto
     {
-        // [Required]
+        [Required]
         public string AppUserId { get; set; }
 
         [Required,
-        StringLength(maximumLength: 2,MinimumLength = 1,ErrorMessage ="yioosdfsd")]
+        StringLength(100)]
         public string? FirstName { get; set; }
 
         [StringLength(1)]
         public string? MiddleName { get; set; }
 
-        // [Required, StringLength(100)]
+        [Required, StringLength(100)]
         public string? LastName { get; set; }
 
-        // [Required, Range(typeof(DateTime), "1/1/1900", "1/1/2050")]
+        [Required, Range(typeof(DateTime), "1/1/1900", "1/1/2050")]
         public DateTime? DateOfBirth { get; set; }
 
-        // [EmailAddress]
+        [EmailAddress]
         public string? Email { get; set; }
 
-        // [Phone]
+        [Phone]
         public string? Landline { get; set; }
 
-        // [Phone]
+        [Phone]
         public string? Mobile { get; set; }
 
-        // [StringLength(50)]
+        [StringLength(50)]
         public string? CandidateNumber { get; set; }
 
-        // [Required, StringLength(50)]
+        [Required, StringLength(50)]
         public string? PhotoIdNumber { get; set; }
 
-        // [Required, Range(typeof(DateTime), "1/1/1900", "1/1/2050")]
+        [Required, Range(typeof(DateTime), "1/1/1900", "1/1/2050")]
         public DateTime? PhotoIdIssueDate { get; set; }
 
         public GenderDto? Gender { get; set; }

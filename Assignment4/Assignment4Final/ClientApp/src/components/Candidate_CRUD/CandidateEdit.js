@@ -288,7 +288,7 @@ export default function CandidateEdit(props) {
                             <Col>
                                 <Form.Group >
                                     <Form.Label>Last Name</Form.Label>
-                                    <Form.Control type="text" name="lastName" value={candidate.lastName} onChange={handleChange} />
+                                    <Form.Control type="text" name="lastName" value={candidate.lastName} onChange={handleChange} required />
                                 </Form.Group>
                             </Col>
                             <Col>
@@ -341,7 +341,7 @@ export default function CandidateEdit(props) {
                             <Col>
                                 <Form.Group >
                                     <Form.Label>Email</Form.Label>
-                                    <Form.Control type="email" name="email" value={candidate.email} onChange={handleChange} />
+                                    <Form.Control type="email" name="email" value={candidate.email} onChange={handleChange} required />
                                 </Form.Group>
                             </Col>
                             <Col>
@@ -359,7 +359,7 @@ export default function CandidateEdit(props) {
                             <Col>
                                 <Form.Group >
                                     <Form.Label>Mobile Number</Form.Label>
-                                    <Form.Control type="text" name="mobile" value={candidate.mobile} onChange={handleChange} />
+                                    <Form.Control type="text" name="mobile" value={candidate.mobile} onChange={handleChange} required />
                                 </Form.Group>
                             </Col>
                         </Row>
@@ -415,7 +415,7 @@ export default function CandidateEdit(props) {
                                                                     <Form.Label>country</Form.Label>
                                                                     <Form.Select as="select" name="country"
                                                                         value={item.country.id}
-                                                                        onChange={(event) => handleChange(event, index)}>
+                                                                        onChange={(event) => handleChange(event, index)} required>
                                                                         <option value="" hidden >Please choose your Country... </option>
                                                                         {countries.map((country, index) =>
                                                                             <option key={index}
@@ -442,7 +442,7 @@ export default function CandidateEdit(props) {
                             <Col>
                                 <Form.Group >
                                     <Form.Label>Photo ID Number</Form.Label>
-                                    <Form.Control type="text" name="photoIdNumber" value={candidate.photoIdNumber} onChange={handleChange} />
+                                    <Form.Control type="text" name="photoIdNumber" value={candidate.photoIdNumber} onChange={handleChange} required />
                                 </Form.Group>
                             </Col>
                             <Col>
@@ -451,7 +451,7 @@ export default function CandidateEdit(props) {
                                     <Form.Control type="date"
                                         name="photoIdIssueDate"
                                         value={convertDateToString(candidate.photoIdIssueDate)}
-                                        onChange={handleChange} />
+                                        onChange={handleChange} required />
                                 </Form.Group>
                             </Col>
                             <Col>
@@ -460,7 +460,7 @@ export default function CandidateEdit(props) {
                                     <Form.Select as="select" name="photoIdType"
                                         value={candidate.photoIdType.id}
                                         onChange={handleChange}
-                                        >
+                                        required>
                                         <option value="" hidden >Please choose your ID type... </option>
                                         {photoIdTypes.map((pId, index) =>
                                             <option key={index}
