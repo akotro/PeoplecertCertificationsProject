@@ -132,35 +132,20 @@ function CertificateForm(props) {
                 <Form onSubmit={handleSubmit} >
                     <Stack gap={3}>
                         <Row>
-                            <Col md={10}>
+                            <Col xs={5}>
                                 <Form.Group >
                                     <Form.Label>Title</Form.Label>
                                     <Form.Control type="text" name="title" value={data.title} onChange={handleChange} />
                                 </Form.Group>
                             </Col>
-                            <Form.Group as={Col}>
-                                <Form.Label>Passing Mark</Form.Label>
-                                <Form.Control type="number" step="1" min="0"
-                                    name='passingMark'
-
-                                    max="100" value={data.passingMark} onChange={handleChange} />
-                            </Form.Group>
-                        </Row>
-                        <Row>
-                            <Col md={10}>
+                            <Col>
                                 <Form.Group>
                                     <Form.Label>Category</Form.Label>
                                     <Form.Control type="text"
                                         name='category'
                                         value={data.category} onChange={handleChange} />
                                 </Form.Group>
-
                             </Col>
-
-                            <Form.Group as={Col}>
-                                <Form.Label>Max Mark</Form.Label>
-                                <Form.Control type="text" value={data.maxMark} disabled />
-                            </Form.Group>
                         </Row>
 
                         <FloatingLabel label="Description" >
