@@ -61,8 +61,7 @@ function CandidateList(props) {
                 </div>
             );
         } else if (role === "qualitycontrol") {
-            return <Button onClick={() => handleEdit(candId)}>Details</Button>
-
+            return <Button onClick={() => navigate(`/candidate/${candId}`, { state: { role: role } })}>Details</Button>
         } else {
             return <div> no buttons for you</div>
         }

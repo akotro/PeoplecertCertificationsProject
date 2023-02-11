@@ -89,7 +89,7 @@ const AppRoutes = [
     path: "/candidate",
     needsAdmin: true,
     needsQc: true,
-
+    
     element: <CandidateList />,
   },
   {
@@ -100,6 +100,7 @@ const AppRoutes = [
   },
   {
     path: "/candidate/:id",
+    needsQc: true,
     needsAdmin: true,
     element: <CandidateEdit />,
   },
