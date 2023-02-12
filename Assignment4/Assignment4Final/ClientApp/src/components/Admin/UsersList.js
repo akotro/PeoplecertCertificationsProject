@@ -56,7 +56,7 @@ function UsersList() {
 
     const handleEdit = (userEmail) => {
         //console.log("edit for id  = ", candId);
-        navigate(`/users/${userEmail}`);
+        navigate(`/users/edit/${userEmail}`);
     }
 
     

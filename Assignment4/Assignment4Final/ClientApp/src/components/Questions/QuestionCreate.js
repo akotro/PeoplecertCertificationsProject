@@ -14,7 +14,7 @@ import {
 } from "react-bootstrap";
 import { Form } from "react-bootstrap";
 // import Multiselect from "multiselect-react-dropdown";
-import { React, useState, useEffect  } from "react";
+import { React, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import axios from "axios";
@@ -24,7 +24,7 @@ import Errors from '../Common/ErrorList'
 import BackButton from "../Common/Back";
 
 function QuestionCreate() {
-    const navigate=useNavigate();
+    const navigate = useNavigate();
     const [error, setError] = useState(null);
     //------------------------------------------------Question state
     const [question, setQuestion] = useState({
@@ -171,7 +171,7 @@ function QuestionCreate() {
     };
 
     //------------------------------------------------HANDLE SUBMIT
-    function handleSubmit(event) {
+    async function handleSubmit(event) {
         event.preventDefault();
         console.log("On submit");
 
@@ -181,7 +181,7 @@ function QuestionCreate() {
 
         console.log(newOnSubmitQuestion);
 
-        axios
+        await axios
             .post("https://localhost:7196/api/Questions", newOnSubmitQuestion)
             .then(function (response) {
                 console.log("Inside response");
@@ -194,7 +194,7 @@ function QuestionCreate() {
                 setError(error);
             });
 
-            navigate('/questions')
+        navigate('/questions')
     }
     // const handleSubmit = (event) => {
     // };
@@ -427,13 +427,13 @@ function QuestionCreate() {
                                 } name="checkbox3" />
                         </Col>
                     </Row>
-                            <Button
-                                variant="primary"
-                                type="submit"
-                                value={"Submit"}
-                            >
-                                Create Question
-                            </Button>
+                    <Button
+                        variant="primary"
+                        type="submit"
+                        value={"Submit"}
+                    >
+                        Create Question
+                    </Button>
                     <BackButton />
                     {/* </Stack> */}
                 </Stack>

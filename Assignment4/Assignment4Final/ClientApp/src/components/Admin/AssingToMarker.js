@@ -1,12 +1,15 @@
 import axios from "axios"
+
 import { useState, useEffect, useContext } from "react";
 import { Form, Row, Col, Button, Accordion } from "react-bootstrap";
+import { useNavigate } from "react-router";
 import { AuthenticationContext } from '../auth/AuthenticationContext'
 import BackButton from "../Common/Back";
 import MarkerList from "../Marker/MarkerList";
 
 
 function AssignToMarker() {
+    const navigate = useNavigate();
     const { update, claims } = useContext(AuthenticationContext);
     const [markers, setMarkers] = useState([]);
     const [notAssignedExams, setNotAssignedExams] = useState([]);
@@ -22,11 +25,11 @@ function AssignToMarker() {
             console.log(error);
         });
         axios.get(`https://localhost:7196/api/Markers/getallcandidateexams/`).then((response) => {
-            setAssignedExams(response.data.data.filter(
-                exam => (exam.marker !== null || exam.marker === undefined)& 
-                (exam.isModerated === null || exam.isModerated=== undefined)
-                ))
-            setNotAssignedExams(response.data.data.filter(exam => exam.marker === null || exam.marker === undefined))
+            console.log(response.data.data)
+            setNotAssignedExams(response.data.data.filter(exam => exam.marker === null || exam.marker === undefined))//swsto
+// )
+            setAssignedExams(response.data.data.filter(exam => (exam.marker !== undefined) && (exam.isModerated !== true) ))
+                
         }).catch(function (error) {
             console.log(error);
         });
@@ -78,6 +81,7 @@ function AssignToMarker() {
             });
             document.getElementById("assignForm").reset();
             document.getElementById("re-assignForm").reset();
+            navigate(-1);
     }
 
     return (
