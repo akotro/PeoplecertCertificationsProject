@@ -1,4 +1,6 @@
 ﻿using Assignment4Final.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -49,6 +51,7 @@ namespace Assignment4Final.Controllers
             return NotFound();
         }
         [HttpGet("success/{id}")]
+       
         public async Task<IActionResult> Success(int id)
         {
             var userId = _userManager.GetUserId(User);

@@ -96,8 +96,8 @@ public class AccountsService
                 UserName = userDto.UserName != null ? userDto.UserName : userDto.Credentials.Email,
                 Email = userDto.Credentials.Email,
                 PhoneNumber = userDto.PhoneNumber,
+                LockoutEnabled = false,
                 EmailConfirmed = true,
-                LockoutEnabled = false
             };
 
             var createResult = await _repository.Create(user, userDto.Credentials.Password);

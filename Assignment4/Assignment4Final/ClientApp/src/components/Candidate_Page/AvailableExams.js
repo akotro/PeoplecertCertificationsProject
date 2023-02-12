@@ -33,9 +33,9 @@ function AvailableExams(props) {
         }).catch(function (error) {
             console.log(error);
         });
-        if (!user) {
-            setUser("admin");
-        }
+        // if (!user) {
+        //     setUser("admin");
+        // }
     }, []);
 
     const [showModal, setShowModal] = useState(false);
