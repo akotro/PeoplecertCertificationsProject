@@ -41,12 +41,13 @@ function UsersList() {
     }, []);
 
 
-    const handleDelete = (userEmail) => {
+    const handleDelete = async (userEmail) => {
         console.log("delete for id  = ", userEmail)
         const confirmDelete = window.confirm("Are you sure you want to delete this User?");
         if (confirmDelete) {
-            axios.delete(`https://localhost:7196/api/accounts/delete/${userEmail}`).then(response => {
+            await axios.delete(`https://localhost:7196/api/accounts/delete/${userEmail}`).then(response => {
                 console.log(response)
+                setUsers( prevData => prevData.filter(item => item.email !== userEmail))
                 // setData(prevData => prevData.filter(item => item.appUserId !== candId));
             }).catch(response => {
                 console.log(response)
@@ -59,15 +60,15 @@ function UsersList() {
         navigate(`/users/edit/${userEmail}`);
     }
 
-    
+
 
 
     return (
         <div>
-                <Button variant='dark'
-                    className='d-grid gap-2 col-6 mx-auto py-2 my-2'
-                    onClick={() => navigate('/users/create')}
-                > Add a User </Button>
+            <Button variant='dark'
+                className='d-grid gap-2 col-6 mx-auto py-2 my-2'
+                onClick={() => navigate('/users/create')}
+            > Add a User </Button>
 
             <Table striped hover borderless className="text-center" id='list_of_allcands'>
                 <thead >
@@ -96,7 +97,7 @@ function UsersList() {
                     )}
                 </tbody>
             </Table>
-            <BackButton/>
+            <BackButton />
         </div>
 
     )

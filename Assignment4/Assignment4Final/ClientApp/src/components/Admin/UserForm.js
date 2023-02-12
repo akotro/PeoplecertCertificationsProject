@@ -7,6 +7,8 @@ import { getUserId } from '../auth/handleJWT'
 import { useNavigate, useParams } from "react-router-dom";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import ErrorsRegister from '../Common/ErrorListRegister'
+
 import axios from "axios";
 
 function UserForm() {
@@ -29,8 +31,7 @@ function UserForm() {
   const [roles, setRoles] = useState([]);
 
   const fetchData = () => {
-    if (params.email)
-    {
+    if (params.email) {
       axios
         .get(`https://localhost:7196/api/accounts/getUser/${params.email}`)
         .then((response) => {
@@ -89,9 +90,19 @@ function UserForm() {
           }
         });
       }
+    } else if (name === "email") {
+      setUser({
+        ...user,[name]: value,
+        credentials: {
+          email: value,
+          password: confirmPassword
+        }
+      });
     }
     else {
-      setUser({ ...user, [name]: value })
+      setUser({
+        ...user, [name]: value
+      })
     }
   }
 
@@ -100,33 +111,36 @@ function UserForm() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (password !== confirmPassword) {
-      console.log("Passwords do not match");
-    } else {
-      console.log("I will send");
-    
+    // if (password !== confirmPassword) {
+    //   console.log("Passwords do not match");
+    // } else {
+    //   console.log("I will send");
 
-      if (params.email)
-      {
-        axios.put(`https://localhost:7196/api/accounts/update/${user.email}`, user)
-          .then((response) => {
-            console.log(response);
-          })
-          .catch(function (error) {
-            console.log(error);
-          });    
+
+    if (params.email) {
+      axios.put(`https://localhost:7196/api/accounts/update/${params.email}`, user)
+        .then((response) => {
+          console.log(response);
+          navigate('/users')
+        })
+        .catch(function (error) {
+          console.log(error);
+          setError(error)
+        });
       }
       else {
         axios.post(`https://localhost:7196/api/accounts/create`, user)
-          .then((response) => {
-            console.log(response);
-          })
-          .catch(function (error) {
-            console.log(error);
-          });    
-      }
+        .then((response) => {
+          console.log(response);
+          navigate('/users')
+        })
+        .catch(function (error) {
+          console.log(error);
+          setError(error)
+        });
     }
   }
+
 
 
   // //for a user who is not a candidate.
@@ -157,7 +171,8 @@ function UserForm() {
 
   return (
     <div>
-      {error && <div>The new password fields must match!</div>}
+      {error && <ErrorsRegister error={error} />}
+
       <div>
 
       </div>
@@ -209,14 +224,14 @@ function UserForm() {
             <Col>
               <Form.Group >
                 <Form.Label>new Password</Form.Label>
-                <Form.Control type="text" name="newPassword1" value={password} onChange={handleChange} required />
+                <Form.Control type="password" name="newPassword1" value={password} onChange={handleChange} />
               </Form.Group>
             </Col>
             <Row>
               <Col>
                 <Form.Group >
                   <Form.Label>Confirm new Password</Form.Label>
-                  <Form.Control type="text" name="newPassword2" value={confirmPassword} onChange={handleChange} required />
+                  <Form.Control type="password" name="newPassword2" value={confirmPassword} onChange={handleChange} />
                 </Form.Group>
               </Col>
             </Row>
