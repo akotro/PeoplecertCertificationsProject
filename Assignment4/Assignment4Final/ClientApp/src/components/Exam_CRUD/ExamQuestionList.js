@@ -58,7 +58,7 @@ function ExamQuestionList() {
         return (
 
             <div>
-                <Button onClick={() => handleRemove(question)} variant="danger">Remove</Button>
+                <Button onClick={() => handleRemove(question)} variant="outline-danger">Remove</Button>
 
             </div>
         )
@@ -84,7 +84,7 @@ function ExamQuestionList() {
 
     const handleBack = () => {
         console.log("before back", exam)
-        axios.put(`https://localhost:7196/api/Exam/${exam.id}`, exam).then(navigate(-1))
+        axios.put(`https://localhost:7196/api/Exam/${exam.id}`, exam).then(navigate("/ExamsList/"))
             .catch(function (error) {
             });
     }
@@ -94,33 +94,41 @@ function ExamQuestionList() {
 
 
             <fieldset disabled={role ? role === "qualitycontrol" : false}>
-                <div>
-                    <Button onClick={() => handleAdd(exam)}>Add Question</Button>
+                <div className="my-2 ">
+
                     <Row className="mt-3">
                         <Col xs={3}>
-                            <span className="p-3 mb-2 bg-info text-white">
+                            <span class="p-3 mb-2 rounded border border-dark text-dark rounded">
                                 Questions in Exam: {questions.length}
                             </span>
                         </Col>
                         <Col xs={3}>
-                            <span className="p-3 mb-2 bg-white text-success">
+                            <span class="p-3 mb-2 rounded border border-dark text-dark rounded">
                                 EASY: {questions.filter(quest => quest.difficultyLevel.difficulty !== "HARD" && quest.difficultyLevel.difficulty !== "MEDIUM").length}
                             </span>
                         </Col>
                         <Col xs={3}>
-                            <span className="p-3 mb-2 bg-white text-secondary">
+                            <span class="p-3 mb-2 rounded border border-dark text-dark rounded">
                                 MEDIUM: {questions.filter(quest => quest.difficultyLevel.difficulty !== "EASY" && quest.difficultyLevel.difficulty !== "HARD").length}
                             </span>
                         </Col>
                         <Col xs={3}>
-                            <span className="p-3 mb-2 bg-white text-danger">
+                            <span class="p-3 mb-2 rounded border border-dark text-dark rounded">
                                 HARD: {questions.filter(quest => quest.difficultyLevel.difficulty !== "EASY" && quest.difficultyLevel.difficulty !== "MEDIUM").length}
                             </span>
                         </Col>
                     </Row>
+                    <Row>
+                        <p></p>
+                        <Button onClick={() => handleAdd(exam)} variant='dark'
+                            className='d-grid gap-2 col-6 mx-auto py-2 my-2' >Add Question</Button>
+
+                    </Row>
+
                     {exam && (
                         <Row className="mt-3">
-                            <Col xs={12}>
+
+                            <Col xs={2}>
                                 <InputGroup>
                                     <InputGroup.Text>Set Passing Mark</InputGroup.Text>
                                     <Form.Control
@@ -153,7 +161,7 @@ function ExamQuestionList() {
                     </tbody>
                 </table>
             </fieldset>
-            <Button variant="dark" onClick={handleBack} className="mt-3">Go Back</Button>
+            <Button variant='secondary' className='d-grid gap-2 col-12 mx-auto py-2 my-2' onClick={handleBack} >Go Back To Exams List</Button>
         </div>
     )
 }

@@ -5,7 +5,7 @@ using NuGet.Versioning;
 
 namespace Assignment4Final.Data.Repositories
 {
-    public class CandidateExamRepository
+    public class CandidateExamRepository : ICandidateExamRepository
     {
         private readonly ApplicationDbContext _context;
 
@@ -95,5 +95,9 @@ namespace Assignment4Final.Data.Repositories
         //       .Collection(e => e.Questions)
         //       .Load();
         // }
+    }
+
+    public interface ICandidateExamRepository
+    {
     }
 }
