@@ -65,6 +65,8 @@ export default function QuestionEdit(event, name) {
             setOptions(response.data.data.options);
         });
     }, [url]);//------------------------------------------------//GET QUESTION BY ID
+
+    console.log(question);
     //------------------------------------------------//HANDLE SUBMIT
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -176,6 +178,7 @@ export default function QuestionEdit(event, name) {
                                     onSelect(event, topic, "topic");
                                 }} //4. this without 3. stops the error
                                 value={topic.id}
+                                onChange={console.log("Topic changed")}
                             >
                                 {topic.name}
                             </option>
@@ -191,7 +194,7 @@ export default function QuestionEdit(event, name) {
                             as="select"
                             name="DifficultySelect"
                             value={question.difficultyLevelId} //1.triggers the controlled component error
-                        // onChange={ handleChange  }    //2.stops the controlled component error
+                        onChange={ console.log("Difficulty changed")  }    //2.stops the controlled component error
                         //3. the combination of 3 and 4 triggers again the error
                         //  required                                    //more study on This is required
                         >
@@ -205,6 +208,7 @@ export default function QuestionEdit(event, name) {
                                         onSelect(event, difficultyLevel, "difficultyLevel");
                                     }} //4. this without 3. stops the error
                                     value={difficultyLevel.id}
+                                    onChange={console.log("Difficulty changed")}
                                 >
                                     {difficultyLevel.difficulty}
                                 </option>
