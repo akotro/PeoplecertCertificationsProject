@@ -21,7 +21,7 @@ namespace Assignment4Final.Controllers
         [HttpGet] //GET: Return all the available Exams in db
         [Authorize(
             AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
-            Policy = "IsAdmin"
+            Policy = "IsAdminOrQualityControl"
         )]
         public async Task<ActionResult<List<ExamDto>>> GetAll()
         {
@@ -32,7 +32,7 @@ namespace Assignment4Final.Controllers
         [HttpGet("{id}")]
         [Authorize(
             AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
-            Policy = "IsAdmin"
+            Policy = "IsAdminOrQualityControl"
         )]
         public async Task<IActionResult> Get(int id)
         {

@@ -1,22 +1,24 @@
 ﻿import React, { useEffect, useState } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { Button, Col, Row, Form } from 'react-bootstrap';
+
 import axios from 'axios';
 
 export default function Examination(props) {
 
     let navigate = useNavigate();
     let location = useLocation();
-    const candidate ={};
+    const candidate = {};
     const params = useParams();
     const [candidateExam, setCandidateExam] = useState({ exam: { questions: [] } })
     const [user, setUser] = useState();
     const candExamId = params.id;
 
     // const [candidateExam, setCandidateExam] = useState({
-        //     exam: { questions: [] },
+    //     exam: { questions: [] },
     //     CandidateExamAnswers: { ChoosenOptions: [] },
     // });
-    
+
     useEffect(() => {
         axios.put(`https://localhost:7196/api/CandidateExam/StartExam/${candExamId}`).then((response) => {
             setCandidateExam(response.data);
@@ -28,7 +30,7 @@ export default function Examination(props) {
             console.log(error);
         });
     }, []);
-    
+
     function Replace(temp) {
         var parser = new DOMParser();
 
@@ -38,13 +40,18 @@ export default function Examination(props) {
     }
 
     const saveCandidateExam = () => {
+
+        const confirmDelete = window.confirm("Are you sure you want to submit this?\nThis will finilise all the progress until now !\nWe suggest your try answering EVERY question");
+
+        if (confirmDelete) {
         axios.put(`https://localhost:7196/api/CandidateExam/EndExam/${candExamId}`).then((response) => {
             //console.log(response.data);
-            navigate(`/candidate/ExamResults`, { state: { data: response.data, candidate:candidate }});
+            navigate(`/candidate/ExamResults`, { state: { data: response.data, candidate: candidate } });
         })
-        .catch(error => {
-            console.error(error);
-        });
+            .catch(error => {
+                console.error(error);
+            });
+        }
     }
 
     const handleOptionChange = (event, questionIndex) => {
@@ -99,7 +106,7 @@ export default function Examination(props) {
                         ))}
                     </ol>
 
-                    <select
+                    {/* <select
                         id="option"
                         value={candidateExam?.candidateExamAnswers[indexOfFirstQuestion + index]?.chosenOption || ""}
                         onChange={(event) => handleOptionChange(event, indexOfFirstQuestion + index)}
@@ -110,21 +117,42 @@ export default function Examination(props) {
                                 {index + 1}
                             </option>
                         ))}
-                    </select>
+                    </select> */}
+                    <Row>
+
+                    <Col xs={4}>
+
+                        <Form.Select as="select" name="gender" id="option"
+                            value={candidateExam?.candidateExamAnswers[indexOfFirstQuestion + index]?.chosenOption || ""}
+                            onChange={(event) => handleOptionChange(event, indexOfFirstQuestion + index)}
+                            required>
+                            <option value="" hidden>Choose option</option>
+                            {question.options.map((option, index) => (
+                                <option key={index} value={option.text}>
+                                    {index + 1}
+                                </option>)
+                            )}
+                        </Form.Select>
+                    </Col>
+                    <Col >
+                        <div className="d-grid gap-2 d-md-flex justify-content-md-end">
+                            {currentPage !== 1 && <Button onClick={() => setCurrentPage(currentPage - 1)}>Previous</Button>}
+                            &nbsp;
+                            {currentPage < totalPages && <Button onClick={() => setCurrentPage(currentPage + 1)}>Next</Button>}
+                        </div>
+                    </Col>
+                    </Row>
 
                 </div>
             ))}
 
-            <hr></hr>
 
-            <div>
-                {currentPage !== 1 && <button onClick={() => setCurrentPage(currentPage - 1)}>Previous</button>}
-                &nbsp;
-                {currentPage < totalPages && <button onClick={() => setCurrentPage(currentPage + 1)}>Next</button>}
+            <hr></hr>
+            <div className="d-grid gap-2 col-3 mx-auto py-2 my-2">
+            <Button  variant="outline-success" onClick={saveCandidateExam}>End & Submit Exam</Button>
+
             </div>
-            <hr></hr>
 
-            <button onClick={saveCandidateExam}>Submit</button>
 
         </div>
     );

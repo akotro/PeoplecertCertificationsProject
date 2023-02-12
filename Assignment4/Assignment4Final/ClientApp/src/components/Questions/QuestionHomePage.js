@@ -109,7 +109,7 @@ function Questions() {
                 <Button variant='dark'
                     className='d-grid gap-2 col-6 mx-auto py-2 my-2'
                     onClick={() => navigate('/questions/create')}
-                > Create a new Certificate </Button>
+                > Create a new Question </Button>
                 : null}
             <div>
                 <Table hover striped>
