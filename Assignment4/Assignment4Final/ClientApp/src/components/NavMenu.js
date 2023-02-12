@@ -82,18 +82,6 @@ function NavMenu() {
                                             <NavLink tag={Link} className="text-dark" to="/users">Add User</NavLink>
                                         </NavDropdown.Item>
                                     </NavDropdown>
-
-                                    <NavDropdown title="Examination Actions">
-                                        <NavItem>
-                                            <NavLink tag={Link} className="text-dark" to="/ExamsList">Examinations List</NavLink>
-                                        </NavItem>
-                                    </NavDropdown>
-
-                                    <NavDropdown title="Examination Actions">
-                                        <NavItem>
-                                            <NavLink tag={Link} className="text-dark" to="/ExamsList">Examinations List</NavLink>
-                                        </NavItem>
-                                    </NavDropdown>
                                 </>}
                             />
 

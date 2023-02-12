@@ -10,26 +10,19 @@ function MarkExam(props) {
     const navigate = useNavigate();
     const location = useLocation();
 
-    // const [exam, setExam] = useState(location.state.data);
-    const [data, setData] = useState([]);
+    const [exam, setExam] = useState(location.state.data);
     const initialScore = location.state.data.candidateScore;
 
-    // const incomingData = location.state.data;
-    // const role = location.state.role;
-
-    console.log(location.state.data);
+    const incomingData = location.state.data;
+    const role = location.state.role;
 
     useEffect(() => {
-        axios.get(`https://localhost:7196/api/getCandExamById/${location.state.data}`)
-          .then((response) => {
-            console.log(response);
-            setData(response);
-          })
-          .catch((error) => {
-            console.log("I am in error");
-            console.log(error);
-          });
-      }, []);
+        // initialScore = exam.candidateScore;
+        // console.log(incomingData)
+        // setExam(incomingData)
+        // console.log(exam.exam.certificateTitle)
+        // console.log(exam.candidateExamAnswers)
+    }, []);
 
 
     const handleChange = (event, queIndex) => {
@@ -39,8 +32,8 @@ function MarkExam(props) {
         // console.log("type", type);
         // console.log(value);
         if (type === 'checkbox') {
-            setData({
-                ...data, candidateExamAnswers: data.candidateExamAnswers.map((canAn, Index) => {
+            setExam({
+                ...exam, candidateExamAnswers: exam.candidateExamAnswers.map((canAn, Index) => {
                     if (Index === queIndex) {
                         return {
                             ...canAn, [name]: checked
@@ -51,12 +44,12 @@ function MarkExam(props) {
         }
         // if (initialScore !== exam.candidateScore) {
         // setExam({...exam , candidateScore: exam.candidateExamAnswers.filter(ans=> ans.isCorrectModerated).count()})
-        console.log(data.candidateExamAnswers.filter(ans => ans.isCorrectModerated === true).length)
+        console.log(exam.candidateExamAnswers.filter(ans => ans.isCorrectModerated === true).length)
         // }
         // const updatedExam = {...exam, isModerated: true};
         // setFinalScore();
         // exam.isModerated = true;
-        console.log(data)
+        console.log(exam)
         // setExam(exam)
     }
     //--------------------------------------------------//filters the text from the raw html
@@ -78,10 +71,10 @@ function MarkExam(props) {
     //--------------------------------------------------
 
     const handleSubmit = (canExamId) => {
-        data.isModerated = true;
-        setData(data);
+        exam.isModerated = true;
+        setExam(exam);
 
-        axios.put(`https://localhost:7196/api/Markers/mark/${canExamId}`, data)
+        axios.put(`https://localhost:7196/api/Markers/mark/${canExamId}`, exam)
             .then(function (response) {
                 console.log(response);
             })
@@ -93,10 +86,10 @@ function MarkExam(props) {
 
     const setFinalScore = () => {
 
-        console.log(data.candidateScore)
-        setData({ ...data, candidateScore: data.candidateExamAnswers.filter(answer => answer.isCorrectModerated === false).length })
-        console.log(...data.candidateExamAnswers.filter(answer => answer.isCorrectModerated === true))
-        console.log(...data.candidateExamAnswers.filter(answer => answer.id === 1))
+        console.log(exam.candidateScore)
+        setExam({ ...exam, candidateScore: exam.candidateExamAnswers.filter(answer => answer.isCorrectModerated === false).length })
+        console.log(...exam.candidateExamAnswers.filter(answer => answer.isCorrectModerated === true))
+        console.log(...exam.candidateExamAnswers.filter(answer => answer.id === 1))
     }
 
     return (
@@ -104,30 +97,30 @@ function MarkExam(props) {
             <div>
                 <Row>
                     <Col xs={8}>
-                        {/* <h4>Title: {data.exam.certificateTitle}</h4> */}
+                        <h4>Title: {exam.exam.certificateTitle}</h4>
                     </Col>
                     <Col>
-                        {initialScore !== data.candidateScore && (
+                        {initialScore !== exam.candidateScore && (
                             <div>
                                 <Row>
                                     <Col>
                                         Initial Score (
-                                        {(initialScore / data.maxScore) * 100}%)
+                                        {(initialScore / exam.maxScore) * 100}%)
                                         :
                                     </Col>
                                     <Col>
-                                        {initialScore}/{data.maxScore}
+                                        {initialScore}/{exam.maxScore}
                                     </Col>
                                 </Row>
                                 <Row>
                                     <Col>
                                         Score After Marking (
-                                        {(data.candidateScore / data.maxScore) *
+                                        {(exam.candidateScore / exam.maxScore) *
                                             100}
                                         %) :
                                     </Col>
                                     <Col>
-                                        {data.candidateScore}/{data.maxScore}
+                                        {exam.candidateScore}/{exam.maxScore}
                                     </Col>
                                 </Row>
                             </div>
@@ -144,7 +137,7 @@ function MarkExam(props) {
                     </tr>
                 </thead>
                 <tbody>
-                    {data.candidateExamAnswers.map((que, index) => (
+                    {exam.candidateExamAnswers.map((que, index) => (
                         <tr key={index}>
                             <td xs={1}>{index + 1}</td>
                             <td>
@@ -228,12 +221,12 @@ function MarkExam(props) {
                                     onChange={(event) =>
                                         handleChange(event, index)
                                     }
-                                    // disabled={
-                                    //     data.isModerated === true ||
-                                    //         role === "qualitycontrol"
-                                    //         ? true
-                                    //         : false
-                                    // }
+                                    disabled={
+                                        exam.isModerated === true ||
+                                            role === "qualitycontrol"
+                                            ? true
+                                            : false
+                                    }
                                 />
                             </td>
                         </tr>
@@ -241,11 +234,11 @@ function MarkExam(props) {
                 </tbody>
             </Table>
             <Stack gap={3}>
-                {/* {role !== "qualitycontrol" && (
-                    <Button onClick={() => handleSubmit(data.id)}>
+                {role !== "qualitycontrol" && (
+                    <Button onClick={() => handleSubmit(exam.id)}>
                         Save & Submit Marking
                     </Button>
-                )} */}
+                )}
                 <Button
                     variant="dark"
                     className="d-grid col-12 mx-auto mb-2"

@@ -21,7 +21,7 @@ function MarkerList(props) {
     useEffect(() => {
 
         const params = {
-            include: false
+            include: true
         };
 
         console.log(role)
@@ -93,20 +93,20 @@ function MarkerList(props) {
                         <tbody>
                             {exams.map((CandidateExam, index) => (
                                 <tr key={index}>
-                                    {/* <td>{CandidateExam.exam.certificateTitle}</td> */}
+                                    <td>{CandidateExam.exam.certificateTitle}</td>
                                     <td>{CandidateExam.candidateScore}</td>
                                     <td>{makeDate(CandidateExam.markerAssignedDate)}
                                         {/* <Button onClick={()=> makeDate(CandidateExam.markerAssignedDate)}>print date</Button> */}
                                     </td>
                                     <td>
                                         {CandidateExam.result === true ?
-                                            <input className="form-check-input" type="checkbox" checked disabled /> :
-                                            <input className="form-check-input" type="checkbox" disabled />
+                                            <input class="form-check-input" type="checkbox" checked disabled /> :
+                                            <input class="form-check-input" type="checkbox" disabled />
                                         }
                                     </td>
                                     <td>
                                     {role !== "qualitycontrol" ?
-                                        <Button onClick={() => navigate(`/marker/markexam`, { state: { data: CandidateExam.id } })}>Mark Exam</Button> :
+                                        <Button onClick={() => navigate(`/marker/markexam`, { state: { data: CandidateExam } })}>Mark Exam</Button> :
                                         <Button onClick={() => navigate(`/marker/markexam`, { state: { data: CandidateExam, role: role } })}>View Marking</Button>
                                     }
                                     </td>
@@ -134,13 +134,13 @@ function MarkerList(props) {
                         <tbody>
                             {markedExams.map((CandidateExam, index) => (
                                 <tr key={index}>
-                                    {/* <td >{CandidateExam.exam.certificateTitle}</td> */}
+                                    <td >{CandidateExam.exam.certificateTitle}</td>
                                     <td>{CandidateExam.candidateScore}</td>
                                     <td>{makeDate(CandidateExam.markingDate)}</td>
                                     <td>
                                         {CandidateExam.result === true ?
-                                            <input className="form-check-input" type="checkbox" checked disabled /> :
-                                            <input className="form-check-input" type="checkbox" disabled />
+                                            <input class="form-check-input" type="checkbox" checked disabled /> :
+                                            <input class="form-check-input" type="checkbox" disabled />
                                         }
                                     </td>
                                     <td>
