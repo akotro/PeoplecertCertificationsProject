@@ -19,7 +19,10 @@ public class PhotoIdTypesController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
+    [Authorize(
+        AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
+        Policy = "IsAdminOrCandidate"
+    )]
     public async Task<IActionResult> GetAll()
     {
         var photoIdTypes = await _photoIdTypesService.GetAllAsync();

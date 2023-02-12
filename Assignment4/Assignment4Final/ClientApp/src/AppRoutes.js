@@ -20,7 +20,6 @@ import ExamList from "./components/Exam_CRUD/ExamList";
 import ExamQuestionList from "./components/Exam_CRUD/ExamQuestionList";
 
 import Login from './components/auth/Login'
-import Register from './components/auth/Register'
 import AddQuestionToExam from './components/Exam_CRUD/AddQuestionToExam';
 
 import MarkerList from "./components/Marker/MarkerList";
@@ -29,6 +28,7 @@ import AssignToMarker from "./components/Admin/AssingToMarker";
 import ExamResults from "./components/Examination/Results";
 import UsersList from "./components/Admin/UsersList";
 import UserForm from "./components/Admin/UserForm";
+import RegisterForm from "./components/auth/RegisterForm";
 
 const AppRoutes = [
   {
@@ -41,7 +41,7 @@ const AppRoutes = [
   },
   {
     path: "/register",
-    element: <Register />,
+    element: <RegisterForm />,
   },
   //-----------------Certificates-------------------
   {

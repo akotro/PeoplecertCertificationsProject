@@ -29,8 +29,9 @@ export default function Login() {
                 navigate("/");
             }
         ).catch(function (error) {
+            console.log(error.response.data);
             console.log(error);
-            if (error.response && error.response.status === 500) {
+            if (error.response && error.response.status === 400) {
                 setError("Failed login please check your credentials.");
             } else {
                 setError(error);
