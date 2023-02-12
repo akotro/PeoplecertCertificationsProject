@@ -18,8 +18,8 @@ function MarkExam(props) {
 
     useEffect(() => {
         // initialScore = exam.candidateScore;
-        // console.log(incomingData)
-        // setExam(incomingData)
+        console.log(incomingData)
+        setExam(incomingData)
         // console.log(exam.exam.certificateTitle)
         // console.log(exam.candidateExamAnswers)
     }, []);
@@ -70,11 +70,11 @@ function MarkExam(props) {
     }
     //--------------------------------------------------
 
-    const handleSubmit = (canExamId) => {
+    const handleSubmit = async (canExamId) => {
         exam.isModerated = true;
         setExam(exam);
 
-        axios.put(`https://localhost:7196/api/Markers/mark/${canExamId}`, exam)
+        await axios.put(`https://localhost:7196/api/Markers/mark/${canExamId}`, exam)
             .then(function (response) {
                 console.log(response);
             })
@@ -235,7 +235,7 @@ function MarkExam(props) {
                 </tbody>
             </Table>
             <Stack gap={3}>
-                {role !== "qualitycontrol" && (
+                {(role !== "qualitycontrol" && exam.isModerated !==true) && (
                     <Button onClick={() => handleSubmit(exam.id)}>
                         Save & Submit Marking
                     </Button>

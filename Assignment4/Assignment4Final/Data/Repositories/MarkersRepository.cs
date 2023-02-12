@@ -36,6 +36,8 @@ public class MarkersRepository : IMarkersRepository
             .Include(m => m.AppUser)
             .Include(m => m.CandidateExams)
             .ThenInclude(ce => ce.CandidateExamAnswers)
+            .ThenInclude(a =>a.Question)
+            .ThenInclude(q => q.Options)
             .Include(m => m.CandidateExams)
             .ThenInclude(ce => ce.Exam)
             .ThenInclude(e => e.Certificate)

@@ -50,16 +50,7 @@ function Register() {
   const handleChange = (event) => {
 
     const { name, value, type, checked } = event.target;
-    //console.log(event.target)
-    //console.log(name);
-    //console.log(type);
-
     if (type === 'checkbox') {
-      // let candBool = false
-      // if (event.target.checked === "on")
-      // {
-      //   candBool = true
-      // }
 
       console.log('checkbox', checked)
       setUser({

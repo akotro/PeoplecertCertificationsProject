@@ -1,9 +1,11 @@
 import { Form, FormGroup, Button, Col, Row, Badge, Stack } from 'react-bootstrap';
 import { Link, useNavigate } from "react-router-dom";
-import { React, useState, useEffect } from 'react';
+import { React, useState, useEffect,useContext } from 'react';
 
 import axios from 'axios';
 import { useLocation, useParams } from 'react-router-dom';
+import { AuthenticationContext } from '../auth/AuthenticationContext'
+
 
 import MyEditor from "./Editor";
 import Errors from '../Common/ErrorList'
@@ -14,6 +16,10 @@ export default function QuestionEdit(event, name) {
     const navigate = useNavigate();
     const [error, setError] = useState(null);
     const [data, setData] = useState([]);
+    const { update, claims } = useContext(AuthenticationContext);
+
+    const [role, setRole] = useState(claims.find(claim => claim.name === 'role').value)
+
     //------------------------------------------------Question state
     const [question, setQuestion] = useState({
         text: "string",
@@ -153,6 +159,7 @@ export default function QuestionEdit(event, name) {
         //---||FORM------------------------------------------------->>>>>>>
         <div>
             {error && <Errors error={error} />}
+            <fieldset disabled={role ? (role === "qualitycontrol") : false}>
             <Form noValidate validated={true} onSubmit={handleSubmit}>
                 {/* DROPDOWN TOPICS */}
                 <Form.Group className='mb-2'>
@@ -346,6 +353,8 @@ export default function QuestionEdit(event, name) {
                     </Row>
                 </Stack>
             </Form>
+            </fieldset>
+
         </div>
     );
 }

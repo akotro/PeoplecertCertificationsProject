@@ -19,7 +19,7 @@ public class TopicsController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdminOrQualityControl")]
     public async Task<IActionResult> GetAll()
     {
         var topics = await _topicsService.GetAllAsync();
