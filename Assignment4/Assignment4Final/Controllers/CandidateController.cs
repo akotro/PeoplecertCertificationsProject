@@ -64,7 +64,7 @@ namespace Assignment4Final.Controllers
         [HttpPost]
         [Authorize(
             AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
-            Policy = "IsAdmin"
+            Policy = "IsAdminOrCandidate"
         )]
         public async Task<IActionResult> CreateCandidate([FromBody] CandidatesDto candidatesDto)
         {

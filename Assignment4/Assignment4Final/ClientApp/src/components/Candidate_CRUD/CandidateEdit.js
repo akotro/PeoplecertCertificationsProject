@@ -26,7 +26,7 @@ export default function CandidateEdit(props) {
     const [message, setMesage] = useState();
     const [registerButton, setRegisterButton] = useState(false)
     const [error, setError] = useState(null);
-    // const [errorRegister, setErrorRegister] = useState(null);
+    const [errorRegister, setErrorRegister] = useState(null);
 
     const [user, setUser] = useState({
         // Id: '',
@@ -148,7 +148,6 @@ export default function CandidateEdit(props) {
         });
     };
 
-
     const getId = () => {
         if (claims.length > 0) {
             return claims.find(claim => claim.name === 'userId').value
@@ -187,11 +186,11 @@ export default function CandidateEdit(props) {
                 console.log(response);
                 alert("Register successful !! ")
                 setRegisterButton(true)
-                setError(null);
+                setErrorRegister(null);
             })
             .catch(err => {
                 console.error(err);
-                setError(err);
+                setErrorRegister(err);
             });
     };
 
@@ -202,8 +201,8 @@ export default function CandidateEdit(props) {
             try {
                 const response = await axios.post(`https://localhost:7196/api/Candidate`, candidate);
                 console.log(response);
-                setError(null);
-                navigate('/candidate');
+                setError([]);
+                navigate('/');
             } catch (e) {
                 setError(e);
             }
@@ -211,6 +210,7 @@ export default function CandidateEdit(props) {
             try {
                 const response = await axios.put(`https://localhost:7196/api/Candidate/${params.id}`, candidate);
                 console.log(response);
+                setError([]);
                 navigate('/candidate');
             } catch (e) {
                 setError(e);
@@ -300,9 +300,9 @@ export default function CandidateEdit(props) {
 
     return (
         <div>
-            {/* {error && <Errors error={error} />} */}
-                        {error && <ErrorsRegister error={error} />}
+            {error && <Errors error={error} />}
             <fieldset disabled={Qcrole ? (Qcrole === "qualitycontrol") : false}>
+                        {errorRegister && <ErrorsRegister error={errorRegister} />}
                 {!params.id &&
                     (role === "admin") ?
                     <div>
