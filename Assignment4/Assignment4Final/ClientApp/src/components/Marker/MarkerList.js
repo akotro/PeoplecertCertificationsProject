@@ -31,24 +31,23 @@ function MarkerList(props) {
                 setExams([...response.data.data.candidateExams.filter(x => x.isModerated === null || x.isModerated === undefined)]);
                 setmarkedExams([...response.data.data.candidateExams.filter(x => x.isModerated === true)])
                 // console.log(response.data.data);
-                // console.log(response.data.data.candidateExams.filter(x => x.isModerated === true));
+                console.log(...response.data.data.candidateExams.filter(x => x.isModerated === null || x.isModerated === undefined));
                 // console.log(response.data.data.candidateExams.filter(x => x.isModerated === null));
             }).catch(function (error) {
                 console.log(error);
             });
         } else if (role === "admin") {
-
-          
-
             axios.get(`https://localhost:7196/api/Markers/getallcandidateexams/`, { params }).then((response) => {
                 console.log(response.data.data)
                 // console.log(response.data.data.map(marker => marker.candidateExams).flat().filter(x => x.isModerated === null))
                 // console.log(response.data.data.map(marker => marker.candidateExams).flat().filter(x => x.isModerated === true))
                 // setData(response.data.data);
+                console.log("null?" ,[...response.data.data.filter(x => x.isModerated === null || x.isModerated === undefined)]);
+                console.log("null?" ,[...response.data.data.filter(x => x.isModerated === true)])
                 // .filter(x => x.isModerated === null)]
-                setExams([...response.data.data.filter(x => x.isModerated !== true)]);
+                setExams([...response.data.data.filter(x => x.isModerated === null || x.isModerated === undefined)]);
                 setmarkedExams([...response.data.data.filter(x => x.isModerated === true)])
-
+                
             }).catch(function (error) {
                 console.log(error);
             });
@@ -59,7 +58,7 @@ function MarkerList(props) {
                 // console.log(response.data.data.map(marker => marker.candidateExams).flat().filter(x => x.isModerated === true))
                 // setData(response.data.data);
                 // .filter(x => x.isModerated === null)]
-                setExams([...response.data.data]);
+                setExams([...response.data.data.filter(x => x.isModerated !== true)]);
 
             }).catch(function (error) {
                 console.log(error);
