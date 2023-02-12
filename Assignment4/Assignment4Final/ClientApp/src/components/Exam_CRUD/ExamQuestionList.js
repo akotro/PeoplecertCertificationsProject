@@ -3,7 +3,7 @@ import CandidateEdit from "../Candidate_CRUD/CandidateEdit";
 import { useNavigate, Link, useParams } from "react-router-dom";
 import { AuthenticationContext } from '../auth/AuthenticationContext'
 
-import { ListGroup, ListGroupItem, Button, Table, Row, Stack, Form } from 'react-bootstrap';
+import { ListGroup, ListGroupItem, Button, Table, Row, Col, Stack, Form, CloseButton, FormGroup, InputGroup } from 'react-bootstrap';
 
 import axios from 'axios';
 import { useLocation } from 'react-router-dom'
@@ -26,6 +26,7 @@ function ExamQuestionList() {
 
     useEffect(() => {
         axios.get(`https://localhost:7196/api/Exam/${params.id}`).then((response) => {
+            console.log('useeffect resp', response)
             setExam(response.data.data)
             setQuestions(response.data.data.questions)
         })
@@ -41,11 +42,13 @@ function ExamQuestionList() {
     }
 
     const handleRemove = (questR) => {
-        console.log(exam)
+        const confirmDelete = window.confirm("Are you sure you want to delete this question?");
         exam.questions = exam.questions.filter(q => q.id !== questR.id)
-        axios.put(`https://localhost:7196/api/Exam/${exam.id}`, exam).then(setExam(exam))
-        console.log(questions)
-        setQuestions(exam.questions)
+        if (confirmDelete) {
+            axios.put(`https://localhost:7196/api/Exam/${exam.id}`, exam).then(setExam(exam))
+            setQuestions(exam.questions)
+
+        }
         console.log(questions)
         var kati = exam.questions;
     }
@@ -53,9 +56,9 @@ function ExamQuestionList() {
     const makeButtons = (exam, question) => {
 
         return (
-            
+
             <div>
-                <Button onClick={() => handleRemove(question)}>Remove</Button>
+                <Button onClick={() => handleRemove(question)} variant="danger">Remove</Button>
 
             </div>
         )
@@ -79,55 +82,100 @@ function ExamQuestionList() {
         console.log('examafterrr', exam)
     }
 
+    const handleBack = () => {
+        console.log("before back", exam)
+        axios.put(`https://localhost:7196/api/Exam/${exam.id}`, exam).then(navigate(-1))
+            .catch(function (error) {
+            });
+    }
+
 
 
     return (
         <div>
-            
-                    <Button variant='dark' onClick={() => navigate(-1)}>Go back</Button>
+
+
             <fieldset disabled={role ? (role === "qualitycontrol") : false}>
-                <p hidden>{console.log('exam', exam)}</p>
-                <Table>
-                <Button onClick={() => handleAdd(exam)}>Add Question</Button>
+                <div>
+                    {/* <p hidden>{console.log('exam', exam)}</p> */}
+                    <Button onClick={() => handleAdd(exam)}>Add Question</Button>
+
+                    <Row>
+                        <Col>
+
+                        </Col>
+                        <Col>
+                            <span class="p-3 mb-2 bg-info text-white">questions in exam: {questions.length}</span>
+
+                        </Col>
+
+                        <Col>
+                            <span class="p-3 mb-2 bg-white text-success">Num. Of EASY: {questions.filter(quest => quest.difficultyLevel.difficulty !== "HARD")
+                                .filter(quest => quest.difficultyLevel.difficulty !== "MEDIUM").length} </span>
+
+                        </Col>
+                        <Col>
+                            <span class="p-3 mb-2 bg-white  class=text-secondary">Num. Of MEDIUM:{questions.filter(quest => quest.difficultyLevel.difficulty !== "EASY")
+                                .filter(quest => quest.difficultyLevel.difficulty !== "HARD").length}</span>
+
+                        </Col>
+
+                        <Col>
+
+
+                            <span class="p-3 mb-2 bg-white  text-danger">Num. Of HARD:{questions.filter(quest => quest.difficultyLevel.difficulty !== "EASY")
+                                .filter(quest => quest.difficultyLevel.difficulty !== "MEDIUM").length} </span>
+
+                        </Col>
+                        <Col>
+                            {exam != null && (
+                                <InputGroup>
+                                    <InputGroup.Text>Set Passing Mark</InputGroup.Text>
+                                    <Form.Control
+                                        placeholder="Set Passing Mark"
+                                        type="number"
+                                        value={exam.passMark}
+
+                                        onChange={handleChangePassmark}
+                                    />
+
+                                </InputGroup>
+                            )}
+
+                        </Col>
+
+
+
+
+
+
+
+                    </Row>
+
+
+
+
+                </div>
+
+                <tbody>
+                    {questions.map((quest, index) =>
                     
 
-                    <span>questions in exam: {questions.length}</span>
-                    <span>Num. Of EASY: {questions.filter(quest => quest.difficultyLevel.difficulty !== "HARD")
-                        .filter(quest => quest.difficultyLevel.difficulty !== "MEDIUM").length} </span>
-                    <span>Num. Of HARD:{questions.filter(quest => quest.difficultyLevel.difficulty !== "EASY")
-                        .filter(quest => quest.difficultyLevel.difficulty !== "MEDIUM").length} </span>
-                    <span>Num. Of MEDIUM:{questions.filter(quest => quest.difficultyLevel.difficulty !== "EASY")
-                        .filter(quest => quest.difficultyLevel.difficulty !== "HARD").length}</span>
-                    {exam != null && (
-
-                        <input
-                            type="number"
-                            value={exam.passMark}
-                            placeholder="Enter a number..."
-                            onChange={handleChangePassmark}
-                        />)}
-
-                    <thead>
-                        <tr>
-                            <th>Number</th>
+                        <tr key={index}>
+                            
+                            <td>{Replace(quest.text)}</td>
+                            <td>{quest.difficultyLevel.difficulty}</td>
+                            <td>{makeButtons(exam, quest)}</td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        {questions.map((quest, index) =>
 
-                            <tr key={index}>
-                                <td>{Replace(quest.text)}</td>
-                                <td>{quest.difficultyLevel.difficulty}</td>
-                                <td>{makeButtons(exam, quest)}</td>
-                            </tr>
+                    )}
+                </tbody>
 
-                        )}
-                    </tbody>
-                </Table>
 
 
 
             </fieldset>
+            <Button variant='dark' onClick={handleBack}>Go back</Button>
 
         </div>
     )
