@@ -6,7 +6,6 @@ import { getUserId } from '../auth/handleJWT'
 
 import { useNavigate, useParams } from "react-router-dom";
 import DatePicker from "react-datepicker";
-import Register from "../auth/Register";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
 

@@ -6,17 +6,17 @@ const ErrorsRegister = ({ error }) => {
     const [show, setShow] = useState(true);
 
     const makeErrors = (error) => {
-        if (Array.isArray(error.response.data.errors)) {
-            return error.response.data.errors.map(object => <li>{object.description}</li>)
+        if (Array.isArray(error.response.data)) {
+            return error.response.data.map(object => <li>{object.description}</li>)
         }
         else {
             return Object.entries(error.response.data.errors).map(([key, value]) => (
-              <li key={key}>{key}: {value[0]}</li>
+                <li key={key}>{key}: {value[0]}</li>
             ))
         }
     }
-
-    return error && error.response && error.response.data && error.response.data.errors ? (
+    // error.response.data.errors
+    return error && error.response && error.response.data  ? (
         <>
             <Button variant="danger" onClick={() => setShow(!show)} style={{ marginBottom: '10px' }}>
                 {show ? 'Minimize' : 'Show'}

@@ -4,10 +4,11 @@ import { AuthenticationContext } from '../auth/AuthenticationContext'
 import { getUserId } from '../auth/handleJWT'
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import DatePicker from "react-datepicker";
-import Register from "../auth/Register";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
 import Errors from '../Common/ErrorList';
+import ErrorsRegister from '../Common/ErrorListRegister'
+
 
 export default function CandidateEdit(props) {
 
@@ -25,6 +26,20 @@ export default function CandidateEdit(props) {
     const [message, setMesage] = useState();
     const [registerButton, setRegisterButton] = useState(false)
     const [error, setError] = useState(null);
+    // const [errorRegister, setErrorRegister] = useState(null);
+
+    const [user, setUser] = useState({
+        // Id: '',
+        UserName: '',
+        Email: '',
+        // PhoneNumber: '',
+        // Role: '',
+        Credentials: {
+            Email: '',
+            Password: '',
+            IsCandidate: true
+        }
+    });
 
     const { update, claims } = useContext(AuthenticationContext);
     const [role, setRole] = useState({})
@@ -98,6 +113,40 @@ export default function CandidateEdit(props) {
             });
     };
 
+    const handleChangeRegister = (event) => {
+        const target = event.target;
+        const name = target.name;
+        const value = target.value;
+        if (name === 'Email') {
+            setUser({
+                ...user,
+                [name]: value,
+                Credentials: {
+                    ...user.Credentials,
+                    [name]: value,
+                },
+            });
+        }
+        else {
+            setUser({
+                ...user,
+                [name]: value
+            });
+        }
+    };
+
+    const handleCredentialsChange = (event) => {
+        const target = event.target;
+        const name = target.name;
+        const value = target.type === 'checkbox' ? target.checked : target.value;
+        setUser({
+            ...user,
+            Credentials: {
+                ...user.Credentials,
+                [name]: value
+            }
+        });
+    };
 
 
     const getId = () => {
@@ -120,18 +169,31 @@ export default function CandidateEdit(props) {
         }
     }, [claims]);
 
-    const handleRegisterSubmit = (event) => {
+    // const handleRegisterSubmit = (event) => {
+    //     event.preventDefault();
+
+    //     axios.post(`https://localhost:7196/api/accounts/create`, registerCand).then(res => {
+    //         const Id = getUserId(res.data.token)
+    //         setCandidate((prev) => ({ ...prev, appUserId: Id }))
+    //     }).catch(function (error) {
+    //     });
+    // }
+
+    const handleSubmitRegister = (event) => {
         event.preventDefault();
 
-        axios.post(`https://localhost:7196/api/accounts/create`, registerCand).then(res => {
-            const Id = getUserId(res.data.token)
-            setCandidate((prev) => ({ ...prev, appUserId: Id }))
-            alert("Register successful !! ")
-            setRegisterButton(true)
-        }).catch(function (error) {
-            alert("Register failed, please try again ")
-        });
-    }
+        axios.post(`https://localhost:7196/api/accounts/create`, user)
+            .then(response => {
+                console.log(response);
+                alert("Register successful !! ")
+                setRegisterButton(true)
+                setError(null);
+            })
+            .catch(err => {
+                console.error(err);
+                setError(err);
+            });
+    };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -140,7 +202,7 @@ export default function CandidateEdit(props) {
             try {
                 const response = await axios.post(`https://localhost:7196/api/Candidate`, candidate);
                 console.log(response);
-                setError([]);
+                setError(null);
                 navigate('/candidate');
             } catch (e) {
                 setError(e);
@@ -154,17 +216,6 @@ export default function CandidateEdit(props) {
                 setError(e);
             }
         }
-    }
-
-    const handleChangeRegister = (event) => {
-        const { name, value, type } = event.target;
-
-        // console.log(name);
-        // console.log(type);
-        // console.log(value);
-        setRegisterCand({ ...registerCand, [name]: value, isCandidate: true });
-
-        console.log(registerCand);
     }
 
     const handleChange = (event, addressIndex) => {
@@ -249,32 +300,49 @@ export default function CandidateEdit(props) {
 
     return (
         <div>
-            {error && <Errors error={error} />}
+            {/* {error && <Errors error={error} />} */}
+                        {error && <ErrorsRegister error={error} />}
             <fieldset disabled={Qcrole ? (Qcrole === "qualitycontrol") : false}>
                 {!params.id &&
                     (role === "admin") ?
                     <div>
-                        <Form onSubmit={handleRegisterSubmit}>
-                            <Row>
-                                <Col>
-                                    <Form.Group >
-                                        <Form.Label>Email</Form.Label>
-                                        <Form.Control type="email" name="email" value={registerCand.email} onChange={handleChangeRegister} />
-                                    </Form.Group>
-                                </Col>
-                                <Col>
-                                    <Form.Group >
-                                        <Form.Label>Password</Form.Label>
-                                        <Form.Control type="password" name="password" value={registerCand.password} onChange={handleChangeRegister} />
-                                    </Form.Group>
-                                </Col>
-                            </Row>
-                            <Button className='d-grid gap-2 col-6 mx-auto py-2 my-2' variant="primary" type="submit" disabled={registerButton}>
-                                Register User
-                            </Button>
+
+                        <Form onSubmit={handleSubmitRegister}>
+                            <Form.Group controlId="formBasicEmail">
+                                <Form.Label>Email address</Form.Label>
+                                <Form.Control
+                                    type="email"
+                                    placeholder="Enter email"
+                                    name="Email"
+                                    value={user.Email}
+                                    onChange={handleChangeRegister}
+                                />
+                            </Form.Group>
+                            <Form.Group controlId="formBasicUserName">
+                                <Form.Label>Username</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Enter username"
+                                    name="UserName"
+                                    value={user.UserName}
+                                    onChange={handleChangeRegister}
+                                />
+                            </Form.Group>
+                            <Form.Group controlId="formBasicCredentialsPassword">
+                                <Form.Label>Password</Form.Label>
+                                <Form.Control
+                                    type="password"
+                                    placeholder="Password"
+                                    name="Password"
+                                    value={user.Credentials.Password}
+                                    onChange={handleCredentialsChange}
+                                />
+                                <Button className='d-grid gap-2 col-6 mx-auto py-2 my-2' variant="primary" type="submit" disabled={registerButton}>
+                                    Register User
+                                </Button>
+                            </Form.Group>
                         </Form>
-                    </div> : null
-                }
+                    </div> : null}
                 <Form onSubmit={handleSubmit} className="lead" >
                     <Stack gap={3}>
                         <div className="display-6 fs-2" >Personal Details</div>
