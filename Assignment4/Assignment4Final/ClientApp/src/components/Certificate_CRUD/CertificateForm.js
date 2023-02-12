@@ -103,7 +103,7 @@ function CertificateForm(props) {
                 .then(function (response) {
                     console.log(response);
                     setError([]);
-                    navigate("/")
+                    navigate("/certificate")
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -114,12 +114,13 @@ function CertificateForm(props) {
                 .then(function (response) {
                     console.log(response);
                     setError([]);
-                    navigate("/")
+                    navigate("/certificate")
                 })
                 .catch(function (error) {
                     console.log(error);
                     setError(error);
                 });
+
 
         }        
     }
