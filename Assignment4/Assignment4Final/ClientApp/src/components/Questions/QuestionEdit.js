@@ -1,5 +1,5 @@
 import { Form, FormGroup, Button, Col, Row, Badge, Stack } from 'react-bootstrap';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { React, useState, useEffect } from 'react';
 
 import axios from 'axios';
@@ -11,6 +11,7 @@ import Errors from '../Common/ErrorList'
 export default function QuestionEdit(event, name) {
 
     const params = useParams();
+    const navigate = useNavigate();
     const [error, setError] = useState(null);
     const [data, setData] = useState([]);
     //------------------------------------------------Question state
@@ -59,7 +60,7 @@ export default function QuestionEdit(event, name) {
                 console.error(err.response.data);
             });
         //------------------------------------------------//GET QUESTION BY ID
-        axios.get(url).then((response) => {
+       axios.get(url).then((response) => {
             setQuestion(response.data.data);
             setOptions(response.data.data.options);
         });
@@ -77,6 +78,7 @@ export default function QuestionEdit(event, name) {
             .then((response) => {
                 console.log("Done!!!");
                 setError([]);
+                navigate("/questions")
             }).catch((err) => {
                 console.error(err);
                 console.error(err.response);
@@ -159,7 +161,7 @@ export default function QuestionEdit(event, name) {
                     <Form.Select
                         as="select"
                         name="TopicSelect"
-                        defaultValue={question.topicId} //1.triggers the controlled component error
+                        value={question.topicId} //1.triggers the controlled component error
                     // onChange={ handleChange  }    //2.stops the controlled component error
                     //3. the combination of 3 and 4 triggers again the error
                     //  required                                    //more study on This is required

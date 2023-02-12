@@ -1,3 +1,4 @@
+import axios from "axios";
 // import React from "react";
 // import { CKEditor } from "@ckeditor/ckeditor5-react";
 // import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
@@ -28,6 +29,7 @@
 //   );
 // };
 
+
 // export default MyEditor;
 
 import React from "react";
@@ -48,15 +50,11 @@ export default function MyEditor({ handleChange, ...props })
                         body.append("file", file);
                         // let headers = new Headers();
                         // headers.append("Origin", "http://localhost:3000");
-                        fetch(`${API_URL}/${UPLOAD_ENDPOINT}`, {
-                            method: "post",
-                            body: body,
-                            // mode: "no-cors"
-                        })
-                            .then((res) => res.json())
+                        axios.post(`${API_URL}/${UPLOAD_ENDPOINT}`, body)
+                            // .then((res) => res.json())
                             .then((res) => {
                                 resolve({
-                                    default: `${res.url}`,
+                                    default: `${res.data.url}`,
                                 });
                                 console.log(res.url)
                             })
@@ -99,3 +97,21 @@ export default function MyEditor({ handleChange, ...props })
 
     );
 }
+
+
+// fetch(`${API_URL}/${UPLOAD_ENDPOINT}`, {
+//     method: "post",
+//     body: body,
+//     // mode: "no-cors"
+// })
+//     .then((res) => res.json())
+//     .then((res) => {
+//         resolve({
+//             default: `${res.url}`,
+//         });
+//         console.log(res.url)
+//     })
+//     .catch((err) => {
+//         reject(err);
+//     });
+// });
