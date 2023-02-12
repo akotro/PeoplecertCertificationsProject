@@ -56,7 +56,7 @@ function UsersList() {
 
     const handleEdit = (userEmail) => {
         //console.log("edit for id  = ", candId);
-        navigate(`/users/${userEmail}`);
+        navigate(`/users/edit/${userEmail}`);
     }
 
     
@@ -66,7 +66,7 @@ function UsersList() {
         <div>
                 <Button variant='dark'
                     className='d-grid gap-2 col-6 mx-auto py-2 my-2'
-                    onClick={() => navigate('/candidate/create')}
+                    onClick={() => navigate('/users/create')}
                 > Add a User </Button>
 
             <Table striped hover borderless className="text-center" id='list_of_allcands'>

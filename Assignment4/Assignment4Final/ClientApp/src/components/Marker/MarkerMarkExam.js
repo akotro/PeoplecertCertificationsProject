@@ -81,6 +81,7 @@ function MarkExam(props) {
             .catch(function (error) {
                 console.log(error);
             });
+            navigate(-1);
     }
 
 

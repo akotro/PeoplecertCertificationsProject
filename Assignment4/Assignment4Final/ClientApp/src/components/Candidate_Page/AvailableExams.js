@@ -15,15 +15,19 @@ function AvailableExams(props) {
     const [user, setUser] = useState();
     const [bookExam, setBookExam] = useState();
     let navigate = useNavigate();
+    const candidate ={};
 
     useEffect(() => {
         axios.get('https://localhost:7196/api/CandidateExam').then((response) => {
             setData(response.data);
 
-            setExams([...response.data.filter(exam => exam.result === null)])
-            setTakenExams([...response.data.filter(exam => exam.result !== null)])
+            setExams([...response.data.filter(exam => exam.result === undefined)])
+            setTakenExams([...response.data.filter(exam => (exam.result === true || exam.result === false))])
             // console.log(response.data);
-            // console.log(...response.data.filter(exam => exam.result === null));
+            console.log(response.data[0].candidate);
+            if ( response.data.length >0 ){
+                candidate= response.data[0].candidate
+            }
             // console.log(...response.data.filter(exam => exam.result !== null));
         }).catch(function (error) {
             console.log(error);
@@ -80,7 +84,7 @@ function AvailableExams(props) {
     };
 
     const makebuttons = (CandExam) => {
-        if (CandExam.result !== null) {
+        if ( (CandExam.result === true || CandExam.result === false)) {
             return (
                 <td>
                     <div className='d-flex '>
@@ -105,7 +109,8 @@ function AvailableExams(props) {
         navigate(`/candidate/ExamResults`, {
             state: {
                 data: CandExam,
-                from: '/candidate/availableexams'
+                from: '/candidate/availableexams',
+                candidate: candidate
             }
         });
     }
@@ -119,7 +124,7 @@ function AvailableExams(props) {
             return;
         }
 
-        navigate(`/candidate/Examination/${CandExam.id}`);
+        navigate(`/candidate/Examination/${CandExam.id}`, {state:{candidate: candidate}});
     };
 
     const makeDate = (examDate) => {

@@ -37,16 +37,17 @@ function Questions() {
         )
     }
     //--------------------------------------------------HANDLE DELETE
-    const handleDelete = (event) => {
+    const handleDelete = (id) => {
         // Asks user if they are sure
-        const localId = event.target.dataset.id;
+        // FIX:(akotro) event.target is undefined
+        // const localId = event.target.dataset.id;
 
         const confirmDelete = window.confirm("Are you sure you want to delete this this question?");
 
         if (confirmDelete) {
             //send axios call with the request to delete using Id
             axios
-                .delete(`https://localhost:7196/api/questions/${localId}`)
+                .delete(`https://localhost:7196/api/questions/${id}`)
                 .then((response) => {
                     // console.log("Delete response");
                 })
@@ -54,13 +55,12 @@ function Questions() {
                     console.log(error);
                 });
 
-            const newData = data.filter((item) => { return item.id != localId; }, localId);
+            const newData = data.filter((item) => { return item.id != id; }, id);
             setData(newData);
         }
     }
 
     const makebuttons = (queId) => {
-
         if (role === "qualitycontrol") {
             return (
                 <td>

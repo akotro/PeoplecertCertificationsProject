@@ -1,4 +1,6 @@
 ﻿using Assignment4Final.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ModelLibrary.Models.DTO;
 using ModelLibrary.Models.DTO.Candidates;
@@ -7,7 +9,6 @@ namespace Assignment4Final.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-//[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
 public class LanguagesController : ControllerBase
 {
     private readonly LanguagesService _languagesService;
@@ -18,7 +19,7 @@ public class LanguagesController : ControllerBase
     }
 
     [HttpGet]
-    // [Authorize]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public async Task<IActionResult> GetAll()
     {
         var languages = await _languagesService.GetAllAsync();
@@ -33,6 +34,7 @@ public class LanguagesController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public async Task<IActionResult> Get(int id)
     {
         var language = await _languagesService.GetAsync(id);
@@ -59,6 +61,7 @@ public class LanguagesController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public async Task<IActionResult> Add([FromBody] LanguageDto languageDto)
     {
         var addedLanguage = await _languagesService.AddAsync(languageDto);
@@ -85,6 +88,7 @@ public class LanguagesController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public async Task<IActionResult> Update(int id, [FromBody] LanguageDto languageDto)
     {
         var updatedLanguage = await _languagesService.UpdateAsync(id, languageDto);
@@ -111,6 +115,7 @@ public class LanguagesController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public async Task<IActionResult> Delete(int id)
     {
         var deletedLanguage = await _languagesService.DeleteAsync(id);

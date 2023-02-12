@@ -23,6 +23,7 @@ using System.IdentityModel.Tokens.Jwt;
 using ModelLibrary.Models.DTO.Accounts;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 
 namespace Assignment4Final
 {
@@ -41,8 +42,7 @@ namespace Assignment4Final
 
             // Add services to the container.
             var connectionString =
-                builder.Configuration.GetConnectionString("localhost")
-
+                builder.Configuration.GetConnectionString("Iasonas")
                 ?? throw new InvalidOperationException(
                     "Connection string 'DefaultConnection' not found."
                 );
@@ -92,11 +92,117 @@ namespace Assignment4Final
                     "IsQualityControl",
                     policy => policy.RequireClaim("role", "qualitycontrol")
                 );
-
                 // NOTE:(akotro) Candidate can see and buy certificates and take exams
                 options.AddPolicy(
                     "IsCandidate",
                     policy => policy.RequireClaim("role", "candidate")
+                );
+                options.AddPolicy(
+                    "IsAdminOrMarker",
+                    policy =>
+                        policy.Requirements.Add(
+                            new ClaimsAuthorizationRequirement("role", new[] { "admin", "marker" })
+                        )
+                );
+                options.AddPolicy(
+                    "IsAdminOrQualityControl",
+                    policy =>
+                        policy.Requirements.Add(
+                            new ClaimsAuthorizationRequirement(
+                                "role",
+                                new[] { "admin", "qualitycontrol" }
+                            )
+                        )
+                );
+                options.AddPolicy(
+                    "IsAdminOrCandidate",
+                    policy =>
+                        policy.Requirements.Add(
+                            new ClaimsAuthorizationRequirement(
+                                "role",
+                                new[] { "admin", "candidate" }
+                            )
+                        )
+                );
+                options.AddPolicy(
+                    "IsMarkerOrQualityControl",
+                    policy =>
+                        policy.Requirements.Add(
+                            new ClaimsAuthorizationRequirement(
+                                "role",
+                                new[] { "marker", "qualitycontrol" }
+                            )
+                        )
+                );
+                options.AddPolicy(
+                    "IsMarkerOrCandidate",
+                    policy =>
+                        policy.Requirements.Add(
+                            new ClaimsAuthorizationRequirement(
+                                "role",
+                                new[] { "marker", "candidate" }
+                            )
+                        )
+                );
+                options.AddPolicy(
+                    "IsQualityControlOrCandidate",
+                    policy =>
+                        policy.Requirements.Add(
+                            new ClaimsAuthorizationRequirement(
+                                "role",
+                                new[] { "qualitycontrol", "candidate" }
+                            )
+                        )
+                );
+                options.AddPolicy(
+                    "IsAdminOrMarkerOrQualityControl",
+                    policy =>
+                        policy.Requirements.Add(
+                            new ClaimsAuthorizationRequirement(
+                                "role",
+                                new[] { "admin", "marker", "qualitycontrol" }
+                            )
+                        )
+                );
+                options.AddPolicy(
+                    "IsAdminOrMarkerOrCandidate",
+                    policy =>
+                        policy.Requirements.Add(
+                            new ClaimsAuthorizationRequirement(
+                                "role",
+                                new[] { "admin", "marker", "candidate" }
+                            )
+                        )
+                );
+                options.AddPolicy(
+                    "IsAdminOrQualityControlOrCandidate",
+                    policy =>
+                        policy.Requirements.Add(
+                            new ClaimsAuthorizationRequirement(
+                                "role",
+                                new[] { "admin", "qualitycontrol", "candidate" }
+                            )
+                        )
+                );
+                options.AddPolicy(
+                    "IsMarkerOrQualityControlOrCandidate",
+                    policy =>
+                        policy.Requirements.Add(
+                            new ClaimsAuthorizationRequirement(
+                                "role",
+                                new[] { "marker", "qualitycontrol", "candidate" }
+                            )
+                        )
+                );
+                options.AddPolicy(
+                    "IsAny",
+                    policy =>
+                        policy.Requirements.Add(
+                            new ClaimsAuthorizationRequirement(
+                                "role",
+                                new[] { "admin", "marker", "qualitycontrol", "candidate" }
+                            )
+                        )
                 );
             });
 

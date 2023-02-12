@@ -11,9 +11,9 @@ public class CertificateDto
     public double? Price { get; set; }
     [Required, StringLength(100)]
     public string? Title { get; set; }
-    [StringLength(50)]
+    [StringLength(1000)]
     public string? Description { get; set; }
-    [StringLength(50)]
+    [StringLength(300)]
     public string? Category { get; set; }
     [Required]
     public bool? Active { get; set; }

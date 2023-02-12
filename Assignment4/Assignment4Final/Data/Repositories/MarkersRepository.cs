@@ -149,6 +149,7 @@ public class MarkersRepository : IMarkersRepository
         {
             return await _context.CandidateExams
                 .AsSplitQuery()
+                .Include(ce => ce.Marker)
                 .Include(ce => ce.Candidate)
                 .Include(ce => ce.CandidateExamAnswers)
                 .ThenInclude(ce => ce.Question)
@@ -161,7 +162,7 @@ public class MarkersRepository : IMarkersRepository
                 .ToListAsync();
         }
 
-        return await _context.CandidateExams.Include(ce => ce.Candidate).ToListAsync();
+        return await _context.CandidateExams.Include(ce => ce.Candidate).Include(ce => ce.Marker).ToListAsync();
     }
 
     public async Task<CandidateExam?> AssignCandidateExamToMarker(
