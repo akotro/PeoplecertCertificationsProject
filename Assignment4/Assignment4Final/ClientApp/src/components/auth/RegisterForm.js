@@ -1,8 +1,8 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from "react-router-dom";
-import { Form, Button, Container, Row, Col, FormControl, FormGroup, Checkbox } from 'react-bootstrap';
+import { Form, Button, Stack } from 'react-bootstrap';
 import { AuthenticationContext } from '../auth/AuthenticationContext'
-import { getClaims, saveToken } from './handleJWT'
+import { getClaims, saveToken, clean } from './handleJWT'
 import ErrorsRegister from '../Common/ErrorListRegister'
 import axios from 'axios';
 
@@ -30,19 +30,13 @@ const RegisterForm = () => {
     const value = target.value;
     if (name === 'Email') {
       setUser({
-        ...user,
-        [name]: value,
+        ...user, [name]: value,
         Credentials: {
-          ...user.Credentials,
-          [name]: value,
+          ...user.Credentials, [name]: value,
         },
       });
-    }
-    else {
-      setUser({
-        ...user,
-        [name]: value
-      });
+    } else {
+      setUser({ ...user, [name]: value });
     }
   };
 
@@ -59,37 +53,43 @@ const RegisterForm = () => {
     });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
-    axios.post(`https://localhost:7196/api/accounts/create`, user)
-    .then(response => {
-      console.log(response);
+    await axios.post(`https://localhost:7196/api/accounts/create`, user)
+      .then(response => {
+        console.log(response);
+        update([]);
+        // saveToken(response.data);
+        // update(getClaims());
+        navigate("/login"); 
+        setError([]);
 
-      saveToken(response.data);
-      update(getClaims());
-      setError([]);
-
-      if (user.Credentials.IsCandidate === true) {
-        navigate("/candidate/create");
-      }
-      else {
-        navigate("/");
-      }
-    })
-    .catch(error => {
-      console.error(error);
-      setError(error);
-    });
+        if (user.Credentials.IsCandidate === true) {
+          // navigate("/candidate/create");
+        }
+        else {
+          navigate("/");
+        }
+      })
+      .catch(error => {
+        console.error(error);
+        setError(error);
+      });
   };
 
-return (
-    <Container>
+  return (
+
+    <div className="d-grid justify-content-center lead">
       {error && <ErrorsRegister error={error} />}
-      <h3>Register</h3>
-      <Row>
-        <Col>
-          <Form onSubmit={handleSubmit}>
+      <Stack gap={4}>
+
+        <h3 className="display-6">Register</h3>
+
+
+        <Form onSubmit={handleSubmit}>
+          <Stack gap={2}>
+
             <Form.Group controlId="formBasicEmail">
               <Form.Label>Email address</Form.Label>
               <Form.Control
@@ -110,36 +110,7 @@ return (
                 onChange={handleChange}
               />
             </Form.Group>
-            {/* <Form.Group controlId="formBasicPhoneNumber"> */}
-            {/*   <Form.Label>Phone Number</Form.Label> */}
-            {/*   <Form.Control */}
-            {/*     type="text" */}
-            {/*     placeholder="Enter phone number" */}
-            {/*     name="PhoneNumber" */}
-            {/*     value={user.PhoneNumber} */}
-            {/*     onChange={handleChange} */}
-            {/*   /> */}
-            {/* </Form.Group> */}
-            {/* <Form.Group controlId="formBasicRole"> */}
-            {/*   <Form.Label>Role</Form.Label> */}
-            {/*   <Form.Control */}
-            {/*     type="text" */}
-            {/*     placeholder="Enter role" */}
-            {/*     name="Role" */}
-            {/*     value={user.Role} */}
-            {/*     onChange={handleChange} */}
-            {/*   /> */}
-            {/* </Form.Group> */}
-            {/* <Form.Group controlId="formBasicCredentialsEmail"> */}
-            {/*   <Form.Label>Credentials Email</Form.Label> */}
-            {/*   <Form.Control */}
-            {/*     type="email" */}
-            {/*     placeholder="Enter email" */}
-            {/*     name="Email" */}
-            {/*     value={user.Credentials.Email} */}
-            {/*     onChange={handleCredentialsChange} */}
-            {/*   /> */}
-            {/* </Form.Group> */}
+
             <Form.Group controlId="formBasicCredentialsPassword">
               <Form.Label>Password</Form.Label>
               <Form.Control
@@ -159,13 +130,14 @@ return (
                 onChange={handleCredentialsChange}
               />
             </Form.Group>
-            <Button variant="primary" type="submit">
+            <Button className="mt-2" variant="primary" type="submit">
               Submit
             </Button>
-          </Form>
-        </Col>
-      </Row>
-    </Container>
+          </Stack>
+        </Form>
+      </Stack>
+
+    </div>
   );
 };
 

@@ -119,19 +119,14 @@ export default function CandidateEdit(props) {
         const value = target.value;
         if (name === 'Email') {
             setUser({
-                ...user,
-                [name]: value,
+                ...user, [name]: value,
                 Credentials: {
-                    ...user.Credentials,
-                    [name]: value,
+                    ...user.Credentials, [name]: value,
                 },
             });
         }
         else {
-            setUser({
-                ...user,
-                [name]: value
-            });
+            setUser({ ...user, [name]: value });
         }
     };
 
@@ -302,7 +297,7 @@ export default function CandidateEdit(props) {
         <div>
             {error && <Errors error={error} />}
             <fieldset disabled={Qcrole ? (Qcrole === "qualitycontrol") : false}>
-                        {errorRegister && <ErrorsRegister error={errorRegister} />}
+                {errorRegister && <ErrorsRegister error={errorRegister} />}
                 {!params.id &&
                     (role === "admin") ?
                     <div>

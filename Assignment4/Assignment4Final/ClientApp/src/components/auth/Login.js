@@ -1,11 +1,11 @@
-import React, { useEffect, useState, useContext} from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { AuthenticationContext } from '../auth/AuthenticationContext'
 import { getClaims, saveToken } from './handleJWT'
 import Errors from '../Common/ErrorList'
 
 
-import { ListGroup, ListGroupItem, Button, Table, Row, Col, Stack, Form, CloseButton } from 'react-bootstrap';
+import { Button, Stack, Form } from 'react-bootstrap';
 
 import axios from 'axios';
 
@@ -41,37 +41,28 @@ export default function Login() {
 
     const handleChange = (event) => {
         const { name, value, type } = event.target;
-
         setCredentials({ ...credentials, [name]: value });
-
-        // console.log(credentials);
     }
 
     return (
-        <div>
+        <div className="d-grid justify-content-center lead">
             {error && <Errors error={error} />}
-            <h3>Login</h3>
-            <Form onSubmit={login}>
-                <Row>
-                    <Col>
+            <Stack gap={4} >
+                <h3 className="display-6">Login</h3>
+                <Form onSubmit={login} >
+                    <Stack gap={2}>
                         <Form.Group >
                             <Form.Label>Email</Form.Label>
                             <Form.Control type="email" name="email" value={credentials.email} onChange={handleChange} />
                         </Form.Group>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col>
                         <Form.Group >
                             <Form.Label>Password</Form.Label>
                             <Form.Control type="password" name="password" value={credentials.password} onChange={handleChange} />
                         </Form.Group>
-                    </Col>
-                </Row>
-                <Button variant="primary" type="submit">login</Button>
-
-            </Form>
+                        <Button className="mt-2" variant="primary" type="submit">login</Button>
+                    </Stack>
+                </Form>
+            </Stack>
         </div>
-
     );
 }
