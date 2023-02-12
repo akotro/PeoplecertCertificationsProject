@@ -23,6 +23,18 @@ const Errors = ({ error }) => {
                 </Alert>
             )}
         </>
+    ) : error ? (
+        <>
+            <Button variant="danger" onClick={() => setShow(!show)} style={{ marginBottom: '10px' }}>
+                {show ? 'Minimize' : ' Show'}
+            </Button>
+
+            {show && (
+                <Alert variant="danger">
+                    <p>{error}</p>
+                </Alert>
+            )}
+        </>
     ) : null;
 };
 
