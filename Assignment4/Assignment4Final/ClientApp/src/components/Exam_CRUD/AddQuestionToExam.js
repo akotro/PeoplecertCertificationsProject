@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useContext } from "react";
 import CandidateEdit from "../Candidate_CRUD/CandidateEdit";
-import { useNavigate, Link, useParams } from "react-router-dom";
+import { useNavigate, Link, useParams, useLocation } from "react-router-dom";
 import { AuthenticationContext } from '../auth/AuthenticationContext'
 
-import { ListGroup, ListGroupItem, Button, Table, Row, Col, Stack, Form, CloseButton } from 'react-bootstrap';
+import { ListGroup, ListGroupItem, Button, Table, Row, Col, Stack, Form, CloseButton, FormGroup, InputGroup } from 'react-bootstrap';
+
 
 import axios from 'axios';
-import { useLocation } from 'react-router-dom'
 
 
 function AddQuestionToExam() {
@@ -20,10 +20,11 @@ function AddQuestionToExam() {
     })
 
 
+
     useEffect(() => {
 
         axios.get(`https://localhost:7196/api/Exam/${params.id}`).then((response) => {
-            console.log(response)
+            console.log("useeffect", response)
             setExam(response.data.data)
             setTopics(response.data.data.certificate.topics)
             console.log(response.data.data)
@@ -53,8 +54,27 @@ function AddQuestionToExam() {
             });
     }
 
+    const handleChangePassmark = (event) => {
+        console.log('EXAAAAMMM', exam)
+        console.log(event.target.value)
+        setExam({ ...exam, passMark: Number(event.target.value) })
+        console.log('examafterrr', exam)
+    }
 
-   
+    const handleBack = async () => {
+        console.log("before back", exam)
+        await axios.put(`https://localhost:7196/api/Exam/${exam.id}`, exam).then(navigate(`/ExamQuestionList/${exam.id}`))
+            .catch(function (error) {
+            });
+
+        // navigate(`/ExamQuestionList/${exam.id}`)
+
+
+
+    }
+
+
+
 
     const makeButtons = (quest) => {
         return (
@@ -66,12 +86,54 @@ function AddQuestionToExam() {
 
     return (
         <div>
-            <Button variant='dark' onClick={() => navigate(-1)}>Go back</Button>
-            <span>questions in exam: {exam.questions.length}</span>
-            <span>Num. Of EASY: {exam.questions.filter(quest => quest.difficultyLevel.difficulty !== "HARD").filter(quest => quest.difficultyLevel.difficulty !== "MEDIUM").length} </span>
-            <span>Num. Of HARD:{exam.questions.filter(quest => quest.difficultyLevel.difficulty !== "EASY").filter(quest => quest.difficultyLevel.difficulty !== "MEDIUM").length} </span>
-            <span>Num. Of MEDIUM:{exam.questions.filter(quest => quest.difficultyLevel.difficulty !== "EASY").filter(quest => quest.difficultyLevel.difficulty !== "HARD").length}</span>
-            
+
+            <div>
+                <Row>
+                    <Col>
+                        <span class="p-3 mb-2 bg-info text-white">Total Questions In Exam: {exam.questions.length}&nbsp;</span>
+                    </Col>
+                    <Col>
+                        <span class="p-3 mb-2 bg-white text-success" > #EASY: {exam.questions
+                            .filter(quest => quest.difficultyLevel.difficulty !== "HARD")
+                            .filter(quest => quest.difficultyLevel.difficulty !== "MEDIUM").length} </span>
+                    </Col>
+
+                    <Col>
+                        <span class="p-3 mb-2 bg-white class=text-secondary">#MEDIUM:{exam.questions
+                            .filter(quest => quest.difficultyLevel.difficulty !== "EASY")
+                            .filter(quest => quest.difficultyLevel.difficulty !== "HARD").length}</span>
+                    </Col>
+
+                    <Col>
+                        <span class="p-3 mb-2 bg-white  text-danger"> #HARD:{exam.questions
+                            .filter(quest => quest.difficultyLevel.difficulty !== "EASY")
+                            .filter(quest => quest.difficultyLevel.difficulty !== "MEDIUM").length} </span>
+                    </Col>
+                    <Col>
+                        {exam != null && (
+                            <InputGroup>
+                                <InputGroup.Text>Set Passing Mark</InputGroup.Text>
+                                <Form.Control
+                                    placeholder="Set Passing Mark"
+                                    type="number"
+                                    value={exam.passMark}
+                                    
+                                    onChange={handleChangePassmark}
+                                />
+
+                            </InputGroup>
+                        )}
+                    </Col>
+                </Row>
+            </div>
+
+
+
+
+
+
+
+
             {topics.map((topic, index) =>
 
                 <div key={index}>
@@ -87,6 +149,7 @@ function AddQuestionToExam() {
                     )}
                 </div>
             )}
+            <Button variant='dark' onClick={handleBack}>Go back</Button>
 
         </div>
     )
