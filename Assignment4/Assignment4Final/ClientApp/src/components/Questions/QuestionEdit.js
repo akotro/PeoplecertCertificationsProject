@@ -9,8 +9,12 @@ import { AuthenticationContext } from '../auth/AuthenticationContext'
 
 import MyEditor from "./Editor";
 import Errors from '../Common/ErrorList'
+
+import BackButton from "../Common/Back";
 //--------------------------------------------------QUESTION EDIT FUNCTION--------------------------------------------------
 export default function QuestionEdit(event, name) {
+
+    const numbers = ['First','Second','Third','Fourth'];
 
     const params = useParams();
     const navigate = useNavigate();
@@ -163,17 +167,15 @@ export default function QuestionEdit(event, name) {
             <Form noValidate validated={true} onSubmit={handleSubmit}>
                 {/* DROPDOWN TOPICS */}
                 <Form.Group className='mb-2'>
-                    <h2>
-                        <Badge pill className='w-100' bg="primary">Question's Topic</Badge>
-                    </h2>
+                    <h4>Question's Topic</h4>
 
                     <Form.Select
                         as="select"
                         name="TopicSelect"
-                        value={question.topicId} //1.triggers the controlled component error
-                    // onChange={ handleChange  }    //2.stops the controlled component error
-                    //3. the combination of 3 and 4 triggers again the error
-                    //  required                                    //more study on This is required
+                        value={question.topicId}                
+                    // onChange={ handleChange  }     
+                                                                             
+                    //  required                                   
                     >
                         <option value="" hidden>
                             Please choose a topic{" "}
@@ -183,7 +185,7 @@ export default function QuestionEdit(event, name) {
                                 key={index}
                                 onClick={() => {
                                     onSelect(event, topic, "topic");
-                                }} //4. this without 3. stops the error
+                                }}
                                 value={topic.id}
                                 onChange={console.log("Topic changed")}
                             >
@@ -192,18 +194,17 @@ export default function QuestionEdit(event, name) {
                         ))}
                     </Form.Select>
                 </Form.Group>
-                {/* <hr /> */}
-                <Form.Group>
+              
                     <Form.Group>
-                        <h2><Badge pill className='w-50' bg="primary">Question's Difficulty</Badge></h2>
+                                {/*  DROPDOWN Difficulty levels */}
+                        <h4> Question's Difficulty</h4>
                         <Form.Select
-                            className='w-50'
+                            className='w-100'
                             as="select"
                             name="DifficultySelect"
-                            value={question.difficultyLevelId} //1.triggers the controlled component error
-                        onChange={ console.log("Difficulty changed")  }    //2.stops the controlled component error
-                        //3. the combination of 3 and 4 triggers again the error
-                        //  required                                    //more study on This is required
+                            value={question.difficultyLevelId}  
+                        onChange={ console.log("Difficulty changed")  }     
+                        //  required                                     
                         >
                             <option value={0} hidden>
                                 Please choose a level{" "}
@@ -213,7 +214,7 @@ export default function QuestionEdit(event, name) {
                                     key={index}
                                     onClick={() => {
                                         onSelect(event, difficultyLevel, "difficultyLevel");
-                                    }} //4. this without 3. stops the error
+                                    }}  
                                     value={difficultyLevel.id}
                                     onChange={console.log("Difficulty changed")}
                                 >
@@ -222,20 +223,13 @@ export default function QuestionEdit(event, name) {
                             ))}
                         </Form.Select>
                     </Form.Group>
-
-
-
-
-
-
-
-                </Form.Group>
+              
                 <hr />
 
-                <Stack gap={5}>
+                <Stack gap={2}>
                     <Row key={"questionEditorAndDropdowns"}>
                         {/*-------------Questions text */}
-                        <Col md={7}>
+                        <Col >
                             <FormGroup required>
                                 <Form.Label><h4>Questions Text</h4></Form.Label>
 
@@ -248,56 +242,12 @@ export default function QuestionEdit(event, name) {
 
                             </FormGroup>
                         </Col>
-
-                        <Col md={3}>
-                        </Col>
-                        {/*  DROPDOWN Difficulty levels */}
-                        <Col md={2}>
-                            {/* <Form.Group>
-                            <Form.Group>
-                            <h2><Badge bg="primary">Question's Difficulty</Badge></h2>
-                            <Form.Select
-                                as="select"
-                                name="DifficultySelect"
-                                value={question.difficultyLevelId} //1.triggers the controlled component error
-                                // onChange={ handleChange  }    //2.stops the controlled component error
-                                //3. the combination of 3 and 4 triggers again the error
-                                //  required                                    //more study on This is required
-                            >
-                                <option value={0} hidden>
-                                    Please choose a level{" "}
-                                </option>
-                                {difficultyLevels.map((difficultyLevel, index) => (
-                                    <option
-                                        key={index}
-                                        onClick={() => {
-                                            onSelect(event, difficultyLevel, "difficultyLevel");
-                                        }} //4. this without 3. stops the error
-                                        value={difficultyLevel.id}
-                                    >
-                                        {difficultyLevel.difficulty}
-                                    </option>
-                                ))}
-                            </Form.Select>
-                        </Form.Group>
-
-
-
-
-
-
-
-                        </Form.Group> */}
-                        </Col>
                     </Row>
                     {/*   Question OPTIONS */}
-
                     {options.map((option, index) => (
-                        <Row key={"unique" + index}>
-                            <Col md={7}>
-                                <Form.Group>
-                                    <Form.Label><h5>Option {index}</h5></Form.Label>
-
+                        <Row key={"unique" + index} className="align-items-center justify-content-center">
+                            <Form.Label><h5>{numbers[index]} Option </h5></Form.Label>
+                            <Col >
                                     <MyEditor
                                         key="index"
                                         handleChange={handleChange}
@@ -305,9 +255,8 @@ export default function QuestionEdit(event, name) {
                                         text={option.text}
                                         index={index}
                                     />
-                                </Form.Group>
                             </Col>
-                            <Col>
+                            <Col xs={2}>
                                 <Form.Check
                                     type={"checkbox"}
                                 // id={index}
@@ -317,7 +266,7 @@ export default function QuestionEdit(event, name) {
                                 // name={"checkbox "}
                                 >
                                     <Form.Check.Label>
-                                        <strong>Is Correct</strong>
+                                         Is Correct 
                                     </Form.Check.Label>
                                     <Form.Check.Input
                                         type={"checkbox"}
@@ -338,19 +287,18 @@ export default function QuestionEdit(event, name) {
                             </Col>
                         </Row>
                     ))}
-                    <Row key={"EditButtonRow"}>
-                        <div className='w-40 mb-3 '>
-                            <Button variant="primary" type="submit" value={"Submit"} >
+                   
+
+                        <div className='w-100 mb-3 '>
+                            <Button variant="primary" type="submit" value={"Submit"} className="w-100 mb-3" >
                                 Update Question
                             </Button>
-                        </div>
-                        <Badge pill bg='primary'>
-                            <Link to={`/questions/`}>
-                                <Button variant="primary" className="w-100">Go Back</Button>
-                            </Link>
-                        </Badge>
+                          
+                        <BackButton />
 
-                    </Row>
+                        </div>
+                        
+                 
                 </Stack>
             </Form>
             </fieldset>
