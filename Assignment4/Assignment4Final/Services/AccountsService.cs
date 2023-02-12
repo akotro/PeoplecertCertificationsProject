@@ -151,6 +151,7 @@ public class AccountsService
 
         var claims = new List<Claim>()
         {
+            new Claim(ClaimTypes.NameIdentifier, user.Id),
             new Claim("email", userCredentials.Email),
             new Claim("userId", user.Id)
         };

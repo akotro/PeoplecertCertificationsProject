@@ -19,7 +19,10 @@ public class MarkersController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
+    [Authorize(
+        AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
+        Policy = "IsAdminOrMarkerOrQualityControl"
+    )]
     public async Task<IActionResult> GetAll()
     {
         var markers = await _markersService.GetAllAsync();
@@ -36,7 +39,7 @@ public class MarkersController : ControllerBase
     [HttpGet("{id}")]
     [Authorize(
         AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
-        Policy = "IsAdminOrMarker"
+        Policy = "IsAdminOrMarkerOrQualityControl"
     )]
     public async Task<IActionResult> Get(string id)
     {
@@ -145,7 +148,10 @@ public class MarkersController : ControllerBase
     }
 
     [HttpGet("getallcandidateexams")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
+    [Authorize(
+        AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
+        Policy = "IsAdminOrMarkerOrQualityControl"
+    )]
     public async Task<IActionResult> GetAllCandidateExams(bool include = false)
     {
         List<CandidateExamDto> candExams;
