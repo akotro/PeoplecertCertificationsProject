@@ -19,7 +19,10 @@ public class GendersController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
+    [Authorize(
+        AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
+        Policy = "IsAdminOrCandidate"
+    )]
     public async Task<IActionResult> GetAll()
     {
         var genders = await _gendersService.GetAllAsync();
