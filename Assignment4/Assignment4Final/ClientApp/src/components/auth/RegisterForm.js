@@ -3,11 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { Form, Button, Container, Row, Col, FormControl, FormGroup, Checkbox } from 'react-bootstrap';
 import { AuthenticationContext } from '../auth/AuthenticationContext'
 import { getClaims, saveToken } from './handleJWT'
+import ErrorsRegister from '../Common/ErrorListRegister'
 import axios from 'axios';
 
 const RegisterForm = () => {
   const navigate = useNavigate();
   const { update } = useContext(AuthenticationContext);
+  const [error, setError] = useState(null);
 
   const [user, setUser] = useState({
     // Id: '',
@@ -66,6 +68,7 @@ const RegisterForm = () => {
 
       saveToken(response.data);
       update(getClaims());
+      setError([]);
 
       if (user.Credentials.IsCandidate === true) {
         navigate("/candidate/create");
@@ -76,11 +79,13 @@ const RegisterForm = () => {
     })
     .catch(error => {
       console.error(error);
+      setError(error);
     });
   };
 
 return (
     <Container>
+      {error && <ErrorsRegister error={error} />}
       <h3>Register</h3>
       <Row>
         <Col>
