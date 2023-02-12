@@ -117,9 +117,6 @@ function Register() {
 
     }
 
-
-
-
 const handleSubmit = (event) => {
   event.preventDefault();
   if (password !== confirmPassword) {
