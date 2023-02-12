@@ -3,8 +3,8 @@ import { AuthenticationContext } from '../components/auth/AuthenticationContext'
 import { Link, useNavigate } from 'react-router-dom';
 import { Col, Container } from "react-bootstrap";
 import { AiOutlineCheck, AiOutlineClose, AiFillHome, AiFillFund } from "react-icons/ai";
-import { BsBook } from "react-icons/bs";
-import { FaUniversity, FaBook, FaQuestion, FaUserAlt, FaCheckDouble } from "react-icons/fa";
+import { BsExclamationOctagonFill } from "react-icons/bs";
+import { FaUniversity, FaBook, FaQuestion, FaUserAlt, FaCheckDouble,FaExclamation } from "react-icons/fa";
 import Authorized from "./auth/Authorized";
 import axios from "axios";
 import { getToken, getUserId } from "./auth/handleJWT";
@@ -47,10 +47,16 @@ function Home() {
             Hello {getUserEmail()}, Welcome to the {claims.filter((x) => x.name === "role")[0]?.value} Homepage!
           </div>
 
-          {isNew ? <div>
-            YOU NEED TO FILL YOUR DETAILS
-            <button class="btn btn-lg fs-2 btn-outline-success" type="button" onClick={() => navigate("/candidate/create")}>
-              Fill your details  &nbsp;&nbsp;<FaBook /></button>
+          {isNew ? 
+          <div>
+          <div className="lead fs-2 text-center mb-4">
+            Please fill your details to continue
+          </div>
+          <div className="d-grid gap-3">
+            <button class="btn btn-lg fs-2 btn-warning" type="button" onClick={() => navigate("/candidate/create")}>
+              Fill our details  &nbsp;&nbsp;<BsExclamationOctagonFill /></button>
+
+          </div>
           </div> :
             <div>
               <div className="lead fs-2 text-center mb-4">
