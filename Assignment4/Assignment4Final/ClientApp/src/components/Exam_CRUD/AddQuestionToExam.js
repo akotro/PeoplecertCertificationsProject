@@ -139,7 +139,7 @@ function AddQuestionToExam() {
                 </Stack>
                 )}
             </Stack>
-            <BackButton />
+            <Button variant='secondary' className='d-grid gap-2 col-12 mx-auto py-2 my-2' onClick={handleBack}>Go back</Button>
         </div>
     )
 }

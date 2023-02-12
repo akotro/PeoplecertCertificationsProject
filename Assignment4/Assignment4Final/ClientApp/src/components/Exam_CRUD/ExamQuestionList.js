@@ -58,7 +58,7 @@ function ExamQuestionList() {
         return (
 
             <div>
-                <Button onClick={() => handleRemove(question)} variant="danger">Remove</Button>
+                <Button onClick={() => handleRemove(question)} variant="outline-danger">Remove</Button>
 
             </div>
         )
@@ -84,99 +84,84 @@ function ExamQuestionList() {
 
     const handleBack = () => {
         console.log("before back", exam)
-        axios.put(`https://localhost:7196/api/Exam/${exam.id}`, exam).then(navigate(-1))
+        axios.put(`https://localhost:7196/api/Exam/${exam.id}`, exam).then(navigate("/ExamsList/"))
             .catch(function (error) {
             });
     }
-
-
 
     return (
         <div>
 
 
-            <fieldset disabled={role ? (role === "qualitycontrol") : false}>
-                <div>
-                    {/* <p hidden>{console.log('exam', exam)}</p> */}
-                    <Button onClick={() => handleAdd(exam)}>Add Question</Button>
+            <fieldset disabled={role ? role === "qualitycontrol" : false}>
+                <div className="my-2 ">
 
+                    <Row className="mt-3">
+                        <Col xs={3}>
+                            <span class="p-3 mb-2 rounded border border-dark text-dark rounded">
+                                Questions in Exam: {questions.length}
+                            </span>
+                        </Col>
+                        <Col xs={3}>
+                            <span class="p-3 mb-2 rounded border border-dark text-dark rounded">
+                                EASY: {questions.filter(quest => quest.difficultyLevel.difficulty !== "HARD" && quest.difficultyLevel.difficulty !== "MEDIUM").length}
+                            </span>
+                        </Col>
+                        <Col xs={3}>
+                            <span class="p-3 mb-2 rounded border border-dark text-dark rounded">
+                                MEDIUM: {questions.filter(quest => quest.difficultyLevel.difficulty !== "EASY" && quest.difficultyLevel.difficulty !== "HARD").length}
+                            </span>
+                        </Col>
+                        <Col xs={3}>
+                            <span class="p-3 mb-2 rounded border border-dark text-dark rounded">
+                                HARD: {questions.filter(quest => quest.difficultyLevel.difficulty !== "EASY" && quest.difficultyLevel.difficulty !== "MEDIUM").length}
+                            </span>
+                        </Col>
+                    </Row>
                     <Row>
-                        <Col>
+                        <p></p>
+                        <Button onClick={() => handleAdd(exam)} variant='dark'
+                            className='d-grid gap-2 col-6 mx-auto py-2 my-2' >Add Question</Button>
 
-                        </Col>
-                        <Col>
-                            <span class="p-3 mb-2 bg-info text-white">questions in exam: {questions.length}</span>
+                    </Row>
 
-                        </Col>
+                    {exam && (
+                        <Row className="mt-3">
 
-                        <Col>
-                            <span class="p-3 mb-2 bg-white text-success">Num. Of EASY: {questions.filter(quest => quest.difficultyLevel.difficulty !== "HARD")
-                                .filter(quest => quest.difficultyLevel.difficulty !== "MEDIUM").length} </span>
-
-                        </Col>
-                        <Col>
-                            <span class="p-3 mb-2 bg-white  class=text-secondary">Num. Of MEDIUM:{questions.filter(quest => quest.difficultyLevel.difficulty !== "EASY")
-                                .filter(quest => quest.difficultyLevel.difficulty !== "HARD").length}</span>
-
-                        </Col>
-
-                        <Col>
-
-
-                            <span class="p-3 mb-2 bg-white  text-danger">Num. Of HARD:{questions.filter(quest => quest.difficultyLevel.difficulty !== "EASY")
-                                .filter(quest => quest.difficultyLevel.difficulty !== "MEDIUM").length} </span>
-
-                        </Col>
-                        <Col>
-                            {exam != null && (
+                            <Col xs={2}>
                                 <InputGroup>
                                     <InputGroup.Text>Set Passing Mark</InputGroup.Text>
                                     <Form.Control
                                         placeholder="Set Passing Mark"
                                         type="number"
                                         value={exam.passMark}
-
                                         onChange={handleChangePassmark}
                                     />
-
                                 </InputGroup>
-                            )}
-
-                        </Col>
-
-
-
-
-
-
-
-                    </Row>
-
-
-
-
-                </div>
-
-                <tbody>
-                    {questions.map((quest, index) =>
-                    
-
-                        <tr key={index}>
-                            
-                            <td>{Replace(quest.text)}</td>
-                            <td>{quest.difficultyLevel.difficulty}</td>
-                            <td>{makeButtons(exam, quest)}</td>
-                        </tr>
-
+                            </Col>
+                        </Row>
                     )}
-                </tbody>
-
-
-
-
+                </div>
+                <table className="mt-3">
+                    <thead>
+                        <tr>
+                            <th>Question Text</th>
+                            <th>Difficulty Level</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {questions.map((quest, index) => (
+                            <tr key={index}>
+                                <td>{Replace(quest.text)}</td>
+                                <td>{quest.difficultyLevel.difficulty}</td>
+                                <td>{makeButtons(exam, quest)}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             </fieldset>
-            <Button variant='dark' onClick={handleBack}>Go back</Button>
-
+            <Button variant='secondary' className='d-grid gap-2 col-12 mx-auto py-2 my-2' onClick={handleBack} >Go Back To Exams List</Button>
         </div>
     )
 }
