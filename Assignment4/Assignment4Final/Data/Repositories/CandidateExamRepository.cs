@@ -72,7 +72,7 @@ namespace Assignment4Final.Data.Repositories
         {
             return await _context.CandidateExams
                 .AsSplitQuery()
-                .Include(ce => ce.Candidate)
+                .Include(candExam => candExam.Candidate)
                 .Include(candExam => candExam.CandidateExamAnswers)
                 .Include(candExam => candExam.Exam)
                 .ThenInclude(cert => cert.Certificate)
