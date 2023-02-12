@@ -174,8 +174,10 @@ function AvailableExams(props) {
                         </tr>
                     </thead>
                     <tbody>
-                        {exams.map((CandidateExam, index) => (
-                            <tr key={index}>
+                        {exams.map((CandidateExam, index) => {
+                            if(CandidateExam !== undefined && CandidateExam.exam !== undefined && CandidateExam.exam.certifiate !== null){
+                                return(
+                                    <tr key={index}>
                                 <td>{CandidateExam.exam.certificate.title}</td>
                                 <td>{CandidateExam.exam.certificate.title}</td>
                                 <td>{makeDate(CandidateExam.examDate)}</td>
@@ -185,7 +187,11 @@ function AvailableExams(props) {
                                     {makebuttons(CandidateExam)}
                                 </td>
                             </tr>
-                        ))}
+
+                                )
+                            }
+                            
+                        })}
                     </tbody>
                 </Table>
             </div>
@@ -201,8 +207,10 @@ function AvailableExams(props) {
                         </tr>
                     </thead>
                     <tbody>
-                        {takenExams.map((CandidateExam, index) => (
-                            <tr key={index}>
+                        {takenExams.map((CandidateExam, index) => {
+                            if(CandidateExam !== undefined && CandidateExam.exam !== undefined && CandidateExam.exam.certificate !== undefined){
+                                return (
+                                    <tr key={index}>
                                 <td>{CandidateExam.exam.certificate.title}</td>
                                 <td>{makeDate(CandidateExam.examDate)}</td>
                                 <td>{CandidateExam.percentScore}&nbsp;%</td>
@@ -210,7 +218,12 @@ function AvailableExams(props) {
                                     {makebuttons(CandidateExam)}
                                 </td>
                             </tr>
-                        ))}
+
+                                )
+                            }
+                            
+                            
+                        })}
                     </tbody>
                 </Table>
             </div>

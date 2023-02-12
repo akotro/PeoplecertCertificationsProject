@@ -158,7 +158,7 @@ function ExamList(props) {
                     })}
                 </tbody>
             </Table>
-            <BackButton />
+            <Button variant='secondary' className='d-grid gap-2 col-12 mx-auto py-2 my-2' onClick={()=> navigate("/")} >Go Back Home Page</Button>
         </div>
     )
 
