@@ -328,38 +328,6 @@ function QuestionCreate() {
 
                     </Row>
 
-                    {/*   //OPTIONS// */}
-                    {/* 1st Option */}
-                    {/* Editor */}
-                    {/* <Row >
-                        <Col md={7}>
-                            <FormGroup>
-                                <Form.Label><h5>First Option</h5></Form.Label>
-                                <Row className="align-items-center">
-                                    <Col>
-                                        <MyEditor
-                                            handleChange={handleChange}
-                                            name={"Option0"}
-                                        />
-                                    </Col><Col>
-
-                                        <Form.Check
-                                            type={"checkbox"}
-                                            id={"1stOptionCorrect"}
-                                            label={"Is Correct"}
-                                            onChange={(event, name) =>
-                                                handleChange(event, name)
-                                            }
-                                            name="checkbox0"
-                                        />
-                                    </Col>
-                                </Row>
-                            </FormGroup>
-                        </Col>
-                        <Col>
-                        </Col>
-                    </Row> */}
-
                     <Row className="align-items-center justify-content-center">
                         <Form.Label><h5>First Option</h5></Form.Label>
                         <Col>
