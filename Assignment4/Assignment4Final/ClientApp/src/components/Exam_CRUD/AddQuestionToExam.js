@@ -3,10 +3,11 @@ import CandidateEdit from "../Candidate_CRUD/CandidateEdit";
 import { useNavigate, Link, useParams, useLocation } from "react-router-dom";
 import { AuthenticationContext } from '../auth/AuthenticationContext'
 
-import { ListGroup, ListGroupItem, Button, Table, Row, Col, Stack, Form, CloseButton, FormGroup, InputGroup } from 'react-bootstrap';
+import { ListGroup, ListGroupItem, Button, Table, Row, Col, Stack, Form, CloseButton, FormGroup, InputGroup, Card } from 'react-bootstrap';
 
 
 import axios from 'axios';
+import BackButton from "../Common/Back";
 
 
 function AddQuestionToExam() {
@@ -76,36 +77,30 @@ function AddQuestionToExam() {
 
 
 
-    const makeButtons = (quest) => {
-        return (
-            <div>
-                <Button onClick={() => handleAdd(quest)}>Add Question</Button>
-            </div>
-        )
-    }
+
 
     return (
         <div>
 
-            <div>
+            <div className="my-2 ">
                 <Row>
                     <Col>
-                        <span class="p-3 mb-2 bg-info text-white">Total Questions In Exam: {exam.questions.length}&nbsp;</span>
+                        <span class="p-3 mb-2 rounded border border-dark text-dark rounded">Total Questions In Exam: {exam.questions.length}&nbsp;</span>
                     </Col>
                     <Col>
-                        <span class="p-3 mb-2 bg-white text-success" > #EASY: {exam.questions
+                        <span class="p-3 mb-2 rounded border border-dark text-dark rounded" ><strong>#&nbsp;EASY:</strong>&nbsp;{exam.questions
                             .filter(quest => quest.difficultyLevel.difficulty !== "HARD")
                             .filter(quest => quest.difficultyLevel.difficulty !== "MEDIUM").length} </span>
                     </Col>
 
                     <Col>
-                        <span class="p-3 mb-2 bg-white class=text-secondary">#MEDIUM:{exam.questions
+                        <span class="p-3 mb-2  rounded border border-dark text-dark rounded"><strong>#&nbsp;MEDIUM:</strong>&nbsp;{exam.questions
                             .filter(quest => quest.difficultyLevel.difficulty !== "EASY")
                             .filter(quest => quest.difficultyLevel.difficulty !== "HARD").length}</span>
                     </Col>
 
                     <Col>
-                        <span class="p-3 mb-2 bg-white  text-danger"> #HARD:{exam.questions
+                        <span class="p-3 mb-2 rounded border border-dark text-dark rounded"><strong>#&nbsp;HARD:</strong>&nbsp;{exam.questions
                             .filter(quest => quest.difficultyLevel.difficulty !== "EASY")
                             .filter(quest => quest.difficultyLevel.difficulty !== "MEDIUM").length} </span>
                     </Col>
@@ -117,40 +112,34 @@ function AddQuestionToExam() {
                                     placeholder="Set Passing Mark"
                                     type="number"
                                     value={exam.passMark}
-                                    
+
                                     onChange={handleChangePassmark}
                                 />
-
                             </InputGroup>
                         )}
                     </Col>
                 </Row>
             </div>
+            <Stack gap={2}>
+                {topics.map((topic, index) =>
+                <Stack gap={2}>
 
-
-
-
-
-
-
-
-            {topics.map((topic, index) =>
-
-                <div key={index}>
-                    <hr />
-                    {console.log(topic)}
-                    <div><h5>Topic Name: {topic.name}</h5></div>
-                    {topic.questions.map((question, number) => exam.questions.findIndex(q => q.id === question.id) > -1 ? null : <div key={number}>
-                        <div> Question: {Replace(question.text)}</div>
-                        <div>Difficulty: {question.difficultyLevel.difficulty}</div>
-                        <div>{makeButtons(question)}</div>
+                    <div key={index}>
+                        {console.log(topic)}
+                        <Card>
+                            <div><h5>Topic Name: {topic.name}</h5></div>
+                            {topic.questions.map((question, number) => exam.questions.findIndex(q => q.id === question.id) > -1 ? null : <div key={number}>
+                                <div> Question: {Replace(question.text)}</div>
+                                <div>Difficulty: {question.difficultyLevel.difficulty}</div>
+                                <Button className='d-grid gap-2 col-2 ms-auto py-2 my-2' onClick={() => handleAdd(question)}>Add Question</Button>
+                            </div>
+                            )}
+                        </Card>
                     </div>
-
-                    )}
-                </div>
-            )}
-            <Button variant='dark' onClick={handleBack}>Go back</Button>
-
+                </Stack>
+                )}
+            </Stack>
+            <BackButton />
         </div>
     )
 }

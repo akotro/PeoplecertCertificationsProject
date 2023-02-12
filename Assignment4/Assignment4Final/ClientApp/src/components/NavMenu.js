@@ -79,7 +79,7 @@ function NavMenu() {
                                             <NavLink tag={Link} className="text-dark" to="/candidate">Candidates List</NavLink>
                                         </NavDropdown.Item>
                                         <NavDropdown.Item>
-                                            <NavLink tag={Link} className="text-dark" to="/users">Add User</NavLink>
+                                            <NavLink tag={Link} className="text-dark" to="/users/create">Add User</NavLink>
                                         </NavDropdown.Item>
                                     </NavDropdown>
                                 </>}

@@ -84,6 +84,7 @@ function CertificateForm(props) {
         console.log("name",name);
         console.log("type", type);
         console.log("value", value);
+        console.log("checked", event.target.checked);
         
         if (type === 'checkbox') {
             setData({ ...data, [name]: event.target.checked })
@@ -145,6 +146,14 @@ function CertificateForm(props) {
                                     <Form.Control type="text"
                                         name='category'
                                         value={data.category} onChange={handleChange} />
+                                </Form.Group>
+                            </Col>
+                            <Col>
+                                <Form.Group>
+                                    <Form.Label>Price</Form.Label>
+                                    <Form.Control type="number"
+                                        name='price'
+                                        value={data.price} onChange={handleChange} />
                                 </Form.Group>
                             </Col>
                         </Row>

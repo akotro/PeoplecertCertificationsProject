@@ -20,6 +20,7 @@ function AvailableExams(props) {
     useEffect(() => {
         axios.get('https://localhost:7196/api/CandidateExam').then((response) => {
             setData(response.data);
+            console.log(response.data);
 
             setExams([...response.data.filter(exam => exam.result === undefined)])
             setTakenExams([...response.data.filter(exam => (exam.result === true || exam.result === false))])
@@ -87,7 +88,7 @@ function AvailableExams(props) {
         if ( (CandExam.result === true || CandExam.result === false)) {
             return (
                 <td>
-                    <div className='d-flex '>
+                    <div className='d-grid justify-content-md-end '>
                         <Button variant="success" onClick={() => showResultsOfExam(CandExam)}>View Result</Button>
                     </div>
                 </td>
@@ -95,7 +96,7 @@ function AvailableExams(props) {
         } else {
             return (
                 <td>
-                    <div className='d-flex gap-2'>
+                    <div className='d-grid gap-2 d-md-flex justify-content-md-end'>
                         <Button onClick={() => takeExam(CandExam)}>Take Exam</Button>
                         <Button onClick={() => handleOpen(CandExam.id)}>Book Date</Button>
                     </div>
@@ -166,10 +167,10 @@ function AvailableExams(props) {
                 <Table striped borderless hover>
                     <thead>
                         <tr>
-                            <th>Title</th>
-                            <th>Voucher</th>
-                            <th>Exam Date</th>
-                            <th></th>
+                            <th style={{ width: "40%" }}>Title</th>
+                            <th style={{ width: "20%" }}>Voucher</th>
+                            <th style={{ width: "20%" }}>Exam Date</th>
+                            <th ></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -193,9 +194,9 @@ function AvailableExams(props) {
                 <Table striped borderless hover>
                     <thead>
                         <tr>
-                            <th>Title</th>
-                            <th>Exam Date</th>
-                            <th>Score</th>
+                            <th style={{ width: "40%" }}>Title</th>
+                            <th style={{ width: "20%" }}>Exam Date</th>
+                            <th style={{ width: "20%" }}>Score</th>
                             <th></th>
                         </tr>
                     </thead>

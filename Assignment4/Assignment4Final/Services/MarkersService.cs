@@ -135,7 +135,17 @@ public class MarkersService
         if (candExamDto?.IsModerated == true)
         {
             var score = candExamDto.CandidateExamAnswers?.Count(
-                answer => (bool)answer.IsCorrectModerated
+                answer =>
+                {
+                    if (answer != null)
+                    {
+                        if (answer.IsCorrectModerated != null && (bool)answer.IsCorrectModerated)
+                        {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
             );
             candExamDto.CandidateScore = score;
             candExamDto.PercentScore = (score / candExamDto.MaxScore) * 100;
