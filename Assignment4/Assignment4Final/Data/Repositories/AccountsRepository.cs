@@ -167,6 +167,12 @@ public class AccountsRepository : IAccountsRepository
     public async Task<SignInResult> Login(string email, string password)
     {
         var user = await GetAppUser(email);
+
+        if (user == null)
+        {
+            return SignInResult.Failed;
+        }
+
         return await _signInManager.PasswordSignInAsync(
             user,
             password,

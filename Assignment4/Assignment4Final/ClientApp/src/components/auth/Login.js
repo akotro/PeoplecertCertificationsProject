@@ -29,7 +29,7 @@ export default function Login() {
                 navigate("/");
             }
         ).catch(function (error) {
-            console.log(error);
+            console.log(error.response.data);
             setError(error);
         });
     }

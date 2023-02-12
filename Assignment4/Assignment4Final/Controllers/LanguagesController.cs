@@ -19,7 +19,10 @@ public class LanguagesController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
+    [Authorize(
+        AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
+        Policy = "IsAdminOrCandidate"
+    )]
     public async Task<IActionResult> GetAll()
     {
         var languages = await _languagesService.GetAllAsync();

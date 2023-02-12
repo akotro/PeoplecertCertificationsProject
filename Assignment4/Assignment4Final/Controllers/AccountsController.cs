@@ -1,6 +1,7 @@
 ﻿using Assignment4Final.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ModelLibrary.Models.DTO.Accounts;
 
@@ -136,7 +137,14 @@ public class AccountsController : ControllerBase
 
         if (authResponse == null)
         {
-            return BadRequest("Incorrect Login");
+            authResponse = new AuthenticationResponseDto()
+            {
+                Errors = new List<IdentityError>()
+                {
+                    new IdentityError() { Code = "Invalid Credentials", Description = "Try Again" }
+                }
+            };
+            return BadRequest(authResponse.Errors);
         }
 
         return Ok(authResponse);
