@@ -65,15 +65,14 @@ namespace Assignment4Final.Controllers
         }
 
         [HttpGet] // All the candidateExams the candidate has bought . both taken and not taken
-        //[Authorize(
-        //    AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
-        //    Policy = "IsAdminOrCandidate"
-        //)]
+        [Authorize(
+            AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
+            Policy = "IsAdminOrCandidate"
+        )]
         public async Task<ActionResult<List<CandidateExamDto>>> GetAll()
         {
-            var candidate = await _candExamService.GetCandidateByUserIdAsync(
-                _userManager.GetUserId(User)
-            );
+            var userId = _userManager.GetUserId(User);
+            var candidate = await _candExamService.GetCandidateByUserIdAsync(userId);
             //var candidate = await _candExamService.GetCandidateByUserIdAsync("02458d8c-aba2-4b3d-86de-8f8457570c60");
             if (candidate == null)
             {
