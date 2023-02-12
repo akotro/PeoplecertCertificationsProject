@@ -23,7 +23,7 @@ function AddQuestionToExam() {
     useEffect(() => {
 
         axios.get(`https://localhost:7196/api/Exam/${params.id}`).then((response) => {
-            console.log(response)
+            console.log("useeffect",response)
             setExam(response.data.data)
             setTopics(response.data.data.certificate.topics)
             console.log(response.data.data)
@@ -53,8 +53,25 @@ function AddQuestionToExam() {
             });
     }
 
+    const handleChangePassmark = (event) => {
+        console.log('EXAAAAMMM', exam)
+        console.log(event.target.value)
+        setExam({ ...exam, passMark: Number(event.target.value) })
+        console.log('examafterrr', exam)
+    }
 
-   
+    const handleBack = () =>{
+        console.log("before back",exam)
+        axios.put(`https://localhost:7196/api/Exam/${exam.id}`, exam).then(navigate(-1))
+            .catch(function (error) {
+            });
+
+
+
+    }
+
+
+
 
     const makeButtons = (quest) => {
         return (
@@ -66,12 +83,21 @@ function AddQuestionToExam() {
 
     return (
         <div>
-            <Button variant='dark' onClick={() => navigate(-1)}>Go back</Button>
+            <Button variant='dark' onClick={handleBack}>Go back</Button>
             <span>questions in exam: {exam.questions.length}</span>
             <span>Num. Of EASY: {exam.questions.filter(quest => quest.difficultyLevel.difficulty !== "HARD").filter(quest => quest.difficultyLevel.difficulty !== "MEDIUM").length} </span>
             <span>Num. Of HARD:{exam.questions.filter(quest => quest.difficultyLevel.difficulty !== "EASY").filter(quest => quest.difficultyLevel.difficulty !== "MEDIUM").length} </span>
             <span>Num. Of MEDIUM:{exam.questions.filter(quest => quest.difficultyLevel.difficulty !== "EASY").filter(quest => quest.difficultyLevel.difficulty !== "HARD").length}</span>
-            
+
+            {exam != null && (
+
+                <input
+                    type="number"
+                    value={exam.passMark}
+                    placeholder="Enter a number..."
+                    onChange={handleChangePassmark}
+                />)}
+
             {topics.map((topic, index) =>
 
                 <div key={index}>

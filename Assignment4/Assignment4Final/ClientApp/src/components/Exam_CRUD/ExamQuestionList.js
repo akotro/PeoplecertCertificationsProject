@@ -26,6 +26,7 @@ function ExamQuestionList() {
 
     useEffect(() => {
         axios.get(`https://localhost:7196/api/Exam/${params.id}`).then((response) => {
+            console.log('useeffect resp',response)
             setExam(response.data.data)
             setQuestions(response.data.data.questions)
         })
@@ -79,12 +80,19 @@ function ExamQuestionList() {
         console.log('examafterrr', exam)
     }
 
+    const handleBack = () =>{
+        console.log("before back",exam)
+        axios.put(`https://localhost:7196/api/Exam/${exam.id}`, exam).then(navigate(-1))
+            .catch(function (error) {
+            });
+        }
+
 
 
     return (
         <div>
             
-                    <Button variant='dark' onClick={() => navigate(-1)}>Go back</Button>
+                    <Button variant='dark' onClick={handleBack}>Go back</Button>
             <fieldset disabled={role ? (role === "qualitycontrol") : false}>
                 <p hidden>{console.log('exam', exam)}</p>
                 <Table>
