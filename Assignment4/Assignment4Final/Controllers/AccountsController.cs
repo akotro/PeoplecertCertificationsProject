@@ -122,7 +122,7 @@ public class AccountsController : ControllerBase
 
         if (authResponse.Errors != null)
         {
-            return BadRequest(authResponse);
+            return BadRequest(authResponse.Errors);
         }
 
         return Ok(authResponse);
