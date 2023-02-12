@@ -1,4 +1,6 @@
 ﻿using Assignment4Final.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ModelLibrary.Models.DTO;
 using ModelLibrary.Models.DTO.Candidates;
@@ -7,7 +9,6 @@ namespace Assignment4Final.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-//[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
 public class CountriesController : ControllerBase
 {
     private readonly CountriesService _countriesService;
@@ -18,7 +19,7 @@ public class CountriesController : ControllerBase
     }
 
     [HttpGet]
-    // [Authorize]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public async Task<IActionResult> GetAll()
     {
         var countries = await _countriesService.GetAllAsync();
@@ -33,6 +34,7 @@ public class CountriesController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public async Task<IActionResult> Get(int id)
     {
         var country = await _countriesService.GetAsync(id);
@@ -59,6 +61,7 @@ public class CountriesController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public async Task<IActionResult> Add([FromBody] CountryDto countryDto)
     {
         var addedCountry = await _countriesService.AddAsync(countryDto);
@@ -85,6 +88,7 @@ public class CountriesController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public async Task<IActionResult> Update(int id, [FromBody] CountryDto countryDto)
     {
         var updatedCountry = await _countriesService.UpdateAsync(id, countryDto);
@@ -111,6 +115,7 @@ public class CountriesController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public async Task<IActionResult> Delete(int id)
     {
         var deletedCountry = await _countriesService.DeleteAsync(id);

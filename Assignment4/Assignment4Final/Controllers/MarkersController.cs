@@ -1,4 +1,6 @@
 ﻿using Assignment4Final.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ModelLibrary.Models.DTO;
 using ModelLibrary.Models.DTO.CandidateExam;
@@ -7,7 +9,6 @@ namespace Assignment4Final.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-//[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
 public class MarkersController : ControllerBase
 {
     private readonly MarkersService _markersService;
@@ -18,6 +19,7 @@ public class MarkersController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public async Task<IActionResult> GetAll()
     {
         var markers = await _markersService.GetAllAsync();
@@ -32,7 +34,10 @@ public class MarkersController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsMarker")]
+    [Authorize(
+        AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
+        Policy = "IsAdminOrMarker"
+    )]
     public async Task<IActionResult> Get(string id)
     {
         var marker = await _markersService.GetAsync(id);
@@ -59,6 +64,7 @@ public class MarkersController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public async Task<IActionResult> Add([FromBody] MarkerDto markerDto)
     {
         var addedMarker = await _markersService.AddAsync(markerDto);
@@ -85,6 +91,7 @@ public class MarkersController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public async Task<IActionResult> Update(string id, [FromBody] MarkerDto markerDto)
     {
         var updatedMarker = await _markersService.UpdateAsync(id, markerDto);
@@ -111,6 +118,7 @@ public class MarkersController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public async Task<IActionResult> Delete(string id)
     {
         var deletedMarker = await _markersService.DeleteAsync(id);
@@ -137,6 +145,7 @@ public class MarkersController : ControllerBase
     }
 
     [HttpGet("getallcandidateexams")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public async Task<IActionResult> GetAllCandidateExams(bool include = false)
     {
         List<CandidateExamDto> candExams;
@@ -168,6 +177,7 @@ public class MarkersController : ControllerBase
     }
 
     [HttpPut("assign/{candExamId}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public async Task<IActionResult> AssignCandidateExamToMarker(
         int candExamId,
         [FromBody] CandidateExamDto candExamDto
@@ -200,7 +210,10 @@ public class MarkersController : ControllerBase
     }
 
     [HttpPut("mark/{candExamId}")]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsMarker")]
+    [Authorize(
+        AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
+        Policy = "IsAdminOrMarker"
+    )]
     public async Task<IActionResult> MarkCandidateExam(
         int candExamId,
         [FromBody] CandidateExamDto candExamDto

@@ -1,4 +1,6 @@
 ﻿using Assignment4Final.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ModelLibrary.Models.DTO;
 using ModelLibrary.Models.DTO.Exams;
@@ -7,7 +9,6 @@ namespace Assignment4Final.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public class ExamController : ControllerBase
     {
         private readonly ExamService _examService;
@@ -18,6 +19,10 @@ namespace Assignment4Final.Controllers
         }
 
         [HttpGet] //GET: Return all the available Exams in db
+        [Authorize(
+            AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
+            Policy = "IsAdmin"
+        )]
         public async Task<ActionResult<List<ExamDto>>> GetAll()
         {
             var exams = await _examService.GetListOfExamsAsync();
@@ -25,6 +30,10 @@ namespace Assignment4Final.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(
+            AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
+            Policy = "IsAdmin"
+        )]
         public async Task<IActionResult> Get(int id)
         {
             var exam = await _examService.GetAsync(id);
@@ -51,6 +60,10 @@ namespace Assignment4Final.Controllers
         }
 
         [HttpPost]
+        [Authorize(
+            AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
+            Policy = "IsAdmin"
+        )]
         public async Task<IActionResult> Add([FromBody] ExamDto examDto)
         {
             var addedExam = await _examService.AddAsync(examDto);
@@ -77,6 +90,10 @@ namespace Assignment4Final.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(
+            AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
+            Policy = "IsAdmin"
+        )]
         public async Task<IActionResult> Update(int id, [FromBody] ExamDto examDto)
         {
             var updatedExam = await _examService.UpdateAsync(id, examDto);
@@ -103,6 +120,10 @@ namespace Assignment4Final.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(
+            AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
+            Policy = "IsAdmin"
+        )]
         public async Task<IActionResult> Delete(int id)
         {
             var deletedExam = await _examService.DeleteAsync(id);

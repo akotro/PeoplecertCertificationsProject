@@ -1,4 +1,6 @@
 ﻿using Assignment4Final.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ModelLibrary.Models.DTO;
 using ModelLibrary.Models.DTO.Candidates;
@@ -7,7 +9,6 @@ namespace Assignment4Final.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-//[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
 public class PhotoIdTypesController : ControllerBase
 {
     private readonly PhotoIdTypesService _photoIdTypesService;
@@ -18,7 +19,7 @@ public class PhotoIdTypesController : ControllerBase
     }
 
     [HttpGet]
-    // [Authorize]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public async Task<IActionResult> GetAll()
     {
         var photoIdTypes = await _photoIdTypesService.GetAllAsync();
@@ -33,6 +34,7 @@ public class PhotoIdTypesController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public async Task<IActionResult> Get(int id)
     {
         var photoIdType = await _photoIdTypesService.GetAsync(id);
@@ -59,6 +61,7 @@ public class PhotoIdTypesController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public async Task<IActionResult> Add([FromBody] PhotoIdTypeDto photoIdTypeDto)
     {
         var addedPhotoIdType = await _photoIdTypesService.AddAsync(photoIdTypeDto);
@@ -85,6 +88,7 @@ public class PhotoIdTypesController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public async Task<IActionResult> Update(int id, [FromBody] PhotoIdTypeDto photoIdTypeDto)
     {
         var updatedPhotoIdType = await _photoIdTypesService.UpdateAsync(id, photoIdTypeDto);
@@ -111,6 +115,7 @@ public class PhotoIdTypesController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public async Task<IActionResult> Delete(int id)
     {
         var deletedPhotoIdType = await _photoIdTypesService.DeleteAsync(id);

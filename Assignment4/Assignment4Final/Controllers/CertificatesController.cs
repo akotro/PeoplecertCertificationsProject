@@ -1,4 +1,6 @@
 using Assignment4Final.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ModelLibrary.Models.DTO;
 using ModelLibrary.Models.DTO.Certificates;
@@ -7,7 +9,6 @@ namespace Assignment4Final.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public class CertificatesController : ControllerBase
     {
         private readonly CertificatesService _certificateService;
@@ -18,8 +19,10 @@ namespace Assignment4Final.Controllers
         }
 
         [HttpGet]
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsQualityControl")]
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsCandidate")]
+        [Authorize(
+            AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
+            Policy = "IsAdminOrQualityControlOrCandidate"
+        )]
         public async Task<IActionResult> GetAll()
         {
             var certificates = await _certificateService.GetAllAsync();
@@ -34,7 +37,10 @@ namespace Assignment4Final.Controllers
         }
 
         [HttpGet("{id}")]
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsQualityControl")]
+        [Authorize(
+            AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
+            Policy = "IsAdminOrQualityControl"
+        )]
         public async Task<IActionResult> Get(int id)
         {
             var certificate = await _certificateService.GetAsync(id);
@@ -61,6 +67,10 @@ namespace Assignment4Final.Controllers
         }
 
         [HttpPost]
+        [Authorize(
+            AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
+            Policy = "IsAdmin"
+        )]
         public async Task<IActionResult> Add([FromBody] CertificateDto certificateDto)
         {
             var addedCertificate = await _certificateService.AddAsync(certificateDto);
@@ -87,6 +97,10 @@ namespace Assignment4Final.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(
+            AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
+            Policy = "IsAdmin"
+        )]
         public async Task<IActionResult> Update(int id, [FromBody] CertificateDto certificateDto)
         {
             var updatedCertificate = await _certificateService.UpdateAsync(id, certificateDto);
@@ -113,6 +127,10 @@ namespace Assignment4Final.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(
+            AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
+            Policy = "IsAdmin"
+        )]
         public async Task<IActionResult> Delete(int id)
         {
             var deletedCertificate = await _certificateService.DeleteAsync(id);
