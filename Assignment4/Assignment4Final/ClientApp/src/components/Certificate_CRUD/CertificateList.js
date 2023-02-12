@@ -101,8 +101,7 @@ function CertificateList(props) {
             return (
                 <td>
                     <div className='d-flex '>
-                        <Button variant="success" onClick={() => handleBuy(certId)} >buy</Button>
-                        <Button>details</Button>
+                        <Button variant="outline-success" onClick={() => handleBuy(certId)} >Purchase</Button>
                     </div>
                 </td>
             );
@@ -151,7 +150,6 @@ function CertificateList(props) {
                             <td>{certificate.description}</td>
                             <td>{certificate.category}</td>
                             <td>{certificate.price}</td>
-
                             {makebuttons(certificate.id)}
                             <td>
                             </td>
