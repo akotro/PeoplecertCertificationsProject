@@ -30,7 +30,11 @@ export default function Login() {
             }
         ).catch(function (error) {
             console.log(error);
-            setError(error);
+            if (error.response && error.response.status === 500) {
+                setError("Failed login please check your credentials.");
+            } else {
+                setError(error);
+            }
         });
     }
 

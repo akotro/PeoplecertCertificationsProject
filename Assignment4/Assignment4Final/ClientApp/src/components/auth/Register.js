@@ -10,6 +10,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
 import { getClaims, saveToken } from './handleJWT'
+import Errors from '../Common/ErrorList'
 
 function Register() {
 
@@ -108,13 +109,11 @@ function Register() {
 
     }
 
-
-
-
 const handleSubmit = (event) => {
   event.preventDefault();
   if (password !== confirmPassword) {
     console.log("Passwords do not match");
+    setError("Passwords do not match");
   } else {
     console.log("I will send");
   
@@ -145,6 +144,7 @@ const handleSubmit = (event) => {
         })
         .catch(function (error) {
           console.log(error);
+          setError(error);
         });    
     }
   }
@@ -179,9 +179,9 @@ const handleSubmit = (event) => {
 
 return (
   <div>
-    {error && <div>The new password fields must match!</div>}
+    {/* {error && <div>Passwords do not match</div>} */}
     <div>
-
+      {error && <Errors error={error} />}
     </div>
     <Form onSubmit={handleSubmit} className="lead" >
       <Stack gap={3}>
