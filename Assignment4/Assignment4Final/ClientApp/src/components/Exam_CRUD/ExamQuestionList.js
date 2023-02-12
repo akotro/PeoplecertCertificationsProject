@@ -89,8 +89,6 @@ function ExamQuestionList() {
             });
     }
 
-
-
     return (
         <div>
 
@@ -99,81 +97,54 @@ function ExamQuestionList() {
                 <div>
                     {/* <p hidden>{console.log('exam', exam)}</p> */}
                     <Button onClick={() => handleAdd(exam)}>Add Question</Button>
+                    <div>
+                        <Row>
+                            <Col>
+                            </Col>
+                            <Col>
+                                <span class="p-3 mb-2 bg-info text-white">questions in exam: {questions.length}</span>
+                            </Col>
+                            <Col>
+                                <span class="p-3 mb-2 bg-white text-success">Num. Of EASY: {questions.filter(quest => quest.difficultyLevel.difficulty !== "HARD")
+                                    .filter(quest => quest.difficultyLevel.difficulty !== "MEDIUM").length} </span>
+                            </Col>
+                            <Col>
+                                <span class="p-3 mb-2 bg-white  class=text-secondary">Num. Of MEDIUM:{questions.filter(quest => quest.difficultyLevel.difficulty !== "EASY")
+                                    .filter(quest => quest.difficultyLevel.difficulty !== "HARD").length}</span>
+                            </Col>
+                            <Col>
+                                <span class="p-3 mb-2 bg-white  text-danger">Num. Of HARD:{questions.filter(quest => quest.difficultyLevel.difficulty !== "EASY")
+                                    .filter(quest => quest.difficultyLevel.difficulty !== "MEDIUM").length} </span>
+                            </Col>
+                            <Col>
+                                {exam != null && (
+                                    <InputGroup>
+                                        <InputGroup.Text>Set Passing Mark</InputGroup.Text>
+                                        <Form.Control
+                                            placeholder="Set Passing Mark"
+                                            type="number"
+                                            value={exam.passMark}
 
-                    <Row>
-                        <Col>
+                                            onChange={handleChangePassmark}
+                                        />
+                                    </InputGroup>
+                                )}
 
-                        </Col>
-                        <Col>
-                            <span class="p-3 mb-2 bg-info text-white">questions in exam: {questions.length}</span>
-
-                        </Col>
-
-                        <Col>
-                            <span class="p-3 mb-2 bg-white text-success">Num. Of EASY: {questions.filter(quest => quest.difficultyLevel.difficulty !== "HARD")
-                                .filter(quest => quest.difficultyLevel.difficulty !== "MEDIUM").length} </span>
-
-                        </Col>
-                        <Col>
-                            <span class="p-3 mb-2 bg-white  class=text-secondary">Num. Of MEDIUM:{questions.filter(quest => quest.difficultyLevel.difficulty !== "EASY")
-                                .filter(quest => quest.difficultyLevel.difficulty !== "HARD").length}</span>
-
-                        </Col>
-
-                        <Col>
-
-
-                            <span class="p-3 mb-2 bg-white  text-danger">Num. Of HARD:{questions.filter(quest => quest.difficultyLevel.difficulty !== "EASY")
-                                .filter(quest => quest.difficultyLevel.difficulty !== "MEDIUM").length} </span>
-
-                        </Col>
-                        <Col>
-                            {exam != null && (
-                                <InputGroup>
-                                    <InputGroup.Text>Set Passing Mark</InputGroup.Text>
-                                    <Form.Control
-                                        placeholder="Set Passing Mark"
-                                        type="number"
-                                        value={exam.passMark}
-
-                                        onChange={handleChangePassmark}
-                                    />
-
-                                </InputGroup>
-                            )}
-
-                        </Col>
-
-
-
-
-
-
-
-                    </Row>
-
-
-
-
+                            </Col>
+                        </Row>
+                    </div>
                 </div>
 
                 <tbody>
                     {questions.map((quest, index) =>
-                    
-
                         <tr key={index}>
-                            
+
                             <td>{Replace(quest.text)}</td>
                             <td>{quest.difficultyLevel.difficulty}</td>
                             <td>{makeButtons(exam, quest)}</td>
                         </tr>
-
                     )}
                 </tbody>
-
-
-
-
             </fieldset>
             <Button variant='dark' onClick={handleBack}>Go back</Button>
 
