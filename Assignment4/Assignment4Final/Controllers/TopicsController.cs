@@ -1,4 +1,6 @@
 ﻿using Assignment4Final.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ModelLibrary.Models.DTO;
 using ModelLibrary.Models.DTO.Certificates;
@@ -7,7 +9,6 @@ namespace Assignment4Final.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-//[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
 public class TopicsController : ControllerBase
 {
     private readonly TopicsService _topicsService;
@@ -18,6 +19,7 @@ public class TopicsController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public async Task<IActionResult> GetAll()
     {
         var topics = await _topicsService.GetAllAsync();
@@ -32,6 +34,7 @@ public class TopicsController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public async Task<IActionResult> Get(int id)
     {
         var topic = await _topicsService.GetAsync(id);
@@ -58,6 +61,7 @@ public class TopicsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public async Task<IActionResult> Add([FromBody] TopicDto topicDto)
     {
         var addedTopic = await _topicsService.AddAsync(topicDto);
@@ -84,6 +88,7 @@ public class TopicsController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public async Task<IActionResult> Update(int id, [FromBody] TopicDto topicDto)
     {
         var updatedTopic = await _topicsService.UpdateAsync(id, topicDto);
@@ -110,6 +115,7 @@ public class TopicsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public async Task<IActionResult> Delete(int id)
     {
         var deletedTopic = await _topicsService.DeleteAsync(id);

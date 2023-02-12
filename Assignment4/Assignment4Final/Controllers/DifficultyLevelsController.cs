@@ -1,4 +1,6 @@
 ﻿using Assignment4Final.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ModelLibrary.Models.DTO;
 using ModelLibrary.Models.DTO.Certificates;
@@ -7,7 +9,6 @@ namespace Assignment4Final.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-//[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
 public class DifficultyLevelsController : ControllerBase
 {
     private readonly DifficultyLevelsService _difficultyLevelsService;
@@ -18,6 +19,7 @@ public class DifficultyLevelsController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public async Task<IActionResult> GetAll()
     {
         var diffLevels = await _difficultyLevelsService.GetAllAsync();
@@ -32,6 +34,7 @@ public class DifficultyLevelsController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public async Task<IActionResult> Get(int id)
     {
         var diffLevel = await _difficultyLevelsService.GetAsync(id);
@@ -58,6 +61,7 @@ public class DifficultyLevelsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public async Task<IActionResult> Add([FromBody] DifficultyLevelDto diffLevelDto)
     {
         var addedDiffLevel = await _difficultyLevelsService.AddAsync(diffLevelDto);
@@ -84,6 +88,7 @@ public class DifficultyLevelsController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public async Task<IActionResult> Update(int id, [FromBody] DifficultyLevelDto diffLevelDto)
     {
         var updatedDiffLevel = await _difficultyLevelsService.UpdateAsync(id, diffLevelDto);
@@ -110,6 +115,7 @@ public class DifficultyLevelsController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public async Task<IActionResult> Delete(int id)
     {
         var deletedDiffLevel = await _difficultyLevelsService.DeleteAsync(id);

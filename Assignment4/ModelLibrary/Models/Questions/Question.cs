@@ -12,4 +12,5 @@ public class Question
     public virtual ICollection<Exam>? Exams { get; set; }
 
     public virtual ICollection<Option>? Options { get; set; } // NOTE:(akotro) Reverse Navigation
+    public virtual ICollection<CandidateExamAnswers>? CandidateExamAnswers { get; set; } // NOTE:(akotro) Reverse Navigation
 }

@@ -1,4 +1,6 @@
 ﻿using Assignment4Final.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ModelLibrary.Models.DTO;
 using ModelLibrary.Models.DTO.CandidateExam;
@@ -7,7 +9,6 @@ namespace Assignment4Final.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-//[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
 public class CandidateExamAnswersController : ControllerBase
 {
     private readonly CandidateExamAnswersService _candidateExamAnswersService;
@@ -18,6 +19,7 @@ public class CandidateExamAnswersController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public async Task<IActionResult> GetAll()
     {
         var candidateExamAnswers = await _candidateExamAnswersService.GetAllAsync();
@@ -32,6 +34,7 @@ public class CandidateExamAnswersController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public async Task<IActionResult> Get(int id)
     {
         var candidateExamAnswer = await _candidateExamAnswersService.GetAsync(id);
@@ -58,6 +61,7 @@ public class CandidateExamAnswersController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public async Task<IActionResult> Add([FromBody] CandidateExamAnswersDto candidateExamAnswerDto)
     {
         var addedCandidateExamAnswer = await _candidateExamAnswersService.AddAsync(
@@ -86,7 +90,10 @@ public class CandidateExamAnswersController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsCandidate")]
+    [Authorize(
+        AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
+        Policy = "IsAdminOrCandidate"
+    )]
     public async Task<IActionResult> Update(
         int id,
         [FromBody] CandidateExamAnswersDto candidateExamAnswerDto
@@ -119,6 +126,7 @@ public class CandidateExamAnswersController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public async Task<IActionResult> Delete(int id)
     {
         var deletedCandidateExamAnswer = await _candidateExamAnswersService.DeleteAsync(id);
