@@ -38,11 +38,15 @@ function ExamList(props) {
     }
 
     const handleDelete = (examId) => {
+        const confirmDelete = window.confirm("Are you sure you want to delete this question?");
         setExams(exams.filter(exam => exam.id !== examId));
-        axios.delete(`https://localhost:7196/api/Exam/${examId}`)
-            .then(response => {
-                console.log(response)
-            })
+        if(confirmDelete){
+
+            axios.delete(`https://localhost:7196/api/Exam/${examId}`)
+                .then(response => {
+                    console.log(response)
+                })
+        }
     }
 
 
@@ -55,8 +59,8 @@ function ExamList(props) {
         if(role === "admin"){
             return ( 
                 <div>
-                    <Button onClick={() => handleDelete(examButtons.id)}>Delete</Button>
-                    <Button onClick={() => handleEdit(examButtons)}>Edit</Button>
+                    <Button onClick={() => handleDelete(examButtons.id)}  variant="danger">Delete</Button>
+                    <Button onClick={() => handleEdit(examButtons)} variant="primary">Edit</Button>
                 </div>
             )
         }
@@ -64,7 +68,7 @@ function ExamList(props) {
             return ( 
                 <div>
                     
-                    <Button onClick={() => handleEdit(examButtons)}>Details</Button>
+                    <Button onClick={() => handleEdit(examButtons)}variant="primary">Details</Button>
                 </div>
             )
 
@@ -145,7 +149,7 @@ function ExamList(props) {
         <div>
         
             {role === "admin" &&
-            <Button onClick={() => createCertificateButton()}>
+            <Button onClick={() => createCertificateButton()} variant="secondary">
                 {showForm ? "Close Form" : "Create New Exam"}
             </Button>}
             <Button variant='dark' onClick={() => navigate(-1)}>Go back</Button>
@@ -192,7 +196,7 @@ function ExamList(props) {
 
 
 
-                    <button type="submit">"Save Exam & Add Answers"</button>
+                    <Button type="submit">"Save Exam & Add Answers"</Button>
                 </Form>
             )}
 
