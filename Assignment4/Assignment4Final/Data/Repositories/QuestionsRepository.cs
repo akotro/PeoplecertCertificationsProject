@@ -140,6 +140,7 @@ public class QuestionsRepository : IQuestionsRepository
         // var question = await _context.Questions.FindAsync(id);
         var question = await _context.Questions
             .Include(question => question.Options)
+            .Include(question => question.CandidateExamAnswers)
             .Where(question => question.Id == id)
             .FirstOrDefaultAsync();
 

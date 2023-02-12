@@ -28,7 +28,7 @@ function MarkerList(props) {
         if (role === "marker") {
             axios.get(`https://localhost:7196/api/Markers/${markerId}`).then((response) => {
                 setData(response.data.data);
-                setExams([...response.data.data.candidateExams.filter(x => x.isModerated === null)]);
+                setExams([...response.data.data.candidateExams.filter(x => x.isModerated === null || x.isModerated === undefined)]);
                 setmarkedExams([...response.data.data.candidateExams.filter(x => x.isModerated === true)])
                 // console.log(response.data.data);
                 // console.log(response.data.data.candidateExams.filter(x => x.isModerated === true));

@@ -1,4 +1,6 @@
 ﻿using System.Security.Cryptography;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ModelLibrary.Models.DTO.Questions;
 
@@ -6,10 +8,10 @@ namespace Assignment4Final.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-//[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
 public class FileController : ControllerBase
 {
     [HttpPost]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public async Task<IActionResult> UploadFile([FromForm] IFormFile file)
     {
         if (file == null || file.Length == 0)
@@ -65,6 +67,7 @@ public class FileController : ControllerBase
     }
 
     [HttpGet("download/{fileName}")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
     public IActionResult DownloadFile(string fileName)
     {
         string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "Uploads");
@@ -78,9 +81,7 @@ public class FileController : ControllerBase
     }
 
     [HttpGet("image/{fileName}")]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsQualityControl")]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsMarker")]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsCandidate")]
+    // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAny")]
     public IActionResult GetImage(string fileName)
     {
         string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "Uploads");

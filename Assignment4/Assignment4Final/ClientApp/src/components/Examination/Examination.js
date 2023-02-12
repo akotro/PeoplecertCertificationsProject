@@ -1,29 +1,34 @@
 ﻿import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import axios from 'axios';
 
 export default function Examination(props) {
 
     let navigate = useNavigate();
+    let location = useLocation();
+    const candidate ={};
     const params = useParams();
     const [candidateExam, setCandidateExam] = useState({ exam: { questions: [] } })
     const [user, setUser] = useState();
     const candExamId = params.id;
 
     // const [candidateExam, setCandidateExam] = useState({
-    //     exam: { questions: [] },
+        //     exam: { questions: [] },
     //     CandidateExamAnswers: { ChoosenOptions: [] },
     // });
-
+    
     useEffect(() => {
         axios.put(`https://localhost:7196/api/CandidateExam/StartExam/${candExamId}`).then((response) => {
             setCandidateExam(response.data);
-            // console.log(response.data);
+            console.log(response.data);
+            // edw prpei na mpei o candidate kai meta sto apo katw assign 
+            // candidate = location.state.candidate;
+
         }).catch(function (error) {
             console.log(error);
         });
     }, []);
-
+    
     function Replace(temp) {
         var parser = new DOMParser();
 
@@ -35,7 +40,7 @@ export default function Examination(props) {
     const saveCandidateExam = () => {
         axios.put(`https://localhost:7196/api/CandidateExam/EndExam/${candExamId}`).then((response) => {
             //console.log(response.data);
-            navigate(`/candidate/ExamResults`, { state: { data: response.data }});
+            navigate(`/candidate/ExamResults`, { state: { data: response.data, candidate:candidate }});
         })
         .catch(error => {
             console.error(error);

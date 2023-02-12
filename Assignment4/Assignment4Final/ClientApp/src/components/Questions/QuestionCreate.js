@@ -14,15 +14,17 @@ import {
 } from "react-bootstrap";
 import { Form } from "react-bootstrap";
 // import Multiselect from "multiselect-react-dropdown";
-import { React, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { React, useState, useEffect  } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 import axios from "axios";
 
 import MyEditor from "./Editor";
 import Errors from '../Common/ErrorList'
+import BackButton from "../Common/Back";
 
 function QuestionCreate() {
+    const navigate=useNavigate();
     const [error, setError] = useState(null);
     //------------------------------------------------Question state
     const [question, setQuestion] = useState({
@@ -191,6 +193,8 @@ function QuestionCreate() {
                 console.log(error);
                 setError(error);
             });
+
+            navigate('/questions')
     }
     // const handleSubmit = (event) => {
     // };
@@ -245,250 +249,196 @@ function QuestionCreate() {
     //------------------------------------------------
     //------------------------------------------------ RETURN
     return (
-        <Container>
+        <div >
             {error && <Errors error={error} />}
-            <Stack gap={3}>
-                <Row>
-                    <Badge pill bg="primary">
-                        <h4>Question's Topic</h4>
-                    </Badge>
-                </Row>
-                <br />
-            </Stack>
-            <Stack gap={3}>
-                {/* ||FORM------------------------------------------------->>>>>>> */}
-                <Form noValidate validated={true} onSubmit={handleSubmit}>
-                    <Form.Group>
-                        <Row className="justify-content-center">
-                            <Form.Select
-                                as="select"
-                                name="TopicSelect"
-                                defaultValue={question.topicId} //1.triggers the controlled component error
-                            // onChange={ handleChange  }    //2.stops the controlled component error
-                            //3. the combination of 3 and 4 triggers again the error
-                            //  required                                    //more study on This is required
-                            >
-                                <option value="" hidden>
-                                    Please choose a topic{" "}
+            {/* ||FORM------------------------------------------------->>>>>>> */}
+            <Form noValidate onSubmit={handleSubmit}>
+                <Stack gap={3} >
+                    <Form.Group >
+                        <Form.Label>
+                            <h4 >Question's Topic</h4>
+                        </Form.Label>
+                        <Form.Select
+                            as="select"
+                            name="TopicSelect"
+                            defaultValue={question.topicId} //1.triggers the controlled component error
+                        // onChange={ handleChange  }    //2.stops the controlled component error
+                        //3. the combination of 3 and 4 triggers again the error
+                        //  required                                    //more study on This is required
+                        >
+                            <option value="" hidden>
+                                Please choose a topic{" "}
+                            </option>
+                            {allTopics.map((topic, index) => (
+                                <option
+                                    key={index}
+                                    onClick={() => {
+                                        onSelect(topic, "topic");
+                                    }} //4. this without 3. stops the error
+                                    value={topic.id}>
+                                    {topic.name}
                                 </option>
-                                {allTopics.map((topic, index) => (
+                            ))}
+                        </Form.Select>
+                    </Form.Group>
+                    <Form.Group>
+                        <Form.Label>
+                            <h4>Question's Difficulty</h4>
+                        </Form.Label>
+                        <Form.Select as="select"
+                            name="DifficultySelect"
+                            defaultValue={
+                                question.difficultyLevelId
+                            }                                                          //1.triggers the controlled component error
+                        // onChange={ handleChange  }    //2.stops the controlled component error
+                        //3. the combination of 3 and 4 triggers again the error
+                        //more study on This is required
+                        >
+                            <option value="" hidden>
+                                Please choose a level{" "}
+                            </option>
+                            {difficultyLevels.map(
+                                (level, index) => (
                                     <option
                                         key={index}
                                         onClick={() => {
-                                            onSelect(topic, "topic");
+                                            onSelect(
+                                                level,
+                                                "level"
+                                            );
                                         }} //4. this without 3. stops the error
-                                        value={topic.id}
-                                    >
-                                        {topic.name}
-                                    </option>
-                                ))}
-                            </Form.Select>
-                        </Row>
+                                    // value={}
+                                    >{level.difficulty}</option>
+                                )
+                            )}
+                        </Form.Select>
                     </Form.Group>
-                    <hr />
-                    <Stack gap={5}>
-                        {/*  DROPDOWN Difficulty levels */}
-                        <Container className="">
-                            <Row className="w-50 mb-3">
-                                <Badge pill bg="primary">
-                                    <h4>Question's Difficulty</h4>
-                                </Badge>
-                            </Row>
-                            <Row className="w-50 mb-0">
-                                <Form.Group>
-                                    <Form.Select as="select"
-                                        name="DifficultySelect"
-                                        defaultValue={
-                                            question.difficultyLevelId
-                                        }                                                          //1.triggers the controlled component error
-                                    // onChange={ handleChange  }    //2.stops the controlled component error
-                                    //3. the combination of 3 and 4 triggers again the error
-                                    //more study on This is required
-                                    >
-                                        <option value="" hidden>
-                                            Please choose a level{" "}
-                                        </option>
-                                        {difficultyLevels.map(
-                                            (level, index) => (
-                                                <option
-                                                    key={index}
-                                                    onClick={() => {
-                                                        onSelect(
-                                                            level,
-                                                            "level"
-                                                        );
-                                                    }} //4. this without 3. stops the error
-                                                // value={}
-                                                >
-                                                    {level.difficulty}
-                                                </option>
-                                            )
-                                        )}
-                                    </Form.Select>
-                                </Form.Group>
-                            </Row>
-                        </Container>
 
-                        {/* <hr /> */}
-                        <Row>
-                            {/* Questions text */}
-                            <Col md={10}>
-                                <FormGroup required>
-                                    <Form.Label><h4>Questions Text</h4></Form.Label>
-                                    <MyEditor
-                                        handleChange={handleChange}
-                                        name={"QuestionText"}
-                                    />
-                                </FormGroup>
-                            </Col>
-                            {/* DROPDOWN TOPICS */}
-                            {/* <Col md={3}>
-            <Form.Group>
-              <Form.Label></Form.Label>
-              <Dropdown autoClose={"outside"} onSelect={onSelect} required>
-                <Dropdown.Toggle variant="primary" id="dropdown-basic">
-                  Question's Topic
-                </Dropdown.Toggle>
+                    {/* <hr /> */}
+                    <Row>
+                        {/* Questions text */}
+                        <Col >
+                            <FormGroup required>
+                                <Form.Label><h4>Questions Text</h4></Form.Label>
+                                <MyEditor
+                                    handleChange={handleChange}
+                                    name={"QuestionText"} />
+                            </FormGroup>
+                        </Col>
 
-                <Dropdown.Menu>
-                  {allTopics.map((topic, index) => (
-                    <Dropdown.Item
-                      key={index}
-                      value={topic.id}
-                      eventKey={topic.id}
-                      species={"topic"}
-                    >
-                      {topic.name}
-                    </Dropdown.Item>
-                  ))}
-                </Dropdown.Menu>
-              </Dropdown>
-            </Form.Group>
-          </Col>{" "} */}
-                        </Row>
+                    </Row>
 
-                        {/*   //OPTIONS// */}
-                        <Row>
-                            {/* 1st Option */}
-                            <Col md={7}>
-                                <FormGroup>
-                                    <Form.Label><h5>First Option</h5></Form.Label>
-                                    {/* Editor */}
-                                    <MyEditor
-                                        handleChange={handleChange}
-                                        name={"Option0"}
-                                    />
-                                </FormGroup>
-                            </Col>
-                            <Col>
-                                <Form.Check
-                                    type={"checkbox"}
-                                    id={"1stOptionCorrect"}
-                                    label={"Is Correct"}
-                                    onChange={(event, name) =>
-                                        handleChange(event, name)
-                                    }
-                                    name="checkbox0"
-                                />
-                            </Col>
-                        </Row>
-                        <Row>
-                            {/* 2nd Option */}
-                            <Col md={7}>
-                                <FormGroup>
-                                    <Form.Label><h5>Second Option</h5></Form.Label>
-                                    {/* Editor */}
-                                    <MyEditor
-                                        handleChange={handleChange}
-                                        name={"Option1"}
-                                    />
-                                </FormGroup>
-                            </Col>
-                            <Col>
-                                <Form.Check
-                                    type={"checkbox"}
-                                    id={"2ndOptionCorrect"}
-                                    label={"Is Correct"}
-                                    onChange={(event, name) =>
-                                        handleChange(event, name)
-                                    }
-                                    name="checkbox1"
-                                />
-                            </Col>
-                        </Row>
-                        <Row>
-                            {/* 3d Option */}
-                            <Col md={7}>
-                                <FormGroup>
-                                    <Form.Label><h5>Third Option</h5></Form.Label>
-                                    {/* Editor */}
-                                    <MyEditor
-                                        handleChange={handleChange}
-                                        name={"Option2"}
-                                    />
-                                </FormGroup>
-                            </Col>
-                            <Col>
-                                <Form.Check
-                                    type={"checkbox"}
-                                    id={"3dOptionCorrect"}
-                                    label={"Is Correct"}
-                                    onChange={(event, name) =>
-                                        handleChange(event, name)
-                                    }
-                                    name="checkbox2"
-                                />
-                            </Col>
-                        </Row>
-                        <Row>
-                            {/* 4th Option  (id=3)*/}
-                            <Col md={7}>
-                                <FormGroup>
-                                    <Form.Label><h5>Fourth Option</h5></Form.Label>
-                                    {/* Editor */}
-                                    <MyEditor
-                                        handleChange={handleChange}
-                                        name={"Option3"}
-                                    />
-                                </FormGroup>
-                            </Col>
-                            <Col>
-                                <Form.Check
-                                    type={"checkbox"}
-                                    id={"4thOptionCorrect"}
-                                    label={"Is Correct"}
-                                    onChange={(event, name) =>
-                                        handleChange(event, name)
-                                    }
-                                    name="checkbox3"
-                                />
-                            </Col>
-                        </Row>
+                    {/*   //OPTIONS// */}
+                    {/* 1st Option */}
+                    {/* Editor */}
+                    {/* <Row >
+                        <Col md={7}>
+                            <FormGroup>
+                                <Form.Label><h5>First Option</h5></Form.Label>
+                                <Row className="align-items-center">
+                                    <Col>
+                                        <MyEditor
+                                            handleChange={handleChange}
+                                            name={"Option0"}
+                                        />
+                                    </Col><Col>
 
-                        <Row>
-                            <Col md="auto">
-                                <Button
-                                    variant="primary"
-                                    type="submit"
-                                    value={"Submit"}
-                                >
-                                    Create Question
-                                </Button>
-                            </Col>
-                        </Row>
-                        <Row className="d-flex w-100">
-                            <Badge pill >
+                                        <Form.Check
+                                            type={"checkbox"}
+                                            id={"1stOptionCorrect"}
+                                            label={"Is Correct"}
+                                            onChange={(event, name) =>
+                                                handleChange(event, name)
+                                            }
+                                            name="checkbox0"
+                                        />
+                                    </Col>
+                                </Row>
+                            </FormGroup>
+                        </Col>
+                        <Col>
+                        </Col>
+                    </Row> */}
 
-                                <Link to={`/questions/`}>
-                                    <Button variant="primary" className="w-100">Go Back</Button>
-                                </Link>
-
-                            </Badge>
-                        </Row>
-                    </Stack>
-                </Form>
-            </Stack>
-        </Container>
+                    <Row className="align-items-center justify-content-center">
+                        <Form.Label><h5>First Option</h5></Form.Label>
+                        <Col>
+                            <MyEditor
+                                handleChange={handleChange}
+                                name={"Option0"} />
+                        </Col>
+                        <Col xs={2}>
+                            <Form.Check
+                                type={"checkbox"}
+                                id={"1stOptionCorrect"}
+                                label={"Is Correct"}
+                                onChange={(event, name) => handleChange(event, name)}
+                                name="checkbox0" />
+                        </Col>
+                    </Row>
+                    <Row className="align-items-center justify-content-center">
+                        <Form.Label><h5>Second Option</h5></Form.Label>
+                        <Col>
+                            <MyEditor
+                                handleChange={handleChange}
+                                name={"Option1"} />
+                        </Col>
+                        <Col xs={2}>
+                            <Form.Check
+                                type={"checkbox"}
+                                id={"2ndOptionCorrect"}
+                                label={"Is Correct"}
+                                onChange={(event, name) =>
+                                    handleChange(event, name)
+                                } name="checkbox1" />
+                        </Col>
+                    </Row>
+                    <Row className="align-items-center justify-content-center">
+                        <Form.Label><h5>Third Option</h5></Form.Label>
+                        <Col>
+                            <MyEditor
+                                handleChange={handleChange}
+                                name={"Option2"} />
+                        </Col>
+                        <Col xs={2}>
+                            <Form.Check
+                                type={"checkbox"}
+                                id={"3dOptionCorrect"}
+                                label={"Is Correct"}
+                                onChange={(event, name) =>
+                                    handleChange(event, name)
+                                } name="checkbox2" />
+                        </Col>
+                    </Row>
+                    <Row className="align-items-center justify-content-center">
+                        <Form.Label><h5>Fourth Option</h5></Form.Label>
+                        <Col>
+                            <MyEditor
+                                handleChange={handleChange}
+                                name={"Option3"} />
+                        </Col>
+                        <Col xs={2}>
+                            <Form.Check
+                                type={"checkbox"}
+                                id={"4thOptionCorrect"}
+                                label={"Is Correct"}
+                                onChange={(event, name) =>
+                                    handleChange(event, name)
+                                } name="checkbox3" />
+                        </Col>
+                    </Row>
+                            <Button
+                                variant="primary"
+                                type="submit"
+                                value={"Submit"}
+                            >
+                                Create Question
+                            </Button>
+                    <BackButton />
+                    {/* </Stack> */}
+                </Stack>
+            </Form>
+        </div>
     );
 }
 export default QuestionCreate;

@@ -176,7 +176,9 @@ namespace Assignment4Final.Services
 
         public async Task<CandidateExam> UpdatdeWithResults(CandidateExam candidateExam)
         {
-            var score = candidateExam.CandidateExamAnswers.Count(answer => (bool)answer.IsCorrect); // IsCorrect must not be nullable
+            //var score = candidateExam.CandidateExamAnswers.Count(answer => (bool)answer.IsCorrect); // IsCorrect must not be nullable
+            var score = candidateExam.CandidateExamAnswers.Count(answer => (answer.IsCorrect != null && (bool)answer.IsCorrect));
+
 
             candidateExam.MaxScore = candidateExam.Exam.MaxMark;
 

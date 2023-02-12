@@ -1,14 +1,22 @@
 // import {Form,Button,Col,Row,FloatingLabel,Stack,Table,Container,} from "react-bootstrap";
 
-import {Button,Table,Container} from "react-bootstrap";
-import  React, {useState, useEffect } from "react";
+import { Button, Table, Container } from "react-bootstrap";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
+
 import parse from "html-react-parser";
+import { AuthenticationContext } from '../auth/AuthenticationContext'
+
 // import QuestionEdit from "./QuestionEdit";
 
 function Questions() {
+
+    const navigate = useNavigate();
     const [data, setData] = useState([]);
+    const { update, claims } = useContext(AuthenticationContext);
+    const [role, setRole] = useState(claims.find(claim => claim.name === 'role').value)
 
     useEffect(() => {
         axios
@@ -29,34 +37,80 @@ function Questions() {
         )
     }
     //--------------------------------------------------HANDLE DELETE
-    const  handleDelete = (event) => {
+    const handleDelete = (id) => {
         // Asks user if they are sure
-        const localId = event.target.dataset.id;
+        // FIX:(akotro) event.target is undefined
+        // const localId = event.target.dataset.id;
 
         const confirmDelete = window.confirm("Are you sure you want to delete this this question?");
 
         if (confirmDelete) {
             //send axios call with the request to delete using Id
             axios
-            .delete(`https://localhost:7196/api/questions/${localId}`)
-            .then((response) => {
-                // console.log("Delete response");
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+                .delete(`https://localhost:7196/api/questions/${id}`)
+                .then((response) => {
+                    // console.log("Delete response");
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
 
-            const newData = data.filter((item) => { return item.id != localId;},localId);
-            setData( newData);
+            const newData = data.filter((item) => { return item.id != id; }, id);
+            setData(newData);
         }
     }
+
+    const makebuttons = (queId) => {
+        if (role === "qualitycontrol") {
+            return (
+                <td>
+                    <div className='d-flex '>
+                        <Button onClick={() => { navigate(`/questions/edit/${queId}`) }}>Details</Button>
+                    </div>
+                </td>
+            );
+        } else if ((role === "admin")) {
+            return (
+                <td>
+                    <div className='d-flex gap-2'>
+                        <Button onClick={() => { navigate(`/questions/edit/${queId}`) }}>Edit</Button>
+                        <Button variant="dark" onClick={() => handleDelete(queId)}>Delete</Button>
+                    </div>
+                </td>
+            );
+        }
+        return (
+            <td>
+
+            </td>
+        );
+
+    };
+
+    //     <td>
+    //     <Link to={`/questions/edit/${item.id}`} state={{ questionIndex: item.id }}>
+    //         <Button >Edit</Button>
+    //     </Link>
+    // </td>
+
+    //  <td>
+    //                                     <Button
+    //                                         variant="dark"
+    //                                         onClick={handleDelete}
+    //                                         data-id={item.id}>
+    //                                         Delete
+    //                                     </Button>
+    //                                 </td>
 
     //-----------------------------------------------------------
     return (
         <Container fluid="md">
-            <Link to="/questions/create">
-                <Button variant="dark">Create new Question</Button>
-            </Link>
+            {role === "admin" ?
+                <Button variant='dark'
+                    className='d-grid gap-2 col-6 mx-auto py-2 my-2'
+                    onClick={() => navigate('/questions/create')}
+                > Create a new Certificate </Button>
+                : null}
             <div>
                 <Table hover striped>
                     <thead>
@@ -64,8 +118,7 @@ function Questions() {
                             <th scope="Col">Id</th>
                             <th scope="col">MainText</th>
                             <th scope="col">Topic</th>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
+                            <th scope="col">Actions</th>
                         </tr>
                     </thead>
 
@@ -74,28 +127,12 @@ function Questions() {
                             <tr key={item.id}>
                                 <td>{item.id != null && item.id}</td>
                                 {Replace(item.text)}
-                                {/* //--TOPIC--// */}
                                 <td>
                                     {item.topic === undefined || item.topic === null
                                         ? "No topic selected"
                                         : item.topic.name}
                                 </td>
-                                    {/* //--EDIT BUTTON--// */}
-                                <td>
-                                    <Link to={`/questions/edit/${item.id}`}    state={{questionIndex:item.id}}>
-                                            <Button variant="dark">Edit</Button>
-                                    </Link>
-                                </td>
-                                    {/* //--DELETE BUTTON--// */}
-                                <td>
-                                    <Button
-                                        variant="dark"
-                                        onClick={ handleDelete}
-                                        data-id={item.id}
-                                    >
-                                        Delete
-                                    </Button>
-                                </td>
+                                {makebuttons(item.id)}
                             </tr>
                         ))}
                     </tbody>
