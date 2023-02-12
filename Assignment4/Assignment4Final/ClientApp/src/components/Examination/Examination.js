@@ -3,7 +3,7 @@ import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { Button, Col, Row, Form } from 'react-bootstrap';
 
 import axios from 'axios';
-
+import parse from "html-react-parser";
 export default function Examination(props) {
 
     let navigate = useNavigate();
@@ -31,12 +31,17 @@ export default function Examination(props) {
         });
     }, []);
 
+    // function Replace(temp) {
+    //     var parser = new DOMParser();
+
+    //     var doc = parser.parseFromString(temp, 'text/html');
+
+    //     return doc.body.innerText;
+    // }
     function Replace(temp) {
-        var parser = new DOMParser();
-
-        var doc = parser.parseFromString(temp, 'text/html');
-
-        return doc.body.innerText;
+        return (
+            <td>{parse(temp)}</td>
+        )
     }
 
     const saveCandidateExam = () => {
@@ -98,7 +103,7 @@ export default function Examination(props) {
             {currentQuestions.map((question, index) => (
                 <div key={index}>
 
-                    <h3>{Replace(question.text)}</h3>
+                    <h3>{ Replace(question.text) }</h3>
 
                     <ol>
                         {question.options.map((option, index) => (

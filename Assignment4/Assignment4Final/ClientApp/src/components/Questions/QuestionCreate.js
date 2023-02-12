@@ -187,6 +187,7 @@ function QuestionCreate() {
                 console.log("Inside response");
                 console.log(response);
                 setError([]);
+                navigate('/questions')
             })
             .catch(function (error) {
                 console.log("Inside error");
@@ -194,7 +195,6 @@ function QuestionCreate() {
                 setError(error);
             });
 
-        navigate('/questions')
     }
     // const handleSubmit = (event) => {
     // };
