@@ -17,9 +17,9 @@ function MarkExam(props) {
     const role = location.state.role;
 
     useEffect(() => {
-        // initialScore = exam.candidateScore;
-        // console.log(incomingData)
-        // setExam(incomingData)
+        initialScore = exam.candidateScore;
+        console.log(incomingData)
+        setExam(incomingData)
         // console.log(exam.exam.certificateTitle)
         // console.log(exam.candidateExamAnswers)
     }, []);

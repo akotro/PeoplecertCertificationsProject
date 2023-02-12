@@ -53,7 +53,7 @@ namespace Assignment4Final.Controllers
         [HttpGet("{id}")]
         [Authorize(
             AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
-            Policy = "IsAdmin"
+            Policy = "IsAdminOrQualityControl"
         )]
         public async Task<IActionResult> Get(int id)
         {

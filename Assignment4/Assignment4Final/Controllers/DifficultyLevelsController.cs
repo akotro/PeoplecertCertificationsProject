@@ -19,7 +19,7 @@ public class DifficultyLevelsController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdminOrQualityControl")]
     public async Task<IActionResult> GetAll()
     {
         var diffLevels = await _difficultyLevelsService.GetAllAsync();
@@ -34,7 +34,7 @@ public class DifficultyLevelsController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdmin")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "IsAdminOrQualityControl")]
     public async Task<IActionResult> Get(int id)
     {
         var diffLevel = await _difficultyLevelsService.GetAsync(id);
