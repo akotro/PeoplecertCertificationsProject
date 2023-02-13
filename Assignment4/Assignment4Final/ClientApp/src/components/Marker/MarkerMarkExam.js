@@ -98,7 +98,9 @@ function MarkExam(props) {
             <div>
                 <Row>
                     <Col xs={8}>
+                    {exam.exam !== undefined && 
                         <h4>Title: {exam.exam.certificateTitle}</h4>
+                    }
                     </Col>
                     <Col>
                         {initialScore !== exam.candidateScore && (
