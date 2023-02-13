@@ -12,6 +12,7 @@ public interface IAccountsRepository
     List<string> GetAllClaims();
     Task<IList<Claim>> GetClaims(AppUser user);
     string? GetUserRole(string email);
+    Task<IdentityResult> UpdateRole(string userEmail, string newRole);
     Task<IdentityResult> MakeAdmin(string email);
     Task<IdentityResult> RemoveAdmin(string email);
     Task<IdentityResult> MakeMarker(string email);

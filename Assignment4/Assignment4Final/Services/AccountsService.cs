@@ -110,6 +110,10 @@ public class AccountsService
                 {
                     await MakeCandidate(userDto.Credentials.Email);
                 }
+                else if (!string.IsNullOrWhiteSpace(userDto.Role))
+                {
+                    await _repository.UpdateRole(user.Email, userDto.Role);
+                }
 
                 return await BuildToken(userDto.Credentials);
             }
