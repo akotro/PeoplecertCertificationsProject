@@ -81,7 +81,11 @@ function MarkerList(props) {
         <div className='container-fluid'>
             <div>
                 <div>
-                    {role !== "qualitycontrol" && <div>Exams to be Marked!</div>}
+                    {role !== "qualitycontrol" &&
+                        <div className="lead fs-4 text-center mb-4">
+                            Exams to be marked
+                        </div>
+                    }
 
                     <Table striped borderless hover>
                         <thead>
@@ -121,8 +125,9 @@ function MarkerList(props) {
             </div>
             {role !== "qualitycontrol" &&
                 <div>
-
-                    <div>Already marked Exams</div>
+                    <div className="lead fs-4 text-center mb-4">
+                            Exams already marked
+                        </div>
                     <Table striped borderless hover>
                         <thead>
 
