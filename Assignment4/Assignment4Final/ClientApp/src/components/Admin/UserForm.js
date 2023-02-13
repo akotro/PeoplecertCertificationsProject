@@ -18,8 +18,8 @@ function UserForm() {
 
   const [error, setError] = useState();
   const [user, setUser] = useState({});
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [password, setPassword] = useState();
+  const [confirmPassword, setConfirmPassword] = useState();
   const [errorMessage, setErrorMessage] = useState("");
 
   const [credentials, setCredentials] = useState({
@@ -77,6 +77,16 @@ function UserForm() {
             password: password
           }
         });
+      } else {
+        console.log("not same!")
+        setUser({
+          ...user,
+          credentials: {
+            email: user.email,
+            password: null
+          }
+        });
+
       }
     } else if (name === "newPassword1") {
       setPassword(value);
@@ -87,6 +97,15 @@ function UserForm() {
           credentials: {
             email: user.email,
             password: confirmPassword
+          }
+        });
+      }else {
+        console.log("not same!")
+        setUser({
+          ...user,
+          credentials: {
+            email: user.email,
+            password: null
           }
         });
       }

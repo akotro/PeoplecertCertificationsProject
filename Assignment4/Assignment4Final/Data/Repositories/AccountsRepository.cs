@@ -227,7 +227,7 @@ public class AccountsRepository : IAccountsRepository
                 }
             }
 
-            if (userDto.Credentials != null)
+            if (userDto.Credentials != null && !string.IsNullOrEmpty(userDto.Credentials.Password))
             {
                 // NOTE:(akotro): Reset password without oldPassword
                 var resetToken = await _userManager.GeneratePasswordResetTokenAsync(dbUser);
