@@ -1,5 +1,6 @@
 ﻿using Assignment4Final.Data.Repositories;
 using AutoMapper;
+using Bogus;
 using ModelLibrary.Models.Candidates;
 using ModelLibrary.Models.Certificates;
 using ModelLibrary.Models.DTO.Candidates;
@@ -40,6 +41,9 @@ namespace Assignment4Final.Services
 
         public async Task<CandidatesDto?> AddCandidate(CandidatesDto candidateDto)
         {
+            var faker = new Faker();
+            candidateDto.CandidateNumber = faker.Random.Number(100000000, 999999999).ToString();
+
             var addedCandidate = await _candidateRepository.AddCandidate(
                 _mapper.Map<Candidate>(candidateDto)
             );
