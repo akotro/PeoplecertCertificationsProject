@@ -30,13 +30,13 @@ function CertificateList(props) {
     useEffect(() => {
         console.log(data)
         axios.get('https://localhost:7196/api/Certificates')
-        .then(res => {
+            .then(res => {
                 if (role === "candidate") {
                     // if the user is a candidate, show only active products
-                    console.log(res.data.data.filter(item => item.active === true))
-                    setData([...res.data.data.filter(item => item.active === true)])
+                    console.log(res.data.data.filter(item => item.active === true && item.exams && item.exams.length !== 0))
+                    setData([...res.data.data.filter(item => item.active === true && item.exams && item.exams.length !== 0)])
                     // () => { console.log(data) })
-                    console.log("res.data.data",res.data.data)
+                    console.log("res.data.data", res.data.data)
                 } else {
                     //if none of the above, show all products
                     setData(res.data.data)
@@ -46,21 +46,21 @@ function CertificateList(props) {
             .catch(err => {
                 console.error(err);
             });
-            
-            
+
+
     }, [])
 
     const handleBuy = (id) => {
         //console.log("handle buy")
-        console.log("data in buy",data)
+        console.log("data in buy", data)
         const cert = data.filter(item => item.id === id)[0];
-        const headers = {"Origin": "https://localhost:44473/"}
+        const headers = { "Origin": "https://localhost:44473/" }
         console.log(id)
-        axios.get(`https://localhost:7196/api/Paypal/${id}`,{headers}).then(response =>{
+        axios.get(`https://localhost:7196/api/Paypal/${id}`, { headers }).then(response => {
             console.log(response.data)
             // window.open(response.data, "_blank", "height=600,width=800");
             window.location.href = response.data;
-    })
+        })
         // console.log("handle buy ",id);
         // console.log("cert in buy",cert)
         // console.log("certexam.id", cert.exams[0].id);
@@ -128,9 +128,9 @@ function CertificateList(props) {
     return (
         <div className='container-fluid'>
             {role === "admin" ?
-                <Button variant='dark' 
-                className='d-grid gap-2 col-6 mx-auto py-2 my-2' 
-                onClick={()=> navigate('/certificate/create')}
+                <Button variant='dark'
+                    className='d-grid gap-2 col-6 mx-auto py-2 my-2'
+                    onClick={() => navigate('/certificate/create')}
                 > Create a new Certificate </Button>
                 : null}
             <Table striped hover borderless className="text-center align-middle" id='list_of_allcerts'>

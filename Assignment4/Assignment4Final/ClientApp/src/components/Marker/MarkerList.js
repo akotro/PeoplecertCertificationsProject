@@ -61,7 +61,11 @@ function MarkerList(props) {
                 // console.log(response.data.data.map(marker => marker.candidateExams).flat().filter(x => x.isModerated === true))
                 // setData(response.data.data);
                 // .filter(x => x.isModerated === null)]
-                setExams([...givenExams.filter(x => x.isModerated !== true)]);
+                setmarkedExams([...givenExams.filter(x => x.isModerated === true)])
+
+                // setExams([...givenExams.filter(x => x.isModerated !== true)]);
+                setExams([...givenExams.filter(x => x.isModerated === null || x.isModerated === undefined)]);
+
 
             }).catch(function (error) {
                 console.log(error);
@@ -99,24 +103,46 @@ function MarkerList(props) {
                         <tbody>
                             {exams.map((CandidateExam, index) => (
                                 <tr key={index}>
-                                    <td>{CandidateExam.exam.certificateTitle}</td>
-                                    <td>{CandidateExam.candidateScore}</td>
-                                    <td>{makeDate(CandidateExam.markerAssignedDate)}
-                                        {/* <Button onClick={()=> makeDate(CandidateExam.markerAssignedDate)}>print date</Button> */}
-                                    </td>
-                                    <td>
-                                        {CandidateExam.result === true ?
-                                            <input class="form-check-input" type="checkbox" checked disabled /> :
-                                            <input class="form-check-input" type="checkbox" disabled />
-                                        }
-                                    </td>
-                                    <td>
-                                        {role !== "qualitycontrol" ?
-                                            <Button onClick={() => navigate(`/marker/markexam`, { state: { data: CandidateExam } })}>Mark Exam</Button> :
-                                            <Button onClick={() => navigate(`/marker/markexam`, { state: { data: CandidateExam, role: role } })}>View Marking</Button>
-                                        }
-                                    </td>
+                                    {CandidateExam.exam !== undefined ?
+                                        <>
+                                            <td>{CandidateExam.exam.certificateTitle}</td>
+                                            <td>{CandidateExam.candidateScore}</td>
+                                            <td>{makeDate(CandidateExam.markerAssignedDate)}
+                                                {/* <Button onClick={()=> makeDate(CandidateExam.markerAssignedDate)}>print date</Button> */}
+                                            </td>
+                                            <td>
+                                                {CandidateExam.result === true ?
+                                                    <input class="form-check-input" type="checkbox" checked disabled /> :
+                                                    <input class="form-check-input" type="checkbox" disabled />
+                                                }
+                                            </td>
+                                            <td>
+                                                {role !== "qualitycontrol" ?
+                                                    <Button onClick={() => navigate(`/marker/markexam`, { state: { data: CandidateExam } })}>Mark Exam</Button> :
+                                                    <Button onClick={() => navigate(`/marker/markexam`, { state: { data: CandidateExam, role: role } })}>View Marking</Button>
+                                                }
+                                            </td>
+                                        </> :
+                                        <>
+                                            <td>This exam has been deleted</td>
+                                            <td>{CandidateExam.candidateScore}</td>
+                                            <td>{makeDate(CandidateExam.markingDate)}</td>
+                                            <td>
+                                                {CandidateExam.result === true ?
+                                                    <input class="form-check-input" type="checkbox" checked disabled /> :
+                                                    <input class="form-check-input" type="checkbox" disabled />
+                                                }
+                                            </td>
+                                            <td>
+                                                {role !== "qualitycontrol" ?
+                                                    <Button onClick={() => navigate(`/marker/markexam`, { state: { data: CandidateExam } })}>Mark Exam</Button> :
+                                                    <Button onClick={() => navigate(`/marker/markexam`, { state: { data: CandidateExam, role: role } })}>View Marking</Button>
+                                                }
+                                            </td>
+                                        </>
+                                    }
                                 </tr>
+
                             ))}
                         </tbody>
                     </Table>
@@ -126,8 +152,8 @@ function MarkerList(props) {
             {role !== "qualitycontrol" &&
                 <div>
                     <div className="lead fs-4 text-center mb-4">
-                            Exams already marked
-                        </div>
+                        Exams already marked
+                    </div>
                     <Table striped borderless hover>
                         <thead>
 
@@ -141,18 +167,36 @@ function MarkerList(props) {
                         <tbody>
                             {markedExams.map((CandidateExam, index) => (
                                 <tr key={index}>
-                                    <td >{CandidateExam.exam.certificateTitle}</td>
-                                    <td>{CandidateExam.candidateScore}</td>
-                                    <td>{makeDate(CandidateExam.markingDate)}</td>
-                                    <td>
-                                        {CandidateExam.result === true ?
-                                            <input class="form-check-input" type="checkbox" checked disabled /> :
-                                            <input class="form-check-input" type="checkbox" disabled />
-                                        }
-                                    </td>
-                                    <td>
-                                        <Button onClick={() => navigate(`/marker/markexam`, { state: { data: CandidateExam } })}>View Marking</Button>
-                                    </td>
+                                    {CandidateExam.exam !== undefined ?
+                                        <>
+                                            <td >{CandidateExam.exam.certificateTitle}</td>
+                                            <td>{CandidateExam.candidateScore}</td>
+                                            <td>{makeDate(CandidateExam.markingDate)}</td>
+                                            <td>
+                                                {CandidateExam.result === true ?
+                                                    <input class="form-check-input" type="checkbox" checked disabled /> :
+                                                    <input class="form-check-input" type="checkbox" disabled />
+                                                }
+                                            </td>
+                                            <td>
+                                                <Button onClick={() => navigate(`/marker/markexam`, { state: { data: CandidateExam } })}>View Marking</Button>
+                                            </td>
+                                        </> :
+                                        <>
+                                            <td>This exam has been deleted</td>
+                                            <td>{CandidateExam.candidateScore}</td>
+                                            <td>{makeDate(CandidateExam.markingDate)}</td>
+                                            <td>
+                                                {CandidateExam.result === true ?
+                                                    <input class="form-check-input" type="checkbox" checked disabled /> :
+                                                    <input class="form-check-input" type="checkbox" disabled />
+                                                }
+                                            </td>
+                                            <td>
+                                                <Button onClick={() => navigate(`/marker/markexam`, { state: { data: CandidateExam } })}>View Marking</Button>
+                                            </td>
+                                        </>
+                                    }
                                 </tr>
                             ))}
                         </tbody>

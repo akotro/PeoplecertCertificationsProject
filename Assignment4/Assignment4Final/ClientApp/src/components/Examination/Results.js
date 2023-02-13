@@ -127,10 +127,11 @@ export default function Results() {
                 {/* ------------------------------------------------------------------------------------------------------ */}
             </div>
             <hr />
-            <Button onClick={handleClick}>Download Results</Button>
-            {location.state && location.state.from === '/candidate/availableexams' && (
-                <BackButton />
-            )}
+            <Button className='d-grid gap-2 col-12 mx-auto py-2 my-2' onClick={handleClick}>Download Results</Button>
+            {/* {location.state && location.state.from === '/candidate/availableexams' && (
+            )} */}
+            <Button variant='secondary' className='d-grid gap-2 col-12 mx-auto py-2 my-2' onClick={() => navigate("/candidate/availableexams")}>Go back</Button>
+                {/* <BackButton /> */}
         </div>
     )
 

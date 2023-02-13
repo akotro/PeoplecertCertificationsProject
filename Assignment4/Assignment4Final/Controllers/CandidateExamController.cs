@@ -61,6 +61,10 @@ namespace Assignment4Final.Controllers
             //     certId,
             //     "02458d8c-aba2-4b3d-86de-8f8457570c60"
             // );
+            if (candExamDto == null )
+            {
+                return NotFound();
+            }
             return Ok(candExamDto);
         }
 

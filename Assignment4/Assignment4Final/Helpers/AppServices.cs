@@ -33,7 +33,7 @@ public class AppServices
         JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
         var connectionString =
-            builder.Configuration.GetConnectionString("localhost")
+            builder.Configuration.GetConnectionString("localdb")
             ?? throw new InvalidOperationException(
                 "Connection string 'DefaultConnection' not found."
             );

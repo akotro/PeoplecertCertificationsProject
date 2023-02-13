@@ -57,7 +57,10 @@ namespace Assignment4Final.Services
         )
         {
             var certificate = await _certificatesRepository.GetAsync(certId); // used this so the entity is loaded
-
+            if (!certificate.Exams.ToList().Any())
+            {
+                return null;
+            }
             var exam = GetRandomExam(certificate.Exams.ToList());
 
             var candExam = new CandidateExam
@@ -76,6 +79,10 @@ namespace Assignment4Final.Services
             Random random = new Random();
             int count = exams.Count();
             var exam = exams[random.Next(0, count)];
+            while (exam == null)
+            {
+                exam = exams[random.Next(0, count)];
+            }
             return exam;
         }
 
