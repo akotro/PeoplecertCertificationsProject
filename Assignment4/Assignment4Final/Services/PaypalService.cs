@@ -9,7 +9,6 @@ namespace Assignment4Final.Services
     {
         private Payment _createdPayment;
 
-
         public async Task<Payment> CreatePayment(CertificateDto certificateDto)
         {
             var id = certificateDto.Id;
@@ -20,18 +19,18 @@ namespace Assignment4Final.Services
             Dictionary<string, string> myDict = new Dictionary<string, string>()
             {
                 { "mode", "sandbox" },
-                { "clientId", "ARJnCIsfgnAtVixz7vm7H6prddiZwfZDoIDkoViJLTzpGChXQHidxJ_2stv2ndHBZaJVDdwSYET0THrn"},
-                {"clientSecret", "EG8Zj7Olz1FrxKD5_eqq1JShD2fXITv8SFs9oY-QxBDLRNkwYavaUyhcHI5oEep5k5hobvOQC9xtov5i" }
+                {
+                    "clientId",
+                    "ARJnCIsfgnAtVixz7vm7H6prddiZwfZDoIDkoViJLTzpGChXQHidxJ_2stv2ndHBZaJVDdwSYET0THrn"
+                },
+                {
+                    "clientSecret",
+                    "EG8Zj7Olz1FrxKD5_eqq1JShD2fXITv8SFs9oY-QxBDLRNkwYavaUyhcHI5oEep5k5hobvOQC9xtov5i"
+                }
             };
             var _config = ConfigManager.Instance.GetProperties();
             var _accesToken = new OAuthTokenCredential(myDict).GetAccessToken();
-            var apiContext = new APIContext(_accesToken)
-
-
-            {
-                Config = myDict
-
-            };
+            var apiContext = new APIContext(_accesToken) { Config = myDict };
             try
             {
                 Payment payment = new Payment
@@ -42,23 +41,20 @@ namespace Assignment4Final.Services
                     {
                         new Transaction
                         {
-                            amount= new Amount
+                            amount = new Amount
                             {
-                                currency="EUR",
-                                total =$"{certificateDto.Price}"
-
-
+                                currency = "EUR",
+                                total = $"{certificateDto.Price}"
                             },
-                            description= $"Certificate : {certificateDto.Description}",
-                            
-
+                            description = $"Certificate : {certificateDto.Description}",
                         }
                     },
                     redirect_urls = new RedirectUrls
                     {
                         cancel_url = "https://localhost:44473/ExamsList",
                         //return_url = "https://localhost:44473/ExamsList"
-                        return_url = $"https://localhost:7196/api/paypal/success/{certificateDto.Id}"
+                        return_url =
+                            $"https://localhost:7196/api/paypal/success/{certificateDto.Id}"
                     }
                 };
                 _createdPayment = payment.Create(apiContext);
@@ -68,8 +64,6 @@ namespace Assignment4Final.Services
                 Console.WriteLine("sdsdsd");
             }
             return _createdPayment;
-
-
         }
     }
 }
