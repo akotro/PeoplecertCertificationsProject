@@ -21,7 +21,7 @@ public class CountriesController : ControllerBase
     [HttpGet]
     [Authorize(
         AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
-        Policy = "IsAdminOrCandidate"
+        Policy = "IsAdminOrQualityControlOrCandidate"
     )]
     public async Task<IActionResult> GetAll()
     {
