@@ -1,5 +1,6 @@
 ﻿using Assignment4Final.Data.Repositories;
 using AutoMapper;
+using Bogus;
 using ModelLibrary.Models.Candidates;
 using ModelLibrary.Models.Certificates;
 using ModelLibrary.Models.DTO.CandidateExam;
@@ -63,10 +64,13 @@ namespace Assignment4Final.Services
             }
             var exam = GetRandomExam(certificate.Exams.ToList());
 
+            var faker = new Faker();
+
             var candExam = new CandidateExam
             {
                 Candidate = await _candidateExamRepository.GetCandidateByUserIdAsync(userId),
-                Exam = exam
+                Exam = exam,
+                Voucher = faker.Random.AlphaNumeric(10)
             };
 
             var candExamUpdated = await _candidateExamRepository.AddOrUpdateAsync(candExam);
@@ -184,8 +188,9 @@ namespace Assignment4Final.Services
         public async Task<CandidateExam> UpdatdeWithResults(CandidateExam candidateExam)
         {
             //var score = candidateExam.CandidateExamAnswers.Count(answer => (bool)answer.IsCorrect); // IsCorrect must not be nullable
-            var score = candidateExam.CandidateExamAnswers.Count(answer => (answer.IsCorrect != null && (bool)answer.IsCorrect));
-
+            var score = candidateExam.CandidateExamAnswers.Count(
+                answer => (answer.IsCorrect != null && (bool)answer.IsCorrect)
+            );
 
             candidateExam.MaxScore = candidateExam.Exam.MaxMark;
 
@@ -193,7 +198,7 @@ namespace Assignment4Final.Services
             candidateExam.ReportDate = DateTime.Now;
 
             decimal precScore = ((decimal)score / (decimal)candidateExam.MaxScore) * (decimal)100;
-            candidateExam.PercentScore = decimal.Round(precScore,2); // max score shoud be on exam not candidateExam
+            candidateExam.PercentScore = decimal.Round(precScore, 2); // max score shoud be on exam not candidateExam
             candidateExam.Result =
                 candidateExam.CandidateScore >= candidateExam.Exam?.PassMark ? true : false;
             return await _candidateExamRepository.AddOrUpdateAsync(candidateExam);
