@@ -122,13 +122,10 @@ function ExamQuestionList() {
                         <p></p>
                         <Button onClick={() => handleAdd(exam)} variant='dark'
                             className='d-grid gap-2 col-6 mx-auto py-2 my-2' >Add Question</Button>
-
                     </Row>
-
                     {exam && (
                         <Row className="mt-3">
-
-                            <Col xs={2}>
+                            <Col xs={3}>
                                 <InputGroup>
                                     <InputGroup.Text>Set Passing Mark</InputGroup.Text>
                                     <Form.Control

@@ -15,7 +15,7 @@ function AvailableExams(props) {
     const [user, setUser] = useState();
     const [bookExam, setBookExam] = useState();
     let navigate = useNavigate();
-    const candidate ={};
+    const candidate = {};
 
     useEffect(() => {
         axios.get('https://localhost:7196/api/CandidateExam').then((response) => {
@@ -26,8 +26,8 @@ function AvailableExams(props) {
             setTakenExams([...response.data.filter(exam => (exam.result === true || exam.result === false))])
             // console.log(response.data);
             console.log(response.data[0].candidate);
-            if ( response.data.length >0 ){
-                candidate= response.data[0].candidate
+            if (response.data.length > 0) {
+                candidate = response.data[0].candidate
             }
             // console.log(...response.data.filter(exam => exam.result !== null));
         }).catch(function (error) {
@@ -85,7 +85,7 @@ function AvailableExams(props) {
     };
 
     const makebuttons = (CandExam) => {
-        if ( (CandExam.result === true || CandExam.result === false)) {
+        if ((CandExam.result === true || CandExam.result === false)) {
             return (
                 <td>
                     <div className='d-grid justify-content-md-end '>
@@ -125,7 +125,7 @@ function AvailableExams(props) {
             return;
         }
 
-        navigate(`/candidate/Examination/${CandExam.id}`, {state:{candidate: candidate}});
+        navigate(`/candidate/Examination/${CandExam.id}`, { state: { candidate: candidate } });
     };
 
     const makeDate = (examDate) => {
@@ -175,22 +175,18 @@ function AvailableExams(props) {
                     </thead>
                     <tbody>
                         {exams.map((CandidateExam, index) => {
-                            if(CandidateExam !== undefined && CandidateExam.exam !== undefined && CandidateExam.exam.certifiate !== null){
-                                return(
+                            if (CandidateExam !== undefined && CandidateExam.exam !== undefined && CandidateExam.exam.certifiate !== null) {
+                                return (
                                     <tr key={index}>
-                                <td>{CandidateExam.exam.certificate.title}</td>
-                                <td>{CandidateExam.exam.certificate.title}</td>
-                                <td>{makeDate(CandidateExam.examDate)}</td>
-                                <td>{CandidateExam.Voucher}</td>
-                                {/* <td>{CandidateExam.id}</td> */}
-                                <td>
-                                    {makebuttons(CandidateExam)}
-                                </td>
-                            </tr>
-
+                                        <td>{CandidateExam.exam.certificate.title}</td>
+                                        <td>{CandidateExam.voucher}</td>
+                                        <td>{makeDate(CandidateExam.examDate)}</td>
+                                        <td>
+                                            {makebuttons(CandidateExam)}
+                                        </td>
+                                    </tr>
                                 )
                             }
-                            
                         })}
                     </tbody>
                 </Table>
@@ -208,21 +204,21 @@ function AvailableExams(props) {
                     </thead>
                     <tbody>
                         {takenExams.map((CandidateExam, index) => {
-                            if(CandidateExam !== undefined && CandidateExam.exam !== undefined && CandidateExam.exam.certificate !== undefined){
+                            if (CandidateExam !== undefined && CandidateExam.exam !== undefined && CandidateExam.exam.certificate !== undefined) {
                                 return (
                                     <tr key={index}>
-                                <td>{CandidateExam.exam.certificate.title}</td>
-                                <td>{makeDate(CandidateExam.examDate)}</td>
-                                <td>{CandidateExam.percentScore}&nbsp;%</td>
-                                <td>
-                                    {makebuttons(CandidateExam)}
-                                </td>
-                            </tr>
+                                        <td>{CandidateExam.exam.certificate.title}</td>
+                                        <td>{makeDate(CandidateExam.examDate)}</td>
+                                        <td>{CandidateExam.percentScore}&nbsp;%</td>
+                                        <td>
+                                            {makebuttons(CandidateExam)}
+                                        </td>
+                                    </tr>
 
                                 )
                             }
-                            
-                            
+
+
                         })}
                     </tbody>
                 </Table>

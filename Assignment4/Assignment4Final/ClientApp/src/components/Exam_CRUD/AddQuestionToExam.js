@@ -127,7 +127,7 @@ function AddQuestionToExam() {
                     <div key={index}>
                         {console.log(topic)}
                         <Card>
-                            <div><h5>Topic Name: {topic.name}</h5></div>
+                            <div><h5><strong>Topic Name: {topic.name}</strong></h5></div>
                             {topic.questions.map((question, number) => exam.questions.findIndex(q => q.id === question.id) > -1 ? null : <div key={number}>
                                 <div> Question: {Replace(question.text)}</div>
                                 <div>Difficulty: {question.difficultyLevel.difficulty}</div>
