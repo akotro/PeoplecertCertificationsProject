@@ -97,8 +97,8 @@ function AvailableExams(props) {
             return (
                 <td>
                     <div className='d-grid gap-2 d-md-flex justify-content-md-end'>
-                        <Button onClick={() => takeExam(CandExam)}>Take Exam</Button>
                         <Button onClick={() => handleOpen(CandExam.id)}>Book Date</Button>
+                        <Button variant="success" onClick={() => takeExam(CandExam)}>Take Exam!</Button>
                     </div>
                 </td>
             );

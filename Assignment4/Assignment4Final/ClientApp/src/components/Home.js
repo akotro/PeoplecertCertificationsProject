@@ -1,8 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { AuthenticationContext } from '../components/auth/AuthenticationContext'
-import { Link, useNavigate } from 'react-router-dom';
-import { Col, Container } from "react-bootstrap";
-import { AiOutlineCheck, AiOutlineClose, AiFillHome, AiFillFund } from "react-icons/ai";
+import { useNavigate } from 'react-router-dom';
 import { BsExclamationOctagonFill } from "react-icons/bs";
 import { FaUniversity, FaBook, FaQuestion, FaUserAlt, FaCheckDouble,FaExclamation } from "react-icons/fa";
 import Authorized from "./auth/Authorized";
@@ -16,6 +14,7 @@ function Home() {
   const { update, claims } = useContext(AuthenticationContext);
   const [claim, setClaim] = useState(claims.filter(x => x.name === "role")[0]?.value);
   const [isNew, SetIsNew] = useState(false);
+
   const getUserEmail = () => {
     const regex = /^[^@]+/;
     // const result = email.match(regex)[0];
