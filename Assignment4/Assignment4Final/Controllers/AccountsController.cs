@@ -137,14 +137,6 @@ public class AccountsController : ControllerBase
 
         if (authResponse == null)
         {
-            // authResponse = new AuthenticationResponseDto()
-            // {
-            //     Errors = new List<IdentityError>()
-            //     {
-            //         new IdentityError() { Code = "Invalid Credentials", Description = "Try Again" }
-            //     }
-            // };
-            // return BadRequest(authResponse);
             return BadRequest();
         }
 

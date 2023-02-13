@@ -21,7 +21,12 @@ namespace Assignment4Final.Controllers
         private readonly CandidateExamService _candExamService;
         private readonly CertificatesService _certificateService;
 
-        public PaypalController(PaypalService paypalService, UserManager<AppUser> userManager, CandidateExamService candExamService, CertificatesService certificateService)
+        public PaypalController(
+            PaypalService paypalService,
+            UserManager<AppUser> userManager,
+            CandidateExamService candExamService,
+            CertificatesService certificateService
+        )
         {
             _certificateService = certificateService;
             _paypalService = paypalService;
@@ -30,8 +35,7 @@ namespace Assignment4Final.Controllers
         }
 
         [HttpGet("{id}")]
-        
-        public async Task<ActionResult<Payment>> CreatePayment( int id)
+        public async Task<ActionResult<Payment>> CreatePayment(int id)
         {
             var userid = _userManager.GetUserId(User);
             var cert = await _certificateService.GetAsync(id);
@@ -41,34 +45,21 @@ namespace Assignment4Final.Controllers
             {
                 if (link.rel.Equals("approval_url"))
                 {
-                    Console.WriteLine("its there");
                     return Ok(link.href);
                 }
             }
 
-
-
             return NotFound();
         }
+
         [HttpGet("success/{id}")]
-       
         public async Task<IActionResult> Success(int id)
         {
             var userId = _userManager.GetUserId(User);
-            var candExamDto = await _candExamService.GetCandidateExamByCertificateAsync(
-                id,
-                userId
-            );
-            
-                //var response = Request.CreateResponse(HttpStatusCode.Moved);
-                //response.Headers.Location = new Uri("http://www.example.com");
-                //return response;
-            
+            var candExamDto =
+                await _candExamService.GetCandidateExamByCertificateAsync(id, userId);
 
             return Redirect("https://localhost:44473/candidate/availableexams");
-
         }
-
-
     }
 }

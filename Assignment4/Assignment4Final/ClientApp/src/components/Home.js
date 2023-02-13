@@ -37,8 +37,6 @@ function Home() {
   }, []);
 
   return (
-
-
     <div>
       <Authorized
         role="candidate"
@@ -54,13 +52,13 @@ function Home() {
           </div>
           <div className="d-grid gap-3">
             <button class="btn btn-lg fs-2 btn-warning" type="button" onClick={() => navigate("/candidate/create")}>
-              Fill our details  &nbsp;&nbsp;<BsExclamationOctagonFill /></button>
+              Fill your details  &nbsp;&nbsp;<BsExclamationOctagonFill /></button>
 
           </div>
           </div> :
             <div>
               <div className="lead fs-2 text-center mb-4">
-                Please use the buttons below to begin ( or the Navbar on top! )
+                Please use the buttons below to begin
               </div>
               <div class="d-grid gap-3">
                 <button class="btn btn-lg fs-2 btn-outline-success" type="button" onClick={() => navigate("/certificate")}>
@@ -69,7 +67,6 @@ function Home() {
                   Examinations &nbsp;&nbsp;<FaUniversity /></button>
               </div>
             </div>
-
           }
         </>}
       />
@@ -142,10 +139,6 @@ function Home() {
           </div>
         </>}
       />
-
-
-
-
     </div>
 
   );

@@ -1,8 +1,12 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext,useEffect } from 'react';
 import { Collapse, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
 import { Button, NavDropdown } from 'react-bootstrap';
 import { AuthenticationContext } from "./auth/AuthenticationContext";
 import Authorized from "./auth/Authorized";
+import { getToken, getUserId } from "./auth/handleJWT";
+
+import axios from "axios";
+
 import { AiOutlineCheck, AiOutlineClose, AiFillHome } from "react-icons/ai";
 
 
@@ -16,6 +20,8 @@ function NavMenu() {
     const navigate = useNavigate();
     const { update, claims } = useContext(AuthenticationContext);
     const [claim, setClaim] = useState(claims.filter(x => x.name === "role")[0]?.value);
+    const [isNew, SetIsNew] = useState(true);
+
 
     const getUserEmail = () => {
         const regex = /^[^@]+/;
@@ -28,6 +34,20 @@ function NavMenu() {
     const toggleNavbar = () => {
         setCollapsed(!collapsed);
     };
+
+    useEffect(() => {
+        const token = getToken();
+        if (token !== null) {
+
+            axios.get(`https://localhost:7196/api/Candidate/${getUserId(token)}`).then((response) => {
+                console.log(response.data)
+                SetIsNew(false)
+            }).catch(function (error) {
+                console.log(error);
+                SetIsNew(true)
+            });
+        }
+    }, []);
 
     return (
         <header>
@@ -85,17 +105,22 @@ function NavMenu() {
                                 </>}
                             />
 
-                            <Authorized
-                                role="candidate"
-                                authorized={<>
-                                    <NavItem>
-                                        <NavLink tag={Link} className="text-dark" to="/certificate">Buy Certificate</NavLink>
-                                    </NavItem>
-                                    <NavItem>
-                                        <NavLink tag={Link} className="text-dark" to="/candidate/availableexams">Available Exams</NavLink>
-                                    </NavItem>
-                                </>}
-                            />
+                            {/* {isNew ?
+                                <></>
+                                :
+                                <Authorized
+                                    role="candidate"
+                                    authorized={<>
+                                        <NavItem>
+                                            <NavLink tag={Link} className="text-dark" to="/certificate">Buy Certificate</NavLink>
+                                        </NavItem>
+                                        <NavItem>
+                                            <NavLink tag={Link} className="text-dark" to="/candidate/availableexams">Available Exams</NavLink>
+                                        </NavItem>
+                                    </>}
+                                />
+
+                            } */}
 
                             <Authorized
                                 role="qualitycontrol"
