@@ -158,7 +158,7 @@ function CertificateList(props) {
                             <td>{certificate.title}</td>
                             <td>{certificate.description}</td>
                             <td>{certificate.category}</td>
-                            <td>{certificate.price}</td>
+                            <td>{certificate.price}&euro;</td>
                             {makebuttons(certificate.id)}
                             <td>
                             </td>

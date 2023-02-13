@@ -147,8 +147,8 @@ function MarkExam(props) {
                                 {Replace(que.questionText)}
                                 <div>
                                     <ul>
-                                        <li>{Replace(que.correctOption)}</li>
-                                        <li>{Replace(que.chosenOption)}</li>
+                                        <li>Correct Option:{Replace(que.correctOption)}</li>
+                                        <li>Choosen Option:{Replace(que.chosenOption)}</li>
                                     </ul>
                                     {/* <details className="display-6 fs-4">
                                                             <summary>

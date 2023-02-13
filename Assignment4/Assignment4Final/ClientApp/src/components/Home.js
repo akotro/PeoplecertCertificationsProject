@@ -38,6 +38,16 @@ function Home() {
 
   return (
     <div>
+      {!claim ?
+        <>
+          <div className="lead fs-2 text-center mb-4" >Welcome to the ErroRList Homepage!</div>
+          <div className="lead fs-4 text-center mb-4">Here are the products you can puchase...(once Logged in...!)</div>
+          <CertificateList />
+        </>
+        :
+        <></>
+      }
+
       <Authorized
         role="candidate"
         authorized={<>
@@ -69,9 +79,7 @@ function Home() {
             </div>
           }
         </>}
-        notAuthorized={<>
-  <CertificateList/>
-        </>}
+
       />
 
       <Authorized
@@ -142,7 +150,10 @@ function Home() {
           </div>
         </>}
       />
+
+
     </div>
+
 
   );
 }
