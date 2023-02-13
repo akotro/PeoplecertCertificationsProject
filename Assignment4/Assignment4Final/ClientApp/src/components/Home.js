@@ -58,7 +58,7 @@ function Home() {
           </div> :
             <div>
               <div className="lead fs-2 text-center mb-4">
-                Please use the buttons below to begin ( or the Navbar on top! )
+                Please use the buttons below to begin
               </div>
               <div class="d-grid gap-3">
                 <button class="btn btn-lg fs-2 btn-outline-success" type="button" onClick={() => navigate("/certificate")}>
