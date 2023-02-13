@@ -294,7 +294,6 @@ export default function QuestionEdit(event, name) {
                                 Update Question
                             </Button>
                           
-                        <BackButton />
 
                         </div>
                         
@@ -302,6 +301,7 @@ export default function QuestionEdit(event, name) {
                 </Stack>
             </Form>
             </fieldset>
+                        <BackButton />
 
         </div>
     );
