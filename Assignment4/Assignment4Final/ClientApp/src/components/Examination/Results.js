@@ -50,8 +50,9 @@ export default function Results() {
             {/* ------------------------------------------------------------------------------------------------------ */}
             <div className='container-fluid' id='jsPdf'>
                 <Row className='justify-content-center'>
-                    <img src={logocolor} alt='some logo' width={200} height={200} />
+                    <img src={logocolor} alt='some logo' width={200} height={200} id='resultLogo'/>
                 </Row>
+                <hr />
                 {/* <Table>
                     <thead>
                         <tr>
