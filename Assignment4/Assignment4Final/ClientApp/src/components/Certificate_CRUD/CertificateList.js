@@ -16,7 +16,7 @@ function CertificateList(props) {
     const navigate = useNavigate();
     const [data, setData] = useState([]);
     const { update, claims } = useContext(AuthenticationContext);
-    const [role, setRole] = useState(claims.find(claim => claim.name === 'role').value)
+    const [role, setRole] = useState(claims.find(claim => claim.name === 'role')?.value)
 
     //---------------------------------------
     //need to implement random select for examIds
@@ -97,11 +97,14 @@ function CertificateList(props) {
 
     const makebuttons = (certId) => {
 
-        if (role === "candidate") {
+        if (role === "admin") {
             return (
                 <td>
-                    <div className='d-flex '>
-                        <Button variant="outline-success" onClick={() => handleBuy(certId)} >Purchase</Button>
+                    <div className='d-flex gap-2'>
+                        <Button onClick={() => { navigate(`/certificate/edit/${certId}`) }}>Edit</Button>
+                        <Button variant="dark" onClick={() => handleDelete(certId)}>
+                            Delete
+                        </Button>
                     </div>
                 </td>
             );
@@ -111,17 +114,23 @@ function CertificateList(props) {
                     <Button onClick={() => { navigate(`/certificate/edit/${certId}`) }}>Details</Button>
                 </td>
             );
+        } else if ((role === "candidate")) {
+            return (
+                <td>
+                    <div className='d-flex '>
+                        <Button variant="outline-success" onClick={() => handleBuy(certId)} >Purchase</Button>
+                    </div>
+                </td>
+            );
+        }else {
+            return (
+                <td>
+                    <div className='d-flex '>
+                        <Button variant="outline-success" onClick={() => navigate("/register")} >Purchase</Button>
+                    </div>
+                </td>
+            );
         }
-        return (
-            <td>
-                <div className='d-flex gap-2'>
-                    <Button onClick={() => { navigate(`/certificate/edit/${certId}`) }}>Edit</Button>
-                    <Button variant="dark" onClick={() => handleDelete(certId)}>
-                        Delete
-                    </Button>
-                </div>
-            </td>
-        );
 
     };
 

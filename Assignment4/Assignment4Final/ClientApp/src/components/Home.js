@@ -2,10 +2,11 @@ import React, { useEffect, useState, useContext } from "react";
 import { AuthenticationContext } from '../components/auth/AuthenticationContext'
 import { useNavigate } from 'react-router-dom';
 import { BsExclamationOctagonFill } from "react-icons/bs";
-import { FaUniversity, FaBook, FaQuestion, FaUserAlt, FaCheckDouble,FaExclamation } from "react-icons/fa";
+import { FaUniversity, FaBook, FaQuestion, FaUserAlt, FaCheckDouble, FaExclamation } from "react-icons/fa";
 import Authorized from "./auth/Authorized";
 import axios from "axios";
 import { getToken, getUserId } from "./auth/handleJWT";
+import CertificateList from "./Certificate_CRUD/CertificateList";
 
 
 function Home() {
@@ -23,7 +24,7 @@ function Home() {
 
   useEffect(() => {
     const token = getToken();
-    if (token!== null ){
+    if (token !== null) {
 
       axios.get(`https://localhost:7196/api/Candidate/${getUserId(token)}`).then((response) => {
         console.log(response.data)
@@ -44,17 +45,17 @@ function Home() {
             Hello {getUserEmail()}, Welcome to the {claims.filter((x) => x.name === "role")[0]?.value} Homepage!
           </div>
 
-          {isNew ? 
-          <div>
-          <div className="lead fs-2 text-center mb-4">
-            Please fill your details to continue
-          </div>
-          <div className="d-grid gap-3">
-            <button class="btn btn-lg fs-2 btn-warning" type="button" onClick={() => navigate("/candidate/create")}>
-              Fill your details  &nbsp;&nbsp;<BsExclamationOctagonFill /></button>
+          {isNew ?
+            <div>
+              <div className="lead fs-2 text-center mb-4">
+                Please fill your details to continue
+              </div>
+              <div className="d-grid gap-3">
+                <button class="btn btn-lg fs-2 btn-warning" type="button" onClick={() => navigate("/candidate/create")}>
+                  Fill your details  &nbsp;&nbsp;<BsExclamationOctagonFill /></button>
 
-          </div>
-          </div> :
+              </div>
+            </div> :
             <div>
               <div className="lead fs-2 text-center mb-4">
                 Please use the buttons below to begin
@@ -67,6 +68,9 @@ function Home() {
               </div>
             </div>
           }
+        </>}
+        notAuthorized={<>
+  <CertificateList/>
         </>}
       />
 
