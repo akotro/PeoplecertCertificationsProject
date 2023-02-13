@@ -37,8 +37,6 @@ function Home() {
   }, []);
 
   return (
-
-
     <div>
       <Authorized
         role="candidate"
@@ -69,7 +67,6 @@ function Home() {
                   Examinations &nbsp;&nbsp;<FaUniversity /></button>
               </div>
             </div>
-
           }
         </>}
       />
@@ -142,10 +139,6 @@ function Home() {
           </div>
         </>}
       />
-
-
-
-
     </div>
 
   );
