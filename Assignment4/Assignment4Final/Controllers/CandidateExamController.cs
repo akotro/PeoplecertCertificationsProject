@@ -27,24 +27,6 @@ namespace Assignment4Final.Controllers
             _examService = examService;
         }
 
-        ////Post : when the candidate picks an exam it makes a candidate exam for this candidate and the exam he picked
-        //[HttpPost]
-        //public async Task<ActionResult<CandidateExam>> GetCandidateExamFromPickedExam(
-        //    [FromBody] ExamDto examDto
-        //)
-        //{
-        //    var exam = _examService.GetExamFromExamDto(examDto);
-
-        //    var userId = _userManager.GetUserId(User);
-        //    var candidateExam = await _candExamService.GetCandidateExamByExam(exam, userId);
-        //    await Task.Run(() => _candExamService.AddCandidateExam(ref candidateExam));
-        //    var candidateExamDto = _candExamService.GetCandidateExamDtoFromCandidateExam(
-        //        candidateExam
-        //    );
-
-        //    return Ok(candidateExamDto);
-        //}
-
         [HttpPost("CreateCandExam/{certId}")] //this API is so a candidate can buy from the available certificates
         [Authorize(
             AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
@@ -57,10 +39,7 @@ namespace Assignment4Final.Controllers
                 certId,
                 userId
             );
-            // var candExamDto = await _candExamService.GetCandidateExamByCertificateAsync(
-            //     certId,
-            //     "02458d8c-aba2-4b3d-86de-8f8457570c60"
-            // );
+          
             if (candExamDto == null )
             {
                 return NotFound();
@@ -77,7 +56,6 @@ namespace Assignment4Final.Controllers
         {
             var userId = _userManager.GetUserId(User);
             var candidate = await _candExamService.GetCandidateByUserIdAsync(userId);
-            //var candidate = await _candExamService.GetCandidateByUserIdAsync("02458d8c-aba2-4b3d-86de-8f8457570c60");
             if (candidate == null)
             {
                 return NotFound(new { description = "Candidate with this userId not found " });
@@ -107,7 +85,6 @@ namespace Assignment4Final.Controllers
             var candidate = await _candExamService.GetCandidateByUserIdAsync(
                 _userManager.GetUserId(User)
             );
-            //var candidate = await _candExamService.GetCandidateByUserIdAsync("02458d8c-aba2-4b3d-86de-8f8457570c60");
             if (candidate == null)
             {
                 return NotFound(new { description = "Candidate with this userId not found " });
@@ -165,18 +142,5 @@ namespace Assignment4Final.Controllers
             return Ok(_candExamService.GetCandidateExamDto(candidateExamUpdated));
         }
 
-        //[HttpPost("QuestionsAndAnswers")]
-        //public async Task<ActionResult<CandidateExamQuestionsAndAnswersDto>> GetQuestionsAndAnswers([FromBody] int id)
-        //{
-
-        //    var candExam = await _candExamService.GetCandidateExamByIdsync(1002);
-        //    if(candExam == null)
-        //    {
-        //        return NotFound("candidateExam with this id not found");
-        //    }
-        //    return _candExamService.GetQuestionsAndAnswersDto(candExam);
-
-
-        //}
-    }
+       }
 }

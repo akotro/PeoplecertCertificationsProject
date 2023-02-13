@@ -1,13 +1,12 @@
 import React, { useEffect, useState, useContext } from "react";
 import { AuthenticationContext } from '../components/auth/AuthenticationContext'
-import { Link, useNavigate } from 'react-router-dom';
-import { Col, Container } from "react-bootstrap";
-import { AiOutlineCheck, AiOutlineClose, AiFillHome, AiFillFund } from "react-icons/ai";
+import { useNavigate } from 'react-router-dom';
 import { BsExclamationOctagonFill } from "react-icons/bs";
-import { FaUniversity, FaBook, FaQuestion, FaUserAlt, FaCheckDouble,FaExclamation } from "react-icons/fa";
+import { FaUniversity, FaBook, FaQuestion, FaUserAlt, FaCheckDouble, FaExclamation } from "react-icons/fa";
 import Authorized from "./auth/Authorized";
 import axios from "axios";
 import { getToken, getUserId } from "./auth/handleJWT";
+import CertificateList from "./Certificate_CRUD/CertificateList";
 
 
 function Home() {
@@ -16,6 +15,7 @@ function Home() {
   const { update, claims } = useContext(AuthenticationContext);
   const [claim, setClaim] = useState(claims.filter(x => x.name === "role")[0]?.value);
   const [isNew, SetIsNew] = useState(false);
+
   const getUserEmail = () => {
     const regex = /^[^@]+/;
     // const result = email.match(regex)[0];
@@ -24,7 +24,7 @@ function Home() {
 
   useEffect(() => {
     const token = getToken();
-    if (token!== null ){
+    if (token !== null) {
 
       axios.get(`https://localhost:7196/api/Candidate/${getUserId(token)}`).then((response) => {
         console.log(response.data)
@@ -38,6 +38,16 @@ function Home() {
 
   return (
     <div>
+      {!claim ?
+        <>
+          <div className="lead fs-2 text-center mb-4" >Welcome to the ErroRList Homepage!</div>
+          <div className="lead fs-4 text-center mb-4">Here are the products you can purchase...(once Logged in...!)</div>
+          <CertificateList />
+        </>
+        :
+        <></>
+      }
+
       <Authorized
         role="candidate"
         authorized={<>
@@ -45,17 +55,17 @@ function Home() {
             Hello {getUserEmail()}, Welcome to the {claims.filter((x) => x.name === "role")[0]?.value} Homepage!
           </div>
 
-          {isNew ? 
-          <div>
-          <div className="lead fs-2 text-center mb-4">
-            Please fill your details to continue
-          </div>
-          <div className="d-grid gap-3">
-            <button class="btn btn-lg fs-2 btn-warning" type="button" onClick={() => navigate("/candidate/create")}>
-              Fill your details  &nbsp;&nbsp;<BsExclamationOctagonFill /></button>
+          {isNew ?
+            <div>
+              <div className="lead fs-2 text-center mb-4">
+                Please fill your details to continue
+              </div>
+              <div className="d-grid gap-3">
+                <button class="btn btn-lg fs-2 btn-warning" type="button" onClick={() => navigate("/candidate/create")}>
+                  Fill your details  &nbsp;&nbsp;<BsExclamationOctagonFill /></button>
 
-          </div>
-          </div> :
+              </div>
+            </div> :
             <div>
               <div className="lead fs-2 text-center mb-4">
                 Please use the buttons below to begin
@@ -69,6 +79,7 @@ function Home() {
             </div>
           }
         </>}
+
       />
 
       <Authorized
@@ -139,7 +150,10 @@ function Home() {
           </div>
         </>}
       />
+
+
     </div>
+
 
   );
 }

@@ -413,12 +413,16 @@ export default function CandidateEdit(props) {
                                     <Form.Control type="email" name="email" value={candidate.email} onChange={handleChange} required />
                                 </Form.Group>
                             </Col>
-                            <Col>
-                                <Form.Group >
-                                    <Form.Label>Candidate Number</Form.Label>
-                                    <Form.Control type="number" name="candidateNumber" value={candidate.candidateNumber} onChange={handleChange} />
-                                </Form.Group>
-                            </Col>
+                            {
+                                (role === "candidate") ?
+                                <></>
+                                :
+                                <Col>
+                                    <Form.Group >
+                                        <Form.Label>Candidate Number</Form.Label>
+                                        <Form.Control type="number" name="candidateNumber" value={candidate.candidateNumber} onChange={handleChange} />
+                                    </Form.Group>
+                                </Col> }
                             <Col>
                                 <Form.Group >
                                     <Form.Label>Landline Number</Form.Label>

@@ -121,7 +121,7 @@ const RegisterForm = () => {
                 onChange={handleCredentialsChange}
               />
             </Form.Group>
-            <Form.Group controlId="formBasicCredentialsIsCandidate">
+            <Form.Group controlId="formBasicCredentialsIsCandidate" hidden>
               <Form.Check
                 type="checkbox"
                 label="Register As Candidate?"

@@ -19,10 +19,10 @@ namespace Assignment4Final.Controllers
         }
 
         [HttpGet]
-        [Authorize(
-            AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
-            Policy = "IsAdminOrQualityControlOrCandidate"
-        )]
+        //[Authorize(
+        //    AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
+        //    Policy = "IsAdminOrQualityControlOrCandidate"
+        //)]
         public async Task<IActionResult> GetAll()
         {
             var certificates = await _certificateService.GetAllAsync();
