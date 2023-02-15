@@ -38,7 +38,7 @@ function UserForm() {
           setUser(response.data);
           // console.log(response.data)
         })
-        .catch(function (error) {
+        .catch(function(error) {
           console.log(error);
         });
     }
@@ -48,7 +48,7 @@ function UserForm() {
         setRoles([...response.data]);
         // console.log(response.data)
       })
-      .catch(function (error) {
+      .catch(function(error) {
         console.log(error);
       });
 
@@ -99,7 +99,7 @@ function UserForm() {
             password: confirmPassword
           }
         });
-      }else {
+      } else {
         console.log("not same!")
         setUser({
           ...user,
@@ -111,7 +111,7 @@ function UserForm() {
       }
     } else if (name === "email") {
       setUser({
-        ...user,[name]: value,
+        ...user, [name]: value,
         credentials: {
           email: value,
           password: confirmPassword
@@ -142,18 +142,18 @@ function UserForm() {
           console.log(response);
           navigate('/users')
         })
-        .catch(function (error) {
+        .catch(function(error) {
           console.log(error);
           setError(error)
         });
-      }
-      else {
-        axios.post(`https://localhost:7196/api/accounts/create`, user)
+    }
+    else {
+      axios.post(`https://localhost:7196/api/accounts/create`, user)
         .then((response) => {
           console.log(response);
           navigate('/users')
         })
-        .catch(function (error) {
+        .catch(function(error) {
           console.log(error);
           setError(error)
         });
@@ -190,6 +190,12 @@ function UserForm() {
 
   return (
     <div>
+      {
+        !params.email ?
+          <h1 class="display-1 text-center align-middle">Create User</h1> :
+          <h1 class="display-1 text-center align-middle">Edit User</h1>
+
+      }
       {error && <ErrorsRegister error={error} />}
 
       <div>

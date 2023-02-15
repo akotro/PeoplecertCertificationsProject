@@ -39,7 +39,7 @@ function ExamList(props) {
     }
 
     const handleDelete = (examId) => {
-        const confirmDelete = window.confirm("Are you sure you want to delete this question?");
+        const confirmDelete = window.confirm("Are you sure you want to delete this exam?");
         setExams(exams.filter(exam => exam.id !== examId));
         if (confirmDelete) {
 
@@ -122,6 +122,7 @@ function ExamList(props) {
 
     return (
         <div>
+            <h1 class="display-1 text-center align-middle">Exams</h1>
             {role === "admin" &&
                 <Button className='d-grid gap-2 col-6 mx-auto py-2 my-2'
                     onClick={() => createCertificateButton()} variant="success">
