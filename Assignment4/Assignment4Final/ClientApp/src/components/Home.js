@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { AuthenticationContext } from '../components/auth/AuthenticationContext'
 import { useNavigate } from 'react-router-dom';
 import { BsExclamationOctagonFill } from "react-icons/bs";
-import { FaUniversity, FaBook, FaQuestion, FaUserAlt, FaCheckDouble, FaExclamation } from "react-icons/fa";
+import { FaUniversity, FaBook, FaQuestion, FaUserAlt, FaCheckDouble, FaExclamation, FaUserGraduate } from "react-icons/fa";
 import Authorized from "./auth/Authorized";
 import axios from "axios";
 import { getToken, getUserId } from "./auth/handleJWT";
@@ -99,6 +99,8 @@ function Home() {
                 Examinations &nbsp;&nbsp;<FaUniversity /></button>
               <button class="btn btn-lg fs-2 btn-outline-primary" type="button" onClick={() => navigate("/questions")}>
                 Questions &nbsp;&nbsp;<FaQuestion /></button>
+              <button class="btn btn-lg fs-2 btn-outline-primary" type="button" onClick={() => navigate("/candidate")}>
+                Candidates &nbsp;&nbsp;<FaUserGraduate /></button>
               <button class="btn btn-lg fs-2 btn-outline-primary" type="button" onClick={() => navigate("/users")}>
                 Users &nbsp;&nbsp;<FaUserAlt /></button>
               <button class="btn btn-lg fs-2 btn-outline-primary" type="button" onClick={() => navigate("/marker")}>
@@ -127,7 +129,7 @@ function Home() {
               <button class="btn btn-lg fs-2 btn-outline-primary" type="button" onClick={() => navigate("/questions")}>
                 Questions &nbsp;&nbsp;<FaQuestion /></button>
               <button class="btn btn-lg fs-2 btn-outline-primary" type="button" onClick={() => navigate("/candidate")}>
-                Users &nbsp;&nbsp;<FaUserAlt /></button>
+                Candidates &nbsp;&nbsp;<FaUserGraduate /></button>
             </div>
           </div>
         </>}

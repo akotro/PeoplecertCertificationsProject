@@ -65,7 +65,7 @@ function UsersList() {
 
     return (
         <div>
-            <h1 class="display-1 text-center align-middle">Users</h1>
+            <h1 class="display-3 text-center align-middle">Users</h1>
             <Button variant='dark'
                 className='d-grid gap-2 col-6 mx-auto py-2 my-2'
                 onClick={() => navigate('/users/create')}

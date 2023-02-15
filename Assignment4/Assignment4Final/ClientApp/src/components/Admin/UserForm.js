@@ -192,9 +192,8 @@ function UserForm() {
     <div>
       {
         !params.email ?
-          <h1 class="display-1 text-center align-middle">Create User</h1> :
-          <h1 class="display-1 text-center align-middle">Edit User</h1>
-
+          <h1 class="display-3 text-center align-middle">Create User</h1> :
+          <h1 class="display-3 text-center align-middle">Edit User</h1>
       }
       {error && <ErrorsRegister error={error} />}
 

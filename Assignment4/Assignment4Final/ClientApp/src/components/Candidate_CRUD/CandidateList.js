@@ -76,6 +76,7 @@ function CandidateList(props) {
 
     return (
         <div>
+            <h1 class="display-3 text-center align-middle">Candidates</h1>
             {role === "admin" ?
                 <Button variant='dark'
                     className='d-grid gap-2 col-6 mx-auto py-2 my-2'

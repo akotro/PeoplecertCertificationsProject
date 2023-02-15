@@ -21,7 +21,7 @@ function AssignToMarker() {
         axios.get(`https://localhost:7196/api/Markers`).then((response) => {
             console.log(response.data.data)
             setMarkers(response.data.data);
-        }).catch(function (error) {
+        }).catch(function(error) {
             console.log(error);
         });
         axios.get(`https://localhost:7196/api/Markers/getallcandidateexams/`).then((response) => {
@@ -31,7 +31,7 @@ function AssignToMarker() {
             // )
             setAssignedExams(givenExams.filter(exam => (exam.marker !== undefined) && (exam.isModerated !== true)))
 
-        }).catch(function (error) {
+        }).catch(function(error) {
             console.log(error);
         });
     }, []);
@@ -74,10 +74,10 @@ function AssignToMarker() {
         event.preventDefault();
         console.log(assignExam)
         await axios.put(`https://localhost:7196/api/Markers/assign/${assignExam.id}`, assignExam)
-            .then(function (response) {
+            .then(function(response) {
                 console.log(response);
             })
-            .catch(function (error) {
+            .catch(function(error) {
                 console.log(error.messages);
             });
         document.getElementById("assignForm").reset();
@@ -86,129 +86,131 @@ function AssignToMarker() {
     }
 
     return (
-        <div className="my-auto py-5 lead">
-            <Accordion defaultActiveKey="0">
-                <Accordion.Item eventKey="0">
-                    <Accordion.Header >
-                        <div class="display-5">
-                            Assign To Marker
-                        </div>
-                    </Accordion.Header>
-                    <Accordion.Body>
-                        <Form onSubmit={handleSubmit} id="assignForm">
-                            <Row >
-                                <Col xs={4}>
-                                    <Form.Group >
-                                        <Form.Label>Select Marker</Form.Label>
-                                        <Form.Select as="select" name="marker" id="assign"
-                                            value={assignExam.marker.appUserId}
-                                            onChange={handleChange}
-                                            required>
-                                            <option value="" hidden>Please choose a Marker </option>
-                                            {markers.map((marker, index) =>
-                                                <option key={index}
-                                                    value={marker.appUserId}
-                                                >{marker.appUser.email}</option>
-                                            )}
-                                        </Form.Select>
-                                    </Form.Group>
-                                </Col>
-                                <Col>
-                                    <Form.Group >
-                                        <Form.Label>Select Exam</Form.Label>
-                                        <Form.Select as="select" name="id" id="assign"
-                                            value={assignExam.exam}
-                                            onChange={handleChange}
-                                            required>
-                                            <option value="" hidden>Please choose an exam </option>
-                                            {notAssignedExams.map((exam, index) =>
-                                                <option key={index}
-                                                    value={exam.id}
-                                                >{exam.candidate.firstName}&nbsp;
-                                                    {exam.candidate.lastName}&nbsp;|&nbsp;
-                                                    {exam.examDate ?
-                                                        <>
-                                                            Exam date : {convertDateToString(exam.examDate)}&nbsp;|&nbsp;
-                                                        </> :
-                                                        <>
-                                                            Exam date : {convertDateToString(exam.examDate)}&nbsp;|&nbsp;
-                                                        </>
-                                                    }
-                                                    Voucher : {exam.voucher}
-                                                </option>
-                                            )}
-                                        </Form.Select>
-                                    </Form.Group>
-                                </Col>
-                            </Row>
-                            <Button variant="success" className='d-grid gap-2 col-6 mx-auto py-2 my-4' type="submit" >
-                                Save & Assign
-                            </Button>
-                        </Form>
-                    </Accordion.Body>
-                </Accordion.Item>
-                <Accordion.Item eventKey="1">
-                    <Accordion.Header>
-                        <div class="display-5">
-                            Re-Assign to another Marker
-                        </div>
-                    </Accordion.Header>
-                    <Accordion.Body>
-                        <Form onSubmit={handleSubmit} id="re-assignForm">
-                            <Row>
-                                <Col xs={4}>
-                                    <Form.Group >
-                                        <Form.Label>Select Marker</Form.Label>
-                                        <Form.Select as="select" name="marker" id="reassign"
-                                            value={assignExam.marker.appUserId}
-                                            onChange={handleChange}
-                                            required>
-                                            <option value="" hidden>Please choose a Marker </option>
-                                            {markers.map((marker, index) =>
-                                                <option key={index}
-                                                    value={marker.appUserId}
-                                                >{marker.appUser.email}</option>
-                                            )}
-                                        </Form.Select>
-                                    </Form.Group>
-                                </Col>
-                                <Col>
-                                    <Form.Group >
-                                        <Form.Label>Select Exam</Form.Label>
-                                        <Form.Select as="select" name="id" id="reassign"
-                                            value={assignExam.exam}
-                                            onChange={handleChange}
-                                            required>
-                                            <option value="" hidden>Please choose an exam </option>
-                                            {assignedExams.map((exam, index) =>
-                                                <option key={index}
-                                                    value={exam.id}
-                                                >{exam.candidate.firstName}&nbsp;
-                                                    {exam.candidate.lastName}&nbsp;|&nbsp;
-                                                    {exam.examDate ?
-                                                        <>
-                                                            Exam date : {convertDateToString(exam.examDate)}&nbsp;|&nbsp;
-                                                        </> :
-                                                        <>
-                                                            Exam date : {convertDateToString(exam.examDate)}&nbsp;|&nbsp;
-                                                        </>
-                                                    }
-                                                    Voucher : {exam.voucher}
-                                                </option>
-                                            )}
-                                        </Form.Select>
-                                    </Form.Group>
-                                </Col>
-                            </Row>
-                            <Button variant="success" className='d-grid gap-2 col-6 mx-auto py-2 my-4' type="submit" >
-                                Save & re-Assign
-                            </Button>
-                        </Form>
-                    </Accordion.Body>
-                </Accordion.Item>
-            </Accordion>
-            <BackButton />
-        </div>
+        <div>
+            <h1 class="display-3 text-center align-middle">Assign Exams For Marking</h1>
+            <div className="my-auto py-5 lead">
+                <Accordion defaultActiveKey="0">
+                    <Accordion.Item eventKey="0">
+                        <Accordion.Header >
+                            <div class="display-5">
+                                Assign To Marker
+                            </div>
+                        </Accordion.Header>
+                        <Accordion.Body>
+                            <Form onSubmit={handleSubmit} id="assignForm">
+                                <Row >
+                                    <Col xs={4}>
+                                        <Form.Group >
+                                            <Form.Label>Select Marker</Form.Label>
+                                            <Form.Select as="select" name="marker" id="assign"
+                                                value={assignExam.marker.appUserId}
+                                                onChange={handleChange}
+                                                required>
+                                                <option value="" hidden>Please choose a Marker </option>
+                                                {markers.map((marker, index) =>
+                                                    <option key={index}
+                                                        value={marker.appUserId}
+                                                    >{marker.appUser.email}</option>
+                                                )}
+                                            </Form.Select>
+                                        </Form.Group>
+                                    </Col>
+                                    <Col>
+                                        <Form.Group >
+                                            <Form.Label>Select Exam</Form.Label>
+                                            <Form.Select as="select" name="id" id="assign"
+                                                value={assignExam.exam}
+                                                onChange={handleChange}
+                                                required>
+                                                <option value="" hidden>Please choose an exam </option>
+                                                {notAssignedExams.map((exam, index) =>
+                                                    <option key={index}
+                                                        value={exam.id}
+                                                    >{exam.candidate.firstName}&nbsp;
+                                                        {exam.candidate.lastName}&nbsp;|&nbsp;
+                                                        {exam.examDate ?
+                                                            <>
+                                                                Exam date : {convertDateToString(exam.examDate)}&nbsp;|&nbsp;
+                                                            </> :
+                                                            <>
+                                                                Exam date : {convertDateToString(exam.examDate)}&nbsp;|&nbsp;
+                                                            </>
+                                                        }
+                                                        Voucher : {exam.voucher}
+                                                    </option>
+                                                )}
+                                            </Form.Select>
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
+                                <Button variant="success" className='d-grid gap-2 col-6 mx-auto py-2 my-4' type="submit" >
+                                    Save & Assign
+                                </Button>
+                            </Form>
+                        </Accordion.Body>
+                    </Accordion.Item>
+                    <Accordion.Item eventKey="1">
+                        <Accordion.Header>
+                            <div class="display-5">
+                                Re-Assign to another Marker
+                            </div>
+                        </Accordion.Header>
+                        <Accordion.Body>
+                            <Form onSubmit={handleSubmit} id="re-assignForm">
+                                <Row>
+                                    <Col xs={4}>
+                                        <Form.Group >
+                                            <Form.Label>Select Marker</Form.Label>
+                                            <Form.Select as="select" name="marker" id="reassign"
+                                                value={assignExam.marker.appUserId}
+                                                onChange={handleChange}
+                                                required>
+                                                <option value="" hidden>Please choose a Marker </option>
+                                                {markers.map((marker, index) =>
+                                                    <option key={index}
+                                                        value={marker.appUserId}
+                                                    >{marker.appUser.email}</option>
+                                                )}
+                                            </Form.Select>
+                                        </Form.Group>
+                                    </Col>
+                                    <Col>
+                                        <Form.Group >
+                                            <Form.Label>Select Exam</Form.Label>
+                                            <Form.Select as="select" name="id" id="reassign"
+                                                value={assignExam.exam}
+                                                onChange={handleChange}
+                                                required>
+                                                <option value="" hidden>Please choose an exam </option>
+                                                {assignedExams.map((exam, index) =>
+                                                    <option key={index}
+                                                        value={exam.id}
+                                                    >{exam.candidate.firstName}&nbsp;
+                                                        {exam.candidate.lastName}&nbsp;|&nbsp;
+                                                        {exam.examDate ?
+                                                            <>
+                                                                Exam date : {convertDateToString(exam.examDate)}&nbsp;|&nbsp;
+                                                            </> :
+                                                            <>
+                                                                Exam date : {convertDateToString(exam.examDate)}&nbsp;|&nbsp;
+                                                            </>
+                                                        }
+                                                        Voucher : {exam.voucher}
+                                                    </option>
+                                                )}
+                                            </Form.Select>
+                                        </Form.Group>
+                                    </Col>
+                                </Row>
+                                <Button variant="success" className='d-grid gap-2 col-6 mx-auto py-2 my-4' type="submit" >
+                                    Save & re-Assign
+                                </Button>
+                            </Form>
+                        </Accordion.Body>
+                    </Accordion.Item>
+                </Accordion>
+                <BackButton />
+            </div></div>
     );
 }
 

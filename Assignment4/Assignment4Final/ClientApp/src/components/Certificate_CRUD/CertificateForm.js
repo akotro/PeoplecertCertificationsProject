@@ -130,10 +130,10 @@ function CertificateForm(props) {
         <div>
             {
                 params.id === undefined ?
-                    <h1 class="display-1 text-center align-middle">Create Certificate</h1> :
+                    <h1 class="display-3 text-center align-middle">Create Certificate</h1> :
                     role && role !== "qualitycontrol" ?
-                        <h1 class="display-1 text-center align-middle">Edit Certificate</h1> :
-                        <h1 class="display-1 text-center align-middle">Certificate Details</h1>
+                        <h1 class="display-3 text-center align-middle">Edit Certificate</h1> :
+                        <h1 class="display-3 text-center align-middle">Certificate Details</h1>
 
             }
             {error && <Errors error={error} />}

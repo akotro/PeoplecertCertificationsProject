@@ -250,7 +250,7 @@ function QuestionCreate() {
     //------------------------------------------------ RETURN
     return (
         <div >
-            <h1 class="display-1 text-center align-middle">Create Question</h1>
+            <h1 class="display-3 text-center align-middle">Create Question</h1>
             {error && <Errors error={error} />}
             {/* ||FORM------------------------------------------------->>>>>>> */}
             <Form noValidate onSubmit={handleSubmit}>
