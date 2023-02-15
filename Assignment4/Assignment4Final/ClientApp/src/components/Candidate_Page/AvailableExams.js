@@ -145,6 +145,7 @@ function AvailableExams(props) {
 
     return (
         <div className='container-fluid'>
+            <h1 class="display-3 text-center align-middle">Examinations</h1>
             <div>
                 <Modal show={showModal} onHide={handleClose}>
                     <Modal.Header closeButton>
