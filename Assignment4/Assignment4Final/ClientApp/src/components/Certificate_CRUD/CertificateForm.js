@@ -128,6 +128,11 @@ function CertificateForm(props) {
 
     return (
         <div>
+            {
+                params.id === undefined ?
+                <h1 class="display-1 text-center align-middle">Create Certificate</h1> :
+                <h1 class="display-1 text-center align-middle">Edit Certificate: {data.title}</h1>
+            }
             {error && <Errors error={error} />}
             <fieldset disabled={role ? (role === "qualitycontrol") : false}>
 

@@ -136,6 +136,7 @@ function CertificateList(props) {
 
     return (
         <div className='container-fluid'>
+            <h1 class="display-1 text-center align-middle">Certificates</h1>
             {role === "admin" ?
                 <Button variant='dark'
                     className='d-grid gap-2 col-6 mx-auto py-2 my-2'
