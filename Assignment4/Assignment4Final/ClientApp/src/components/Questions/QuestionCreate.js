@@ -183,13 +183,13 @@ function QuestionCreate() {
 
         await axios
             .post("https://localhost:7196/api/Questions", newOnSubmitQuestion)
-            .then(function (response) {
+            .then(function(response) {
                 console.log("Inside response");
                 console.log(response);
                 setError([]);
                 navigate('/questions')
             })
-            .catch(function (error) {
+            .catch(function(error) {
                 console.log("Inside error");
                 console.log(error);
                 setError(error);
@@ -250,6 +250,7 @@ function QuestionCreate() {
     //------------------------------------------------ RETURN
     return (
         <div >
+            <h1 class="display-1 text-center align-middle">Create Question</h1>
             {error && <Errors error={error} />}
             {/* ||FORM------------------------------------------------->>>>>>> */}
             <Form noValidate onSubmit={handleSubmit}>

@@ -105,6 +105,7 @@ function Questions() {
     //-----------------------------------------------------------
     return (
         <Container fluid="md">
+            <h1 class="display-1 text-center align-middle">Questions</h1>
             {role === "admin" ?
                 <Button variant='dark'
                     className='d-grid gap-2 col-6 mx-auto py-2 my-2'
