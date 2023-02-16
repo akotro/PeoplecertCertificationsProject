@@ -44,6 +44,24 @@ public class AccountsRepository : IAccountsRepository
         return await _userManager.GetClaimsAsync(user);
     }
 
+    public async Task<Dictionary<string, string>> GetUserRoles(List<AppUser> appUsers)
+    {
+        var userRoles = new Dictionary<string, string>();
+        var userEmails = appUsers.Select(u => u.Email).ToList();
+
+        foreach (var user in appUsers)
+        {
+            var claims = await GetClaims(user);
+            var role = claims?.FirstOrDefault(c => c.Type == "role");
+            if (role != null)
+            {
+                userRoles[user.Email] = role.Value;
+            }
+        }
+
+        return userRoles;
+    }
+
     public string? GetUserRole(string email)
     {
         return GetClaims(GetAppUser(email).Result).Result

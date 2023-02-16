@@ -236,3 +236,6 @@ _Pvt_Extensions
 
 # Ignore Uploads Folder
 Uploads/
+
+# Ignore sqlite databases
+**/*.db*

@@ -29,7 +29,7 @@ function Home() {
       axios.get(`https://localhost:7196/api/Candidate/${getUserId(token)}`).then((response) => {
         console.log(response.data)
         SetIsNew(false)
-      }).catch(function (error) {
+      }).catch(function(error) {
         console.log(error);
         SetIsNew(true)
       });
@@ -40,6 +40,8 @@ function Home() {
     <div>
       {!claim ?
         <>
+          {/* FIX:(akotro) Claims exist here but claim is undefined */}
+          {console.log('claims', claims)}
           <div className="lead fs-2 text-center mb-4" >Welcome to the ErroRList Homepage!</div>
           <div className="lead fs-4 text-center mb-4">Here are the products you can purchase...(once Logged in...!)</div>
           <CertificateList />

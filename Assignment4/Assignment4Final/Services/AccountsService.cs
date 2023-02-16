@@ -34,8 +34,18 @@ public class AccountsService
 
     public async Task<List<UserDto>> GetListUsers()
     {
-        var userDtos = _mapper.Map<List<UserDto>>(await _repository.ListUsers());
-        userDtos.ForEach(u => u.Role = _repository.GetUserRole(u.Email));
+        var users = await _repository.ListUsers();
+        var userDtos = _mapper.Map<List<UserDto>>(users);
+
+        // TODO:(akotro) Benchmark this
+        var userRoles = await _repository.GetUserRoles(users);
+        foreach (var user in userDtos)
+        {
+            if (userRoles.ContainsKey(user.Email))
+            {
+                user.Role = userRoles[user.Email];
+            }
+        }
         return userDtos;
     }
 

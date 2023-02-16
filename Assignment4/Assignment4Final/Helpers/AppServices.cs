@@ -48,6 +48,26 @@ public class AppServices
             .AddDefaultTokenProviders();
     }
 
+    public static void AddDatabaseServicesSqlite(WebApplicationBuilder builder)
+    {
+        JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
+        var connectionString =
+            builder.Configuration.GetConnectionString("sqlite")
+            ?? throw new InvalidOperationException(
+                "Connection string 'sqlite' not found."
+            );
+        builder.Services.AddDbContext<ApplicationDbContext>(
+            options => options.UseSqlite(connectionString)
+        );
+        builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+        builder.Services
+            .AddIdentity<AppUser, IdentityRole>(opt => opt.User.RequireUniqueEmail = true)
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
+    }
+
     public static void AddAuthentication(
         WebApplicationBuilder builder,
         IConfiguration configuration
