@@ -6,6 +6,8 @@ import { AuthenticationContext } from '../auth/AuthenticationContext'
 import { ListGroup, ListGroupItem, Button, Table, Row, Stack } from 'react-bootstrap';
 
 import axios from 'axios';
+import { trackPromise } from "react-promise-tracker";
+import LoadingIndicator from "../Common/LoadingIndicator";
 
 
 function CandidateList(props) {
@@ -24,13 +26,13 @@ function CandidateList(props) {
         console.log(claims)
         console.log(role)
 
-        axios.get('https://localhost:7196/api/Candidate').then((response) => {
+        trackPromise(axios.get('https://localhost:7196/api/Candidate').then((response) => {
             setData(response.data);
             console.log(response.data)
             console.log("hey")
         }).catch(function (error) {
             console.log(error);
-        });
+        }));
     }, []);
 
     const handleDelete = (candId) => {
@@ -107,6 +109,7 @@ function CandidateList(props) {
                     )}
                 </tbody>
             </Table>
+            <LoadingIndicator />
         </div>
     );
 

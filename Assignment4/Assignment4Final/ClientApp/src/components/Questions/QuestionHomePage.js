@@ -8,6 +8,8 @@ import { useNavigate } from 'react-router-dom';
 
 import parse from "html-react-parser";
 import { AuthenticationContext } from '../auth/AuthenticationContext'
+import { trackPromise } from "react-promise-tracker";
+import LoadingIndicator from "../Common/LoadingIndicator";
 
 // import QuestionEdit from "./QuestionEdit";
 
@@ -19,7 +21,7 @@ function Questions() {
     const [role, setRole] = useState(claims.find(claim => claim.name === 'role').value)
 
     useEffect(() => {
-        axios
+        trackPromise(axios
             .get("https://localhost:7196/api/questions")
             .then((response) => {
                 console.log(response.data.data)
@@ -27,7 +29,7 @@ function Questions() {
             })
             .catch((error) => {
                 console.log(error);
-            });
+            }));
     }, []);
 
     //--------------------------------------------------//filters the text from the raw html
@@ -51,7 +53,7 @@ function Questions() {
                 .then((response) => {
                     // console.log("Delete response");
                 })
-                .catch(function (error) {
+                .catch(function(error) {
                     console.log(error);
                 });
 
@@ -138,6 +140,7 @@ function Questions() {
                         ))}
                     </tbody>
                 </Table>
+                <LoadingIndicator />
             </div>
         </Container>
     );

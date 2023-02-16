@@ -7,6 +7,9 @@ import { ListGroup, ListGroupItem, Button, Table, Row, Stack } from 'react-boots
 
 import axios from 'axios';
 import BackButton from "../Common/Back";
+import { trackPromise } from "react-promise-tracker";
+import LoadingIndicator from "../Common/LoadingIndicator";
+
 function UsersList() {
     //const [buttons, setButtons] = useState();
     const [users, setUsers] = useState([]);
@@ -23,13 +26,13 @@ function UsersList() {
         console.log(claims)
         console.log(role)
 
-        axios.get('https://localhost:7196/api/accounts/listUsers').then((response) => {
+        trackPromise(axios.get('https://localhost:7196/api/accounts/listUsers').then((response) => {
             setUsers(response.data);
             console.log(response.data)
             // console.log("hey")
-        }).catch(function (error) {
+        }).catch(function(error) {
             console.log(error);
-        });
+        }));
 
         // axios.get('https://localhost:7196/api/accounts/getAllClaims').then((response) => {
         //     setRoles(response.data);
@@ -47,7 +50,7 @@ function UsersList() {
         if (confirmDelete) {
             await axios.delete(`https://localhost:7196/api/accounts/delete/${userEmail}`).then(response => {
                 console.log(response)
-                setUsers( prevData => prevData.filter(item => item.email !== userEmail))
+                setUsers(prevData => prevData.filter(item => item.email !== userEmail))
                 // setData(prevData => prevData.filter(item => item.appUserId !== candId));
             }).catch(response => {
                 console.log(response)
@@ -98,6 +101,7 @@ function UsersList() {
                     )}
                 </tbody>
             </Table>
+            <LoadingIndicator />
             <BackButton />
         </div>
 

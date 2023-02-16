@@ -5,6 +5,8 @@ import { BrowserRouter, Route, useParams } from "react-router-dom";
 
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import LoadingIndicator from "../Common/LoadingIndicator";
+import { trackPromise } from "react-promise-tracker";
 
 function MarkerList(props) {
 
@@ -26,18 +28,18 @@ function MarkerList(props) {
 
         console.log(role)
         if (role === "marker") {
-            axios.get(`https://localhost:7196/api/Markers/${markerId}`).then((response) => {
+            trackPromise(axios.get(`https://localhost:7196/api/Markers/${markerId}`).then((response) => {
                 setData(response.data.data);
                 setExams([...response.data.data.candidateExams.filter(x => x.isModerated === null || x.isModerated === undefined)]);
                 setmarkedExams([...response.data.data.candidateExams.filter(x => x.isModerated === true)])
                 // console.log(response.data.data);
                 console.log(...response.data.data.candidateExams.filter(x => x.isModerated === null || x.isModerated === undefined));
                 // console.log(response.data.data.candidateExams.filter(x => x.isModerated === null));
-            }).catch(function (error) {
+            }).catch(function(error) {
                 console.log(error);
-            });
+            }));
         } else if (role === "admin") {
-            axios.get(`https://localhost:7196/api/Markers/getallcandidateexams/`, { params }).then((response) => {
+            trackPromise(axios.get(`https://localhost:7196/api/Markers/getallcandidateexams/`, { params }).then((response) => {
                 console.log(response.data.data)
                 const givenExams = (response.data.data.filter(x => x.result === true || x.result === false));
 
@@ -50,11 +52,11 @@ function MarkerList(props) {
                 setExams([...givenExams.filter(x => x.isModerated === null || x.isModerated === undefined)]);
                 setmarkedExams([...givenExams.filter(x => x.isModerated === true)])
 
-            }).catch(function (error) {
+            }).catch(function(error) {
                 console.log(error);
-            });
+            }));
         } else {
-            axios.get(`https://localhost:7196/api/Markers/getallcandidateexams/`, { params }).then((response) => {
+            trackPromise(axios.get(`https://localhost:7196/api/Markers/getallcandidateexams/`, { params }).then((response) => {
                 const givenExams = (response.data.data.filter(x => x.result === true || x.result === false));
                 console.log(response.data.data)
                 // console.log(response.data.data.map(marker => marker.candidateExams).flat().filter(x => x.isModerated === null))
@@ -67,9 +69,9 @@ function MarkerList(props) {
                 setExams([...givenExams.filter(x => x.isModerated === null || x.isModerated === undefined)]);
 
 
-            }).catch(function (error) {
+            }).catch(function(error) {
                 console.log(error);
-            });
+            }));
 
         }
     }, []);
@@ -147,6 +149,7 @@ function MarkerList(props) {
                             ))}
                         </tbody>
                     </Table>
+                    <LoadingIndicator />
                 </div>
 
             </div>
@@ -202,8 +205,8 @@ function MarkerList(props) {
                             ))}
                         </tbody>
                     </Table>
+                    <LoadingIndicator />
                 </div>
-
             }
         </div>
 
