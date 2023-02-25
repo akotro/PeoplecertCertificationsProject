@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { AuthenticationContext } from '../components/auth/AuthenticationContext'
 import { useNavigate } from 'react-router-dom';
 import { BsExclamationOctagonFill } from "react-icons/bs";
-import { FaUniversity, FaBook, FaQuestion, FaUserAlt, FaCheckDouble, FaExclamation } from "react-icons/fa";
+import { FaUniversity, FaBook, FaQuestion, FaUserAlt, FaCheckDouble, FaExclamation, FaUserGraduate } from "react-icons/fa";
 import Authorized from "./auth/Authorized";
 import axios from "axios";
 import { getToken, getUserId } from "./auth/handleJWT";
@@ -29,7 +29,7 @@ function Home() {
       axios.get(`https://localhost:7196/api/Candidate/${getUserId(token)}`).then((response) => {
         console.log(response.data)
         SetIsNew(false)
-      }).catch(function (error) {
+      }).catch(function(error) {
         console.log(error);
         SetIsNew(true)
       });
@@ -40,6 +40,8 @@ function Home() {
     <div>
       {!claim ?
         <>
+          {/* FIX:(akotro) Claims exist here but claim is undefined */}
+          {console.log('claims', claims)}
           <div className="lead fs-2 text-center mb-4" >Welcome to the ErroRList Homepage!</div>
           <div className="lead fs-4 text-center mb-4">Here are the products you can purchase...(once Logged in...!)</div>
           <CertificateList />
@@ -99,6 +101,8 @@ function Home() {
                 Examinations &nbsp;&nbsp;<FaUniversity /></button>
               <button class="btn btn-lg fs-2 btn-outline-primary" type="button" onClick={() => navigate("/questions")}>
                 Questions &nbsp;&nbsp;<FaQuestion /></button>
+              <button class="btn btn-lg fs-2 btn-outline-primary" type="button" onClick={() => navigate("/candidate")}>
+                Candidates &nbsp;&nbsp;<FaUserGraduate /></button>
               <button class="btn btn-lg fs-2 btn-outline-primary" type="button" onClick={() => navigate("/users")}>
                 Users &nbsp;&nbsp;<FaUserAlt /></button>
               <button class="btn btn-lg fs-2 btn-outline-primary" type="button" onClick={() => navigate("/marker")}>
@@ -127,7 +131,7 @@ function Home() {
               <button class="btn btn-lg fs-2 btn-outline-primary" type="button" onClick={() => navigate("/questions")}>
                 Questions &nbsp;&nbsp;<FaQuestion /></button>
               <button class="btn btn-lg fs-2 btn-outline-primary" type="button" onClick={() => navigate("/candidate")}>
-                Users &nbsp;&nbsp;<FaUserAlt /></button>
+                Candidates &nbsp;&nbsp;<FaUserGraduate /></button>
             </div>
           </div>
         </>}

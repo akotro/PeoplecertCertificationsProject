@@ -11,6 +11,7 @@ public interface IAccountsRepository
     Task<AppUser> GetAppUser(string email);
     List<string> GetAllClaims();
     Task<IList<Claim>> GetClaims(AppUser user);
+    Task<Dictionary<string, string>> GetUserRoles(List<AppUser> appUsers);
     string? GetUserRole(string email);
     Task<IdentityResult> UpdateRole(string userEmail, string newRole);
     Task<IdentityResult> MakeAdmin(string email);

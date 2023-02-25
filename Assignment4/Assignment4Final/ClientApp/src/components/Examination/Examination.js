@@ -97,6 +97,7 @@ export default function Examination(props) {
 
     return (
         <div>
+            <h1 class="display-3 text-center align-middle">Examination</h1>
             <h1>Question {currentPage}</h1>
             <hr></hr>
 

@@ -295,6 +295,14 @@ export default function CandidateEdit(props) {
 
     return (
         <div>
+            {
+                params.id === undefined ?
+                    <h1 class="display-3 text-center align-middle">Create Candidate</h1> :
+                    role && role !== "qualitycontrol" ?
+                        <h1 class="display-3 text-center align-middle">Edit Candidate</h1> :
+                        <h1 class="display-3 text-center align-middle">Candidate Details</h1>
+
+            }
             {error && <Errors error={error} />}
             <fieldset disabled={Qcrole ? (Qcrole === "qualitycontrol") : false}>
                 {errorRegister && <ErrorsRegister error={errorRegister} />}

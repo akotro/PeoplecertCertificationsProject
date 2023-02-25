@@ -17,6 +17,7 @@ namespace Assignment4Final
 
             // NOTE: Add services to the container.
             AppServices.AddDatabaseServices(builder);
+            // AppServices.AddDatabaseServicesSqlite(builder);
             AppServices.AddAuthentication(builder, Configuration);
             AppServices.AddAuthorization(builder);
             AppServices.AddControllers(builder);

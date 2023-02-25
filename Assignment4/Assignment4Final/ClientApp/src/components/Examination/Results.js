@@ -47,6 +47,7 @@ export default function Results() {
     }
     return (
         <div >
+            <h1 class="display-3 text-center align-middle">Examination Result</h1>
             {/* ------------------------------------------------------------------------------------------------------ */}
             <div className='container-fluid' id='jsPdf'>
                 <Row className='justify-content-center'>
@@ -139,26 +140,3 @@ export default function Results() {
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

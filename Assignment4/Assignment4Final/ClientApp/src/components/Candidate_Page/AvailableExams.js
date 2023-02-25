@@ -6,6 +6,8 @@ import { BrowserRouter, Route, useParams } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { DatePicker, Space } from 'antd';
+import { trackPromise } from "react-promise-tracker";
+import LoadingIndicator from "../Common/LoadingIndicator";
 
 function AvailableExams(props) {
 
@@ -18,7 +20,7 @@ function AvailableExams(props) {
     const candidate = {};
 
     useEffect(() => {
-        axios.get('https://localhost:7196/api/CandidateExam').then((response) => {
+        trackPromise(axios.get('https://localhost:7196/api/CandidateExam').then((response) => {
             setData(response.data);
             console.log(response.data);
 
@@ -30,12 +32,9 @@ function AvailableExams(props) {
                 candidate = response.data[0].candidate
             }
             // console.log(...response.data.filter(exam => exam.result !== null));
-        }).catch(function (error) {
+        }).catch(function(error) {
             console.log(error);
-        });
-        // if (!user) {
-        //     setUser("admin");
-        // }
+        }));
     }, []);
 
     const [showModal, setShowModal] = useState(false);
@@ -145,6 +144,7 @@ function AvailableExams(props) {
 
     return (
         <div className='container-fluid'>
+            <h1 class="display-3 text-center align-middle">Examinations</h1>
             <div>
                 <Modal show={showModal} onHide={handleClose}>
                     <Modal.Header closeButton>
@@ -190,6 +190,7 @@ function AvailableExams(props) {
                         })}
                     </tbody>
                 </Table>
+                <LoadingIndicator />
             </div>
             <div>
                 <h1>Taken exams</h1>
@@ -217,11 +218,10 @@ function AvailableExams(props) {
 
                                 )
                             }
-
-
                         })}
                     </tbody>
                 </Table>
+                <LoadingIndicator />
             </div>
         </div>
     );

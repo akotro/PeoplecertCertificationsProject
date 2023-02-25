@@ -162,6 +162,11 @@ export default function QuestionEdit(event, name) {
     return (
         //---||FORM------------------------------------------------->>>>>>>
         <div>
+            {
+                role && role !== "qualitycontrol" ?
+                <h1 class="display-3 text-center align-middle">Edit Question</h1> :
+                <h1 class="display-3 text-center align-middle">Question Details</h1>
+            }
             {error && <Errors error={error} />}
             <fieldset disabled={role ? (role === "qualitycontrol") : false}>
             <Form noValidate validated={true} onSubmit={handleSubmit}>

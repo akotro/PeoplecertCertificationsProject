@@ -5,6 +5,8 @@ import { useNavigate, Link } from "react-router-dom";
 import { AuthenticationContext } from '../auth/AuthenticationContext'
 import Multiselect from 'multiselect-react-dropdown';
 import BackButton from "../Common/Back";
+import { trackPromise } from "react-promise-tracker";
+import LoadingIndicator from "../Common/LoadingIndicator";
 
 function ExamList(props) {
     const [exams, setExams] = useState([]);
@@ -21,12 +23,11 @@ function ExamList(props) {
     // let navigate = useNavigate();
 
     useEffect(() => {
-        axios.get('https://localhost:7196/api/Exam').then((response) => {
+        trackPromise(axios.get('https://localhost:7196/api/Exam').then((response) => {
             setExams(response.data)
-        }).catch(function (error) {
+        }).catch(function(error) {
             console.log(error)
-        })
-
+        }))
     }, []);
 
 
@@ -39,7 +40,7 @@ function ExamList(props) {
     }
 
     const handleDelete = (examId) => {
-        const confirmDelete = window.confirm("Are you sure you want to delete this question?");
+        const confirmDelete = window.confirm("Are you sure you want to delete this exam?");
         setExams(exams.filter(exam => exam.id !== examId));
         if (confirmDelete) {
 
@@ -88,7 +89,7 @@ function ExamList(props) {
     }, [pickedCert]
     )
 
-    const handleChange = function (event) {
+    const handleChange = function(event) {
         var id = event.target.value
         var name = event.target.name
 
@@ -122,6 +123,7 @@ function ExamList(props) {
 
     return (
         <div>
+            <h1 class="display-3 text-center align-middle">Exams</h1>
             {role === "admin" &&
                 <Button className='d-grid gap-2 col-6 mx-auto py-2 my-2'
                     onClick={() => createCertificateButton()} variant="success">
@@ -158,7 +160,8 @@ function ExamList(props) {
                     })}
                 </tbody>
             </Table>
-            <Button variant='secondary' className='d-grid gap-2 col-12 mx-auto py-2 my-2' onClick={()=> navigate("/")} >Go Back Home Page</Button>
+            <LoadingIndicator />
+            <Button variant='secondary' className='d-grid gap-2 col-12 mx-auto py-2 my-2' onClick={() => navigate("/")} >Go Back Home Page</Button>
         </div>
     )
 

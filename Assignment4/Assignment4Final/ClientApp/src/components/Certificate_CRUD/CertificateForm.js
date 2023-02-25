@@ -34,7 +34,7 @@ function CertificateForm(props) {
         if (params.id !== undefined) {
             axios.get(`https://localhost:7196/api/Certificates/${params.id}`).then((response) => {
                 setData(response.data.data);
-            }).catch(function (error) {
+            }).catch(function(error) {
                 console.log(error);
             });
         }
@@ -81,11 +81,11 @@ function CertificateForm(props) {
     const handleChange = (event) => {
         const { name, value, type } = event.target;
 
-        console.log("name",name);
+        console.log("name", name);
         console.log("type", type);
         console.log("value", value);
         console.log("checked", event.target.checked);
-        
+
         if (type === 'checkbox') {
             setData({ ...data, [name]: event.target.checked })
         } else if (type === 'number') {
@@ -101,33 +101,41 @@ function CertificateForm(props) {
 
             //PUTs the updated data for the cert 
             axios.put(`https://localhost:7196/api/Certificates/${data.id}`, data)
-                .then(function (response) {
+                .then(function(response) {
                     console.log(response);
                     setError([]);
                     navigate("/certificate")
                 })
-                .catch(function (error) {
+                .catch(function(error) {
                     console.log(error);
                     setError(error);
                 });
         } else {
             axios.post(`https://localhost:7196/api/Certificates`, data)
-                .then(function (response) {
+                .then(function(response) {
                     console.log(response);
                     setError([]);
                     navigate("/certificate")
                 })
-                .catch(function (error) {
+                .catch(function(error) {
                     console.log(error);
                     setError(error);
                 });
 
 
-        }        
+        }
     }
 
     return (
         <div>
+            {
+                params.id === undefined ?
+                    <h1 class="display-3 text-center align-middle">Create Certificate</h1> :
+                    role && role !== "qualitycontrol" ?
+                        <h1 class="display-3 text-center align-middle">Edit Certificate</h1> :
+                        <h1 class="display-3 text-center align-middle">Certificate Details</h1>
+
+            }
             {error && <Errors error={error} />}
             <fieldset disabled={role ? (role === "qualitycontrol") : false}>
 

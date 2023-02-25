@@ -95,6 +95,11 @@ function MarkExam(props) {
 
     return (
         <div>
+            {
+                 role !== "qualitycontrol" && exam.isModerated !== true ?
+                    <h1 class="display-3 text-center align-middle">Mark Exam</h1> :
+                    <h1 class="display-3 text-center align-middle">Exam Marking Details</h1>
+            }
             <div>
                 <Row>
                     <Col xs={8}>

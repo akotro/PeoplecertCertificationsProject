@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Assignment4Final.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230210120623_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20230222224851_Initial_Create")]
+    partial class Initial_Create
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -944,7 +944,7 @@ namespace Assignment4Final.Data.Migrations
                         .HasForeignKey("CandidateExamId");
 
                     b.HasOne("ModelLibrary.Models.Questions.Question", "Question")
-                        .WithMany()
+                        .WithMany("CandidateExamAnswers")
                         .HasForeignKey("QuestionId");
 
                     b.Navigation("CandidateExam");
@@ -1062,6 +1062,8 @@ namespace Assignment4Final.Data.Migrations
 
             modelBuilder.Entity("ModelLibrary.Models.Questions.Question", b =>
                 {
+                    b.Navigation("CandidateExamAnswers");
+
                     b.Navigation("Options");
                 });
 #pragma warning restore 612, 618

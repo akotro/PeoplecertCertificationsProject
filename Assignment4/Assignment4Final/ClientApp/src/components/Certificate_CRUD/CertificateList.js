@@ -5,6 +5,8 @@ import instance from '../auth/axiosInstance';
 import { ListGroup, ListGroupItem, Button, Table, Row, Stack } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { trackPromise } from 'react-promise-tracker';
+import LoadingIndicator from '../Common/LoadingIndicator';
 
 
 //import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -29,25 +31,20 @@ function CertificateList(props) {
 
     useEffect(() => {
         console.log(data)
-        axios.get('https://localhost:7196/api/Certificates')
-            .then(res => {
-                if (role === "candidate") {
-                    // if the user is a candidate, show only active products
-                    console.log(res.data.data.filter(item => item.active === true && item.exams && item.exams.length !== 0))
-                    setData([...res.data.data.filter(item => item.active === true && item.exams && item.exams.length !== 0)])
-                    // () => { console.log(data) })
-                    console.log("res.data.data", res.data.data)
-                } else {
-                    //if none of the above, show all products
-                    setData(res.data.data)
-                    console.log(res.data.data)
-                }
-            })
-            .catch(err => {
-                console.error(err);
-            });
-
-
+        trackPromise(axios.get('https://localhost:7196/api/Certificates').then(res => {
+            if (role === "candidate") {
+                // if the user is a candidate, show only active products
+                console.log(res.data.data.filter(item => item.active === true && item.exams && item.exams.length !== 0))
+                setData([...res.data.data.filter(item => item.active === true && item.exams && item.exams.length !== 0)])
+                console.log("res.data.data", res.data.data)
+            } else {
+                //if none of the above, show all products
+                setData(res.data.data)
+                console.log(res.data.data)
+            }
+        }).catch(err => {
+            console.error(err);
+        }));
     }, [])
 
     const handleBuy = (id) => {
@@ -89,7 +86,7 @@ function CertificateList(props) {
                     //     data: prevState.data.filter(item => item.id !== id)
                     // }));
                 })
-                .catch(function (error) {
+                .catch(function(error) {
                     console.log(error);
                 });
         }
@@ -122,7 +119,7 @@ function CertificateList(props) {
                     </div>
                 </td>
             );
-        }else {
+        } else {
             return (
                 <td>
                     <div className='d-flex '>
@@ -136,6 +133,7 @@ function CertificateList(props) {
 
     return (
         <div className='container-fluid'>
+            <h1 class="display-3 text-center align-middle">Certificates</h1>
             {role === "admin" ?
                 <Button variant='dark'
                     className='d-grid gap-2 col-6 mx-auto py-2 my-2'
@@ -166,10 +164,9 @@ function CertificateList(props) {
                     ))}
                 </tbody>
             </Table>
+            <LoadingIndicator />
         </div>
     );
 };
-
-
 
 export default CertificateList;
